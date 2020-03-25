@@ -1,16 +1,12 @@
 # Pull base image
-FROM node:12
+FROM node:12.16.1-alpine
 
 # Set work directory
-WORKDIR /app/
+WORKDIR /app/frontend
 
 # Install dependencies
-COPY package.json yarn.lock /app/
-RUN npm install
+COPY package.json yarn.lock /app/frontend/
+RUN yarn
 
-# Add rest of the client code
-COPY . /app/
-
-EXPOSE 3000
-
-CMD npm start
+# Add the rest of the code
+COPY . /app/frontend/
