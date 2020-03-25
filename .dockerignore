@@ -1,0 +1,6 @@
+# JS stuff
+frontend/node_modules
+
+# Dev stuff
+.git
+.gitignore
