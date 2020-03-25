@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 3rd-party apps
+    'rest_framework',
+    'rest_framework.authtoken',
+
     # local
     'scholarships.apps.ScholarshipsConfig',
     'users.apps.UsersConfig',
@@ -127,5 +131,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#### Add-ons ####
+
 # authentication
 AUTH_USER_MODEL = 'users.CustomUser'
+
+# rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
