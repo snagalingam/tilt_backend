@@ -3,4 +3,4 @@ docker-compose.yml
 docker-compose.prod.yml
 
 # dependencies
-frontend/node_modules
+*/node_modules/*
