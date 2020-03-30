@@ -69,7 +69,7 @@ const ContactUs = () => {
 
               {/* Link */}
               <div class="mb-5 mb-md-0">
-                <a href="#!" class="h4">
+                <a href="tel:224-306-9466" class="h4">
                   (224) 306-9466
                 </a>
               </div>
@@ -83,7 +83,7 @@ const ContactUs = () => {
               </h6>
 
               {/* Link */}
-              <a href="#!" class="h4">
+              <a href="mailto:hello@tiltaccess.com" class="h4">
                 hello@tiltaccess.com
               </a>
 

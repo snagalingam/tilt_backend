@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import ContactUs from './ContactUs';
 import logo from './img/tilt_logo.png';
 
 

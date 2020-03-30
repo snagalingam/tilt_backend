@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import facebook from './img/social/facebook.svg';
 import instagram from './img/social/instagram.svg';
@@ -57,7 +58,7 @@ const Footer = props => {
               <h5 class="text-muted">
                 © Tilt 2020
                 <br />
-                <a class="text-reset" href="@@webRoot/privacy-policy.html">Privacy Policy</a> & <a class="text-reset" href="@@webRoot/terms-of-service.html">Terms of Service</a>
+                <Link class="text-reset" to="/privacy-policy">Privacy Policy</Link> & <Link class="text-reset" to="/terms-of-service">Terms of Service</Link>
               </h5>
           </div>
         </div>
