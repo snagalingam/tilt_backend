@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,8 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['tilt-website.herokuapp.com', 'www.tiltaccess.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -150,3 +150,17 @@ SITE_ID = 1
 GRAPHENE = {
     'SCHEMA': 'tilt_project.schema.schema',
 }
+
+# security for production
+if ENVIRONMENT == 'production':
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_REFERRER_POLICY = 'same-origin'
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
