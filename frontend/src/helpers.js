@@ -1,5 +1,6 @@
 import AOS from 'aos';
 import Typed from 'typed.js';
+import SmoothScroll from 'smooth-scroll'
 
 export function initializeAOS() {
   function init() {
@@ -40,4 +41,24 @@ export function initializeTyped() {
       init(el);
     });
   };
+};
+
+export function initializeSmoothScroll() {
+  var toggle = '[data-toggle="smooth-scroll"]';
+
+  function init(toggle) {
+    var options = {
+      header: '.navbar.fixed-top',
+      offset: function(anchor, toggle) {
+        return toggle.dataset.offset ? toggle.dataset.offset : 24;
+      }
+    };
+
+    new SmoothScroll(toggle, options);
+  }
+
+  if (typeof SmoothScroll !== 'undefined' && toggle) {
+    init(toggle);
+  }
+
 };

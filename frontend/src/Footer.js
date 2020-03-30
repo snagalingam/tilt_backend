@@ -6,9 +6,19 @@ import logo from './img/tilt_logo.png';
 import twitter from './img/social/twitter.svg';
 
 
-const Footer = () => {
+const navStyle = classList => {
+  var base = "py-8 py-md-11"
+  if (classList) {
+    return base.concat(classList);
+  }
+  return base;
+};
+
+const Footer = props => {
+  const classList = props.classList;
+
   return (
-    <footer class="py-8 py-md-11 @@classList">
+    <footer class={navStyle(classList)}>
       <div class="container">
         <div class="row">
           <div class="col-12 col-md-4 col-lg-3">
@@ -47,8 +57,7 @@ const Footer = () => {
               <h5 class="text-muted">
                 © Tilt 2020
                 <br />
-                <a href="@@webRoot/privacy-policy.html">Privacy Policy</a> &
-                <a href="@@webRoot/terms-of-service.html">Terms of Service</a>
+                <a class="text-reset" href="@@webRoot/privacy-policy.html">Privacy Policy</a> & <a class="text-reset" href="@@webRoot/terms-of-service.html">Terms of Service</a>
               </h5>
           </div>
         </div>

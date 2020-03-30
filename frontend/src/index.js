@@ -1,29 +1,30 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import './scss/theme.scss';
 import 'aos/dist/aos.css';
 
-import Footer from './Footer';
+import ContactUs from './ContactUs';
 import HomePage from './HomePage';
-import NavBar from './NavBar';
-import { initializeAOS, initializeTyped } from './helpers';
+import { initializeAOS, initializeSmoothScroll, initializeTyped } from './helpers';
 
 
 const App = () => {
     useEffect(() => {
       document.title = 'Financial aid help for high school students - Tilt';
       initializeAOS();
+      initializeSmoothScroll();
       initializeTyped();
     });
 
   return (
-    <body>
-      <noscript>You need to enable JavaScript to run this app.</noscript>
-      <NavBar classList=" navbar-light bg-white" type="boxed"/>
-      <HomePage style={{ flex: 1 }}/>
-      <Footer />
-    </body>
+    <div>
+      <BrowserRouter>
+        <Route path="/" exact component={HomePage} />
+        <Route path="/contact" exact component={ContactUs} />
+      </BrowserRouter>
+    </div>
   );
 };
 

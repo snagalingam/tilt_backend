@@ -1,5 +1,9 @@
 import React from 'react';
 import { Check } from 'react-feather';
+import { Link } from 'react-router-dom';
+
+import Footer from './Footer';
+import NavBar from './NavBar';
 
 import butler from './img/clients/butler.svg';
 import chart from './img/product/chart.jpg';
@@ -10,7 +14,9 @@ import westinghouse from './img/clients/westinghouse.svg';
 
 const HomePage = () => {
   return (
-    <div>
+    <body>
+      <noscript>You need to enable JavaScript to run this app.</noscript>
+      <NavBar classList=" navbar-light bg-white" type="boxed" />
       {/* WELCOME
       ================================================== */}
       <section className="pt-4 pt-md-11 pb-11">
@@ -592,9 +598,9 @@ const HomePage = () => {
               </p>
 
               {/* Button */}
-              <a href="contact.html" className="btn btn-success lift">
+              <Link to="/contact" className="btn btn-success lift">
                 Contact Us <i className="fe fe-arrow-right"></i>
-              </a>
+              </Link>
 
             </div>
           </div>
@@ -610,7 +616,8 @@ const HomePage = () => {
           </svg>
         </div>
       </div>
-    </div>
+      <Footer />
+    </body>
   );
 };
 

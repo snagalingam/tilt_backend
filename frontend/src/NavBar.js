@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
+import ContactUs from './ContactUs';
 import logo from './img/tilt_logo.png';
 
 
@@ -27,9 +29,9 @@ const NavBar = props => {
       <div className={containerFluid(type)}>
 
         {/* Brand */}
-        <a className="navbar-brand" href="@@webRoot/index.html">
+        <Link className="navbar-brand" to="/">
           <img src={logo} className="navbar-brand-img" alt="..." />
-        </a>
+        </Link>
 
         {/* Toggler */}
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarButton" aria-controls="navbarButton" aria-expanded="false" aria-label="Toggle Button">
@@ -59,9 +61,9 @@ const NavBar = props => {
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" id="navbarContact" href="@@webRoot/contact.html">
+              <Link className="nav-link" id="navbarContact" to="/contact">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
 
