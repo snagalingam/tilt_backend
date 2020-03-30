@@ -2,5 +2,8 @@
 docker-compose.yml
 docker-compose.prod.yml
 
+# heroku
+heroku.yml
+
 # dependencies
 */node_modules/*
