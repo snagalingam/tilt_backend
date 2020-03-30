@@ -5,11 +5,12 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './scss/theme.scss';
 import 'aos/dist/aos.css';
 
-import ContactUs from './ContactUs';
-import HomePage from './HomePage';
-import { initializeAOS, initializeSmoothScroll, initializeTyped } from './helpers';
-import PrivacyPolicy from './PrivacyPolicy';
-import TermsOfService from './TermsOfService';
+import ContactUs from './components/ContactUs';
+import HomePage from './components/HomePage';
+import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import ScrollToTop from './components/ScrollToTop';
+import TermsOfService from './components/TermsOfService';
 
 
 const App = () => {
@@ -23,10 +24,12 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Route path="/" exact component={HomePage} />
-        <Route path="/contact" exact component={ContactUs} />
-        <Route path="/privacy-policy" exact component={PrivacyPolicy} />
-        <Route path="/terms-of-service" exact component={TermsOfService} />
+        <ScrollToTop>
+          <Route path="/" exact component={HomePage} />
+          <Route path="/contact" exact component={ContactUs} />
+          <Route path="/privacy-policy" exact component={PrivacyPolicy} />
+          <Route path="/terms-of-service" exact component={TermsOfService} />
+        </ScrollToTop>
       </BrowserRouter>
     </div>
   );
