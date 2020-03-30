@@ -54,9 +54,9 @@ const NavBar = props => {
           {/* Navigation */}
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <a className="nav-link" id="navbarResources" href="@@webRoot/resources/index.html">
+              <Link className="nav-link" id="navbarResources" to="/resources">
                 Resources
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item">
