@@ -8,8 +8,6 @@ build:
 
 release:
   image: web
-  command:
-    - python backend/manage.py collectstatic --noinput
 
 run:
   web: gunicorn backend/tilt_project.wsgi
