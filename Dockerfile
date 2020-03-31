@@ -15,14 +15,14 @@ RUN apt-get -y install curl \
 WORKDIR /app/backend
 
 # Install dependencies
-COPY Pipfile Pipfile.lock /app/backend/
+COPY ./backend/Pipfile ./backend/Pipfile.lock /app/backend/
 RUN pip install pipenv && pipenv install --system
 
 # Set work directory
 WORKDIR /app/frontend
 
 # Install JS dependencies
-COPY package.json yarn.lock /app/frontend/
+COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
 RUN yarn
 
 # Add the rest of the code
