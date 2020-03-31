@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Install curl, node, & yarn
 RUN apt-get -y install curl \
-  && curl -sL https://deb.nodesource.com/setup_812x | bash \
+  && curl -sL https://deb.nodesource.com/setup_12.x | bash \
   && apt-get install nodejs \
   && curl -o- -L https://yarnpkg.com/install.sh | bash
 
@@ -39,8 +39,6 @@ RUN mkdir /app/backend/staticfiles
 
 WORKDIR /app
 
-# SECRET_KEY is only included here to avoid raising an error when generating static files.
-# Be sure to add a real SECRET_KEY config variable in Heroku.
 RUN python3 backend/manage.py collectstatic --noinput
 
 EXPOSE 8000
