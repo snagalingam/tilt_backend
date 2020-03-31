@@ -31,7 +31,8 @@ COPY ./backend/Pipfile ./backend/Pipfile.lock /app/backend/
 RUN pip install pipenv && pipenv install --system
 
 # Add the rest of the code
-COPY . /app/backend/
+COPY . /app/
+COPY --from=build-stage /app/frontend/build/ /app/frontend/build/
 
 # Have to move all static files other than index.html to root/
 # for whitenoise middleware
