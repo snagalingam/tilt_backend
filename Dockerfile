@@ -23,13 +23,13 @@ WORKDIR /app/frontend
 
 # Install JS dependencies
 COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
-RUN yarn
+RUN $HOME/.yarn/bin/yarn install
 
 # Add the rest of the code
 COPY . /app/
 
 # Build static files
-RUN yarn build
+RUN $HOME/.yarn/bin/yarn build
 
 # Have to move all static files other than index.html to root
 # for whitenoise middleware
