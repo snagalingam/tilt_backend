@@ -6,7 +6,7 @@ FROM node:12.16.1-alpine as build-stage
 WORKDIR /app/frontend
 
 # Install dependencies
-COPY package.json yarn.lock /app/frontend/
+COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
 RUN yarn
 
 # Add the rest of the code
@@ -27,7 +27,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app/backend
 
 # Install dependencies
-COPY Pipfile Pipfile.lock /app/backend/
+COPY ./backend/Pipfile ./backend/Pipfile.lock /app/backend/
 RUN pip install pipenv && pipenv install --system
 
 # Add the rest of the code
@@ -43,7 +43,6 @@ WORKDIR /app
 # SECRET_KEY is only included here to avoid raising an error when generating static files.
 # Be sure to add a real SECRET_KEY config variable in Heroku.
 RUN SECRET_KEY=somethingsupersecret \
-  python backend/manage.py collectstatic --noinput
-
-RUN python backend/manage.py makemigrations
-RUN python backend/manage.py migrate
+  python /app/backend/manage.py collectstatic --noinput
+RUN python /app/backend/manage.py makemigrations
+RUN python /app/backend/manage.py migrate
