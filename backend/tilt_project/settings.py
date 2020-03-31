@@ -151,11 +151,10 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "backend", "staticfiles")
 
 if ENVIRONMENT == 'development':
     STATICFILES_DIRS = [os.path.join(BASE_DIR)]
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 
 if ENVIRONMENT == 'production':
