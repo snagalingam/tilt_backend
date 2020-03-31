@@ -8,6 +8,8 @@ build:
 
 release:
   image: web
+  command:
+    - python backend/manage.py collectstatic --noinput
 
 run:
   web: PYTHONPATH="$PWD/backend/" gunicorn tilt_project.wsgi
