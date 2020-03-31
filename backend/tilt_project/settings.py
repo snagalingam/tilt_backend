@@ -158,9 +158,9 @@ if ENVIRONMENT == 'development':
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 
 if ENVIRONMENT == 'production':
-    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../", "frontend", "build")]
+    TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
     STATICFILES_DIRS = [os.path.join( "frontend", "build", "static")]
-    WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
+    WHITENOISE_ROOT = os.path.join("frontend", "build", "root")
 
 
 # security for production
