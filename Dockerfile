@@ -40,10 +40,3 @@ WORKDIR /app/frontend/build
 RUN mkdir root && mv *.ico *.js *.json root
 
 WORKDIR /app
-
-# SECRET_KEY is only included here to avoid raising an error when generating static files.
-# Be sure to add a real SECRET_KEY config variable in Heroku.
-RUN SECRET_KEY=somethingsupersecret \
-  python /app/backend/manage.py collectstatic --noinput
-RUN python /app/backend/manage.py makemigrations
-RUN python /app/backend/manage.py migrate
