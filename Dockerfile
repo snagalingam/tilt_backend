@@ -1,42 +1,38 @@
-# Stage 0: "build-stage" to build and compile frontend
-# Pull base image
-FROM node:12.16.1-alpine as build-stage
-
-# Set work directory
-WORKDIR /app/frontend
-
-# Install dependencies
-COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
-RUN yarn
-
-# Add the rest of the code
-COPY ./frontend /app/frontend/
-
-# Build static files
-RUN yarn build
-
-# Stage 1: Compile the app and ready for production
-# Pull base image
-FROM python:3.7
+FROM python:3.6
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set work directory
+# Install curl, node, & yarn
+RUN apt-get -y install curl \
+  && curl -sL https://deb.nodesource.com/setup_12.x | bash \
+  && apt-get install nodejs \
+  && curl -o- -L https://yarnpkg.com/install.sh | bash
+
 WORKDIR /app/backend
 
-# Install dependencies
+# Install Python dependencies
 COPY ./backend/Pipfile ./backend/Pipfile.lock /app/backend/
 RUN pip install pipenv && pipenv install --system
 
+# Install JS dependencies
+WORKDIR /app/frontend
+
+COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
+RUN $HOME/.yarn/bin/yarn install
+
 # Add the rest of the code
 COPY . /app/
-COPY --from=build-stage /app/frontend/build/ /app/frontend/build/
+
+# Build static files
+RUN $HOME/.yarn/bin/yarn build
 
 # Have to move all static files other than index.html to root/
 # for whitenoise middleware
 WORKDIR /app/frontend/build
 RUN mkdir root && mv *.ico *.js *.json root
 
+# Collect static files
+RUN mkdir /app/backend/staticfiles
 WORKDIR /app
