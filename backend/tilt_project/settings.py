@@ -159,7 +159,7 @@ if ENVIRONMENT == 'development':
 
 if ENVIRONMENT == 'production':
     TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../", "frontend", "build")]
-    STATICFILES_DIRS = [os.path.join( "app", "frontend", "build", "static")]
+    STATICFILES_DIRS = [os.path.join( "frontend", "build", "static")]
     WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
 
 
