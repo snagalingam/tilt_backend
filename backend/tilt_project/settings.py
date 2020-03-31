@@ -150,19 +150,18 @@ GRAPHENE = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 if ENVIRONMENT == 'development':
-    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR)]
     STATICFILES_DIRS = [os.path.join(BASE_DIR)]
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 
 if ENVIRONMENT == 'production':
-    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../", "app", "frontend", "build")]
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "../", "app", "frontend", "build", "static")]
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "app", "frontend", "build", "root")
+    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../", "frontend", "build")]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "../", "frontend", "build", "static")]
+    WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
 
 
 # security for production
