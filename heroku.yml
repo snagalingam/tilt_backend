@@ -10,8 +10,6 @@ release:
   image: web
   command:
     - python /app/backend/manage.py collectstatic --noinput
-    - python /app/backend/manage.py makemigrations
-    - python /app/backend/manage.py migrate
 
 run:
-  web: gunicorn backend/tilt_project.wsgi
+  web: gunicorn /app/backend/tilt_project.wsgi
