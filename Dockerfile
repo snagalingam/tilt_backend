@@ -10,7 +10,7 @@ COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
 RUN yarn
 
 # Add the rest of the code
-COPY . /app/frontend/
+COPY ./frontend /app/frontend/
 
 # Build static files
 RUN yarn build
