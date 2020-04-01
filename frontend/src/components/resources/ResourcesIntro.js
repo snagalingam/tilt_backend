@@ -96,7 +96,7 @@ const ResourcesIntro = () => {
                   <div class="card-body">
                     {/* Link */}
                     <h3>
-                      <a href="https://www.nacacnet.org/college-admission-status-coronavirus" target="_blank">
+                      <a href="https://www.nacacnet.org/college-admission-status-coronavirus" target="_blank" rel="noopener noreferrer">
                         NACAC College Admission Status Update: Coronavirus Impact
                       </a>
                     </h3>
@@ -114,7 +114,7 @@ const ResourcesIntro = () => {
                   <div class="card-body">
                     {/* Link */}
                     <h3>
-                      <a href="https://docs.google.com/document/d/1RIlDMwtaOmudGxMuZsuEfjDW_wH89A_v6EHza5K5HtU/edit" target="_blank">
+                      <a href="https://docs.google.com/document/d/1RIlDMwtaOmudGxMuZsuEfjDW_wH89A_v6EHza5K5HtU/edit" target="_blank" rel="noopener noreferrer">
                         Colleges That Have Changed Deposit Deadline to June 1, 2020
                       </a>
                     </h3>
@@ -131,7 +131,7 @@ const ResourcesIntro = () => {
                   <div class="card-body">
                     {/* Link */}
                     <h3>
-                      <a href="https://docs.google.com/spreadsheets/d/1ZOAtzZNAjwxoOQbKzMY2JvMll24LQHBXlpV158qQi0U/htmlview?usp=sharing&fbclid=IwAR1_aaTmZIzngtAQCeJ1m26RsmhO3ARbq67TX9GOYzO4KVSQ-dSFIt42YLU&sle=true&urp=gmail_link#" target="_blank">
+                      <a href="https://docs.google.com/spreadsheets/d/1ZOAtzZNAjwxoOQbKzMY2JvMll24LQHBXlpV158qQi0U/htmlview?usp=sharing&fbclid=IwAR1_aaTmZIzngtAQCeJ1m26RsmhO3ARbq67TX9GOYzO4KVSQ-dSFIt42YLU&sle=true&urp=gmail_link#" target="_blank" rel="noopener noreferrer">
                         Upcoming Virtual College Admission Events
                       </a>
                     </h3>
@@ -148,7 +148,7 @@ const ResourcesIntro = () => {
                   <div class="card-body">
                     {/* Link */}
                     <h3>
-                      <a href="https://docs.google.com/spreadsheets/d/13yRLukZxg8EotJWaz9YnH_S-iPEM8QNQY3Xxdv3Kg_E/edit#gid=1908149057" target="_blank">
+                      <a href="https://docs.google.com/spreadsheets/d/13yRLukZxg8EotJWaz9YnH_S-iPEM8QNQY3Xxdv3Kg_E/edit#gid=1908149057" target="_blank" rel="noopener noreferrer">
                         College/University CyberGuidance for Illinois Students
                       </a>
                     </h3>

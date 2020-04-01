@@ -62,7 +62,70 @@ const Scholarships = () => {
               <h1 class="mb-1">Scholarship Links</h1>
               <br />
 
-              {/* Heading */}
+              {/* Month */}
+              <h2 class="font-weight-bold">April</h2>
+
+              {/* Scholarship Title */}
+              <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Ava's Grace Scholarship</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> Up to $5,000 renewable for 4 years<br />
+                <span class="font-weight-bold">Eligibility:</span> Students who have parents who are currently or have been incarcerated and live in Missouri or Illinois counties that are part of the St. Louis Metro area.
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="https://www.chicagohomeless.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Chicago Coalition for the Homeless</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 13, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $2,500<br />
+                <span class="font-weight-bold">Eligibility:</span> Students from Chicago and suburban schools are eligible to apply in 2020, as well as Chicago Coalition for the Homeless youth leaders and former youth clients.
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="https://www.ccclatinocaucus.org/clcf-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Chi Latino Caucus</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 10, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $5,000<br />
+                <span class="font-weight-bold">Eligibility:</span> Studnets must currently reside in Chicago, Illinois and be at least one-half Hispanic/Latino.
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="https://www.microsoft.com/en-us/diversity/programs/blacks-scholarships.aspx" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Blacks at Microsoft Scholarship</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $5,000 for up to four (4) consecutive years <br />
+                <span class="font-weight-bold">Eligibility:</span> Students must be a high-school senior of African descent (African American or African).
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="https://www.microsoft.com/en-us/diversity/programs/blacks-scholarships.aspx" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">AKA Imani Pearls Community Development Foundation Scholarship</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 3, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $5,000<br />
+                <span class="font-weight-bold">Eligibility:</span> The applicant must have permanent residency or attend school in the Bronzeville, Douglas, Englewood, Grand Boulevard, Hyde Park, Kenwood, Oakland, or Washington Park community in Chicago, Illinois.
+              </p>
+
+              {/* Month */}
               <h2 class="font-weight-bold">March</h2>
 
               {/* Heading */}
