@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -21,6 +22,7 @@ class Scholarship(models.Model):
     posted_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
