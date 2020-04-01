@@ -18,6 +18,10 @@ class Scholarship(models.Model):
         default=EXACT,
     )
     deadline = models.DateField()
+    posted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+    )
 
     def __str__(self):
         return self.name

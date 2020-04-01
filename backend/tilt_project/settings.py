@@ -125,11 +125,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_URL = '/static/'
-
 #### Add-ons ####
 
 # authentication
@@ -146,21 +141,9 @@ GRAPHENE = {
     'SCHEMA': 'tilt_project.schema.schema',
 }
 
-# heroku
+# heroku database
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
-
-if ENVIRONMENT == 'development':
-    STATICFILES_DIRS = [os.path.join(BASE_DIR)]
-    WHITENOISE_ROOT = os.path.join(BASE_DIR)
-
-if ENVIRONMENT == 'production':
-    TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
-    STATICFILES_DIRS = [os.path.join( "frontend", "build", "static")]
-    WHITENOISE_ROOT = os.path.join("frontend", "build", "root")
 
 
 # security for production
@@ -176,3 +159,17 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+
+# static files
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
+
+if ENVIRONMENT == 'development':
+    STATICFILES_DIRS = [os.path.join(BASE_DIR)]
+    WHITENOISE_ROOT = os.path.join(BASE_DIR)
+
+if ENVIRONMENT == 'production':
+    TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
+    STATICFILES_DIRS = [os.path.join( "frontend", "build", "static")]
+    WHITENOISE_ROOT = os.path.join("frontend", "build", "root")
