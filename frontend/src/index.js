@@ -1,7 +1,10 @@
-import ApolloClient, { gql } from 'apollo-boost';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { ApolloClient } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import './scss/theme.scss';
 import 'aos/dist/aos.css';
@@ -9,7 +12,6 @@ import 'cross-fetch/polyfill';
 
 import ContactUs from './components/ContactUs';
 import HomePage from './components/HomePage';
-import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ResourcesFAQs from './components/resources/ResourcesFAQs';
 import ResourcesIntro from './components/resources/ResourcesIntro';
@@ -17,32 +19,17 @@ import Scholarships from './components/resources/Scholarships';
 import ScrollToTop from './components/ScrollToTop';
 import Terminology from './components/resources/Terminology';
 import TermsOfService from './components/TermsOfService';
+import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
 
-const client = new ApolloClient({
-  uri: 'https://localhost:8000/graphql',
-  request: operation => {
-    operation.setContext({
-      headers: {
-        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImV4cCI6MTU4NTg0NTYzNiwib3JpZ19pYXQiOjE1ODU4NDUzMzZ9.M-tYqYuIcr0hVpuq-FswbWwoJsY0tvtcmuKa_UZbNJA'
-      },
-    });
-  },
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:8000',
 })
 
-const GET_USER = gql`
-  {
-    me {
-      username
-      email
-    }
-  }
-`;
-
-client
-  .query({
-    query: GET_USER,
-  })
-  .then(console.log);
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
 
 const App = () => {
     useEffect(() => {
@@ -53,7 +40,7 @@ const App = () => {
     });
 
   return (
-    <div>
+    <ApolloProvider client={client}>
       <BrowserRouter>
         <ScrollToTop>
           <Route path="/" exact component={HomePage} />
@@ -66,7 +53,7 @@ const App = () => {
           <Route path='/resources/terminology' exact component={Terminology} />
         </ScrollToTop>
       </BrowserRouter>
-    </div>
+    </ApolloProvider>
   );
 };
 
