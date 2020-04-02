@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Footer from './Footer';
 import NavBar from './NavBar';
 
 const TermsOfService = () => {
+  useEffect(() => {
+    document.title = 'Tilt: Terms of Service';
+  });
+
   return (
-    <body>
-      <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div>
       <NavBar classList=" navbar-light bg-white border-bottom" type="boxed" />
       {/* CONTENT
       ================================================== */}
@@ -397,7 +400,7 @@ const TermsOfService = () => {
         </div>
       </div>
       <Footer classList=" bg-dark"/>
-    </body>
+    </div>
   );
 };
 

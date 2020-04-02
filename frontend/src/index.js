@@ -1,9 +1,11 @@
+import ApolloClient, { gql } from 'apollo-boost';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import './scss/theme.scss';
 import 'aos/dist/aos.css';
+import 'cross-fetch/polyfill';
 
 import ContactUs from './components/ContactUs';
 import HomePage from './components/HomePage';
@@ -16,6 +18,31 @@ import ScrollToTop from './components/ScrollToTop';
 import Terminology from './components/resources/Terminology';
 import TermsOfService from './components/TermsOfService';
 
+const client = new ApolloClient({
+  uri: 'https://localhost:8000/graphql',
+  request: operation => {
+    operation.setContext({
+      headers: {
+        authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImV4cCI6MTU4NTg0NTYzNiwib3JpZ19pYXQiOjE1ODU4NDUzMzZ9.M-tYqYuIcr0hVpuq-FswbWwoJsY0tvtcmuKa_UZbNJA'
+      },
+    });
+  },
+})
+
+const GET_USER = gql`
+  {
+    me {
+      username
+      email
+    }
+  }
+`;
+
+client
+  .query({
+    query: GET_USER,
+  })
+  .then(console.log);
 
 const App = () => {
     useEffect(() => {

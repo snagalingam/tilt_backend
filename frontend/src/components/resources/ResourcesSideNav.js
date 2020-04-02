@@ -4,40 +4,40 @@ import { Link } from 'react-router-dom';
 
 const ResourcesSideNav = () => {
   return (
-    <div class="collapse d-lg-block" id="sidenavCollapse">
-      <div class="py-7 py-lg-9 px-lg-7">
+    <div className="collapse d-lg-block" id="sidenavCollapse">
+      <div className="py-7 py-lg-9 px-lg-7">
 
         {/* Links */}
-        <ul class="list mb-6">
-          <li class="list-item">
-            <Link class="list-link" to="/resources">Introduction</Link>
+        <ul className="list mb-6">
+          <li className="list-item">
+            <Link className="list-link" to="/resources">Introduction</Link>
           </li>
         </ul>
 
         {/* Heading */}
-        <h6 class="text-uppercase font-weight-bold">
+        <h6 className="text-uppercase font-weight-bold">
           Financial Aid
         </h6>
 
         {/* Links */}
-        <ul class="list mb-6">
-          <li class="list-item">
-            <Link class="list-link" to="/resources/terminology">Terminology</Link>
+        <ul className="list mb-6">
+          <li className="list-item">
+            <Link className="list-link" to="/resources/terminology">Terminology</Link>
           </li>
-          <li class="list-item d-flex">
-            <Link class="list-link" to="/resources/faqs">FAQs</Link>
+          <li className="list-item d-flex">
+            <Link className="list-link" to="/resources/faqs">FAQs</Link>
           </li>
         </ul>
 
         {/* Heading */}
-        <h6 class="text-uppercase font-weight-bold">
+        <h6 className="text-uppercase font-weight-bold">
           Scholarships
         </h6>
 
         {/* Links */}
-        <ul class="list mb-6">
-          <li class="list-item">
-            <Link class="list-link" to="/resources/scholarships">Links</Link>
+        <ul className="list mb-6">
+          <li className="list-item">
+            <Link className="list-link" to="/resources/scholarships">Links</Link>
           </li>
         </ul>
       </div>
