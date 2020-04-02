@@ -1,7 +1,8 @@
 import graphene
 import graphql_jwt
 
-import scholarships.schema, users.schema
+import scholarships.schema
+import users.schema
 
 class Query(
     scholarships.schema.Query,
@@ -19,4 +20,4 @@ class Mutation(
     verify_token = graphql_jwt.Verify.Field()
     refersh_token = graphql_jwt.Refresh.Field()
 
-schema = graphene.Schema(query = Query, mutation = Mutation)
+schema = graphene.Schema(query=Query, mutation=Mutation)

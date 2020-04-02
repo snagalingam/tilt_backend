@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import NavBar from '../NavBar';
 import ResourcesSideNav from './ResourcesSideNav';
 
+
+const BG_LIGHT = "bg-light";
+const BODY_PADDING = "body-padding";
+
 const ResourcesIntro = () => {
+  useEffect(() => {
+    document.title = 'Tilt: Resources Introduction';
+    document.body.classList.add(BG_LIGHT, BODY_PADDING);
+  });
+
   return (
-    <body class="bg-light" style={{ paddingTop: "84px" }}>
-      <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div>
       <NavBar classList=" navbar-light fixed-top bg-white border-bottom" type="fluid" />
 
       {/* BREADCRUMB
@@ -164,7 +172,7 @@ const ResourcesIntro = () => {
           </div>
         </div>
       </section>
-    </body>
+    </div>
   );
 };
 
