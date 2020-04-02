@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import NavBar from '../NavBar';
 import ResourcesSideNav from './ResourcesSideNav';
+import ScholarshipList from './ScholarshipList';
 
 
 const BG_LIGHT = "bg-light";
@@ -72,29 +73,7 @@ const Scholarships = () => {
               {/* Month */}
               <h2 className="font-weight-bold">April</h2>
 
-              {/* Scholarship Title */}
-              <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">
-                <h4 className="font-weight-bold">Ava's Grace Scholarship</h4>
-              </a>
-
-              {/* Scholarship Details */}
-              <p className="text-gray-700">
-                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
-                <span className="font-weight-bold">Amount:</span> Up to $5,000 renewable for 4 years<br />
-                <span className="font-weight-bold">Eligibility:</span> Students who have parents who are currently or have been incarcerated and live in Missouri or Illinois counties that are part of the St. Louis Metro area.
-              </p>
-
-              {/* Scholarship Title */}
-              <a href="https://www.chicagohomeless.org/scholarships/" target="_blank" rel="noopener noreferrer">
-                <h4 className="font-weight-bold">Chicago Coalition for the Homeless</h4>
-              </a>
-
-              {/* Scholarship Details */}
-              <p className="text-gray-700">
-                <span className="font-weight-bold">Deadline:</span> April 13, 2020<br />
-                <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Students from Chicago and suburban schools are eligible to apply in 2020, as well as Chicago Coalition for the Homeless youth leaders and former youth clients.
-              </p>
+              <ScholarshipList />
 
               {/* Scholarship Title */}
               <a href="https://www.ccclatinocaucus.org/clcf-scholarship/" target="_blank" rel="noopener noreferrer">

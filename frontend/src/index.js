@@ -23,7 +23,7 @@ import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/hel
 
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:8000',
+  uri: 'http://localhost:8000/graphql',
 })
 
 const client = new ApolloClient({

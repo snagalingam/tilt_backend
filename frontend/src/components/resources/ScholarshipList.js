@@ -1,32 +1,47 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 import ScholarshipDetail from './ScholarshipDetail';
 
 
-const ScholarshipList = props => {
-  const linksToRender = [
-    {
-      id: '1',
-      description: 'Prisma turns your database into a GraphQL API 😎',
-      url: 'https://www.prismagraphql.com',
-    },
-    {
-      id: '2',
-      description: 'The best GraphQL client',
-      url: 'https://www.apollographql.com/docs/react/',
-    },
-  ]
+const SCHOLARSHIPS_QUERY = gql`
+  {
+    scholarships {
+      id
+      name
+      amount
+      deadline
+      url
+    }
+  }
+`;
 
+const ScholarshipList = () => {
   return(
-    <div>
-    {linksToRender.map(scholarship =>
-        <ScholarshipDetail
-          key={scholarship.id}
-          description={scholarship.description}
-          url={scholarship.url}
-        />
-      )
-    };
-    </div>
+    <Query query={SCHOLARSHIPS_QUERY}>
+      {({ loading, error, data }) => {
+        if (loading) return <div>Loading ...</div>
+        if (error) return <div>Error</div>
+
+        const scholarshipsToRender = data.scholarships;
+
+        console.log(scholarshipsToRender);
+
+        return (
+          <div>
+            {scholarshipsToRender.map(scholarship =>
+              <ScholarshipDetail
+                key={scholarship.id}
+                name={scholarship.name}
+                amount={scholarship.amount}
+                deadline={scholarship.deadline}
+                url={scholarship.url}
+              />
+            )}
+          </div>
+        )
+      }}
+    </Query>
   );
 };
 

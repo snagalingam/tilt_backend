@@ -17,37 +17,33 @@ class Query(graphene.ObjectType):
 
 class CreateScholarship(graphene.Mutation):
     id = graphene.Int()
-    url = graphene.String()
+    name = graphene.String()
     amount = graphene.Int()
-    amount_descriptor = graphene.String()
     deadline = graphene.types.datetime.Date()
-    posted_by = graphene.Field(UserType)
+    url = graphene.String()
 
     class Arguments:
-        url = graphene.String()
+        name = graphene.String()
         amount = graphene.Int()
-        amount_descriptor = graphene.String()
         deadline = graphene.types.datetime.Date()
+        url = graphene.String()
 
-    def mutate(self, info, url, amount, amount_descriptor, deadline):
-        user = info.context.user or None
+    def mutate(self, info, name, amount, deadline, url):
 
         scholarship = Scholarship(
-            url=url,
+            name=name,
             amount=amount,
-            amount_descriptor=amount_descriptor,
             deadline=deadline,
-            posted_by=user,
+            url=url,
         )
         scholarship.save()
 
         return CreateScholarship(
             id=scholarship.id,
-            url=scholarship.url,
+            name=scholarship.name,
             amount=scholarship.amount,
-            amount_descriptor=scholarship.amount_descriptor,
             deadline=scholarship.deadline,
-            posted_by=scholarship.posted_by,
+            url=scholarship.url,
         )
 
 class Mutation(graphene.ObjectType):
