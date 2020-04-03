@@ -11,6 +11,8 @@ const ResourcesIntro = () => {
   useEffect(() => {
     document.title = 'Tilt: Resources Introduction';
     document.body.classList.add(BG_LIGHT, BODY_PADDING);
+
+    return () => { document.body.classList.remove(BG_LIGHT, BODY_PADDING) }
   });
 
   return (

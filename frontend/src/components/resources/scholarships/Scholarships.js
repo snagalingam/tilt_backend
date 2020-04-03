@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import NavBar from '../NavBar';
-import ResourcesSideNav from './ResourcesSideNav';
+import NavBar from '../../NavBar';
+import ResourcesSideNav from '../ResourcesSideNav';
 import ScholarshipList from './ScholarshipList';
 
 

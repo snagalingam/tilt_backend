@@ -11,6 +11,8 @@ const Terminology = () => {
   useEffect(() => {
     document.title = 'Tilt: Terminology';
     document.body.classList.add(BG_LIGHT, BODY_PADDING);
+
+    return () => { document.body.classList.remove(BG_LIGHT, BODY_PADDING) }
   });
 
   return (
