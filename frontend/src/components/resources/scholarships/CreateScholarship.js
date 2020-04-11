@@ -23,6 +23,9 @@ const CreateScholarship = () => {
     createScholarship,
     { error: mutationError },
   ] = useMutation(CREATE_SCHOLARSHIP);
+  if (mutationError) {
+    console.log(JSON.stringify(mutationError));
+  };
 
   useEffect(() => {
     document.title = 'Tilt: Create Scholarship';
@@ -113,7 +116,6 @@ const CreateScholarship = () => {
                 </Form>
               )}
             </Formik>
-            {mutationError && console.log(JSON.stringify(mutationError))}
           </div>
         </div>
       </div>
