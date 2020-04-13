@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import NavBar from '../NavBar';
 import ResourcesSideNav from './ResourcesSideNav';
@@ -8,6 +8,11 @@ const BG_LIGHT = "bg-light";
 const BODY_PADDING = "body-padding";
 
 const ResourcesFAQs = () => {
+  const [sideNavCollapsed, setSideNavCollapsed] = useState(true);
+  const toggleSideNav = () => setSideNavCollapsed(!sideNavCollapsed);
+  const classSideNavCollapsed = sideNavCollapsed ? 'collapse d-lg-block' : 'collapse d-lg-block show';
+  const classSideNavToggler = sideNavCollapsed ? 'navbar-toggler collapsed' : 'navbar-toggler';
+
   useEffect(() => {
     document.title = 'Tilt: Resources FAQs';
     document.body.classList.add(BG_LIGHT, BODY_PADDING);
@@ -45,7 +50,7 @@ const ResourcesFAQs = () => {
 
               {/* Toggler */}
               <div class="navbar-dark">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button className={classSideNavToggler} type="button" onClick={toggleSideNav} data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
               </div>
@@ -62,7 +67,9 @@ const ResourcesFAQs = () => {
           <div class="row">
             <div class="col-12 col-lg-3 col-xl-2 px-lg-0 border-bottom border-bottom-lg-0 border-right-lg border-gray-300 sidenav sidenav-left">
 
-              <ResourcesSideNav />
+              <div className={classSideNavCollapsed} id="sidenavCollapse">
+                <ResourcesSideNav />
+              </div>
 
             </div>
             <div class="col-12 col-lg-8 col-xl-8 offset-lg-3 offset-xl-2 py-7 py-lg-9 px-lg-7">

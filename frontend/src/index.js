@@ -6,8 +6,9 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-import './scss/theme.scss';
 import 'aos/dist/aos.css';
+import './fonts/Feather/feather.css';
+import './scss/theme.scss';
 import 'cross-fetch/polyfill';
 
 import CreateScholarship from './components/resources/scholarships/CreateScholarship';

@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import NavBar from '../../NavBar';
 import ResourcesSideNav from '../ResourcesSideNav';
-import ScholarshipList from './ScholarshipList';
 
 
 const BG_LIGHT = "bg-light";
 const BODY_PADDING = "body-padding";
 
 const Scholarships = () => {
+  const [sideNavCollapsed, setSideNavCollapsed] = useState(true);
+  const toggleSideNav = () => setSideNavCollapsed(!sideNavCollapsed);
+  const classSideNavCollapsed = sideNavCollapsed ? 'collapse d-lg-block' : 'collapse d-lg-block show';
+  const classSideNavToggler = sideNavCollapsed ? 'navbar-toggler collapsed' : 'navbar-toggler';
+
   useEffect(() => {
     document.title = 'Tilt: Scholarships';
     document.body.classList.add(BG_LIGHT, BODY_PADDING);
+
+    return () => { document.body.classList.remove(BG_LIGHT, BODY_PADDING) }
   });
 
   return (
@@ -34,7 +40,7 @@ const Scholarships = () => {
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   <span className="text-white">
-                    Upcoming Deadlines
+                    Links
                   </span>
                 </li>
               </ol>
@@ -44,7 +50,7 @@ const Scholarships = () => {
 
               {/* Toggler */}
               <div className="navbar-dark">
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button className={classSideNavToggler} type="button" onClick={toggleSideNav} data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span className="navbar-toggler-icon"></span>
                 </button>
               </div>
@@ -61,7 +67,9 @@ const Scholarships = () => {
           <div className="row">
             <div className="col-12 col-lg-3 col-xl-2 px-lg-0 border-bottom border-bottom-lg-0 border-right-lg border-gray-300 sidenav sidenav-left">
 
-              <ResourcesSideNav />
+              <div className={classSideNavCollapsed} id="sidenavCollapse">
+                <ResourcesSideNav />
+              </div>
 
             </div>
             <div className="col-12 col-lg-8 col-xl-8 offset-lg-3 offset-xl-2 py-7 py-lg-9 px-lg-7">
@@ -71,9 +79,104 @@ const Scholarships = () => {
               <br />
 
               {/* Month */}
+              <h2 className="font-weight-bold">May</h2>
+
+              {/* Scholarship */}
+              <a href="https://www.chicagoengineersfoundation.org/awards/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Chicago Engineer Foundation Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Chicago high school student pursuing engineering program with at least a 2.5 GPA.
+              </p>
+
+              {/* Month */}
               <h2 className="font-weight-bold">April</h2>
 
-              <ScholarshipList />
+              {/* Scholarship */}
+              <a href="https://www.monarchawardsfoundation.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Chicago Metropolitan High School Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $3,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Chicago high school students.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Fiesta del Sol Guadalupe A. Reyes Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 24, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Students who identify as Hispnic / Latino.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.nshss.org/scholarships/s/nshss-steam-scholarships-2020/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">NSHSS STEM Scholarships</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span>
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.corinnelicostiefamilyfoundation.com/apply.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Corinne Licostie Family Foundation Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span>
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://thebhwgroup.com/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">BHW Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $3,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Students who have parents who are currently or have been incarcerated and live in Missouri or Illinois counties that are part of the St. Louis Metro area.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://balkhifoundation.com/making-education-more-affordable/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Balkhi Foundation Higher Education Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1000<br />
+                <span className="font-weight-bold">Eligibility:</span>
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Ava's Grace Scholarship</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Up to $5,000 renewable for 4 years<br />
+                <span className="font-weight-bold">Eligibility:</span> Students who have parents who are currently or have been incarcerated and live in Missouri or Illinois counties that are part of the St. Louis Metro area.
+              </p>
+
+              {/* Scholarship Title */}
+              <a href="https://www.chicagohomeless.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Chicago Coalition for the Homeless</h4>
+              </a>
+
+              {/* Scholarship Details */}
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 13, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Students from Chicago and suburban schools are eligible to apply in 2020, as well as Chicago Coalition for the Homeless youth leaders and former youth clients.
+              </p>
 
               {/* Scholarship Title */}
               <a href="https://www.ccclatinocaucus.org/clcf-scholarship/" target="_blank" rel="noopener noreferrer">
