@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import NavBar from '../NavBar';
 import ResourcesSideNav from './ResourcesSideNav';
 
 
 const Scholarships = () => {
+  const [sideNavCollapsed, setSideNavCollapsed] = useState(true);
+  const toggleSideNav = () => setSideNavCollapsed(!sideNavCollapsed);
+  const classSideNavCollapsed = sideNavCollapsed ? 'collapse d-lg-block' : 'collapse d-lg-block show';
+  const classSideNavToggler = sideNavCollapsed ? 'navbar-toggler collapsed' : 'navbar-toggler';
+
   return (
     <body class="bg-light" style={{ paddingTop: "84px" }}>
       <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -36,7 +41,7 @@ const Scholarships = () => {
 
               {/* Toggler */}
               <div class="navbar-dark">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button className={classSideNavToggler} type="button" onClick={toggleSideNav} data-toggle="collapse" data-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
               </div>
@@ -53,7 +58,9 @@ const Scholarships = () => {
           <div class="row">
             <div class="col-12 col-lg-3 col-xl-2 px-lg-0 border-bottom border-bottom-lg-0 border-right-lg border-gray-300 sidenav sidenav-left">
 
-              <ResourcesSideNav />
+              <div class={classSideNavCollapsed} id="sidenavCollapse">
+                <ResourcesSideNav />
+              </div>
 
             </div>
             <div class="col-12 col-lg-8 col-xl-8 offset-lg-3 offset-xl-2 py-7 py-lg-9 px-lg-7">
@@ -63,7 +70,80 @@ const Scholarships = () => {
               <br />
 
               {/* Month */}
+              <h2 class="font-weight-bold">May</h2>
+
+              {/* Scholarship */}
+              <a href="https://www.chicagoengineersfoundation.org/awards/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Chicago Engineer Foundation Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> May 1, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $1,000<br />
+                <span class="font-weight-bold">Eligibility:</span> Chicago high school student pursuing engineering program with at least a 2.5 GPA.
+              </p>
+
+              {/* Month */}
               <h2 class="font-weight-bold">April</h2>
+
+              {/* Scholarship */}
+              <a href="https://www.monarchawardsfoundation.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Chicago Metropolitan High School Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $3,000<br />
+                <span class="font-weight-bold">Eligibility:</span> Chicago high school students.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Fiesta del Sol Guadalupe A. Reyes Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 24, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $1,500<br />
+                <span class="font-weight-bold">Eligibility:</span> Students who identify as Hispnic / Latino.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.nshss.org/scholarships/s/nshss-steam-scholarships-2020/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">NSHSS STEM Scholarships</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $1,000<br />
+                <span class="font-weight-bold">Eligibility:</span>
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.corinnelicostiefamilyfoundation.com/apply.html" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Corinne Licostie Family Foundation Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $500<br />
+                <span class="font-weight-bold">Eligibility:</span>
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://thebhwgroup.com/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">BHW Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $3,000<br />
+                <span class="font-weight-bold">Eligibility:</span> Students who have parents who are currently or have been incarcerated and live in Missouri or Illinois counties that are part of the St. Louis Metro area.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://balkhifoundation.com/making-education-more-affordable/" target="_blank" rel="noopener noreferrer">
+                <h4 class="font-weight-bold">Balkhi Foundation Higher Education Scholarship</h4>
+              </a>
+              <p class="text-gray-700">
+                <span class="font-weight-bold">Deadline:</span> April 15, 2020<br />
+                <span class="font-weight-bold">Amount:</span> $1000<br />
+                <span class="font-weight-bold">Eligibility:</span>
+              </p>
 
               {/* Scholarship Title */}
               <a href="http://avasgrace.org/scholarship/scholarship-details/" target="_blank" rel="noopener noreferrer">

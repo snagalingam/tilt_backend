@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import './scss/theme.scss';
 import 'aos/dist/aos.css';
+import './fonts/Feather/feather.css';
+import './scss/theme.scss';
 
 import ContactUs from './components/ContactUs';
 import HomePage from './components/HomePage';
