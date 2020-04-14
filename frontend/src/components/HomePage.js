@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Check } from 'react-feather';
 import { Link } from 'react-router-dom';
 
@@ -14,9 +14,12 @@ import solorio from '../img/clients/solorio.svg';
 import westinghouse from '../img/clients/westinghouse.svg';
 
 const HomePage = () => {
+  useEffect(() => {
+    document.title = 'Financial aid help for high school students - Tilt';
+  });
+
   return (
-    <body>
-      <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div>
       <NavBar classList=" navbar-light bg-white" type="boxed" />
       {/* WELCOME
       ================================================== */}
@@ -330,7 +333,7 @@ const HomePage = () => {
       <div className="position-relative mt-n8">
           <div className="shape shape-bottom shape-fluid-x svg-shim text-gray-200">
             <svg viewBox="0 0 2880 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M2160 0C1440 240 720 240 720 240H0V480H2880V0H2160Z" fill="currentColor"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M2160 0C1440 240 720 240 720 240H0V480H2880V0H2160Z" fill="currentColor"/>
             </svg>
         </div>
       </div>
@@ -618,7 +621,7 @@ const HomePage = () => {
         </div>
       </div>
       <Footer />
-    </body>
+    </div>
   );
 };
 

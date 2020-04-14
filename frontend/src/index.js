@@ -1,22 +1,39 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { ApolloClient } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import 'aos/dist/aos.css';
 import './fonts/Feather/feather.css';
 import './scss/theme.scss';
+import 'cross-fetch/polyfill';
 
+import CreateScholarship from './components/resources/scholarships/CreateScholarship';
 import ContactUs from './components/ContactUs';
 import HomePage from './components/HomePage';
-import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
+import Login from './components/account/Login';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ResourcesFAQs from './components/resources/ResourcesFAQs';
 import ResourcesIntro from './components/resources/ResourcesIntro';
-import Scholarships from './components/resources/Scholarships';
+import Scholarships from './components/resources/scholarships/Scholarships';
 import ScrollToTop from './components/ScrollToTop';
 import Terminology from './components/resources/Terminology';
 import TermsOfService from './components/TermsOfService';
+import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
 
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:8000/graphql',
+  credentials: 'same-origin'
+})
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
 
 const App = () => {
     useEffect(() => {
@@ -27,20 +44,22 @@ const App = () => {
     });
 
   return (
-    <div>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
         <ScrollToTop>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/contact" exact component={ContactUs} />
-          <Route path="/privacy-policy" exact component={PrivacyPolicy} />
-          <Route path="/terms-of-service" exact component={TermsOfService} />
-          <Route path='/resources' exact component={ResourcesIntro} />
-          <Route path='/resources/faqs' exact component={ResourcesFAQs} />
-          <Route path='/resources/scholarships' exact component={Scholarships} />
-          <Route path='/resources/terminology' exact component={Terminology} />
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/contact" component={ContactUs} />
+          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+          <Route exact path="/terms-of-service" component={TermsOfService} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path='/resources' component={ResourcesIntro} />
+          <Route exact path='/resources/faqs' component={ResourcesFAQs} />
+          <Route exact path='/resources/scholarships' component={Scholarships} />
+          <Route exact path='/resources/scholarships/create' component={CreateScholarship} />
+          <Route exact path='/resources/terminology' component={Terminology} />
         </ScrollToTop>
-      </BrowserRouter>
-    </div>
+      </ApolloProvider>
+    </BrowserRouter>
   );
 };
 

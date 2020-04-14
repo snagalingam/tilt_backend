@@ -11,7 +11,6 @@ class ScholarshipTests(TestCase):
             name='first scholarship',
             url='https://www.scholarship.com',
             amount='1000',
-            amount_descriptor='exact',
             deadline='2020-03-31',
         )
 
@@ -20,7 +19,6 @@ class ScholarshipTests(TestCase):
         name = f'{scholarship.name}'
         url = f'{scholarship.url}'
         amount = f'{scholarship.amount}'
-        amount_descriptor = f'{scholarship.amount_descriptor}'
         deadline = f'{scholarship.deadline}'
         self.assertEquals(name, 'first scholarship')
         self.assertEquals(url, 'https://www.scholarship.com')
