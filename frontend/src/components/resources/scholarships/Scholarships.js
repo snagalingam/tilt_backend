@@ -95,13 +95,13 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">April</h2>
 
               {/* Scholarship */}
-              <a href="https://scholarships.uncf.org/Program/Details/9a7dd298-99f5-41de-a0be-c72d0f011006" target="_blank" rel="noopener noreferrer">
+              <a href="https://scholarships.uncf.org/Program/Details/1dc8ade7-aa7f-4187-a7a6-6d3a8ede2758" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">UNCF/Best Buy Scholars Program</h4>
               </a>
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
-                <span className="font-weight-bold">Amount:</span> $6,000<br />
-                <span className="font-weight-bold">Eligibility:</span> You must be a graduating senior from Wellesley High School in the Town of Wellesley, MA and participant in METCO. You must also have at least a 2.5 GPA.
+                <span className="font-weight-bold">Amount:</span> $20,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be African American with demonstrated financial need and intent to enroll in an HBCU.
               </p>
 
               {/* Scholarship */}
