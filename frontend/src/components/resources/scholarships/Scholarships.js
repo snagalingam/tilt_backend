@@ -95,6 +95,36 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">April</h2>
 
               {/* Scholarship */}
+              <a href="https://scholarships.uncf.org/Program/Details/9a7dd298-99f5-41de-a0be-c72d0f011006" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">UNCF/Best Buy Scholars Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $6,000<br />
+                <span className="font-weight-bold">Eligibility:</span> You must be a graduating senior from Wellesley High School in the Town of Wellesley, MA and participant in METCO. You must also have at least a 2.5 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://scholarships.uncf.org/Program/Details/0b1c9f9b-ddea-468f-ac77-2b952ed0c48f" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Nevada Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> You must be a permanent resident of the Las Vegas region and attending an HBCU next fall. You must also have demonstrated financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.devantestokesscholarship.com/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Devante Stokes Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> You must reside in South Carolina and be attending an institution in the area.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://www.monarchawardsfoundation.org/scholarships" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Chicago Metropolitan High School Scholarship</h4>
               </a>
