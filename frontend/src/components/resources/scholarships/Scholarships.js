@@ -88,11 +88,161 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Chicago high school student pursuing engineering program with at least a 2.5 GPA.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Chicago with at least a 2.5 GPA and be pursuing an engineering degree.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.jssa.org/get-help/scholarships/scholarships-for-undergraduate-students/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Morton A. Gibson Memorial Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, be a US citizen, and have demonstrated community service.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.jssa.org/get-help/scholarships/scholarships-for-undergraduate-students/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Max and Emmy Dreyfuss Jewish Undergrad Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $4,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, and be a US citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.jssa.org/get-help/scholarships/scholarships-for-undergraduate-students/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">JSSA Educational Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $6,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Montgomery County in Maryland, identify as Jewish, be a US citizen, and have demonstrated need.
               </p>
 
               {/* Month */}
               <h2 className="font-weight-bold">April</h2>
+
+              {/* Scholarship */}
+              <a href="http://globalsportsdevelopment.org/exceptional-youth-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Global Sports Development: Exceptional Youth Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizen with at least a 3.0 GPA and have participated in community service.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.jccia.com/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">John Fischetti Scholarship Award 2020</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Italian, be from Chicago, and interested in pursuing journalism.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.edisonparkcc.com/jill-doherty-memorial-scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Jill Doherty Memorial Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Edison Park in Chicago and have participted in community service.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.joshgardnerendowment.org/application/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Joshua David Gardner Memorial Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a US citizen with at least a 2.8 GPA and attending an HBCU.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.maeandmarylegacyfoundation.org/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Mae & Mary Scholarship Fund </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be African American and interested in the health care field.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.niche.com/about/scholarship-rules/no-essay-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Niche "No Essay" Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://brownmae.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Norman Brown Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Black/African American, Native American/American Indian, Hispanic/Latin American, or Asian/Pacific Islander and have at least a 2.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.trea.org/TREA/Resources/Scholarship/TREA/Scholarships.aspx" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">TREA Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.shawncartersf.com/scholarship-fund/#app" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Shawn Carter Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens with at least a 2.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.tedrollinsecoscholars.com/ted-rollins-eco-scholarship-application-details/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Ted Rollins Eco Schlarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have demonstrated interest in sustainability.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.sarascholarship.org" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Sara Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be interested in golf, identify as a woman, have at least a 3.30 GPA, and have demonstrated financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://ncgc.org/scholarship-program/criteria/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Virginia W. Smith Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Long Island, NY and interested in horticulture.
+              </p>
 
               {/* Scholarship */}
               <a href="https://scholarships.uncf.org/Program/Details/1dc8ade7-aa7f-4187-a7a6-6d3a8ede2758" target="_blank" rel="noopener noreferrer">
