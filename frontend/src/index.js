@@ -20,6 +20,7 @@ import ResourcesFAQs from './components/resources/ResourcesFAQs';
 import ResourcesIntro from './components/resources/ResourcesIntro';
 import Scholarships from './components/resources/scholarships/Scholarships';
 import ScrollToTop from './components/ScrollToTop';
+import Sitemap from './components/Sitemap';
 import Terminology from './components/resources/Terminology';
 import TermsOfService from './components/TermsOfService';
 import { initializeAOS, initializeSmoothScroll, initializeTyped } from './js/helpers';
@@ -57,6 +58,7 @@ const App = () => {
           <Route exact path='/resources/scholarships' component={Scholarships} />
           <Route exact path='/resources/scholarships/create' component={CreateScholarship} />
           <Route exact path='/resources/terminology' component={Terminology} />
+          <Route exact path='/sitemap' component={Sitemap} />
         </ScrollToTop>
       </ApolloProvider>
     </BrowserRouter>
