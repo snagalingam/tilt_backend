@@ -92,6 +92,74 @@ const ResourcesIntro = () => {
 
               <div className="row">
 
+              {/* Card */}
+              <div className="card mb-4">
+                <div className="card-body">
+                  {/* Link */}
+                  <h3>
+                    <a href="https://docs.google.com/spreadsheets/d/1woEx8bil0ren77H6x-TSje1y_hyJxjnmCiBwa8NTYEQ/edit#gid=0" target="_blank" rel="noopener noreferrer">
+                      Virtual Webinars & College Fairs
+                    </a>
+                  </h3>
+
+                  {/* Text */}
+                  <p className="text-gray-700">
+                    A list of virtual webinars that are currently going on!
+                  </p>
+                </div>
+              </div>
+
+              {/* Card */}
+              <div className="card mb-4">
+                <div className="card-body">
+                  {/* Link */}
+                  <h3>
+                    <a href="https://docs.google.com/document/d/14Mn1CrA-CV5YZAkOZtrMKTmn2O4oL-2EhIXhzXZbO0A/edit?_hsenc=p2ANqtz-93yS8kqKmff-cyAu6H6-DHtrx253JuOkDZm-o3QrIa3m9eYp8MbzZYUuZKl1y5LIP3vd3U8tqeEXJAW_wKce3BhWbidg&_hsmi=86282518#bookmark=id.ymao8324o4p" target="_blank" rel="noopener noreferrer">
+                      College Perspectives by Current Students
+                    </a>
+                  </h3>
+
+                  {/* Text */}
+                  <p className="text-gray-700">
+                    In response to coronavirus, a group of current students wrote their opinions on each college they are attending.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card */}
+              <div className="card mb-4">
+                <div className="card-body">
+                  {/* Link */}
+                  <h3>
+                    <a href="https://www.strivescan.com/virtual/" target="_blank" rel="noopener noreferrer">
+                      Strive Virtual College Fair
+                    </a>
+                  </h3>
+
+                  {/* Text */}
+                  <p className="text-gray-700">
+                    From Monday, April 20 to Thursday, April 23, 2020, four full days of virtual presentations for juniors to explore college opportunities. 300+ colleges participating.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card */}
+              <div className="card mb-4">
+                <div className="card-body">
+                  {/* Link */}
+                  <h3>
+                    <a href="https://docs.google.com/spreadsheets/u/1/d/1sO7pVos0EvK0BvXoMbnyg00K6r7hXbOQE0HNXF4N4eM/htmlview?usp=sharing&fbclid=IwAR2Kg_sYSYPXB7Fmrfj7YEQS7rQe3AnSYqpGHORtHW5L0WYiIYbfa14S-Y4&utm_campaign=Content&utm_source=hs_email&utm_medium=email&utm_content=85334513&_hsenc=p2ANqtz-9aMHcq6m3jUeYn46lPkNTrvg1fT727me_voMcdhLYOXo7wQpUMT326QfYMo3ZSFVIks4UnWfHNvzHAvLXz2yd-22FpFQ&_hsmi=85334513#" target="_blank" rel="noopener noreferrer">
+                      College Virtual Tours
+                    </a>
+                  </h3>
+
+                  {/* Text */}
+                  <p className="text-gray-700">
+                    This is a spreadsheet that lists out multiple types of virtual resources to tour colleges.
+                  </p>
+                </div>
+              </div>
+
                 {/* Card */}
                 <div className="card mb-4">
                   <div className="card-body">
