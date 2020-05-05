@@ -18,32 +18,104 @@ class Query(graphene.ObjectType):
 class CreateScholarship(graphene.Mutation):
     id = graphene.Int()
     name = graphene.String()
-    amount = graphene.Int()
-    deadline = graphene.types.datetime.Date()
+    organization = graphene.String()
     url = graphene.String()
+    due_date = graphene.types.datetime.Date()
+    max_amount = graphene.Int()
+    renewable = graphene.Boolean()
+    category = graphene.String()
+    area_of_study = graphene.String()
+    location = graphene.String()
+    state = graphene.String()
+    ethnicity = graphene.String()
+    gender = graphene.String()
+    gpa = graphene.Float()
+    us_citizen = graphene.Boolean()
+    daca_status = graphene.Boolean()
+    financial_need = graphene.Boolean()
+    hbcu = graphene.Boolean()
 
     class Arguments:
         name = graphene.String()
-        amount = graphene.Int()
-        deadline = graphene.types.datetime.Date()
+        organization = graphene.String()
         url = graphene.String()
+        due_date = graphene.types.datetime.Date()
+        max_amount = graphene.Int()
+        renewable = graphene.Boolean()
+        category = graphene.String()
+        area_of_study = graphene.String()
+        location = graphene.String()
+        state = graphene.String()
+        ethnicity = graphene.String()
+        gender = graphene.String()
+        gpa = graphene.Float()
+        us_citizen = graphene.Boolean()
+        daca_status = graphene.Boolean()
+        financial_need = graphene.Boolean()
+        hbcu = graphene.Boolean()
 
-    def mutate(self, info, name, amount, deadline, url):
+    def mutate(
+        self,
+        info,
+        name,
+        organization,
+        url,
+        due_date,
+        max_amount,
+        renewable,
+        category,
+        area_of_study,
+        location,
+        state,
+        ethnicity,
+        gender,
+        gpa,
+        us_citizen,
+        daca_status,
+        financial_need,
+        hbcu
+    ):
 
         scholarship = Scholarship(
             name=name,
-            amount=amount,
-            deadline=deadline,
+            organization=organization,
             url=url,
+            due_date=due_date,
+            max_amount=max_amount,
+            renewable=renewable,
+            category=category,
+            area_of_study=area_of_study,
+            location=location,
+            state=state,
+            ethnicity=ethnicity,
+            gender=gender,
+            gpa=gpa,
+            us_citizen=us_citizen,
+            daca_status=daca_status,
+            financial_need=financial_need,
+            hbcu=hbcu,
         )
         scholarship.save()
 
         return CreateScholarship(
             id=scholarship.id,
-            name=scholarship.name,
-            amount=scholarship.amount,
-            deadline=scholarship.deadline,
+            name=scholraship.name,
+            organization=scholarship.organization,
             url=scholarship.url,
+            due_date=scholarship.due_date,
+            max_amount=scholarship.max_amount,
+            renewable=scholarship.renewable,
+            category=scholarship.category,
+            area_of_study=scholarship.area_of_study,
+            location=scholarship.location,
+            state=scholarship.state,
+            ethnicity=scholarship.ethnicity,
+            gender=scholarship.gender,
+            gpa=scholarship.gpa,
+            us_citizen=scholarship.us_citizen,
+            daca_status=scholaraship.daca_status,
+            financial_need=scholarship.financial_need,
+            hbcu=scholarship.hbcu,
         )
 
 class Mutation(graphene.ObjectType):
