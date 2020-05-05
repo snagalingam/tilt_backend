@@ -82,6 +82,216 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">May</h2>
 
               {/* Scholarship */}
+              <a href="https://www.angelswingsfoundation.org/angels-wings-thai-scholarship-2020" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Angels Wings Thai Scholarships</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 18, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have at least a 3.0 GPA and identify as Thai.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.upakar.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Upakar Indian-American Scholarship Foundation Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Indian, be US citizens with financial need, and have at least a 3.60 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://lmofoundation.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Gladys Lewis HBCU Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have demonstrated commitment to community service, identify as women, have at least a 2.75 GPA, and attend an HBCU.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://lmofoundation.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Jessie M. Shaw Merit Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Students must have demonstrated commitment to community service, identify as women, and have at least a 3.30 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://lmofoundation.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Claudette McFarland Winstead Need Based Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have a demonstrated interest in community service, identify as women, have at least a 2.75 GPA, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.revgruffoloscholarship.com" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Rev. George Ruffolo Memorial Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Cook County, IL with at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.vaneseagape.org/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Keisha Bodden Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US Citizens with financial need, have at least a 2.75 GPA, and be from Florida.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.maxwell.org/guidelines" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Edmund F. Maxwell Foundation</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Washington and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.thecha.org/residents/chicago-housing-authority-scholarship-program" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Chicago Housing Authority Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 14, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be listed on a Chicago Housing Authoritty lease and have at least a 2.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.illinoishotels.org/Scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">IHLAEF Scholarships</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 14, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000 - $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens from Illinois and pursuing a degree in hospitality.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://azdchipsi.org/buell/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Temple Hoyne Buell Memorial Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 9, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be entering freshmen at UIUC and identify as men.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.fiestadelsol.org/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Fiesta del Sol Guadalupe A. Reyes Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Latinx.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://cps.academicworks.com/opportunities/3354" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Lakeside Bank "Write On!" Creative Writing Challenge</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be students at Chicago Public Schools with financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://bhw.hrsa.gov/loans-scholarships/nurse-corps/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">NURSE Corps Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be pursuing a nursing degree and be US citizens with financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://allwomeninmedia.org/ford-emerging-voices-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Ford Emerging Voices Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000 or $3,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as women and be interested in journalism.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.beccascloset.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Becca's Closet Scholarships</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Unknown<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have demonstrated commitment to community service with at least a 2.0 GPA. Both US citizens and DACA students can apply.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.isee.org/students" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">SEE Education Foundation Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500 - $7,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need and be pursuing a degree related to the explosives industry.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://whitakerwatercolors.org/the-foundation/the-foundation-scholarship-fund-and-application/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Foundation Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 5, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be interested in art and be US citizens with at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.thermofisher.com/us/en/home/life-science/antibodies/thermo-fisher-scientific-antibody-scholarship-program.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Thermo Fischer Antibody Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 5, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000 - $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be pursuing a degree in life sciences and be US citizens with at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.cgcs.org/Scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">CGCS - Bernard Harris Scholars </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 4, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be pursuing a degree in STEM with a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.calculatedgenius.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Steminist Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 3, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from Chicago, IL and pursuing a degree in STEM, and identify as women with at least a 3.0 GPA. Both US citizens and DACA students can apply.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://www.chicagoengineersfoundation.org/awards/" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Chicago Engineer Foundation Scholarship</h4>
               </a>
