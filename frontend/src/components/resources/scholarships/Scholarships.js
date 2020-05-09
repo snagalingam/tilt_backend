@@ -82,6 +82,16 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">May</h2>
 
               {/* Scholarship */}
+              <a href="https://scholarships.uncf.org/Program/Details/be57b2be-b03d-4dc3-bcee-78cf9f6b0ea2?_ga=2.30033471.1867487941.1586898157-80437064.1586898157" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">William L. & Mary Ann Brown Scholarships</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 22, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Meckleburg Co, NC, plan to attend a HBCU, plan to pursue STEM, have a 3.0 GPA, have financial need, and be a U.S. Citizen
+              </p>
+
+              {/* Scholarship */}
               <a href="https://www.angelswingsfoundation.org/angels-wings-thai-scholarship-2020" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Angels Wings Thai Scholarships</h4>
               </a>
