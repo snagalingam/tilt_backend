@@ -114,6 +114,11 @@ const Terminology = () => {
                 <span className="font-weight-bold text-primary">Gift Aid (also known as Grants and Scholarships):</span> A gift that college or taxpayers are giving you to pay for your school that does not need to be repaid! Keep in mind that this amount may vary every year.
               </p>
 
+              {/* YouTube */}
+              <iframe title="need_vs_merit" width="320" height="240" src="https://www.youtube.com/embed/rMoqxV4L8Bs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <br />
+              <br />
+
               {/* Text */}
               <p className="text-gray-700">
                 <span className="font-weight-bold text-primary">Loans:</span> This is money that you are borrowing and needs to be repaid with interest. Interest is basically a fee that you pay someone for borrowing their money. You have to pay back how much you borrowed plus interest.
@@ -141,6 +146,9 @@ const Terminology = () => {
                 <span className="font-weight-bold text-primary">Work-Study:</span> This is the maximum amount of money you can get from a specific part-time job that the federal government subsidizes. However, you are still responsible to apply for and get a job.
               </p>
 
+              {/* Divider */}
+              <hr className="border-gray-300 my-6" />
+
               {/* Heading */}
               <h3 className="font-weight-bold" id="whyFigma">Calculations</h3>
 
@@ -155,6 +163,15 @@ const Terminology = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold text-primary">Tuition Bill:</span> This is the amount that you will have to pay directly to the college at the start of the semester.
               </p>
+
+              {/* Text */}
+              <p className="text-gray-700">
+                <span className="font-weight-bold text-primary">Expected Family Contribution:</span> This is the amount the government estimates your family can contribute to your college tuition annually. It is calculated by the information you provide in your FAFSA.
+              </p>
+
+              {/* YouTube */}
+              <iframe title="efc" width="320" height="240" src="https://www.youtube.com/embed/CWWRUm1SWd0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
             </div>
           </div>
         </div>
