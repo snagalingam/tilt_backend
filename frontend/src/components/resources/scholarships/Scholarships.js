@@ -82,6 +82,126 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">May</h2>
 
               {/* Scholarship */}
+              <a href="https://www.federalresources.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Warrior's Legacy Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a child of police, EMT, paramedic, fire fighter, or military parent, have at least a 3.0 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://againstthegrainproductions.com/atg-artistic-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Against the Grain Artistic Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue erforming arts, visual arts, journalism, or communications, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://againstthegrainproductions.com/lily-pabilona-emerging-entrepreneur-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Lily Pabilona</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://app.smartsheet.com/b/form/bc3d8106e24042ef9c888afe6c8c40f8" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Exelon African-American Resource Alliance (EAARA) Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates reside in Illinois, identify as African American, and have at least a 2.75 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://againstthegrainproductions.com/groundbreaker-leadership-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Against The Grain Groundbreaker Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.5 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.earnest.com/student-loans/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Earnest Scholarship Fund</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen or have DACA status.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://againstthegrainproductions.com/livelikelyly-memorial-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">RLyly Koenig Mendez Memorial Artistic Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to puruse fashion or graphic design, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.naaiachicago.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Ron Allen Award Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Chicago, IL and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.naaiachicago.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">NAAIA Chicago 2020 Insuring Excellence Awards</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Chicago, IL and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://cuidadocaserofoundation.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Nursing Student Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must puruse nursing, reside in Dallas, TX, identify as Hispanic/Latinx, have at least a 3.0 GPA, be a U.S. citizen, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://aynrand.org/students/essay-contests#tab-3-anthem" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Anthem Contest</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 28, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be in 11th or 12th grade.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://aynrand.org/students/essay-contests#tab-3-the-fountainhead" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Fountainhead Contest</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> May 28, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be in 11th or 12th grade.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://scholarships.uncf.org/Program/Details/be57b2be-b03d-4dc3-bcee-78cf9f6b0ea2?_ga=2.30033471.1867487941.1586898157-80437064.1586898157" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">William L. & Mary Ann Brown Scholarships</h4>
               </a>
