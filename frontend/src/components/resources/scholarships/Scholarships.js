@@ -79,6 +79,69 @@ const Scholarships = () => {
               <br />
 
               {/* Month */}
+              <h2 className="font-weight-bold">June</h2>
+
+              {/* Scholarship */}
+              <a href="https://arborjet.com/taking-root-scholarship-program/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Taking Root College Scholarship Program </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan on pursuing Plant Sciences, Horticulture, Entomology, Plant Pathology, Environmental Science and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ipcdf.org/cms/wp-content/uploads/2020/04/Microsoft-Word-2020-IPCDF-HBCU-Scholarship-Application-COVID-19-approved.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 HBCU Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan on attending a HBCU, reside in Chicago, IL, and have at least a 2.85 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ipcdf.org/cms/wp-content/uploads/2020/04/Microsoft-Word-2020-IPCDF-General-Scholarship-Application-COVID-19-approved.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 General Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Chicago, Illinois and have at least a 2.85 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ipcdf.org/cms/wp-content/uploads/2020/04/2020-IPCDF-Dana-G.-Woodley-Scholarship-Application-COVID-19-approved.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Dana G. Woodley Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue STEM, identify as African American, reside in Illinois, Michigan, or Indiana, have at least a 3.5 GPA, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ipcdf.org/cms/wp-content/uploads/2020/04/Microsoft-Word-IPCDF-2020-2-Year-College-Scholarship-Application-COVID-19-approved.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Two‐Year College and Vocation Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue two‐year colleges, vocational, trade or apprenticeship programs, reside in Chicago, IL and have at least a 2.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ipcdf.org/cms/wp-content/uploads/2020/04/Microsoft-Word-2020-IPCDF-Helen-R.-Jackson-Scholarship-Application-COVID-19-approved.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Helen R. Jackson Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Chicago, IL and have at least a 2.0 GPA.
+              </p>
+
+              {/* Month */}
               <h2 className="font-weight-bold">May</h2>
 
               {/* Scholarship */}
@@ -143,7 +206,7 @@ const Scholarships = () => {
 
               {/* Scholarship */}
               <a href="http://againstthegrainproductions.com/livelikelyly-memorial-scholarship/" target="_blank" rel="noopener noreferrer">
-                <h4 className="font-weight-bold">RLyly Koenig Mendez Memorial Artistic Scholarship</h4>
+                <h4 className="font-weight-bold">Lyly Koenig Mendez Memorial Artistic Scholarship</h4>
               </a>
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
