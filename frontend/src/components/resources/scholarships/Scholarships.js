@@ -82,6 +82,86 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">June</h2>
 
               {/* Scholarship */}
+              <a href="https://programs.applyists.com/walmartassociate/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Walmart Associate Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need, be a U.S. citizen, and be employed part-time or full-time by Walmart.   
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.cbsmf.org/scholarship.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Charles B. Staats Memorial Foundation Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must serve as a swim coach in their community and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://nyramblers.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">New York Ramblers Scholarships  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be an athlete, identify as lesbian, gay, bisexual, transgender, queer, or intersex person; or a demonstrated and committed ally, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.platinumed.com/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Platinum Educational Group Scholarship Program  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue EMS, Nursing, Allied Health Fields.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://ffrf.org/outreach/ffrf-student-scholarship-essay-contests" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 William J Schulz Memorial Essay Contest for College-Bound High School Seniors </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $3,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Open to all.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.joefrancis.com/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Joe Francais Haircare Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,200<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be currently applying for entrance into Cosmetology/Barber School, OR actively enrolled in a Cosmetology/Barber program.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.jasna.org/programs/essay-contest?" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Jane Austen Society of North America Essay Contest </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Open to all.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.iaee.com/helen-brett-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Helen Brett Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://arborjet.com/taking-root-scholarship-program/" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Taking Root College Scholarship Program </h4>
               </a>
