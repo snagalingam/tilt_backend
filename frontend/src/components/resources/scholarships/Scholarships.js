@@ -88,7 +88,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> Varies<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need, be a U.S. citizen, and be employed part-time or full-time by Walmart.   
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need, be a U.S. citizen, and be employed part-time or full-time by Walmart.
               </p>
 
               {/* Scholarship */}
