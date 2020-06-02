@@ -152,7 +152,7 @@ const Scholarships = () => {
               </p>
 
               {/* Scholarship */}
-              <a href="http://blackskepticsla.org/scholarship-application/"_blank" rel="noopener noreferrer">
+              <a href="http://blackskepticsla.org/scholarship-application/" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">First in the Family Humanist Scholarship: Freedom from Religion Foundation Forward Freethought Scholarship 2020 </h4>
               </a>
               <p className="text-gray-700">
@@ -162,7 +162,7 @@ const Scholarships = () => {
               </p>
 
               {/* Scholarship */}
-              <a href="https://breakthroughjuniorchallenge.org"_blank" rel="noopener noreferrer">
+              <a href="https://breakthroughjuniorchallenge.org" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Breakthrough Juniors Challenge  </h4>
               </a>
               <p className="text-gray-700">
@@ -202,7 +202,7 @@ const Scholarships = () => {
               </p>
 
               {/* Scholarship */}
-              <a href="https://awafoundation.org/Scholarships target="_blank" rel="noopener noreferrer">
+              <a href="https://awafoundation.org/Scholarships" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">AWA Foundation Education Scholarship   </h4>
               </a>
               <p className="text-gray-700">
