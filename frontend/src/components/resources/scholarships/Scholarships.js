@@ -82,6 +82,216 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">June</h2>
 
               {/* Scholarship */}
+              <a href="http://www.edascal.org/pr06.htm" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Raising Awareness of Mental Illness in Service Members Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.kasf.org/apply-mwrc/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Korean American Scholarship Foundation - Midwestern Regional Chapter </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be of Korean heritage, pursuing education at a school in the Midwestern region, have at least a 3.0 GPA, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.cyberdriveillinois.com/departments/library/center_for_the_book/emerging-writers.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Gwendolyn Brooks Poetry Award </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Illinois.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://endcyberbullying.net/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Delete Cyberbullying Scholarship Award</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://infoguides.pepperdine.edu/AEL" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">AEL Collegiate Essay Contest  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.automotivehalloffame.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Automotive Hall of Fame Scholarships  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue a career in automotives, have at least a 3.0 GPA, and be a U.S. citizen with financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.ccapw.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Central California Asian Pacific Women (CCAPW) Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be an Asian or Pacific Islander woman residing in Fresno, Kern, Kings, Madera, Merced, San Joaquin, Stanislaus or Tulare County, California and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://blackskepticsla.org/scholarship-application/"_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">First in the Family Humanist Scholarship: Freedom from Religion Foundation Forward Freethought Scholarship 2020 </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 26, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a person of color who identifies as agnostic, atheist, humanist, and/or secular.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://breakthroughjuniorchallenge.org"_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Breakthrough Juniors Challenge  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 25, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $250,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates make a video explaining a big idea in physics, life sciences, mathematics, or the science of the COVID-19 pandemic.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://uicapsi.wixsite.com/zeta/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Dream Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 19, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to attend University of Chicago Illinois, be latinx, and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.parekhfamilyfoundation.org/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Gunvant & Bharati Parekh College Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be of Indian origin and reside in the U.S.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://form.jotform.com/200275477072050" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Emerald Creek Capital Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be in National Honors Society and reside in New York City.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://awafoundation.org/Scholarships target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">AWA Foundation Education Scholarship   </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 12, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $25,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must a woman planning to pursue a career in the automotive or related industries, a U.S. citizen, and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.bbbchicagofoundation.org/about-the-contest-2020#entry-guidelines" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">BBB Embody Integrity Video Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 12, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Boone, Carroll, Cook, DeKalb, DuPage, Grundy, JoDavies, Kane, Kankakee, Kendall, Lake, LaSalle, Lee, McHenry, Ogle, Stephenson, Whiteside, Will, or Winnebago County in ILlinois and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://festivaldaculturaportuguesa.com/2020-fdcp-scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Festival da Cultura Portuguesa </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have Portuguese ancestry, have at least a 3.0 GPA, and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://scholarships.uncf.org/Program/Details/9898a633-b8da-42eb-af7a-d55025fb2706?_ga=2.7510450.1057392258.1590279032-2022323697.1590279032" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Jack & Jill of America Foundation </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 8, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be African American, have at least a 3.0 GPA, and be a U.S. citizen with financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://rchwf.org/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">RCH Wrestling Foundation Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 7, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Illinois or Indiana, have at least a 2.5 GPA, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.icahnautomotive.com/scholarship.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Technical Education Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 5, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue an automotive technician degree or certification, have at least a 3.0 GPA, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.chicagomoa.net/moa-scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Metropolitan Officials Association Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 5, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Chicago, IL and have at least a 2.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.provfound.org/index.php/programs/scholarship-program" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Provident Foundation Scholarship  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 5, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $3,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue medicine, reside in Chicago, IL, and be a minority.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.luciefoundation.org/programs/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">2020 Lucie Foundation Scholarship Program  </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> June 3, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must pursue art, film, or photography.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://programs.applyists.com/walmartassociate/" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Walmart Associate Scholarship  </h4>
               </a>
