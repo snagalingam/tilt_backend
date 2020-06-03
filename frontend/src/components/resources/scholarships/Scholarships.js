@@ -207,7 +207,7 @@ const Scholarships = () => {
               </a>
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 12, 2020<br />
-                <span className="font-weight-bold">Amount:</span> $25,000<br />
+                <span className="font-weight-bold">Amount:</span> $2,500<br />
                 <span className="font-weight-bold">Eligibility:</span> Candidates must a woman planning to pursue a career in the automotive or related industries, a U.S. citizen, and have at least a 3.0 GPA.
               </p>
 
