@@ -79,6 +79,89 @@ const Scholarships = () => {
               <br />
 
               {/* Month */}
+              <h2 className="font-weight-bold">July</h2>
+
+              {/* Scholarship */}
+              <a href="https://www.lambdapichi.org/page/2020_BookScholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">A2020 College Book Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 10, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as women or non-binary and committed to community service, leadership, and academic excellence. 
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.afghanamericanconference.org/scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Afghan-American Scholarship Program </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 7, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be Afghan-American, have at least a 3.0 GPA, be a U.S. citizen, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.txadc.org/Scholarships.php" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Texas Urban Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 6, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Texas and be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.blmsquaredscholarship.org/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">BLM² Scholarship Foundation College Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 3, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Illinois, be a minority, and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://laoamericanscholarship.org/apply" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">LASF Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 3, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in western NY and be of Laotian descent.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.sccavs.org/CarveyScholarshipApplication.pdf" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Elmer Carvey Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue physics, chemistry, materials science and engineering and reside in California.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.ohe.state.mn.us/mPg.cfm?pageID=149" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Minnesota Indian Scholarship Program </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $4,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to attend school in Minnesota, reside in Minnesota, be 1/4 or more American Indian, and have financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.nadona.org/stephanie-carroll-scholarship-2020/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Stephanie Carroll Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> Varies<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue nursing.
+              </p>
+
+              {/* Month */}
               <h2 className="font-weight-bold">June</h2>
 
               {/* Scholarship */}
