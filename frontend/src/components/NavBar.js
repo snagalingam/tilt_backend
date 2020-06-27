@@ -73,9 +73,9 @@ const NavBar = props => {
 
 
           {/* Button */}
-          <a className="navbar-btn btn btn-sm btn-primary lift ml-auto" href="https://kellogg.qualtrics.com/jfe/form/SV_578NDO4HdsYbd4h" target="_blank" rel="noopener noreferrer">
+          <Link className="navbar-btn btn btn-sm btn-primary lift ml-auto" to="/signup-survey">
             Get Started
-          </a>
+          </Link>
 
         </div>
       </div>
