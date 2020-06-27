@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+
+  backend:
+    container_name: backend
+    build: ./backend
+    command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
+    environment:
+      - ENVIRONMENT=development
+      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
+      - DEBUG=1
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:11
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    command: yarn start
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    tty: true
+
+volumes:
+  postgres_data:
