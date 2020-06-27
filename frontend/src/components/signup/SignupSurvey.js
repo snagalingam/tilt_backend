@@ -45,9 +45,9 @@ const SignupSurvey = () => {
                   <div className="row align-items-center justify-content-between no-gutters mt-3">
                     <div className="col-4 text-center">
                       <p>
-                        <a className="font-size-sm text-center text-muted" href="{% url 'home' %}">
+                        <Link className="font-size-sm text-center text-muted" to="/">
                           © Tilt
-                        </a>
+                        </Link>
                       </p>
                     </div>
                     <div className="col-4 text-center">
