@@ -82,13 +82,173 @@ const Scholarships = () => {
               <h2 className="font-weight-bold">July</h2>
 
               {/* Scholarship */}
+              <a href="https://trustemlaw.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Echard Marquette, P.C. Trial Lawyer Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in western Pennsylvania and demonstrate financial need.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.novusbio.com/scholarship-program.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Novus Biologicals Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 29, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue science-related majors.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.rndsystems.com/grants-scholarships/scholarship-application" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">R&D Systems Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 29, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue science-related majors.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.tocris.com/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Tocris Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 29, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue science-related majors.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.learncurious.com/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">The Phyliss J. McCarthy Scholarship for Excellence in Writing</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 23, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must submit an essay under 3000 words.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://aidsmemorial.org/programs/about-the-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Pedro Zamora Young Leaders Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must demonstrate an active commitment to end HIV/AIDS, have taken on roles of public service and leadership, and have at least a 2.5 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.careerenjoyment.com/career-coach-scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Career Enjoyment Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must submit an essay with a minimum of 800 words.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://dolphingalleries.com/pages/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Dolphin Galleries Scholarship for the Visual Arts </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside plan to pursue arts-related majors and does not have to be a U.S. citizen.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.lwcc.com/Careers/Stephen-W-Cavanaugh-Scholarship-Fund" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Stephen W. Cavanaugh Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $8,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Louisiana and plan to pursue insurance-related majors.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.collegefundpinellas.org/Apply.html" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">College Fund of Pinellas County Grant </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 17, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Pinellas County, FL, have at least a 3.0 GPA, be a U.S. citizen, and be a Pell Grant recipient.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.yclscholarship.org/scholarship-guidelines" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Christian Leadership Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in New Jersey, New York, or Connecticut and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://communitycouncilofidaho.org/scholarships/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">CCI Hispanic Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Idaho, identify as Hispanic, and have at least a 2.5 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.burrus.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Daniel Burrus Scholarship Fund </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must submit a 1-2 page essay with a minimum of 500 words.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.surveymonkey.com/r/KS878TG" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">David Hudak Memorial Essay Contest for Freethinking Students of Color </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $3,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be students of color.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.doe.k12.de.us/Page/1050" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Nursing Incentive Program Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Delaware, have at least a 2.5 GPA, and be U.S. citizens.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://mhec.maryland.gov/preparing/Pages/FinancialAid/ProgramDescriptions/prog_conroy.aspx" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Edward T. Conroy Memorial Scholarship Program </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 15, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Maryland.
+              </p>
+
+              {/* Scholarship */}
               <a href="https://www.lambdapichi.org/page/2020_BookScholarship" target="_blank" rel="noopener noreferrer">
-                <h4 className="font-weight-bold">A2020 College Book Scholarship </h4>
+                <h4 className="font-weight-bold">2020 College Book Scholarship </h4>
               </a>
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> July 10, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as women or non-binary and committed to community service, leadership, and academic excellence. 
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as women or non-binary and committed to community service, leadership, and academic excellence.
               </p>
 
               {/* Scholarship */}
@@ -98,7 +258,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> July 7, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be Afghan-American, have at least a 3.0 GPA, be a U.S. citizen, and have financial need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Afghan-American, have at least a 3.0 GPA, be U.S. citizens, and have financial need.
               </p>
 
               {/* Scholarship */}
@@ -108,7 +268,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> July 6, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Texas and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Texas and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -148,7 +308,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> July 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $4,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to attend school in Minnesota, reside in Minnesota, be 1/4 or more American Indian, and have financial need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to attend school in Minnesota, reside in Minnesota, identify as American Indian, and have financial need.
               </p>
 
               {/* Scholarship */}
@@ -171,7 +331,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -201,7 +361,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -211,7 +371,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -221,7 +381,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> Varies<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue a career in automotives, have at least a 3.0 GPA, and be a U.S. citizen with financial need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue a career in automotives, have at least a 3.0 GPA, and be U.S. citizens with financial need.
               </p>
 
               {/* Scholarship */}
@@ -291,7 +451,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 12, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must a woman planning to pursue a career in the automotive or related industries, a U.S. citizen, and have at least a 3.0 GPA.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as women, plan to pursue a career in the automotive or related industries, be U.S. citizens, and have at least a 3.0 GPA.
               </p>
 
               {/* Scholarship */}
@@ -311,7 +471,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 8, 2020<br />
                 <span className="font-weight-bold">Amount:</span> Varies<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must have Portuguese ancestry, have at least a 3.0 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have Portuguese ancestry, have at least a 3.0 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -321,7 +481,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 8, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be African American, have at least a 3.0 GPA, and be a U.S. citizen with financial need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as African American, have at least a 3.0 GPA, and be U.S. citizens with financial need.
               </p>
 
               {/* Scholarship */}
@@ -381,7 +541,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> Varies<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need, be a U.S. citizen, and be employed part-time or full-time by Walmart.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have financial need, be U.S. citizens, and be employed part-time or full-time by Walmart.
               </p>
 
               {/* Scholarship */}
@@ -451,7 +611,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen and have at least a 3.0 GPA.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be U.S. citizens and have at least a 3.0 GPA.
               </p>
 
               {/* Scholarship */}
@@ -461,7 +621,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> June 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $10,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must plan on pursuing Plant Sciences, Horticulture, Entomology, Plant Pathology, Environmental Science and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan on pursuing Plant Sciences, Horticulture, Entomology, Plant Pathology, Environmental Science and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -524,7 +684,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a child of police, EMT, paramedic, fire fighter, or military parent, have at least a 3.0 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a child of police, EMT, paramedic, fire fighter, or military parent, have at least a 3.0 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -534,7 +694,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue erforming arts, visual arts, journalism, or communications, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue erforming arts, visual arts, journalism, or communications, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -544,7 +704,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -564,7 +724,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.5 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must identify as Asian American/Pacific Islander, have at least a 3.5 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -574,7 +734,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen or have DACA status.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be U.S. citizens or have DACA status.
               </p>
 
               {/* Scholarship */}
@@ -584,7 +744,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 31, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $1,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to puruse fashion or graphic design, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be a U.S. citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to puruse fashion or graphic design, identify as Asian American/Pacific Islander, have at least a 3.0 GPA, and be U.S. citizens.
               </p>
 
               {/* Scholarship */}
@@ -614,7 +774,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $5,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must puruse nursing, reside in Dallas, TX, identify as Hispanic/Latinx, have at least a 3.0 GPA, be a U.S. citizen, and have financial need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must puruse nursing, reside in Dallas, TX, identify as Hispanic/Latinx, have at least a 3.0 GPA, be U.S. citizens, and have financial need.
               </p>
 
               {/* Scholarship */}
@@ -644,7 +804,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 22, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Meckleburg Co, NC, plan to attend a HBCU, plan to pursue STEM, have a 3.0 GPA, have financial need, and be a U.S. Citizen
+                <span className="font-weight-bold">Eligibility:</span> Candidates must reside in Meckleburg Co, NC, plan to attend a HBCU, plan to pursue STEM, have a 3.0 GPA, have financial need, and be U.S. Citizens.
               </p>
 
               {/* Scholarship */}
@@ -874,7 +1034,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,500<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, be a US citizen, and have demonstrated community service.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, be US citizens, and have demonstrated community service.
               </p>
 
               {/* Scholarship */}
@@ -884,7 +1044,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $4,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, and be a US citizen.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Metro DC area, identify as Jewish, and be US citizens.
               </p>
 
               {/* Scholarship */}
@@ -894,7 +1054,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> May 1, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $6,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Montgomery County in Maryland, identify as Jewish, be a US citizen, and have demonstrated need.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be from the Montgomery County in Maryland, identify as Jewish, be US citizens, and have demonstrated need.
               </p>
 
               {/* Month */}
@@ -907,7 +1067,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $10,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizen with at least a 3.0 GPA and have participated in community service.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens with at least a 3.0 GPA and have participated in community service.
               </p>
 
               {/* Scholarship */}
@@ -937,7 +1097,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> April 30, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a US citizen with at least a 2.8 GPA and attending an HBCU.
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be US citizens with at least a 2.8 GPA and attending an HBCU.
               </p>
 
               {/* Scholarship */}
