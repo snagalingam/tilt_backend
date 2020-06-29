@@ -451,9 +451,9 @@ const HomePage = () => {
                 </div>
 
                 {/* Button */}
-                <a href="https://kellogg.qualtrics.com/jfe/form/SV_578NDO4HdsYbd4h" className="card-btn btn btn-block btn-lg btn-primary" target="_blank" rel="noopener noreferrer">
+                <Link className="card-btn btn btn-block btn-lg btn-primary" to="/signup-survey">
                   Sign up now
-                </a>
+                </Link>
 
               </div>
 
