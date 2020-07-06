@@ -1,0 +1,14 @@
+appdirs==1.4.2
+cffi==1.9.1
+decorator==4.0.11
+mysql-connector-python-cext==2.1.5
+ObjDict==0.4.4
+olefile==0.44
+py==1.4.32
+pycparser==2.17
+pyodbc==3.1.1
+pyopencl==2016.2.1
+pytest==3.0.6
+pytools==2016.2.6
+requests==2.13.0
+simplejson==3.10.0
