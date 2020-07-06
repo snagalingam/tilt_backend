@@ -132,6 +132,16 @@ const Scholarships = () => {
               </p>
 
               {/* Scholarship */}
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScLb3OQRUCvHJItwoA4DGxPzk9r38fOeasb4VP7F9mKOCq0pQ/viewform" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">CAPOC Scholarship </h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $2,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a resident of California. 
+              </p>
+
+              {/* Scholarship */}
               <a href="https://aidsmemorial.org/programs/about-the-scholarship/" target="_blank" rel="noopener noreferrer">
                 <h4 className="font-weight-bold">Pedro Zamora Young Leaders Scholarship</h4>
               </a>
