@@ -9,7 +9,6 @@
       - RUN `source <name of virtual environment>/bin/activate`
 4. Install dependencies
       - RUN `pipenv install`
-      - RUN `pip install -r requirements.txt`
 
 ## Setup local database instance:
 1. Create local db instance using postgres. Easiest way: https://postgresapp.com/
