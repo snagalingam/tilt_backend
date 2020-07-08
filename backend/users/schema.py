@@ -59,7 +59,7 @@ class CreateUser(graphene.Mutation):
         pronouns,
         pronouns_other_value,
         ethnicity,
-        ethnicity_other_value
+        ethnicity_other_value,
         user_type,
         highschool_graduation_year,
     ):
@@ -76,7 +76,7 @@ class CreateUser(graphene.Mutation):
             pronouns=pronouns,
             pronouns_other_value=pronouns_other_value,
             ethnicity=ethnicity,
-            ethnicity_other_value=ethnicity_other_value
+            ethnicity_other_value=ethnicity_other_value,
             user_type=user_type,
             highschool_graduation_year=highschool_graduation_year,
             is_staff=False,
