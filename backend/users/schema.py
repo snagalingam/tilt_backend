@@ -31,7 +31,7 @@ class CreateUser(graphene.Mutation):
         first_name = graphene.String()
         last_name = graphene.String()
         preferred_name = graphene.String()
-        gpa = graphene.Decimal()
+        gpa = graphene.Float()
         act_score = graphene.Int()
         sat_score = graphene.Int()
         efc = graphene.Int()
