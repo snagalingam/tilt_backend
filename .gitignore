@@ -3,3 +3,9 @@
 
 # Mac files
 *.DS_Store
+
+# VS CODE
+*.vscode/*
+
+# Python
+__pycache__/
