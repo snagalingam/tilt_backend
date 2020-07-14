@@ -39,9 +39,9 @@ const NavBar = props => {
 
         {/* Toggler */}
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarGetStarted" aria-controls="navbarGetStarted" aria-expanded="false" aria-label="Toggle Get Started">
-          <a className="btn btn-sm btn-primary lift ml-auto" href="https://kellogg.qualtrics.com/jfe/form/SV_578NDO4HdsYbd4h" target="_blank" rel="noopener noreferrer">
+          <Link className="btn btn-sm btn-primary lift ml-auto" to="/signup-survey">
             Get Started
-          </a>
+          </Link>
         </button>
 
         <button className={classNavBarToggler} type="button" onClick={toggleNavbar} data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
