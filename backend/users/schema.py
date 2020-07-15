@@ -8,6 +8,7 @@ class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
 
+
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
@@ -22,6 +23,7 @@ class Query(graphene.ObjectType):
 
         return user
 
+
 class CreateUser(graphene.Mutation):
     user = graphene.Field(UserType)
 
@@ -30,62 +32,26 @@ class CreateUser(graphene.Mutation):
         password = graphene.String()
         first_name = graphene.String()
         last_name = graphene.String()
-        preferred_name = graphene.String()
-        gpa = graphene.Float()
-        act_score = graphene.Int()
-        sat_score = graphene.Int()
-        efc = graphene.Int()
-        terms_and_conditions = graphene.Boolean()
-        pronouns = graphene.String()
-        pronouns_other_value = graphene.String()
-        ethnicity = graphene.String()
-        ethnicity_other_value = graphene.String()
-        user_type = graphene.String()
-        highschool_graduation_year = graphene.String()
 
     def mutate(
-        self, 
+        self,
         info,
         email,
         password,
         first_name,
         last_name,
-        preferred_name,
-        gpa,
-        act_score,
-        sat_score,
-        efc,
-        terms_and_conditions,
-        pronouns,
-        pronouns_other_value,
-        ethnicity,
-        ethnicity_other_value,
-        user_type,
-        highschool_graduation_year,
+
     ):
         user = get_user_model()(
             email=email,
             first_name=first_name,
             last_name=last_name,
-            preferred_name=preferred_name,
-            gpa=gpa,
-            act_score=act_score,
-            sat_score=sat_score,
-            efc=efc,
-            terms_and_conditions=terms_and_conditions,
-            pronouns=pronouns,
-            pronouns_other_value=pronouns_other_value,
-            ethnicity=ethnicity,
-            ethnicity_other_value=ethnicity_other_value,
-            user_type=user_type,
-            highschool_graduation_year=highschool_graduation_year,
-            is_staff=False,
         )
         user.set_password(password)
         user.save()
 
-        return CreateUser(user = user)
+        return CreateUser(user=user)
+
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
-

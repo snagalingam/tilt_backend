@@ -46,8 +46,6 @@ const SignUpForm = () => {
         lastName: "",
         email: "",
         password: undefined,
-        userType: undefined,
-        confirmPassword: undefined,
       }}
       validationSchema={signUpSchema}
       onSubmit={handleSubmit}
@@ -58,16 +56,16 @@ const SignUpForm = () => {
           <FieldSet name="firstName" label="First Name" />
           <FieldSet name="lastName" label="Last Name" />
           <FieldSet name="password" label="Password" type="password" />
-          <FieldSet
+          {/* <FieldSet
             name="confirmPassword"
             label="Confirm Password"
             type="password"
-          />
-          <FieldSet fieldType="select" name="userType" label="User Type">
+          /> */}
+          {/* <FieldSet fieldType="select" name="userType" label="User Type">
             <option value="Student">Student</option>
             <option value="Parent">Parent</option>
             <option value="Counselor">Counselor</option>
-          </FieldSet>
+          </FieldSet> */}
           <TiltButton type="submit">Sign Up</TiltButton>
         </Form>
       )}

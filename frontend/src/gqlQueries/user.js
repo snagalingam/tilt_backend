@@ -26,14 +26,12 @@ export const CREATE_USER = gql`
     $lastName: String!
     $email: String!
     $password: String
-    $userType: String
   ) {
     createUser(
       firstName: $firstName
       lastName: $lastName
       email: $email
       password: $password
-      userType: $userType
     ) {
       user {
         firstName
