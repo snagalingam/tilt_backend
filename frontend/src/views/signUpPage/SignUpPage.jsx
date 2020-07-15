@@ -19,7 +19,7 @@ const SignUpPage = () => {
         <span>Sign up with</span>
         <div className="oauth-buttons">
           <GoogleOAuth />
-          <GoogleOAuth logout />
+          {/* <GoogleOAuth logout /> */}
         </div>
       </div>
     </div>
