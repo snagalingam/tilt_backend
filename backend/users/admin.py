@@ -7,6 +7,7 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 CustomUser = get_user_model()
 
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -30,5 +31,6 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
     model = CustomUser
-    
+
+
 admin.site.register(CustomUser, CustomUserAdmin)

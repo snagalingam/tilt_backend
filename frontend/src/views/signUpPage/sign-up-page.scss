@@ -1,0 +1,16 @@
+@import "../../css/mixins";
+
+.sign-up-page {
+  width: 100vw;
+  height: 100vh;
+  @include flex-center;
+  flex-direction: column;
+}
+
+.oauth-sign-up {
+  @include flex-center;
+  flex-direction: column;
+  .oauth-buttons {
+    display: flex;
+  }
+}

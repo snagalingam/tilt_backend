@@ -1,0 +1,23 @@
+@import "../../css/variables";
+@import "../../css/mixins";
+
+.tilt-button {
+  @include flex-center;
+  background: $tilt_purple;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  margin: 5px;
+  outline: none;
+  padding: 0.75rem 1rem;
+  &:hover {
+    background: $tilt_dark_purple;
+  }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
