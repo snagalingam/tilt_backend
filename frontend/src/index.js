@@ -13,6 +13,7 @@ import "cross-fetch/polyfill";
 
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
+import Dashboard from "./views/dashboard/Dashboard";
 import HomePage from "./components/HomePage";
 import Login from "./components/account/Login";
 import PrivacyPolicy from "./components/PrivacyPolicy";
@@ -26,11 +27,15 @@ import SignupSurvey from "./components/signup/SignupSurvey";
 import SignupThankYou from "./components/signup/SignupThankYou";
 import Terminology from "./components/resources/Terminology";
 import TermsOfService from "./components/TermsOfService";
+
 import {
   initializeAOS,
   initializeSmoothScroll,
   initializeTyped,
 } from "./js/helpers";
+import { APP_URLS } from "./constants/urlConstants";
+
+const { SIGN_UP_PAGE, DASHBOARD } = APP_URLS;
 
 const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql",
@@ -48,7 +53,7 @@ const App = () => {
     initializeAOS();
     initializeSmoothScroll();
     initializeTyped();
-  });
+  }, []);
 
   return (
     <Router>
@@ -56,9 +61,10 @@ const App = () => {
         <ScrollToTop>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/contact" component={ContactUs} />
+          <Route exact path={DASHBOARD} component={Dashboard} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
           <Route exact path="/terms-of-service" component={TermsOfService} />
-          <Route exact path="/login" component={Login} />
+          <Route exact path={"/login"} component={Login} />
           <Route exact path="/resources" component={ResourcesIntro} />
           <Route exact path="/resources/faqs" component={ResourcesFAQs} />
           <Route
@@ -72,7 +78,7 @@ const App = () => {
             component={CreateScholarship}
           />
           <Route exact path="/resources/terminology" component={Terminology} />
-          <Route exact path="/signup" component={SignUpPage} />
+          <Route exact path={SIGN_UP_PAGE} component={SignUpPage} />
           <Route exact path="/signup-survey" component={SignupSurvey} />
           <Route exact path="/signup-thank-you" component={SignupThankYou} />
           <Route exact path="/sitemap" component={Sitemap} />

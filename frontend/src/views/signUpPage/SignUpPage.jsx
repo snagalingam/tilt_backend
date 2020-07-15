@@ -1,28 +1,35 @@
-import React from "react";
-import { useEffect } from "react";
-import FacebookIcon from "@material-ui/icons/Facebook";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
-import SignUpForm from "../../components/form/SignUpForm";
-import TiltButton from "../../components/button/TiltButton";
-import { CREATE_USER } from "../../gqlQueries/user";
 import GoogleOAuth from "../../components/oAuth/GoogleOAuth";
+import SignUpForm from "../../components/form/SignUpForm";
+
+import { APP_URLS } from "../../constants/urlConstants";
 
 import "./sign-up-page.scss";
 
+const { DASHBOARD } = APP_URLS;
+
 const SignUpPage = () => {
-  useEffect(() => {}, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <div className="sign-up-page">
-      <SignUpForm />
-      <div className="oauth-sign-up">
-        <span>Sign up with</span>
-        <div className="oauth-buttons">
-          <GoogleOAuth />
-          {/* <GoogleOAuth logout /> */}
+    <>
+      {isAuthenticated ? (
+        <Redirect to={DASHBOARD} />
+      ) : (
+        <div className="sign-up-page">
+          <SignUpForm setIsAuthenticated={setIsAuthenticated} />
+          <div className="oauth-sign-up">
+            <span>Sign up with</span>
+            <div className="oauth-buttons">
+              <GoogleOAuth setIsAuthenticated={setIsAuthenticated} />
+              {/* <GoogleOAuth logout /> */}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

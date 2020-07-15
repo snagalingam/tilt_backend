@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { useMutation } from "@apollo/react-hooks";
+import Cookies from "js-cookie";
 
 import { GET_SOCIAL_TOKEN } from "../../gqlQueries/token";
 
-const GoogleOAuth = ({ logout }) => {
+const GoogleOAuth = ({ logout, setIsAuthenticated }) => {
   const handleError = (error) => {
     console.log(error);
   };
 
-  const [socialAuth, { data }] = useMutation(GET_SOCIAL_TOKEN, {
+  const [socialAuth, { data, error, loading }] = useMutation(GET_SOCIAL_TOKEN, {
     onError: handleError,
   });
 
@@ -26,8 +27,9 @@ const GoogleOAuth = ({ logout }) => {
 
   // store token in cookies if data is valid
   useEffect(() => {
-    if (data) {
-      document.cookie = `jwt=${data.socialAuth.token}`;
+    if (data && !error && !loading) {
+      Cookies.set("jwt", data.socialAuth.token);
+      setIsAuthenticated(true);
     }
   }, [data]);
 

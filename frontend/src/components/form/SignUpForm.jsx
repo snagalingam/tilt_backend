@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import { useQuery, useMutation } from "@apollo/react-hooks";
@@ -18,7 +18,7 @@ const signUpSchema = yup.object().shape({
     .required("Please enter your email"),
 });
 
-const SignUpForm = () => {
+const SignUpForm = ({ setIsAuthenticated }) => {
   const { data, loading, error } = useQuery(GET_USERS);
 
   const handleError = (error) => {
@@ -38,6 +38,18 @@ const SignUpForm = () => {
       variables: values,
     });
   };
+
+  useEffect(() => {
+    if (createData && !isCreateLoading && !createHasError) {
+      setIsAuthenticated(true);
+    }
+  }, [createData]);
+
+  useEffect(() => {
+    console.log(`loading: ${loading}`);
+    console.log(`error: ${!!error}`);
+    console.log(data);
+  }, [data]);
 
   return (
     <Formik
