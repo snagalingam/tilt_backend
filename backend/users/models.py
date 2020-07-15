@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def _create_user(self, email, first_name, user_type, password, **extra_fields):
+    def _create_user(self, email, first_name, user_type=None, password=None, **extra_fields):
         if not email:
             raise ValueError("Email must be provided")
         email = self.normalize_email(email)
@@ -28,13 +28,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, first_name, user_type, password=None, **extra_fields):
+    def create_user(self, email, first_name, user_type=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, first_name, user_type, password, **extra_fields)
 
     def create_superuser(
-        self, email, first_name, user_type, password=None, **extra_fields
+        self, email, first_name, user_type=None, password=None, **extra_fields
     ):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
@@ -53,7 +53,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
 
-    REQUIRED_FIELDS = ["first_name", "user_type", "highschool_graduation_year"]
+    # A list of the field names that will be prompted for when creating a user via the createsuperuser management command
+    REQUIRED_FIELDS = ["first_name", "user_type"]
 
     email = models.EmailField(
         _("email address"),
@@ -63,7 +64,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         },
     )
     first_name = models.CharField(_("first name"), max_length=50)
-    last_name = models.CharField(_("last name"), max_length=150, null=True, blank=True)
+    last_name = models.CharField(
+        _("last name"), max_length=150, null=True, blank=True)
     preferred_name = models.CharField(
         _("preferred name"), max_length=120, null=True, blank=True
     )
@@ -72,7 +74,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     act_score = models.IntegerField(_("ACT score"), null=True, blank=True)
     sat_score = models.IntegerField(_("SAT score"), null=True, blank=True)
-    efc = models.IntegerField(_("Expected Family Contribution"), null=True, blank=True)
+    efc = models.IntegerField(
+        _("Expected Family Contribution"), null=True, blank=True)
     terms_and_conditions = models.BooleanField(default=False)
 
     # Pronouns Field
@@ -86,7 +89,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     pronouns = models.CharField(
         _("pronoun"), max_length=20, choices=PRONOUN_CHOICES, default=None, null=True
     )
-    pronouns_other_value = models.CharField(max_length=20, null=True, blank=True,)
+    pronouns_other_value = models.CharField(
+        max_length=20, null=True, blank=True,)
 
     # Ethnicty Field
     ETHNICITY_CHOICES = [
@@ -107,7 +111,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         default=None,
         null=True,
     )
-    ethnicity_other_value = models.CharField(max_length=50, null=True, blank=True)
+    ethnicity_other_value = models.CharField(
+        max_length=50, null=True, blank=True)
 
     # UserType Field
     USER_TYPE_CHOICES = [
@@ -116,7 +121,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ("Counselor", "Counselor"),
     ]
     user_type = models.CharField(
-        _("user type"), max_length=10, choices=USER_TYPE_CHOICES, default="Student"
+        _("user type"), max_length=10, choices=USER_TYPE_CHOICES, default="Student", null=True, blank=True
     )
 
     # High School Graduation Year
@@ -132,13 +137,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("high school graduation year"),
         max_length=4,
         choices=HIGH_SCHOOL_GRADUATION_YEAR_CHOICES,
-        default="2020",
+        blank=True,
+        null=True
     )
 
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
+        help_text=_(
+            "Designates whether the user can log into this admin site."),
     )
 
     is_active = models.BooleanField(
