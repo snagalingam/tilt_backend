@@ -19,22 +19,6 @@ export const GET_SOCIAL_TOKEN = gql`
   }
 `;
 
-export const GOOGLE_GET_TOKEN = gql`
-  mutation TokenAuth($email: String!, $googleId: String!) {
-    tokenAuth(email: $email, googleId: $googleId) {
-      token
-    }
-  }
-`;
-
-export const FB_GET_TOKEN = gql`
-  mutation TokenAuth($email: String!, $facebookId: String!) {
-    tokenAuth(email: $email, facebookId: $facebookId) {
-      token
-    }
-  }
-`;
-
 // { email, exp, orig-iat } = payload
 export const VERIFY_TOKEN = gql`
   mutation VerifyToken($token: String!) {
