@@ -179,6 +179,22 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details',
 ]
 
+SOCIAL_AUTH_DISCONNECT_PIPELINE = [
+    # Verifies that the social association can be disconnected from the current
+    # user (ensure that the user login mechanism is not compromised by this
+    # disconnection).
+    'social_core.pipeline.disconnect.allowed_to_disconnect',
+
+    # Collects the social associations to disconnect.
+    'social_core.pipeline.disconnect.get_entries',
+
+    # Revoke any access_token when possible.
+    'social_core.pipeline.disconnect.revoke_tokens',
+
+    # Removes the social associations.
+    'social_core.pipeline.disconnect.disconnect',
+]
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY', default='')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_SECRET', default='')
@@ -215,8 +231,14 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
 
+
 if ENVIRONMENT == 'development':
-    STATICFILES_DIRS = [os.path.join(BASE_DIR)]
+    TEMPLATES[0]["DIRS"] = [os.path.join(
+        os.path.dirname(os.getcwd()), 'frontend', 'build')]
+    STATICFILES_DIRS = [os.path.join(os.path.dirname(
+        os.getcwd()), 'frontend', 'build', 'static')]
+
+    # STATICFILES_DIRS = [os.path.join(BASE_DIR)]
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 
 if ENVIRONMENT == 'production':

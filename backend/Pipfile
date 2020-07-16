@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "==3.0.1"
+django = "*"
 psycopg2-binary = "==2.8.4"
 graphene-django = "==2.9.0"
 django-filter = "==2.0.0"
