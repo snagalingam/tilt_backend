@@ -5,7 +5,7 @@ from django.urls import path, re_path, include
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
-from .views import index, logout_view, login_view, register
+from .views import index, logout_view
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 
