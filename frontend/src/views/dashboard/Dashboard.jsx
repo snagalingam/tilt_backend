@@ -7,7 +7,7 @@ const Dashboard = () => {
       Dashboard
       <button>Logout</button>
       <a href="/logout">Logout</a>
-      <GoogleOAuth style={{ display: "none" }} logout ref={googleLogout} />
+      <GoogleOAuth style={{ display: "none" }} logout />
     </div>
   );
 };
