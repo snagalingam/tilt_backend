@@ -13,8 +13,8 @@ export const GET_SOCIAL_TOKEN = gql`
     socialAuth(provider: $provider, accessToken: $accessToken) {
       social {
         uid
+        extraData
       }
-      token
     }
   }
 `;

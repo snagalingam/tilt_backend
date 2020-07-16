@@ -2,12 +2,18 @@ import React, { useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import Cookies from "js-cookie";
 
 import TiltButton from "../button/TiltButton";
 import FieldSet from "./FieldSet";
 import { GET_USERS, CREATE_USER } from "../../gqlQueries/user";
 
 import "./form.scss";
+import Axios from "axios";
+
+const csrfToken = Cookies.get("csrftoken");
+
+const headers = { "X-CSRFTOKEN": csrfToken };
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Please enter you first name"),
@@ -34,9 +40,12 @@ const SignUpForm = ({ setIsAuthenticated }) => {
 
   const handleSubmit = (values) => {
     console.log(values);
-    createUser({
-      variables: values,
+    Axios.post("/register", values, { headers: headers }).then((r) => {
+      console.log(r);
     });
+    // createUser({
+    //   variables: values,
+    // });
   };
 
   useEffect(() => {
