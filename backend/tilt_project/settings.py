@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # 3rd-party apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'corsheaders',
     'graphene_django',
     'social_django',
@@ -231,13 +234,13 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
 
+print(os.path.join(
+    BASE_DIR, 'frontend', 'build'))
+
 
 if ENVIRONMENT == 'development':
-    TEMPLATES[0]["DIRS"] = [os.path.join(
-        os.path.dirname(os.getcwd()), 'frontend', 'build')]
-    STATICFILES_DIRS = [os.path.join(os.path.dirname(
-        os.getcwd()), 'frontend', 'build', 'static')]
-
+    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, 'frontend', 'build')]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend', 'build', 'static')]
     # STATICFILES_DIRS = [os.path.join(BASE_DIR)]
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 

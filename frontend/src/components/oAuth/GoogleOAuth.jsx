@@ -3,14 +3,14 @@ import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { useMutation } from "@apollo/react-hooks";
 import Cookies from "js-cookie";
 
-import { GET_SOCIAL_TOKEN } from "../../gqlQueries/token";
+import { SOCIAL_AUTH } from "../../gqlQueries/authentication";
 
 const GoogleOAuth = ({ logout, setIsAuthenticated }) => {
   const handleError = (error) => {
     console.log(error);
   };
 
-  const [socialAuth, { data, error, loading }] = useMutation(GET_SOCIAL_TOKEN, {
+  const [socialAuth, { data, error, loading }] = useMutation(SOCIAL_AUTH, {
     onError: handleError,
   });
 

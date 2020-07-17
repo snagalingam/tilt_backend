@@ -6,7 +6,8 @@ import Cookies from "js-cookie";
 
 import TiltButton from "../button/TiltButton";
 import FieldSet from "./FieldSet";
-import { GET_USERS, CREATE_USER } from "../../gqlQueries/user";
+import { GET_USERS } from "../../gqlQueries/user";
+import { CREATE_USER } from "../../gqlQueries/authentication";
 
 import "./form.scss";
 import Axios from "axios";
