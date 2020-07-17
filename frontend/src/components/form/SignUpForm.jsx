@@ -12,24 +12,19 @@ import "./form.scss";
 import Axios from "axios";
 
 const csrfToken = Cookies.get("csrftoken");
-
 const headers = { "X-CSRFTOKEN": csrfToken };
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Please enter you first name"),
-  lastName: yup.string().required("Please enter your last name"),
   email: yup
     .string()
     .email("Invalid email")
     .required("Please enter your email"),
+  password: yup.string().required(),
 });
 
 const SignUpForm = ({ setIsAuthenticated }) => {
   const { data, loading, error } = useQuery(GET_USERS);
-
-  const handleError = (error) => {
-    console.log(error);
-  };
 
   const [
     createUser,
@@ -38,15 +33,16 @@ const SignUpForm = ({ setIsAuthenticated }) => {
     onError: handleError,
   });
 
-  const handleSubmit = (values) => {
+  function handleError(error) {
+    console.log(error);
+  }
+
+  function handleSubmit(values) {
     console.log(values);
-    Axios.post("/register", values, { headers: headers }).then((r) => {
-      console.log(r);
-    });
     // createUser({
     //   variables: values,
     // });
-  };
+  }
 
   useEffect(() => {
     if (createData && !isCreateLoading && !createHasError) {
@@ -63,9 +59,8 @@ const SignUpForm = ({ setIsAuthenticated }) => {
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
         email: "",
+        firstName: "",
         password: undefined,
       }}
       validationSchema={signUpSchema}
@@ -74,20 +69,18 @@ const SignUpForm = ({ setIsAuthenticated }) => {
       {({ errors, touched }) => (
         <Form className="sign-up-form form">
           <FieldSet name="email" label="Email" />
+          {errors.email && <span>{errors.email}</span>}
           <FieldSet name="firstName" label="First Name" />
-          <FieldSet name="lastName" label="Last Name" />
+          {errors.firstName && <span>{errors.firstName}</span>}
           <FieldSet name="password" label="Password" type="password" />
-          {/* <FieldSet
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-          /> */}
+          {errors.password1 && <span>{errors.password1}</span>}
+
           {/* <FieldSet fieldType="select" name="userType" label="User Type">
             <option value="Student">Student</option>
             <option value="Parent">Parent</option>
             <option value="Counselor">Counselor</option>
           </FieldSet> */}
-          <TiltButton type="submit">Sign Up</TiltButton>
+          <TiltButton type="submit">Sign Up NOW</TiltButton>
         </Form>
       )}
     </Formik>

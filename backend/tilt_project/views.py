@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.csrf import ensure_csrf_cookie
 from users.forms import CustomUserCreationForm
 import json
 
 # Create your views here.
 
 
+@ensure_csrf_cookie
 def index(request):
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1

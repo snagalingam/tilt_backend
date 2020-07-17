@@ -18,6 +18,8 @@ django-cors-headers = "==3.2.1"
 django-cors-middleware = "*"
 django-graphql-social-auth = {extras = ["jwt"], version = "*"}
 social-auth-app-django = "*"
+django-allauth = "*"
+django-rest-framework = "*"
 
 [requires]
 python_version = "3.7"
