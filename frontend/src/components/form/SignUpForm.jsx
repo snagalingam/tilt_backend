@@ -17,11 +17,12 @@ const headers = { "X-CSRFTOKEN": csrfToken };
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Please enter you first name"),
+  lastName: yup.string().required("Please enter you last name"),
   email: yup
     .string()
     .email("Invalid email")
     .required("Please enter your email"),
-  password: yup.string().required(),
+  password: yup.string().required("Password is required"),
 });
 
 const SignUpForm = ({ setIsAuthenticated }) => {
@@ -40,9 +41,9 @@ const SignUpForm = ({ setIsAuthenticated }) => {
 
   function handleSubmit(values) {
     console.log(values);
-    // createUser({
-    //   variables: values,
-    // });
+    createUser({
+      variables: values,
+    });
   }
 
   useEffect(() => {
@@ -62,6 +63,7 @@ const SignUpForm = ({ setIsAuthenticated }) => {
       initialValues={{
         email: "",
         firstName: "",
+        lastName: "",
         password: undefined,
       }}
       validationSchema={signUpSchema}
@@ -70,18 +72,26 @@ const SignUpForm = ({ setIsAuthenticated }) => {
       {({ errors, touched }) => (
         <Form className="sign-up-form form">
           <FieldSet name="email" label="Email" />
-          {errors.email && <span>{errors.email}</span>}
+          {errors.email && touched.email && <span>{errors.email}</span>}
           <FieldSet name="firstName" label="First Name" />
-          {errors.firstName && <span>{errors.firstName}</span>}
+          {errors.firstName && touched.firstName && (
+            <span>{errors.firstName}</span>
+          )}
+          <FieldSet name="lastName" label="Last Name" />
+          {errors.lastName && touched.lastName && (
+            <span>{errors.lastName}</span>
+          )}
           <FieldSet name="password" label="Password" type="password" />
-          {errors.password1 && <span>{errors.password1}</span>}
+          {errors.password && touched.password && (
+            <span>{errors.password}</span>
+          )}
 
           {/* <FieldSet fieldType="select" name="userType" label="User Type">
             <option value="Student">Student</option>
             <option value="Parent">Parent</option>
             <option value="Counselor">Counselor</option>
           </FieldSet> */}
-          <TiltButton type="submit">Sign Up NOW</TiltButton>
+          <TiltButton type="submit">Sign Up Now</TiltButton>
         </Form>
       )}
     </Formik>
