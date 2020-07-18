@@ -25,10 +25,8 @@ const GoogleOAuth = ({ logout, setIsAuthenticated }) => {
     });
   };
 
-  // store token in cookies if data is valid
   useEffect(() => {
     if (data && !error && !loading) {
-      Cookies.set("jwt", data.socialAuth.token);
       setIsAuthenticated(true);
     }
   }, [data]);
