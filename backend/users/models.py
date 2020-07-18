@@ -63,9 +63,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
+    # had to set first_name and last_name null=True so that social auth can automatically add these details
     first_name = models.CharField(_("first name"), max_length=50, null=True)
     last_name = models.CharField(
-        _("last name"), max_length=150, null=True, blank=True)
+        _("last name"), max_length=150, null=True)
+
     preferred_name = models.CharField(
         _("preferred name"), max_length=120, null=True, blank=True
     )
