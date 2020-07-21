@@ -79,7 +79,100 @@ const Scholarships = () => {
               <br />
 
               {/* Month */}
+              <h2 className="font-weight-bold">August</h2>
+
+              {/* Scholarship */}
+              <a href="https://www.patsyminkfoundation.org/education-support-application" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Patsy Takemoto Mink Education Support Award</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $5,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a low-income mother with minor children and pursuing her first degree.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://hbcuconnect.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">HBCU CONNECT Minority Scholarship Program</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to attend a HBCU.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.lawfirm4immigrants.com/essay-contest-undocumented-daca-essential-workers/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Essay Contest for Undocumented & DACA Essential Workers</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be working, or have recently worked, as an essential work in the healthcare industry, food supply chain, or other essential industries and have DACA status.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://jsgfirm.com/scholarship/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Future Mentors Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> There is no GPA requirement. The scholarship is open to Domestic, international, and undocumented students.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.cascadehealthcaresolutions.com/Chs_Scholarship_a/364.htm" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Nurses Make a Difference Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must plan to pursue nursing and have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://www.nyctutoring.com/scholarship" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">NYCTutoring.com Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must have at least a 3.0 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="http://www.michaelmoodyfitness.com/student-scholarship-chicago/" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Michael Moody Fitness Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> August 1, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $1,500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen and plan to pursue Athletic Training, Psychology, Biology, Kinesiology, Nursing, General Medicine, Dentistry, Behavioral Sciences, Personal Training, Physical Education Teaching and Coaching, Health and Physical Fitness, Exercise Science, Sports and Recreation Management, Health Sciences, Physical Therapist, or another health- related major.
+              </p>
+
+              {/* Month */}
               <h2 className="font-weight-bold">July</h2>
+
+              {/* Scholarship */}
+              <a href="https://couragetogrowscholarship.com" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Courage To Grow</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $500<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a U.S. citizen and have at least a 2.5 GPA.
+              </p>
+
+              {/* Scholarship */}
+              <a href="https://bold.org/scholarships/the-be-bold-no-essay-scholarship/#ref=great-scholarships" target="_blank" rel="noopener noreferrer">
+                <h4 className="font-weight-bold">Be Bold Scholarship</h4>
+              </a>
+              <p className="text-gray-700">
+                <span className="font-weight-bold">Deadline:</span> July 31, 2020<br />
+                <span className="font-weight-bold">Amount:</span> $10,000<br />
+                <span className="font-weight-bold">Eligibility:</span> Candidates must create a Bold.org profile.
+              </p>
 
               {/* Scholarship */}
               <a href="https://trustemlaw.com/scholarship/" target="_blank" rel="noopener noreferrer">
@@ -138,7 +231,7 @@ const Scholarships = () => {
               <p className="text-gray-700">
                 <span className="font-weight-bold">Deadline:</span> July 20, 2020<br />
                 <span className="font-weight-bold">Amount:</span> $2,000<br />
-                <span className="font-weight-bold">Eligibility:</span> Candidates must be a resident of California. 
+                <span className="font-weight-bold">Eligibility:</span> Candidates must be a resident of California.
               </p>
 
               {/* Scholarship */}
