@@ -38,7 +38,7 @@ import { APP_URLS } from "./constants/urlConstants";
 const { SIGN_UP_PAGE, DASHBOARD } = APP_URLS;
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:8000/graphql",
+  uri: "https://tilt-website-staging.herokuapp.com/graphql",
   credentials: "same-origin",
 });
 

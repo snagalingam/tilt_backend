@@ -1,5 +1,6 @@
 import dj_database_url
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
@@ -245,3 +246,5 @@ if ENVIRONMENT == 'production':
     TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
     STATICFILES_DIRS = [os.path.join("frontend", "build", "static")]
     WHITENOISE_ROOT = os.path.join("frontend", "build", "root")
+
+django_heroku.settings(locals())
