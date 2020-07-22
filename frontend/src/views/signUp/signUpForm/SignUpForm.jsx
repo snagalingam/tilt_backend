@@ -46,7 +46,8 @@ const SignUpForm = () => {
         email: "",
         firstName: "",
         lastName: "",
-        password: undefined,
+        password1: undefined,
+        password2: undefined,
       }}
       validationSchema={signUpSchema}
       onSubmit={handleSubmit}

@@ -12,6 +12,7 @@ const SignUp = () => {
         <div className="tilt-logo">
           <img src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"></img>
         </div>
+
         <div className="tilt-message-container">
           <div className="tilt-message">
             <h2>Find affordable colleges</h2>
@@ -26,22 +27,28 @@ const SignUp = () => {
             <p>We'll walk you through your scholarship and loan options</p>
           </div>
         </div>
-        <div className="left-footer">
+
+        <div className="tilt-footer">
           <p>Tilt 2020</p>
         </div>
       </div>
+
       <div className="authentication-right form">
         <div className="sign-up-header">
           <h1>Create your Tilt account</h1>
           <p>No credit card required. Cancel anytime.</p>
         </div>
+
         <GoogleOAuth />
+
         <div className="form-divider">
           <div />
           <span>OR</span>
           <div />
         </div>
+
         <SignUpForm />
+
         <div className="sign-up-footer">
           <p>Have an account? Sign in</p>
         </div>
