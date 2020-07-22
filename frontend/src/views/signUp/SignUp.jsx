@@ -10,7 +10,10 @@ const SignUp = () => {
     <div className="authentication-container sign-up-container">
       <div className="authentication-left">
         <div className="tilt-logo">
-          <img src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"></img>
+          <img
+            src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"
+            alt="tilt-logo"
+          ></img>
         </div>
 
         <div className="tilt-message-container">

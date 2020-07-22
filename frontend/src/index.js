@@ -44,6 +44,7 @@ const client = new ApolloClient({
 
 const SignUp = lazy(() => import("./views/signUp/SignUp"));
 const Login = lazy(() => import("./views/login/Login"));
+const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
 
 const App = () => {
   useEffect(() => {
@@ -76,6 +77,7 @@ const App = () => {
           <Route exact path="/resources/terminology" component={Terminology} />
           <Suspense fallback={<div>Loading...</div>}>
             <Route exact path="/login" component={Login} />
+            <Route exact path="/onboarding" component={Onboarding} />
             <Route exact path="/signup" component={SignUp} />
           </Suspense>
           <Route exact path="/signup-survey" component={SignupSurvey} />
