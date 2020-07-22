@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./login-carousel.scss";
 
@@ -39,6 +39,23 @@ const LoginCarousel = () => {
       selectIndex((prevIndex) => (prevIndex += 1));
     }
   }
+
+  function handleInterval() {
+    selectIndex((prevIndex) => {
+      if (prevIndex + 1 > numberOfItems - 1) {
+        return 0;
+      } else {
+        return (prevIndex += 1);
+      }
+    });
+  }
+
+  useEffect(() => {
+    setInterval(handleInterval, 10000);
+    return () => {
+      clearInterval(handleInterval);
+    };
+  }, []);
 
   return (
     <div className="login-carousel">
