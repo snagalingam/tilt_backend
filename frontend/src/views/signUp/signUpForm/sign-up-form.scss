@@ -14,7 +14,8 @@
   }
   .sign-up-terms-of-service {
     @include flex-center;
-    margin-bottom: 20px;
+    height: 40px;
+    margin: 0.5rem 0;
     p {
       text-align: center;
       font-size: 12px;
