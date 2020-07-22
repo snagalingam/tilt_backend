@@ -55,11 +55,11 @@ const LoginCarousel = () => {
   }
 
   useEffect(() => {
-    setInterval(handleInterval, 10000);
+    const carouselInterval = setInterval(handleInterval, 10000);
     return () => {
-      clearInterval(handleInterval);
+      clearInterval(carouselInterval);
     };
-  }, [selectIndex]);
+  }, [selectedIndex]);
 
   return (
     <div className="login-carousel">
