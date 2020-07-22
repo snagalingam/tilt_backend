@@ -33,24 +33,26 @@ const SignUp = () => {
         </div>
       </div>
 
-      <div className="authentication-right form">
-        <div className="sign-up-header">
-          <h1>Create your Tilt account</h1>
-          <p>No credit card required. Cancel anytime.</p>
-        </div>
+      <div className="authentication-right">
+        <div className="form">
+          <div className="form-header">
+            <h1>Create your Tilt account</h1>
+            <p>No credit card required. Cancel anytime.</p>
+          </div>
 
-        <GoogleOAuth signup />
+          <GoogleOAuth signup />
 
-        <div className="form-divider">
-          <div />
-          <span>OR</span>
-          <div />
-        </div>
+          <div className="form-divider">
+            <div />
+            <span>OR</span>
+            <div />
+          </div>
 
-        <SignUpForm />
+          <SignUpForm />
 
-        <div className="sign-up-footer">
-          <p>Have an account? Sign in</p>
+          <div className="form-footer">
+            <p>Have an account? Sign in</p>
+          </div>
         </div>
       </div>
     </div>

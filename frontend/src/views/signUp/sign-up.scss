@@ -33,26 +33,5 @@
   .authentication-right {
     display: flex;
     flex-direction: column;
-    .sign-up-header {
-      @include flex-center;
-      flex-direction: column;
-      margin-bottom: 3rem;
-      h1 {
-        color: #333;
-        margin-bottom: 0.5rem;
-      }
-      p {
-        color: #828282;
-      }
-    }
-    .sign-up-footer {
-      @include flex-center;
-      height: 40px;
-      margin: 0.5rem 0;
-      p {
-        font-size: 12px;
-        color: #828282;
-      }
-    }
   }
 }

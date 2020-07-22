@@ -4,14 +4,7 @@
 .sign-up-form {
   @include flex-center;
   flex-direction: column;
-  width: 400px;
-  button {
-    height: 40px;
-    background: #828282;
-    width: 100%;
-    color: white;
-    font-weight: 500;
-  }
+  width: 100%;
   .sign-up-form-footer {
     @include flex-center;
     height: 40px;
