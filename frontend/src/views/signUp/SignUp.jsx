@@ -1,6 +1,6 @@
 import React from "react";
 
-import GoogleOAuth from "./googleOAuth/GoogleOAuth";
+import GoogleOAuth from "../../components/googleOAuth/GoogleOAuth";
 import SignUpForm from "./signUpForm/SignUpForm";
 
 import "./sign-up.scss";
@@ -39,7 +39,7 @@ const SignUp = () => {
           <p>No credit card required. Cancel anytime.</p>
         </div>
 
-        <GoogleOAuth />
+        <GoogleOAuth signup />
 
         <div className="form-divider">
           <div />
