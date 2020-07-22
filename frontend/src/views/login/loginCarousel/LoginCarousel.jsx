@@ -44,22 +44,21 @@ const LoginCarousel = () => {
     }
   }
 
-  function handleInterval() {
-    selectIndex((prevIndex) => {
-      if (prevIndex + 1 > numberOfItems - 1) {
-        return 0;
-      } else {
-        return (prevIndex += 1);
-      }
-    });
-  }
-
   useEffect(() => {
+    function handleInterval() {
+      selectIndex((prevIndex) => {
+        if (prevIndex + 1 > numberOfItems - 1) {
+          return 0;
+        } else {
+          return (prevIndex += 1);
+        }
+      });
+    }
     const carouselInterval = setInterval(handleInterval, 10000);
     return () => {
       clearInterval(carouselInterval);
     };
-  }, [selectedIndex]);
+  }, [selectedIndex, numberOfItems]);
 
   return (
     <div className="login-carousel">
