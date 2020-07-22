@@ -31,12 +31,16 @@ const LoginCarousel = () => {
   function handleLeft() {
     if (selectedIndex - 1 >= 0) {
       selectIndex((prevIndex) => (prevIndex -= 1));
+    } else {
+      selectIndex(numberOfItems - 1);
     }
   }
 
   function handleRight() {
     if (selectedIndex + 1 <= numberOfItems - 1) {
       selectIndex((prevIndex) => (prevIndex += 1));
+    } else {
+      selectIndex(0);
     }
   }
 
@@ -55,25 +59,15 @@ const LoginCarousel = () => {
     return () => {
       clearInterval(handleInterval);
     };
-  }, []);
+  }, [selectIndex]);
 
   return (
     <div className="login-carousel">
       <div className="login-carousel-controls">
-        <div
-          onClick={handleLeft}
-          className={`${selectedIndex - 1 < 0 ? "disabled" : ""}`}
-          role="button"
-        >
+        <div onClick={handleLeft} role="button">
           &#60;
         </div>
-        <div
-          onClick={handleRight}
-          className={`${
-            selectedIndex + 1 > numberOfItems - 1 ? "disabled" : ""
-          }`}
-          role="button"
-        >
+        <div onClick={handleRight} role="button">
           &#62;
         </div>
       </div>
