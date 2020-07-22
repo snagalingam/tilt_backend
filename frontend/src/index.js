@@ -14,7 +14,6 @@ import "cross-fetch/polyfill";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
 import HomePage from "./components/HomePage";
-import Login from "./components/account/Login";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ResourcesFAQs from "./components/resources/ResourcesFAQs";
 import ResourcesIntro from "./components/resources/ResourcesIntro";
@@ -44,6 +43,7 @@ const client = new ApolloClient({
 });
 
 const SignUp = lazy(() => import("./views/signUp/SignUp"));
+const Login = lazy(() => import("./views/login/Login"));
 
 const App = () => {
   useEffect(() => {
@@ -61,7 +61,6 @@ const App = () => {
           <Route exact path="/contact" component={ContactUs} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
           <Route exact path="/terms-of-service" component={TermsOfService} />
-          <Route exact path="/login" component={Login} />
           <Route exact path="/resources" component={ResourcesIntro} />
           <Route exact path="/resources/faqs" component={ResourcesFAQs} />
           <Route
@@ -76,6 +75,7 @@ const App = () => {
           />
           <Route exact path="/resources/terminology" component={Terminology} />
           <Suspense fallback={<div>Loading...</div>}>
+            <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
           </Suspense>
           <Route exact path="/signup-survey" component={SignupSurvey} />
