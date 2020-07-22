@@ -52,44 +52,27 @@ const SignUpForm = () => {
       validationSchema={signUpSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched }) => (
+      {(state) => (
         <Form className="sign-up-form form">
-          <FieldSet
-            name="email"
-            label="Email"
-            errors={errors}
-            touched={touched}
-          />
+          <FieldSet name="email" label="Email" {...state} />
           <div className="form-name-fields">
-            <FieldSet
-              name="firstName"
-              label="First Name"
-              errors={errors}
-              touched={touched}
-            />
-            <FieldSet
-              name="lastName"
-              label="Last Name"
-              errors={errors}
-              touched={touched}
-            />
+            <FieldSet name="firstName" label="First Name" {...state} />
+            <FieldSet name="lastName" label="Last Name" {...state} />
           </div>
           <FieldSet
             name="password1"
             label="Password"
             type="password"
-            errors={errors}
-            touched={touched}
+            {...state}
           />
           <FieldSet
             name="password2"
             label="Confirm Password"
             type="password"
-            errors={errors}
-            touched={touched}
+            {...state}
           />
 
-          <div className="sign-up-terms-of-service">
+          <div className="sign-up-form-footer">
             <p>
               By signing up, you agree to our Terms of Service and Privacy
               Policy
