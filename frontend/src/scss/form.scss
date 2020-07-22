@@ -1,0 +1,55 @@
+.form {
+  .form-divider {
+    height: 40px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    span {
+      color: #828282;
+      font-size: 12px;
+      width: 50px;
+      text-align: center;
+    }
+    div {
+      flex: 1;
+      align-self: flex-start;
+      height: 50%;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  }
+  fieldset {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+    label {
+      font-size: 13px;
+      color: #444;
+      font-weight: 500;
+    }
+    input {
+      border-radius: 4px;
+      border: none;
+      height: 40px;
+      width: 100%;
+      padding: 0 15px;
+      color: #444;
+      font-size: 14px;
+    }
+  }
+  .form-name-fields {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 48% 48%;
+    column-gap: 4%;
+  }
+  .form-error {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #828282;
+  }
+}

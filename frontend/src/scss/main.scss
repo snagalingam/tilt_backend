@@ -1,0 +1,42 @@
+@import "./form.scss";
+@import "./mixins";
+@import "./variables";
+
+:root {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+  }
+  p {
+    margin: 0;
+  }
+  button {
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+  }
+}
+
+.authentication-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background: $light-gray;
+  .authentication-left {
+    width: 30%;
+    background: $gray;
+    padding: 50px;
+  }
+  .authentication-right {
+    width: 70%;
+    @include flex-center;
+  }
+}
