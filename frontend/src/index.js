@@ -1,10 +1,7 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
-import { ApolloClient } from "apollo-client";
-import { ApolloProvider } from "react-apollo";
+
 import { BrowserRouter, Route } from "react-router-dom";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
 import { loadReCaptcha } from "react-recaptcha-google";
 
 import "aos/dist/aos.css";
@@ -12,6 +9,7 @@ import "./fonts/Feather/feather.css";
 import "./scss/theme.scss";
 import "cross-fetch/polyfill";
 
+import Apollo from "./apollo/ApolloProvider/Apollo";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
 import HomePage from "./components/HomePage";
@@ -25,6 +23,7 @@ import SignupSurvey from "./components/signup/SignupSurvey";
 import SignupThankYou from "./components/signup/SignupThankYou";
 import Terminology from "./components/resources/Terminology";
 import TermsOfService from "./components/TermsOfService";
+
 import {
   initializeAOS,
   initializeSmoothScroll,
@@ -32,16 +31,6 @@ import {
 } from "./js/helpers";
 
 import "./scss/main.scss";
-
-const httpLink = createHttpLink({
-  uri: "http://localhost:8000/graphql",
-  credentials: "same-origin",
-});
-
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
 
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
 const Login = lazy(() => import("./views/login/Login"));
@@ -52,7 +41,6 @@ const SignUp = lazy(() => import("./views/signUp/SignUp"));
 const App = () => {
   useEffect(() => {
     loadReCaptcha();
-    // TODO: check for authentication
   }, []);
 
   useEffect(() => {
@@ -64,7 +52,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <ApolloProvider client={client}>
+      <Apollo>
         <ScrollToTop>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/contact" component={ContactUs} />
@@ -94,7 +82,7 @@ const App = () => {
           <Route exact path="/signup-thank-you" component={SignupThankYou} />
           <Route exact path="/sitemap" component={Sitemap} />
         </ScrollToTop>
-      </ApolloProvider>
+      </Apollo>
     </BrowserRouter>
   );
 };

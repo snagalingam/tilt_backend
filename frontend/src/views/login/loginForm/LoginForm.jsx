@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Link } from "react-router-dom";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { Redirect } from "react-router-dom";
-import gql from "graphql-tag";
-
 import * as yup from "yup";
 
-import "./login-form.scss";
+import { LOGIN_MUTATION } from "../../../apollo/mutations/account";
 
-const LOGIN_MUTATION = gql`
-  mutation LOGIN_USER($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
-      user {
-        email
-      }
-    }
-  }
-`;
+import "./login-form.scss";
 
 const signUpSchema = yup.object().shape({
   email: yup

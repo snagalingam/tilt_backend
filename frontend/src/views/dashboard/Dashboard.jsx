@@ -1,28 +1,21 @@
 import React, { useEffect, useState } from "react";
-
-import { useQuery } from "@apollo/react-hooks";
 import { Redirect } from "react-router-dom";
-import gql from "graphql-tag";
+import { useQuery } from "@apollo/client";
 
-const ME_QUERY = gql`
-  {
-    me {
-      firstName
-      lastName
-      email
-    }
-  }
-`;
+import { GET_ME } from "../../apollo/queries/account";
+
+import "./dashboard.scss";
 
 const Dashboard = () => {
-  const { loading, error, data } = useQuery(ME_QUERY);
+  const { data, error, loading } = useQuery(GET_ME);
 
-  useEffect(() => {
-    console.log(data, error, loading);
-  }, [data]);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <Redirect to="/login" />;
 
   return (
-    <div>{`${data?.me?.firstName} ${data?.me?.lastName} ${data?.me?.email}`}</div>
+    <div className="dashboard-container">
+      <h1>{`Welcome ${data?.me?.firstName}!`}</h1>
+    </div>
   );
 
   return;
