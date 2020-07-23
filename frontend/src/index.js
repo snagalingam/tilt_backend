@@ -5,6 +5,7 @@ import { ApolloProvider } from "react-apollo";
 import { BrowserRouter, Route } from "react-router-dom";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { loadReCaptcha } from "react-recaptcha-google";
 
 import "aos/dist/aos.css";
 import "./fonts/Feather/feather.css";
@@ -14,7 +15,6 @@ import "cross-fetch/polyfill";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
 import HomePage from "./components/HomePage";
-import Login from "./components/account/Login";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ResourcesFAQs from "./components/resources/ResourcesFAQs";
 import ResourcesIntro from "./components/resources/ResourcesIntro";
@@ -44,8 +44,15 @@ const client = new ApolloClient({
 });
 
 const SignUp = lazy(() => import("./views/signUp/SignUp"));
+const Login = lazy(() => import("./views/login/Login"));
+const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
+const ResetPassword = lazy(() => import("./views/resetPassword/ResetPassword"));
 
 const App = () => {
+  useEffect(() => {
+    loadReCaptcha();
+  }, []);
+
   useEffect(() => {
     document.title = "Financial aid help for high school students - Tilt";
     initializeAOS();
@@ -61,7 +68,6 @@ const App = () => {
           <Route exact path="/contact" component={ContactUs} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
           <Route exact path="/terms-of-service" component={TermsOfService} />
-          <Route exact path="/login" component={Login} />
           <Route exact path="/resources" component={ResourcesIntro} />
           <Route exact path="/resources/faqs" component={ResourcesFAQs} />
           <Route
@@ -76,6 +82,9 @@ const App = () => {
           />
           <Route exact path="/resources/terminology" component={Terminology} />
           <Suspense fallback={<div>Loading...</div>}>
+            <Route exact path="/reset-password" component={ResetPassword} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/onboarding" component={Onboarding} />
             <Route exact path="/signup" component={SignUp} />
           </Suspense>
           <Route exact path="/signup-survey" component={SignupSurvey} />
