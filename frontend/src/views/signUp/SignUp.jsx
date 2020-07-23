@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import GoogleOAuth from "../../components/googleOAuth/GoogleOAuth";
 import SignUpForm from "./signUpForm/SignUpForm";
@@ -10,7 +11,10 @@ const SignUp = () => {
     <div className="authentication-container sign-up-container">
       <div className="authentication-left">
         <div className="tilt-logo">
-          <img src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"></img>
+          <img
+            src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"
+            alt="tilt-logo"
+          ></img>
         </div>
 
         <div className="tilt-message-container">
@@ -33,24 +37,28 @@ const SignUp = () => {
         </div>
       </div>
 
-      <div className="authentication-right form">
-        <div className="sign-up-header">
-          <h1>Create your Tilt account</h1>
-          <p>No credit card required. Cancel anytime.</p>
-        </div>
+      <div className="authentication-right">
+        <div className="form-container">
+          <div className="form-header">
+            <h1>Create your Tilt account</h1>
+            <p>No credit card required. Cancel anytime.</p>
+          </div>
 
-        <GoogleOAuth signup />
+          <GoogleOAuth signup />
 
-        <div className="form-divider">
-          <div />
-          <span>OR</span>
-          <div />
-        </div>
+          <div className="form-divider">
+            <div />
+            <span>OR</span>
+            <div />
+          </div>
 
-        <SignUpForm />
+          <SignUpForm />
 
-        <div className="sign-up-footer">
-          <p>Have an account? Sign in</p>
+          <div className="form-footer">
+            <p>
+              Have an account? <Link to="/login">Sign in</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
