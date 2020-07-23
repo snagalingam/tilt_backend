@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 
 import "./sign-up-form.scss";
@@ -53,7 +54,7 @@ const SignUpForm = () => {
       onSubmit={handleSubmit}
     >
       {(state) => (
-        <Form className="sign-up-form form">
+        <Form className="sign-up-form">
           <FieldSet name="email" label="Email" {...state} />
           <div className="form-name-fields">
             <FieldSet name="firstName" label="First Name" {...state} />
@@ -74,8 +75,9 @@ const SignUpForm = () => {
 
           <div className="sign-up-form-footer">
             <p>
-              By signing up, you agree to our Terms of Service and Privacy
-              Policy
+              By signing up, you agree to our{" "}
+              <Link to="/terms-of-service">Terms of Service</Link> and{" "}
+              <Link to="/privacy-policy">Privacy Policy</Link>
             </p>
           </div>
 

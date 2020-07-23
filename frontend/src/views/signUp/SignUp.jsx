@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import GoogleOAuth from "../../components/googleOAuth/GoogleOAuth";
 import SignUpForm from "./signUpForm/SignUpForm";
@@ -37,7 +38,7 @@ const SignUp = () => {
       </div>
 
       <div className="authentication-right">
-        <div className="form">
+        <div className="form-container">
           <div className="form-header">
             <h1>Create your Tilt account</h1>
             <p>No credit card required. Cancel anytime.</p>
@@ -54,7 +55,9 @@ const SignUp = () => {
           <SignUpForm />
 
           <div className="form-footer">
-            <p>Have an account? Sign in</p>
+            <p>
+              Have an account? <Link to="/login">Sign in</Link>
+            </p>
           </div>
         </div>
       </div>

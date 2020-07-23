@@ -1,8 +1,9 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 
-import './login-form.scss';
+import "./login-form.scss";
 
 const signUpSchema = yup.object().shape({
   email: yup
@@ -22,7 +23,12 @@ const FieldSet = ({
   touched,
 }) => (
   <fieldset>
-    <label htmlFor={`login-${name}`}>{label}</label>
+    <label htmlFor={`login-${name}`}>
+      {label}
+      {name === "password" && (
+        <Link to="/reset-password">Forgot Password?</Link>
+      )}
+    </label>
     <Field as={fieldType} name={name} type={type}>
       {children}
     </Field>
@@ -47,7 +53,7 @@ const LoginForm = () => {
       onSubmit={handleSubmit}
     >
       {(state) => (
-        <Form className="login-form form">
+        <Form className="login-form">
           <FieldSet name="email" label="Email" {...state} />
           <FieldSet
             name="password"
