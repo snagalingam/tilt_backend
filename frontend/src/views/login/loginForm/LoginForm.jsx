@@ -74,7 +74,7 @@ const LoginForm = () => {
   return (
     <>
       {isAuthenticated ? (
-        <Redirect to="/" />
+        <Redirect to="/dashboard" />
       ) : (
         <Formik
           initialValues={{
