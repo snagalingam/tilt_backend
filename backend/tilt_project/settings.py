@@ -166,10 +166,12 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
 
 if ENVIRONMENT == 'development':
-    STATICFILES_DIRS = [os.path.join(BASE_DIR)]
+    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "frontend", "build")]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend", "build", "static")]
+    # STATICFILES_DIRS = [os.path.join(BASE_DIR)]
     WHITENOISE_ROOT = os.path.join(BASE_DIR)
 
 if ENVIRONMENT == 'production':
     TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
-    STATICFILES_DIRS = [os.path.join( "frontend", "build", "static")]
+    STATICFILES_DIRS = [os.path.join("frontend", "build", "static")]
     WHITENOISE_ROOT = os.path.join("frontend", "build", "root")

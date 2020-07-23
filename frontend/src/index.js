@@ -51,6 +51,7 @@ const ResetPassword = lazy(() => import("./views/resetPassword/ResetPassword"));
 const App = () => {
   useEffect(() => {
     loadReCaptcha();
+    // TODO: check for authentication
   }, []);
 
   useEffect(() => {
