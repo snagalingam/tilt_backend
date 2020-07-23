@@ -1,12 +1,13 @@
-from django.contrib.auth import get_user_model
-
 import graphene
+from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 
 
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
+
 
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
@@ -21,6 +22,23 @@ class Query(graphene.ObjectType):
             raise Exception('Not logged in!')
 
         return user
+
+
+class LoginUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+
+    def mutate(self, info, email, password, next_url="/"):
+        email = BaseUserManager.normalize_email(email)
+        user = authenticate(username=email, password=password)
+
+        if user is not None:
+            login(info.context, user)
+            return LoginUser(user=user)
+
 
 class CreateUser(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -44,7 +62,7 @@ class CreateUser(graphene.Mutation):
         highschool_graduation_year = graphene.String()
 
     def mutate(
-        self, 
+        self,
         info,
         email,
         password,
@@ -84,8 +102,9 @@ class CreateUser(graphene.Mutation):
         user.set_password(password)
         user.save()
 
-        return CreateUser(user = user)
+        return CreateUser(user=user)
+
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
-
+    login_user = LoginUser.Field()
