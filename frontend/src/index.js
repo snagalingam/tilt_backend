@@ -1,10 +1,12 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
-import { ApolloClient } from "apollo-client";
-import { ApolloProvider } from "react-apollo";
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+} from "@apollo/client";
 import { BrowserRouter, Route } from "react-router-dom";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
 import { loadReCaptcha } from "react-recaptcha-google";
 
 import "aos/dist/aos.css";

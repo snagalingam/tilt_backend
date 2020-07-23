@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, gql } from "@apollo/client";
 import { Redirect } from "react-router-dom";
-import gql from "graphql-tag";
 
 import "./sign-up-form.scss";
 

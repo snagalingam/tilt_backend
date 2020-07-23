@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, gql } from "@apollo/client";
 import { Redirect } from "react-router-dom";
-import gql from "graphql-tag";
 
 const ME_QUERY = gql`
   {
