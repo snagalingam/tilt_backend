@@ -67,7 +67,6 @@ const SignUpForm = () => {
   const [createUser, response] = useMutation(SIGNUP_MUTATION);
 
   function handleSubmit(values) {
-    console.log(values);
     createUser({
       variables: {
         firstName: values.firstName,
