@@ -5,6 +5,7 @@ import { ApolloProvider } from "react-apollo";
 import { BrowserRouter, Route } from "react-router-dom";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { loadReCaptcha } from "react-recaptcha-google";
 
 import "aos/dist/aos.css";
 import "./fonts/Feather/feather.css";
@@ -48,6 +49,10 @@ const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
 const ResetPassword = lazy(() => import("./views/resetPassword/ResetPassword"));
 
 const App = () => {
+  useEffect(() => {
+    loadReCaptcha();
+  }, []);
+
   useEffect(() => {
     document.title = "Financial aid help for high school students - Tilt";
     initializeAOS();
