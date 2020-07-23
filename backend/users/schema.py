@@ -31,7 +31,7 @@ class LoginUser(graphene.Mutation):
         email = graphene.String()
         password = graphene.String()
 
-    def mutate(self, info, email, password, next_url="/"):
+    def mutate(self, info, email, password):
         email = BaseUserManager.normalize_email(email)
         user = authenticate(username=email, password=password)
 
