@@ -1,29 +1,9 @@
 import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
-const CREATE_SCHOLARSHIP = gql`
-  mutation CreateScholarship(
-    $name: String!
-    $amount: Int!
-    $deadline: Date!
-    $url: String!
-  ) {
-    createScholarship(
-      name: $name
-      amount: $amount
-      deadline: $deadline
-      url: $url
-    ) {
-      id
-      name
-      amount
-      deadline
-      url
-    }
-  }
-`;
+import { CREATE_SCHOLARSHIP } from "../../../apollo/mutations/scholarship";
 
 const CreateScholarship = () => {
   const MIN_DATE = "2020-01-01";
