@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import "./login-carousel.scss";
+import "./side-carousel.scss";
 
 const messages = [
   {
@@ -24,7 +24,7 @@ const messages = [
   },
 ];
 
-const LoginCarousel = () => {
+const SideCarousel = () => {
   const [numberOfItems] = useState(messages.length);
   const [selectedIndex, selectIndex] = useState(0);
 
@@ -61,8 +61,8 @@ const LoginCarousel = () => {
   }, [selectedIndex, numberOfItems]);
 
   return (
-    <div className="login-carousel">
-      <div className="login-carousel-controls">
+    <div className="side-carousel">
+      <div className="side-carousel-controls">
         <div onClick={handleLeft} role="button">
           &#60;
         </div>
@@ -96,4 +96,4 @@ const LoginCarousel = () => {
   );
 };
 
-export default LoginCarousel;
+export default SideCarousel;

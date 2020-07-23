@@ -1,6 +1,6 @@
 @import "../scss/mixins";
 
-.form {
+.form-container {
   width: 400px;
   .form-header {
     @include flex-center;
@@ -84,5 +84,10 @@
     width: 100%;
     color: white;
     font-weight: 500;
+    &.secondary-button {
+      background: transparent;
+      border: 1px solid #e0e0e0;
+      color: #828282;
+    }
   }
 }

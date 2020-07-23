@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import GoogleOAuth from "../../components/googleOAuth/GoogleOAuth";
-import LoginCarousel from "./loginCarousel/LoginCarousel";
 import LoginForm from "./loginForm/LoginForm";
+import SideCarousel from "../../components/sideCarousel/SideCarousel";
 
 import "./login.scss";
 
@@ -17,11 +18,11 @@ const Login = () => {
           ></img>
         </div>
 
-        <LoginCarousel />
+        <SideCarousel />
       </div>
 
       <div className="authentication-right">
-        <div className="form">
+        <div className="form-container">
           <div className="form-header">
             <h1>Welcome to Tilt</h1>
             <p>
@@ -40,7 +41,9 @@ const Login = () => {
           <LoginForm />
 
           <div className="form-footer">
-            <p>Don't have an account? Get started</p>
+            <p>
+              Don't have an account? <Link to="/signup">Get started</Link>
+            </p>
           </div>
         </div>
       </div>
