@@ -2,33 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { Redirect } from "react-router-dom";
-import gql from "graphql-tag";
 
 import "./sign-up-form.scss";
 
-const SIGNUP_MUTATION = gql`
-  mutation CREATE_USER(
-    $email: String!
-    $firstName: String
-    $lastName: String
-    $password: String!
-  ) {
-    createUser(
-      email: $email
-      firstName: $firstName
-      lastName: $lastName
-      password: $password
-    ) {
-      user {
-        firstName
-        lastName
-        email
-      }
-    }
-  }
-`;
+import { SIGNUP_MUTATION } from "../../../apollo/mutations/account";
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Please enter your first name"),
