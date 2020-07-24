@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 
 import "./sign-up-form.scss";
 
-import { SIGNUP_MUTATION } from "../../../apollo/mutations/account";
+import { SIGN_UP } from "../../../apollo/mutations/account";
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Please enter your first name"),
@@ -43,7 +43,7 @@ const FieldSet = ({
 const SignUpForm = () => {
   // Will move this to Index.js once I figure out how to use Apollo
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [createUser, response] = useMutation(SIGNUP_MUTATION);
+  const [createUser, response] = useMutation(SIGN_UP);
 
   function handleSubmit(values) {
     createUser({
@@ -62,56 +62,52 @@ const SignUpForm = () => {
     }
   }, [response]);
 
+  if (isAuthenticated) return <Redirect to="/dashboard" />;
+
   return (
-    <>
-      {isAuthenticated ? (
-        <Redirect to="/dashboard" />
-      ) : (
-        <Formik
-          initialValues={{
-            email: "",
-            firstName: "",
-            lastName: "",
-            password1: undefined,
-            password2: undefined,
-          }}
-          validationSchema={signUpSchema}
-          onSubmit={handleSubmit}
-        >
-          {(state) => (
-            <Form className="sign-up-form">
-              <FieldSet name="email" label="Email" {...state} />
-              <div className="form-name-fields">
-                <FieldSet name="firstName" label="First Name" {...state} />
-                <FieldSet name="lastName" label="Last Name" {...state} />
-              </div>
-              <FieldSet
-                name="password1"
-                label="Password"
-                type="password"
-                {...state}
-              />
-              <FieldSet
-                name="password2"
-                label="Confirm Password"
-                type="password"
-                {...state}
-              />
+    <Formik
+      initialValues={{
+        email: "",
+        firstName: "",
+        lastName: "",
+        password1: undefined,
+        password2: undefined,
+      }}
+      validationSchema={signUpSchema}
+      onSubmit={handleSubmit}
+    >
+      {(state) => (
+        <Form className="sign-up-form">
+          <FieldSet name="email" label="Email" {...state} />
+          <div className="form-name-fields">
+            <FieldSet name="firstName" label="First Name" {...state} />
+            <FieldSet name="lastName" label="Last Name" {...state} />
+          </div>
+          <FieldSet
+            name="password1"
+            label="Password"
+            type="password"
+            {...state}
+          />
+          <FieldSet
+            name="password2"
+            label="Confirm Password"
+            type="password"
+            {...state}
+          />
 
-              <div className="sign-up-form-footer">
-                <p>
-                  By signing up, you agree to our{" "}
-                  <Link to="/terms-of-service">Terms of Service</Link> and{" "}
-                  <Link to="/privacy-policy">Privacy Policy</Link>
-                </p>
-              </div>
+          <div className="sign-up-form-footer">
+            <p>
+              By signing up, you agree to our{" "}
+              <Link to="/terms-of-service">Terms of Service</Link> and{" "}
+              <Link to="/privacy-policy">Privacy Policy</Link>
+            </p>
+          </div>
 
-              <button>Create Account</button>
-            </Form>
-          )}
-        </Formik>
+          <button type="submit">Create Account</button>
+        </Form>
       )}
-    </>
+    </Formik>
   );
 };
 

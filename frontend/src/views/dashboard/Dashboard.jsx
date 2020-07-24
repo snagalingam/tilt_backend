@@ -9,9 +9,6 @@ import "./dashboard.scss";
 const Dashboard = () => {
   const { data, error, loading } = useQuery(GET_ME);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <Redirect to="/login" />;
-
   return (
     <div className="dashboard-container">
       <h1>{`Welcome ${data?.me?.firstName}!`}</h1>
