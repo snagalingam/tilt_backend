@@ -4,8 +4,8 @@ import { Redirect } from "react-router-dom";
 import "./user-type.scss";
 
 const UserType = ({
-  preferredName = "default",
-  answer,
+  answers,
+  setAnswers,
   previous,
   next,
   highSchool,
@@ -13,24 +13,26 @@ const UserType = ({
   parent,
   counselor,
 }) => {
+  const { preferredName } = answers;
+
   function handleHighSchool() {
     next(highSchool);
-    answer("high school");
+    setAnswers((prev) => ({ ...prev, userType: "high school student" }));
   }
 
   function handleCollege() {
     next(college);
-    answer("college");
+    setAnswers((prev) => ({ ...prev, userType: "college student" }));
   }
 
   function handleParent() {
     next(parent);
-    answer("parent");
+    setAnswers((prev) => ({ ...prev, highSchoolName: "parent" }));
   }
 
   function handleCounselor() {
     next(counselor);
-    answer("counselor");
+    setAnswers((prev) => ({ ...prev, highSchoolName: "counselor" }));
   }
 
   return (

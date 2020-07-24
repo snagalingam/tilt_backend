@@ -8,11 +8,12 @@ const preferredNameSchema = yup.object().shape({
   preferredName: yup.string().required("Please enter your preferred name"),
 });
 
-const PreferredName = ({ firstName, previous, next, answer }) => {
+const PreferredName = ({ me, previous, next, setAnswers }) => {
+  const { firstName } = me;
   const [isEnterPreferredName, setIsEnterPreferredName] = useState(false);
 
   function handleSubmit(values) {
-    answer(values.preferredName);
+    setAnswers((prev) => ({ ...prev, preferredName: values.preferredName }));
     next();
   }
 

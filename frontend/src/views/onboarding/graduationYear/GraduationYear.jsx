@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 
 import "../userType/user-type.scss";
 
-const GraduationYear = ({ next, answer }) => {
+const GraduationYear = ({ highSchool, college, next, answer }) => {
   function handleClick(value) {
     answer(value);
     next();
@@ -18,7 +18,8 @@ const GraduationYear = ({ next, answer }) => {
   return (
     <div className="user-type-container form-container">
       <div className="form-header">
-        <h1>When will you be graduating high school?</h1>
+        {highSchool && <h1>When will you be graduating high school?</h1>}
+        {college && <h1>When did you graduate from high school?</h1>}
       </div>
       <div className="user-type-buttons">
         <div className="user-type-buttons-absolute">
