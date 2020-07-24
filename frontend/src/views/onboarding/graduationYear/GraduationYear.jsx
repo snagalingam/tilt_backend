@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 
 import "../userType/user-type.scss";
 
-const GraduationYear = ({ highSchool, college, next, answer }) => {
+const GraduationYear = ({ highSchool, college, next, previous, answer }) => {
   function handleClick(value) {
     answer(value);
     next();
@@ -35,7 +35,9 @@ const GraduationYear = ({ highSchool, college, next, answer }) => {
         </div>
       </div>
       <div className="user-type-back-button">
-        <button className="secondary-button">Back</button>
+        <button className="secondary-button" onClick={previous}>
+          Back
+        </button>
       </div>
     </div>
   );
