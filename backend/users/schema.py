@@ -2,6 +2,7 @@ import graphene
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
+from services.sendgrid.usecases import send_validation_email
 
 
 class UserType(DjangoObjectType):
@@ -65,6 +66,9 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+
+        # send validation email
+        send_validation_email(email)
 
         # login user after signup
         user = authenticate(username=email, password=password)

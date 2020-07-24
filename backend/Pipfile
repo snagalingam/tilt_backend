@@ -19,6 +19,7 @@ django-cors-headers = "==3.2.1"
 argon2-cffi = "*"
 bcrypt = "*"
 sendgrid = "*"
+pyjwt = "==1.7.1"
 
 [requires]
 python_version = "3.8"
