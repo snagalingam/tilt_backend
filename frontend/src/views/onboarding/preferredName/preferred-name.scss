@@ -1,0 +1,41 @@
+.preferred-name-container {
+  .preferred-name-options {
+    .form-header {
+      margin-bottom: 2.5rem;
+    }
+    .secondary-button {
+      margin-top: 3rem;
+    }
+    .preferred-name-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .block-button {
+        margin: 1rem;
+      }
+    }
+  }
+  .preferred-name-update {
+    .form-header {
+      margin-bottom: 2rem;
+    }
+    .preferred-name-form {
+      input {
+        width: 100%;
+        height: 100px;
+        background: transparent;
+        border: none;
+        font-weight: 500;
+        font-size: 56px;
+        text-align: center;
+        &:focus {
+          border: none;
+          outline: none;
+        }
+      }
+      button {
+        margin-top: 3rem;
+      }
+    }
+  }
+}
