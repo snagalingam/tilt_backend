@@ -18,8 +18,13 @@ import UserType from "./userType/UserType";
 import { GET_ME } from "../../apollo/queries/account";
 
 const highSchoolFlow = {
-  1: "high school name",
-  2: "graduation year",
+  1: "High school name",
+  2: "Graduation year",
+  3: "Have you taken the ACT yet?",
+  4: "Highest ACT score?",
+  5: "Have you taken the SAT yet?",
+  6: "What was your highest score?",
+  7: "What is your unweighted GPA?",
 };
 
 const collegeFlow = {

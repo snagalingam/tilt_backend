@@ -19,23 +19,5 @@
     .form-header {
       margin-bottom: 2rem;
     }
-    .preferred-name-form {
-      input {
-        width: 100%;
-        height: 100px;
-        background: transparent;
-        border: none;
-        font-weight: 500;
-        font-size: 56px;
-        text-align: center;
-        &:focus {
-          border: none;
-          outline: none;
-        }
-      }
-      button {
-        margin-top: 3rem;
-      }
-    }
   }
 }
