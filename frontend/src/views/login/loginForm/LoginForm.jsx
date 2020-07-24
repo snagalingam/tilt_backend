@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { Redirect } from "react-router-dom";
 import * as yup from "yup";
+
+import { LOGIN_MUTATION } from "../../../apollo/mutations/account";
 
 import "./login-form.scss";
 
@@ -39,33 +43,53 @@ const FieldSet = ({
 );
 
 const LoginForm = () => {
+  // Will move this to Index.js once I figure out how to use Apollo
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginUser, response] = useMutation(LOGIN_MUTATION);
+
   function handleSubmit(values) {
-    console.log(values);
+    if (values) {
+      loginUser({ variables: values });
+    }
   }
 
-  return (
-    <Formik
-      initialValues={{
-        lastName: "",
-        password: undefined,
-      }}
-      validationSchema={signUpSchema}
-      onSubmit={handleSubmit}
-    >
-      {(state) => (
-        <Form className="login-form">
-          <FieldSet name="email" label="Email" {...state} />
-          <FieldSet
-            name="password"
-            label="Password"
-            type="password"
-            {...state}
-          />
+  useEffect(() => {
+    if (response?.data?.loginUser?.user?.email) {
+      setIsAuthenticated(true);
+    } else {
+      // TODO: try again
+    }
+  }, [response]);
 
-          <button>Login</button>
-        </Form>
+  return (
+    <>
+      {isAuthenticated ? (
+        <Redirect to="/dashboard" />
+      ) : (
+        <Formik
+          initialValues={{
+            email: "",
+            password: undefined,
+          }}
+          validationSchema={signUpSchema}
+          onSubmit={handleSubmit}
+        >
+          {(state) => (
+            <Form className="login-form">
+              <FieldSet name="email" label="Email" {...state} />
+              <FieldSet
+                name="password"
+                label="Password"
+                type="password"
+                {...state}
+              />
+
+              <button>Login</button>
+            </Form>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 };
 
