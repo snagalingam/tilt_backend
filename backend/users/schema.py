@@ -20,12 +20,13 @@ class Query(graphene.ObjectType):
         user = info.context.user
         if user.is_anonymous:
             raise Exception('Not logged in!')
-
-        return user
+        if user.is_authenticated:
+            return user
 
 
 class LoginUser(graphene.Mutation):
     user = graphene.Field(UserType)
+    is_authenticated = graphene.Boolean()
 
     class Arguments:
         email = graphene.String()
@@ -37,7 +38,9 @@ class LoginUser(graphene.Mutation):
 
         if user is not None:
             login(info.context, user)
-            return LoginUser(user=user)
+            return LoginUser(user=user, is_authenticated=user.is_authenticated)
+        else:
+            raise Exception("Incorrect credentials")
 
 
 class CreateUser(graphene.Mutation):
