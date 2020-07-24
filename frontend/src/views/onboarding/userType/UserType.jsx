@@ -12,27 +12,29 @@ const UserType = ({
   college,
   parent,
   counselor,
+  userTypes,
 }) => {
   const { preferredName } = answers;
+  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR } = userTypes;
 
   function handleHighSchool() {
     next(highSchool);
-    setAnswers((prev) => ({ ...prev, userType: "high school student" }));
+    setAnswers((prev) => ({ ...prev, userType: HIGH_SCHOOL }));
   }
 
   function handleCollege() {
     next(college);
-    setAnswers((prev) => ({ ...prev, userType: "college student" }));
+    setAnswers((prev) => ({ ...prev, userType: COLLEGE }));
   }
 
   function handleParent() {
     next(parent);
-    setAnswers((prev) => ({ ...prev, highSchoolName: "parent" }));
+    setAnswers((prev) => ({ ...prev, highSchoolName: PARENT }));
   }
 
   function handleCounselor() {
     next(counselor);
-    setAnswers((prev) => ({ ...prev, highSchoolName: "counselor" }));
+    setAnswers((prev) => ({ ...prev, highSchoolName: COUNSELOR }));
   }
 
   return (

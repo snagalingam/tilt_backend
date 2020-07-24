@@ -45,6 +45,20 @@ const flow = {
   8: "complete!",
 };
 
+const flows = {
+  highSchool: highSchoolFlow,
+  college: collegeFlow,
+  parent: parentFlow,
+  counselor: counselorFlow,
+};
+
+const userTypes = {
+  HIGH_SCHOOL: "high school",
+  COLLEGE: "college",
+  PARENT: "parent",
+  COUNSELOR: "counselor",
+};
+
 const Onboarding = () => {
   const { data, error, loading } = useQuery(GET_ME);
 
@@ -87,6 +101,7 @@ const Onboarding = () => {
       setFlowIndex((prev) => (prev -= 1));
     }
     if (flowType !== flow && flowIndex === 1) {
+      console.log("hi");
       setFlowType(flow);
       setFlowIndex(indexBeforeFork);
     }
@@ -113,21 +128,18 @@ const Onboarding = () => {
     flowIndex,
   };
 
-  const flows = {
-    highSchool: highSchoolFlow,
-    college: collegeFlow,
-    parent: parentFlow,
-    counselor: counselorFlow,
-  };
-
   return (
     <div className="authentication-container onboarding-container">
       <div className="authentication-left"></div>
       <div className="authentication-right">
         {flowType[flowIndex] === flow[1] && <SkipOnboarding {...props} />}
         {flowType[flowIndex] === flow[2] && <PreferredName {...props} />}
-        {flowType[flowIndex] === flow[3] && <UserType {...props} {...flows} />}
-        {flowType[flowIndex] === flow[5] && <PreferredPronoun {...props} />}
+        {flowType[flowIndex] === flow[3] && (
+          <UserType {...props} {...flows} userTypes={userTypes} />
+        )}
+        {flowType[flowIndex] === flow[5] && (
+          <PreferredPronoun {...props} {...flows} userTypes={userTypes} />
+        )}
         {flowType[flowIndex] === flow[6] && <Ethnicity {...props} />}
         {flowType[flowIndex] === flow[7] && <Source {...props} />}
         {flowType[flowIndex] === flow[8] && <Completion {...props} />}
