@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 
-import "./preferred-name.scss";
+import CustomTextInput from "../customTextInput/CustomTextInput";
 
-const preferredNameSchema = yup.object().shape({
-  preferredName: yup.string().required("Please enter your preferred name"),
-});
+import "./preferred-name.scss";
 
 const PreferredName = ({ me, previous, next, setAnswers }) => {
   const { firstName } = me;
@@ -17,14 +15,6 @@ const PreferredName = ({ me, previous, next, setAnswers }) => {
     next();
   }
 
-  let inputRef;
-
-  useEffect(() => {
-    if (inputRef) {
-      inputRef.focus();
-    }
-  });
-
   return (
     <div className="preferred-name-container form-container">
       {isEnterPreferredName ? (
@@ -32,23 +22,11 @@ const PreferredName = ({ me, previous, next, setAnswers }) => {
           <div className="form-header">
             <h1>Please enter your preferred name</h1>
           </div>
-          <Formik
-            initialValues={{
-              preferredName: "",
-            }}
-            validationSchema={preferredNameSchema}
-            onSubmit={handleSubmit}
-          >
-            {(state) => (
-              <Form className="preferred-name-form">
-                <Field
-                  name="preferredName"
-                  innerRef={(input) => (inputRef = input)}
-                ></Field>
-                <button type="submit">Continue</button>
-              </Form>
-            )}
-          </Formik>
+          <CustomTextInput
+            field="preferredName"
+            handleSubmit={handleSubmit}
+            errorMessage="Please enter your preferred name."
+          />
           <button
             className="secondary-button"
             onClick={() => setIsEnterPreferredName(false)}

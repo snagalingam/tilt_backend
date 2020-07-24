@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
 import GraduationYear from "../graduationYear/GraduationYear";
-import HighSchoolInput from "../highSchoolInput/HighSchoolInput";
+import HighSchoolName from "../highSchoolName/HighSchoolName";
 
 const HighSchoolStudent = ({ flowIndex, next, previous, setAnswers }) => {
   return (
     <div className="high-school-student-container form-container">
       {flowIndex === 1 && (
-        <HighSchoolInput
+        <HighSchoolName
           next={next}
           previous={previous}
           answer={(highSchoolName) =>
