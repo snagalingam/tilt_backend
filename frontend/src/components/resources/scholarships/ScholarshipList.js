@@ -1,27 +1,15 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import ScholarshipDetail from './ScholarshipDetail';
+import React from "react";
+import { Query } from "@apollo/client/react/components";
+import ScholarshipDetail from "./ScholarshipDetail";
 
-
-const SCHOLARSHIPS_QUERY = gql`
-  {
-    scholarships {
-      id
-      name
-      amount
-      deadline
-      url
-    }
-  }
-`;
+import { SCHOLARSHIPS_QUERY } from "../../../apollo/queries/scholarship";
 
 const ScholarshipList = () => {
-  return(
+  return (
     <Query query={SCHOLARSHIPS_QUERY}>
       {({ loading, error, data }) => {
-        if (loading) return <div>Loading ...</div>
-        if (error) return <div>Error</div>
+        if (loading) return <div>Loading ...</div>;
+        if (error) return <div>Error</div>;
 
         const scholarshipsToRender = data.scholarships;
 
@@ -29,7 +17,7 @@ const ScholarshipList = () => {
 
         return (
           <div>
-            {scholarshipsToRender.map(scholarship =>
+            {scholarshipsToRender.map((scholarship) => (
               <ScholarshipDetail
                 key={scholarship.id}
                 name={scholarship.name}
@@ -37,9 +25,9 @@ const ScholarshipList = () => {
                 deadline={scholarship.deadline}
                 url={scholarship.url}
               />
-            )}
+            ))}
           </div>
-        )
+        );
       }}
     </Query>
   );
