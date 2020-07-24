@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form, Field } from "formik";
-import * as yup from "yup";
+import React, { useState } from "react";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
+import TwoOptions from "../twoOptions/TwoOptions";
 
 import "./preferred-name.scss";
 
@@ -41,18 +40,12 @@ const PreferredName = ({ me, previous, next, setAnswers }) => {
               firstName || "default"
             }, or do you have another preferred name?`}</h1>
           </div>
-          <div className="preferred-name-buttons">
-            <button className="block-button" onClick={next}>
-              Yes
-            </button>
-            <button
-              className="block-button"
-              onClick={() => setIsEnterPreferredName(true)}
-            >
-              Other Name
-            </button>
-          </div>
-
+          <TwoOptions
+            first="Yes"
+            handleFirst={next}
+            second="Other Name"
+            handleSecond={() => setIsEnterPreferredName(true)}
+          />
           <button className="secondary-button" onClick={previous}>
             Back
           </button>
