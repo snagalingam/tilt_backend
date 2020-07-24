@@ -8,7 +8,7 @@ const highSchoolNameSchema = yup.object().shape({
   highSchoolName: yup.string().required("Please enter your high school name"),
 });
 
-const HighSchoolInput = ({ next }) => {
+const HighSchoolInput = ({ next, previous }) => {
   function handleSubmit(values) {
     console.log(values);
     next();
@@ -44,6 +44,9 @@ const HighSchoolInput = ({ next }) => {
           </Form>
         )}
       </Formik>
+      <button className="secondary-button" onClick={previous}>
+        Back
+      </button>
     </div>
   );
 };

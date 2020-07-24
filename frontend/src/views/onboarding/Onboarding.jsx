@@ -18,31 +18,31 @@ import UserType from "./userType/UserType";
 import { GET_ME } from "../../apollo/queries/account";
 
 const highSchoolFlow = {
-  1: "SCHOOL_NAME",
-  2: "GRADUATION_YEAR",
+  1: "high school name",
+  2: "graduation year",
 };
 
 const collegeFlow = {
-  1: "GRADUATION_YEAR",
+  1: "graduation year",
 };
 
 const parentFlow = {
-  1: "GRADUATING",
+  1: "when is your child graduating?",
 };
 
 const counselorFlow = {
-  1: "HELPING",
+  1: "are you helping a student?",
 };
 
 const flow = {
-  1: "SKIP_ONBOARDING",
-  2: "PREFERRED_NAME",
-  3: "USER_TYPE",
+  1: "proceed or skip onboarding",
+  2: "preferred name",
+  3: "user type",
   4: { highSchoolFlow, collegeFlow, parentFlow, counselorFlow },
-  5: "PREFERRED_PRONOUN",
-  6: "ETHNICITIES",
-  7: "SOURCE",
-  8: "COMPLETE",
+  5: "preferred pronounc",
+  6: "ethnicity",
+  7: "how did you hear about us?",
+  8: "complete!",
 };
 
 const Onboarding = () => {
@@ -60,11 +60,11 @@ const Onboarding = () => {
 
   // this should only be visible to people who are logged in
   function next(newFlow) {
-    const numberOfItemsBeforeFork = 3;
-    if (flowType === flow && flowIndex < numberOfItemsBeforeFork) {
+    const indexBeforeFork = 3;
+    if (flowType === flow && flowIndex < indexBeforeFork) {
       setFlowIndex((prev) => (prev += 1));
     }
-    if (flowType === flow && flowIndex === numberOfItemsBeforeFork) {
+    if (flowType === flow && flowIndex === indexBeforeFork) {
       setFlowType(newFlow);
       setFlowIndex(1);
     }
@@ -77,15 +77,28 @@ const Onboarding = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(flowType, flowIndex);
-  }, [flowType, flowIndex]);
-
-  function previous() {
+  function previous(newFlow) {
+    const indexBeforeFork = 3;
+    const indexWhenMerge = 5;
     if (flowType === flow && flowIndex > 0) {
       setFlowIndex((prev) => (prev -= 1));
     }
+    if (flowType !== flow && flowIndex > 0) {
+      setFlowIndex((prev) => (prev -= 1));
+    }
+    if (flowType !== flow && flowIndex === 1) {
+      setFlowType(flow);
+      setFlowIndex(indexBeforeFork);
+    }
+    if (flowType === flow && flowIndex === indexWhenMerge) {
+      setFlowType(newFlow);
+      setFlowIndex(Object.keys(newFlow).length);
+    }
   }
+
+  useEffect(() => {
+    console.log(flowType, flowIndex);
+  }, [flowType, flowIndex]);
 
   useEffect(() => {
     console.log(answers);
