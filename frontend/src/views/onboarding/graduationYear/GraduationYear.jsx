@@ -3,7 +3,14 @@ import { Redirect } from "react-router-dom";
 
 import "../userType/user-type.scss";
 
-const GraduationYear = ({ highSchool, college, next, previous, answer }) => {
+const GraduationYear = ({
+  highSchool,
+  college,
+  next,
+  previous,
+  answer,
+  setIsCustomGradYear,
+}) => {
   function handleClick(value) {
     answer(value);
     next();
@@ -30,7 +37,9 @@ const GraduationYear = ({ highSchool, college, next, previous, answer }) => {
           </div>
           <div className="second-row">
             {gradYearButton(2023)}
-            <button className="block-button ">Other</button>
+            <button className="block-button" onClick={setIsCustomGradYear}>
+              Other
+            </button>
           </div>
         </div>
       </div>
