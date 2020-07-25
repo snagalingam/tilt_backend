@@ -9,6 +9,7 @@ const GradYear = ({
   highSchool,
   parent,
   counselor,
+  other,
   next,
   previous,
   setAnswers,
@@ -52,7 +53,7 @@ const GradYear = ({
           ? "When will you be graduating high school?"
           : parent
           ? "When is your child graduating?"
-          : counselor
+          : counselor || other
           ? "What year will your students graduate high school in?"
           : "When did you graduate from high school?"
       }

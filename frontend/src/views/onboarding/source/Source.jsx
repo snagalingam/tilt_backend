@@ -7,17 +7,21 @@ import "./source.scss";
 
 const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
   const [isCustomSource, toggleIsCustomSource] = useState(false);
-  const [other, setOther] = useState(null);
+  const [otherSource, setOther] = useState(null);
   const [sources, selectSources] = useState([]);
 
-  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR } = userTypes;
-  const { highSchool, college, parent, counselor } = flows;
+  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
+  const { highSchool, college, parent, counselor, other } = flows;
   const { userType } = answers;
   console.log(userType);
 
   function handlePrevious() {
     setAnswers((prev) => {
       const copy = { ...prev };
+      if (userType === OTHER) {
+        if (copy.organizationName) delete copy.organizationName;
+        if (copy.graduationYear) delete copy.graduationYear;
+      }
       if (copy.source) delete copy.source;
       return copy;
     });
@@ -33,6 +37,9 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
     }
     if (userType === COUNSELOR) {
       previous(counselor);
+    }
+    if (userType === OTHER) {
+      previous(other);
     }
   }
 
@@ -61,11 +68,11 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
 
   function handleSave() {
     const copy = [...sources];
-    const index = copy.indexOf(other);
+    const index = copy.indexOf(otherSource);
     if (index >= 0) {
       copy.splice(index, 1);
     } else {
-      copy.push(other);
+      copy.push(otherSource);
     }
     selectSources(copy);
     setAnswers((prev) => ({ ...prev, sources: copy }));
@@ -98,10 +105,10 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
             sourceButton(source)
           )}
           <button
-            className={`block-button${other ? " selected" : ""}`}
+            className={`block-button${otherSource ? " selected" : ""}`}
             onClick={() => toggleIsCustomSource(true)}
           >
-            {other || "Other"}
+            {otherSource || "Other"}
           </button>
         </div>
       </div>
