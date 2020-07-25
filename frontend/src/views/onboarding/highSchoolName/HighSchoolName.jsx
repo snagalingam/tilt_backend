@@ -2,16 +2,17 @@ import React from "react";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
 
-const HighSchoolName = ({ next, previous }) => {
+const HighSchoolName = ({ next, previous, setAnswers }) => {
   function handleSubmit(values) {
-    console.log(values);
+    const { highSchoolName } = values;
+    setAnswers((prev) => ({ ...prev, highSchoolName }));
     next();
   }
 
   return (
-    <div className="high-school-input-container form-container">
+    <div className="high-school-name-container form-container">
       <div className="form-header">
-        What high school do you currently attend?
+        <h1>What high school do you currently attend?</h1>
       </div>
       <CustomTextInput
         field="highSchoolName"

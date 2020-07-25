@@ -3,9 +3,10 @@ import * as yup from "yup";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
 
-const CustomGradYear = ({ next, previous, answer }) => {
+const CustomGradYear = ({ next, previous, setAnswers }) => {
   function handleSubmit(values) {
-    answer(values.gradYear);
+    const { gradYear } = values;
+    setAnswers((prev) => ({ ...prev, gradYear }));
     next();
   }
 

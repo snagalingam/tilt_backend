@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+
+import CustomPronoun from "../customPronoun/CustomPronoun";
+
+import "./preferred-pronoun.scss";
 
 const PreferredPronoun = ({
   answers,
@@ -8,8 +11,12 @@ const PreferredPronoun = ({
   college,
   parent,
   counselor,
+  next,
   previous,
+  setAnswers,
 }) => {
+  const [isCustomPronoun, setIsCustomPronoun] = useState(false);
+
   const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR } = userTypes;
   const { userType } = answers;
 
@@ -28,13 +35,45 @@ const PreferredPronoun = ({
     }
   }
 
+  function handleClick(option) {
+    setAnswers((prev) => ({ ...prev, preferredPronoun: option }));
+    next();
+  }
+
+  const pronounButton = (option) => (
+    <button onClick={() => handleClick(option)} className="block-button">
+      {option}
+    </button>
+  );
+
   return (
-    <div className="preferred-pronoun-container form-container">
-      Preferred Pronoun
-      <button className="secondary-button" onClick={goBack}>
-        Back
-      </button>
-    </div>
+    <>
+      {isCustomPronoun ? (
+        <CustomPronoun
+          previous={() => setIsCustomPronoun(false)}
+          next={next}
+          setAnswers={setAnswers}
+        />
+      ) : (
+        <div className="preferred-pronoun-container form-container">
+          <div className="form-header">What are your preferred pronouns</div>
+          <div className="preferred-pronoun-options">
+            <div>
+              {["He", "She", "They"].map((pronoun) => pronounButton(pronoun))}
+              <button
+                onClick={() => setIsCustomPronoun(true)}
+                className="block-button"
+              >
+                Other
+              </button>
+            </div>
+          </div>
+          <button className="secondary-button" onClick={goBack}>
+            Back
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 

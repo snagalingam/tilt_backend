@@ -1,0 +1,16 @@
+.preferred-pronoun-container {
+  .preferred-pronoun-options {
+    display: grid;
+    justify-content: center;
+    div {
+      width: 550px;
+      display: flex;
+      button {
+        margin-right: 1rem;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

@@ -18,36 +18,35 @@ import UserType from "./userType/UserType";
 import { GET_ME } from "../../apollo/queries/account";
 
 const highSchoolFlow = {
-  1: "High school name",
-  2: "Graduation year",
-  3: "Have you taken the ACT yet?",
-  4: "Highest ACT score?",
-  5: "Have you taken the SAT yet?",
-  6: "What was your highest score?",
-  7: "What is your unweighted GPA?",
+  1: "Where did you go to high school?",
+  2: "When are you graduating?",
+  3: "What's your ACT score",
+  4: "What was your highest SAT score?",
+  5: "What is your unweighted GPA?",
 };
 
 const collegeFlow = {
-  1: "graduation year",
+  1: "When did you graduate?",
 };
 
 const parentFlow = {
-  1: "when is your child graduating?",
+  1: "When is your child graduating?",
 };
 
 const counselorFlow = {
-  1: "are you helping a student?",
+  1: "Are you helping a student?",
 };
 
 const flow = {
-  1: "proceed or skip onboarding",
-  2: "preferred name",
-  3: "user type",
+  1: "Would you like to proceed or skip onboarding?",
+  2: "What is your preferred name?",
+  3: "What type of user are you?",
   4: { highSchoolFlow, collegeFlow, parentFlow, counselorFlow },
-  5: "preferred pronounc",
-  6: "ethnicity",
-  7: "how did you hear about us?",
-  8: "complete!",
+  5: "What is your family income?",
+  6: "What are your preferred pronouns",
+  7: "What is your ethnicity?",
+  8: "How did you hear about us?",
+  9: "You are done!",
 };
 
 const flows = {
@@ -67,20 +66,18 @@ const userTypes = {
 const Onboarding = () => {
   const { data, error, loading } = useQuery(GET_ME);
 
-  // store this in apollo just in case user presses back button and they can continue where they left off
   const [flowType, setFlowType] = useState(flow);
   const [flowIndex, setFlowIndex] = useState(1);
-
   const [answers, setAnswers] = useState({});
-  // const [questionNumber, setQuestionNumber] = useState(0);
 
-  // if user already answered these questions, this page should not be accessible so redirect to dashboard
-  // return <Redirect to='/dashboard' />
-
-  // this should only be visible to people who are logged in
   function next(newFlow) {
     const indexBeforeFork = 3;
-    if (flowType === flow && flowIndex < indexBeforeFork) {
+    const indexWhenMerge = 5;
+
+    if (
+      flowType === flow &&
+      (flowIndex < indexBeforeFork || flowIndex >= indexWhenMerge)
+    ) {
       setFlowIndex((prev) => (prev += 1));
     }
     if (flowType === flow && flowIndex === indexBeforeFork) {
