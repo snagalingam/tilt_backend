@@ -76,6 +76,52 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=user)
 
 
+class OnboardUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        id = graphene.ID()
+        preferred_name = graphene.String()
+        gpa = graphene.Float()
+        act_score = graphene.Int()
+        sat_score = graphene.Int()
+        terms_and_conditions = graphene.Boolean()
+        pronouns = graphene.String()
+        ethnicity = graphene.String()
+        user_type = graphene.String()
+        highschool_graduation_year = graphene.Int()
+
+    def mutate(
+        self,
+        info,
+        id,
+        gpa,
+        act_score,
+        sat_score,
+        terms_and_conditions,
+        pronouns,
+        ethnicity,
+        user_type,
+        highschool_graduation_year
+    ):
+        user = get_user_model().objects.get(pk=id)
+
+        if user is not None:
+            user.gpa = gpa
+            user.act_score = act_score
+            user.sat_score = sat_score
+            terms_and_conditions = terms_and_conditions
+            pronouns = pronouns
+            ethnicity = ethnicity
+            user_type = user_type
+            highschool_graduation_year = highschool_graduation_year
+            user.save()
+            return user
+        else:
+            raise Exception("User is not logged in")
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
+    onboard_user = OnboardUser.Field()
