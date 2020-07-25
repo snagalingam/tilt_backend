@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React from "react";
 
 import GradYear from "../graduationYear/GradYear";
 import SchoolDistrict from "../schoolDistrict/SchoolDistrict";

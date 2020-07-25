@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React from "react";
 import { useQuery } from "@apollo/client";
 
 import { GET_ME } from "../../apollo/queries/account";
@@ -14,8 +13,6 @@ const Dashboard = () => {
       <h1>{`Welcome ${data?.me?.firstName}!`}</h1>
     </div>
   );
-
-  return;
 };
 
 export default Dashboard;
