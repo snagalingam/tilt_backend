@@ -5,11 +5,12 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import Completion from "./completion/Completion";
 import Counselor from "./counselor/Counselor";
-import Student from "./student/Student";
+import OtherUser from "./otherUser/OtherUser";
 import Parent from "./parent/Parent";
 import PreferredName from "./preferredName/PreferredName";
 import SkipOnboarding from "./skipOnboarding/SkipOnboarding";
 import Source from "./source/Source";
+import Student from "./student/Student";
 import UserType from "./userType/UserType";
 
 import { GET_ME } from "../../apollo/queries/account";
@@ -46,6 +47,10 @@ const counselorFlow = {
   2: "What year will your students graduate high school in?",
 };
 
+const otherFlow = {
+  1: "Do you work at an organization that suppors students?",
+};
+
 const flow = {
   1: "Would you like to proceed or skip onboarding?",
   2: "What is your preferred name?",
@@ -60,6 +65,7 @@ const flows = {
   college: collegeFlow,
   parent: parentFlow,
   counselor: counselorFlow,
+  other: otherFlow,
 };
 
 const userTypes = {
@@ -67,6 +73,7 @@ const userTypes = {
   COLLEGE: "college",
   PARENT: "parent",
   COUNSELOR: "counselor",
+  OTHER: "other",
 };
 
 const Onboarding = () => {
@@ -119,14 +126,6 @@ const Onboarding = () => {
     }
   }
 
-  useEffect(() => {
-    // console.log(flowType, flowIndex);
-  }, [flowType, flowIndex]);
-
-  useEffect(() => {
-    console.log(answers);
-  }, [answers]);
-
   const props = {
     me: data?.me || {},
     answers,
@@ -150,6 +149,7 @@ const Onboarding = () => {
         {flowType === collegeFlow && <Student college {...props} />}
         {flowType === parentFlow && <Parent {...props} />}
         {flowType === counselorFlow && <Counselor {...props} />}
+        {flowType === otherFlow && <OtherUser {...props} />}
         {/* merge */}
         {flowType[flowIndex] === flow[5] && (
           <Source

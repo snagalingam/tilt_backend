@@ -12,10 +12,11 @@ const UserType = ({
   college,
   parent,
   counselor,
+  other,
   userTypes,
 }) => {
   const { preferredName } = answers;
-  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR } = userTypes;
+  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
 
   function handleHighSchool() {
     next(highSchool);
@@ -29,12 +30,17 @@ const UserType = ({
 
   function handleParent() {
     next(parent);
-    setAnswers((prev) => ({ ...prev, highSchoolName: PARENT }));
+    setAnswers((prev) => ({ ...prev, userType: PARENT }));
   }
 
   function handleCounselor() {
     next(counselor);
-    setAnswers((prev) => ({ ...prev, highSchoolName: COUNSELOR }));
+    setAnswers((prev) => ({ ...prev, userType: COUNSELOR }));
+  }
+
+  function handleOther() {
+    next(other);
+    setAnswers((prev) => ({ ...prev, userType: OTHER }));
   }
 
   function handlePrevious() {
@@ -69,7 +75,9 @@ const UserType = ({
             <button onClick={handleCounselor} className="block-button ">
               Counselor, Teacher or Administrator
             </button>
-            <button className="block-button ">Other</button>
+            <button className="block-button" onClick={handleOther}>
+              Other
+            </button>
           </div>
         </div>
       </div>
