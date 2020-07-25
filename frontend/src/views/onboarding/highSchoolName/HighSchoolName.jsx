@@ -5,7 +5,7 @@ import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import "./high-school-name.scss";
 
-const HighSchoolName = ({ next, previous, setAnswers, highSchool }) => {
+const HighSchoolName = ({ next, previous, setAnswers, highSchool, parent }) => {
   function handleSubmit(values) {
     const { highSchoolName } = values;
     setAnswers((prev) => ({ ...prev, highSchoolName }));
@@ -27,6 +27,8 @@ const HighSchoolName = ({ next, previous, setAnswers, highSchool }) => {
       h1={
         highSchool
           ? "What high school do you currently attend?"
+          : parent
+          ? "What high school does your child currently attend?"
           : "What high school did you graduate from?"
       }
       previousFunc={handlePrevious}

@@ -5,7 +5,7 @@ import CustomGradYear from "./CustomGradYear";
 import "./grad-year.scss";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const GradYear = ({ highSchool, college, next, previous, setAnswers }) => {
+const GradYear = ({ highSchool, parent, next, previous, setAnswers }) => {
   const [showCustomGradYear, toggleShowCustomGradYear] = useState(false);
 
   function handleNext(graduationYear) {
@@ -43,6 +43,8 @@ const GradYear = ({ highSchool, college, next, previous, setAnswers }) => {
       h1={
         highSchool
           ? "When will you be graduating high school?"
+          : parent
+          ? "When is your child graduating?"
           : "When did you graduate from high school?"
       }
       previousFunc={handlePrevious}
