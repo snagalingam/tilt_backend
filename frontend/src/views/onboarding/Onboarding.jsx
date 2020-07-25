@@ -61,11 +61,11 @@ const flow = {
 };
 
 const flows = {
-  highSchool: highSchoolFlow,
-  college: collegeFlow,
-  parent: parentFlow,
-  counselor: counselorFlow,
-  other: otherFlow,
+  highSchoolFlow,
+  collegeFlow,
+  parentFlow,
+  counselorFlow,
+  otherFlow,
 };
 
 const userTypes = {

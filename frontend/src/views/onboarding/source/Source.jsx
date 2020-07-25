@@ -11,9 +11,14 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
   const [sources, selectSources] = useState([]);
 
   const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
-  const { highSchool, college, parent, counselor, other } = flows;
+  const {
+    highSchoolFlow,
+    collegeFlow,
+    parentFlow,
+    counselorFlow,
+    otherFlow,
+  } = flows;
   const { userType } = answers;
-  console.log(userType);
 
   function handlePrevious() {
     setAnswers((prev) => {
@@ -27,19 +32,19 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
     });
 
     if (userType === HIGH_SCHOOL) {
-      previous(highSchool);
+      previous(highSchoolFlow);
     }
     if (userType === COLLEGE) {
-      previous(college);
+      previous(collegeFlow);
     }
     if (userType === PARENT) {
-      previous(parent);
+      previous(parentFlow);
     }
     if (userType === COUNSELOR) {
-      previous(counselor);
+      previous(counselorFlow);
     }
     if (userType === OTHER) {
-      previous(other);
+      previous(otherFlow);
     }
   }
 
