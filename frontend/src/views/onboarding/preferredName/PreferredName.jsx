@@ -1,57 +1,60 @@
 import React, { useState } from "react";
 
-import CustomTextInput from "../customTextInput/CustomTextInput";
+import PreferredNameInput from "./PreferredNameInput";
 import TwoOptions from "../twoOptions/TwoOptions";
 
 import "./preferred-name.scss";
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 const PreferredName = ({ me, previous, next, setAnswers }) => {
   const { firstName } = me;
-  const [isEnterPreferredName, setIsEnterPreferredName] = useState(false);
+  const [showPreferredNameInput, toggleShowPreferredNameInput] = useState(
+    false
+  );
 
-  function handleSubmit(values) {
-    setAnswers((prev) => ({ ...prev, preferredName: values.preferredName }));
+  function handleNext() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.preferredName) delete copy.preferredName;
+      return copy;
+    });
     next();
   }
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.preferredName) delete copy.preferredName;
+      return copy;
+    });
+    previous();
+  }
+
+  if (showPreferredNameInput)
+    return (
+      <PreferredNameInput
+        next={next}
+        previous={previous}
+        setAnswers={setAnswers}
+        toggleShowPreferredNameInput={toggleShowPreferredNameInput}
+      />
+    );
+
   return (
-    <div className="preferred-name-container form-container">
-      {isEnterPreferredName ? (
-        <div className="preferred-name-update">
-          <div className="form-header">
-            <h1>Please enter your preferred name</h1>
-          </div>
-          <CustomTextInput
-            field="preferredName"
-            handleSubmit={handleSubmit}
-            errorMessage="Please enter your preferred name."
-          />
-          <button
-            className="secondary-button"
-            onClick={() => setIsEnterPreferredName(false)}
-          >
-            Back
-          </button>
-        </div>
-      ) : (
-        <div className="preferred-name-options">
-          <div className="form-header">
-            <h1>{`Should we call you ${
-              firstName || "default"
-            }, or do you have another preferred name?`}</h1>
-          </div>
-          <TwoOptions
-            first="Yes"
-            handleFirst={next}
-            second="Other Name"
-            handleSecond={() => setIsEnterPreferredName(true)}
-          />
-          <button className="secondary-button" onClick={previous}>
-            Back
-          </button>
-        </div>
-      )}
-    </div>
+    <OnboardingTemplate
+      name="preferred-name-options"
+      h1={`Should we call you ${
+        firstName || "default"
+      }, or do you have another preferred name?`}
+      previousFunc={handlePrevious}
+    >
+      <TwoOptions
+        first="Yes"
+        handleFirst={handleNext}
+        second="Other Name"
+        handleSecond={() => toggleShowPreferredNameInput(true)}
+      />
+    </OnboardingTemplate>
   );
 };
 

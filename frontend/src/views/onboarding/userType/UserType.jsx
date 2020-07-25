@@ -37,14 +37,23 @@ const UserType = ({
     setAnswers((prev) => ({ ...prev, highSchoolName: COUNSELOR }));
   }
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.userType) delete copy.userType;
+      return copy;
+    });
+    previous();
+  }
+
   return (
     <div className="user-type-container form-container">
       <div className="form-header">
         <h1>{`Thanks ${preferredName}!`}</h1>
         <h1>So, are you a...?</h1>
       </div>
-      <div className="user-type-buttons">
-        <div className="user-type-buttons-absolute">
+      <div className="form-body">
+        <div>
           <div className="first-row">
             <button onClick={handleHighSchool} className="block-button ">
               High School Student
@@ -64,8 +73,8 @@ const UserType = ({
           </div>
         </div>
       </div>
-      <div className="user-type-back-button">
-        <button className="secondary-button" onClick={previous}>
+      <div className="onboarding-buttons">
+        <button className="secondary-button" onClick={handlePrevious}>
           Back
         </button>
       </div>

@@ -2,6 +2,9 @@ import React from "react";
 import * as yup from "yup";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
+
+import "./gpa.scss";
 
 const Gpa = ({ next, previous, setAnswers }) => {
   function handleSubmit(values) {
@@ -10,24 +13,31 @@ const Gpa = ({ next, previous, setAnswers }) => {
     next();
   }
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.gpa) delete copy.gpa;
+      return copy;
+    });
+    previous();
+  }
+
   const schema = yup.object().shape({
     gpa: yup.number().min(0).max(6).required("Please enter a valid GPA"),
   });
 
   return (
-    <div className="gpa-score-container form-container">
-      <div className="form-header">
-        <h1>What is your unweighted GPA?</h1>
-      </div>
+    <OnboardingTemplate
+      name="gpa"
+      h1="What is your unweighted GPA?"
+      previousFunc={handlePrevious}
+    >
       <CustomTextInput
         field="gpa"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />
-      <button className="secondary-button" onClick={previous}>
-        Back
-      </button>
-    </div>
+    </OnboardingTemplate>
   );
 };
 

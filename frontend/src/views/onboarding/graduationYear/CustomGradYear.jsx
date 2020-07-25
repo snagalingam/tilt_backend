@@ -4,34 +4,40 @@ import * as yup from "yup";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const ActScore = ({ next, previous, setAnswers }) => {
+const CustomGradYear = ({ next, previous, setAnswers, highSchool }) => {
   function handleSubmit(values) {
-    const { act } = values;
-    setAnswers((prev) => ({ ...prev, act }));
+    const { graduationYear } = values;
+    setAnswers((prev) => ({ ...prev, graduationYear }));
     next();
   }
 
   function handlePrevious() {
     setAnswers((prev) => {
       const copy = { ...prev };
-      if (copy.act) delete copy.act;
+      if (copy.graduationYear) delete copy.graduationYear;
       return copy;
     });
     previous();
   }
 
   const schema = yup.object().shape({
-    act: yup.number().min(1).max(36).required("Please enter a valid score"),
+    graduationYear: yup
+      .number()
+      .min("2000")
+      .max("2025")
+      .required("Please enter the year you graduated"),
   });
 
   return (
     <OnboardingTemplate
-      name="act-score"
-      h1="What was your highest ACT score?"
-      previous={handlePrevious}
+      name="grad-year"
+      h1={
+        highSchool ? "When are you graduating?" : "What year did you graduate?"
+      }
+      previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="act"
+        field="graduationYear"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />
@@ -39,4 +45,4 @@ const ActScore = ({ next, previous, setAnswers }) => {
   );
 };
 
-export default ActScore;
+export default CustomGradYear;

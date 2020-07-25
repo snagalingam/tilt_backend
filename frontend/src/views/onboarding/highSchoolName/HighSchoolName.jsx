@@ -1,28 +1,42 @@
 import React from "react";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const HighSchoolName = ({ next, previous, setAnswers }) => {
+import "./high-school-name.scss";
+
+const HighSchoolName = ({ next, previous, setAnswers, highSchool }) => {
   function handleSubmit(values) {
     const { highSchoolName } = values;
     setAnswers((prev) => ({ ...prev, highSchoolName }));
     next();
   }
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.highSchoolName) delete copy.highSchoolName;
+      return copy;
+    });
+    previous();
+  }
+
   return (
-    <div className="high-school-name-container form-container">
-      <div className="form-header">
-        <h1>What high school do you currently attend?</h1>
-      </div>
+    <OnboardingTemplate
+      name="high-school-name"
+      h1={
+        highSchool
+          ? "What high school do you currently attend?"
+          : "What high school did you graduate from?"
+      }
+      previousFunc={handlePrevious}
+    >
       <CustomTextInput
         field="highSchoolName"
         handleSubmit={handleSubmit}
         errorMessage="Please enter your high school name."
       />
-      <button className="secondary-button" onClick={previous}>
-        Back
-      </button>
-    </div>
+    </OnboardingTemplate>
   );
 };
 
