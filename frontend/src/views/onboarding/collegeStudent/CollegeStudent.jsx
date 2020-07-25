@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
-import GraduationYear from "../graduationYear/GraduationYear";
+import GraduationYear from "../graduationYear/GradYear";
 
 const CollegeStudent = ({ next, previous, flowIndex, setAnswers }) => {
   return (

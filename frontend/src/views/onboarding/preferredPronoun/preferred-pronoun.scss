@@ -1,5 +1,5 @@
 .preferred-pronoun-container {
-  .preferred-pronoun-options {
+  .form-body {
     display: grid;
     justify-content: center;
     div {
@@ -12,5 +12,11 @@
         }
       }
     }
+  }
+}
+
+.custom-pronoun-container {
+  .form-body {
+    margin-bottom: 0;
   }
 }

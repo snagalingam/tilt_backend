@@ -3,14 +3,11 @@ import { Redirect } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { useHistory, useLocation } from "react-router-dom";
 
-import CollegeStudent from "./collegeStudent/CollegeStudent";
 import Completion from "./completion/Completion";
 import Counselor from "./counselor/Counselor";
-import Ethnicity from "./ethnicity/Ethnicity";
-import HighSchoolStudent from "./highSchoolStudent/HighSchoolStudent";
+import Student from "./student/Student";
 import Parent from "./parent/Parent";
 import PreferredName from "./preferredName/PreferredName";
-import PreferredPronoun from "./preferredPronoun/PreferredPronoun";
 import SkipOnboarding from "./skipOnboarding/SkipOnboarding";
 import Source from "./source/Source";
 import UserType from "./userType/UserType";
@@ -18,23 +15,35 @@ import UserType from "./userType/UserType";
 import { GET_ME } from "../../apollo/queries/account";
 
 const highSchoolFlow = {
-  1: "Where did you go to high school?",
-  2: "When are you graduating?",
-  3: "What's your ACT score",
+  1: "Which school are you currently enrolled at?",
+  2: "What year will you be graduating high school?",
+  3: "What is your unweighted GPA?",
   4: "What was your highest SAT score?",
-  5: "What is your unweighted GPA?",
+  5: "What was your highest ACT score?",
+  6: "What is your family income?",
+  7: "What are your preferred pronouns",
+  8: "How do you identify yourself?",
 };
 
 const collegeFlow = {
-  1: "When did you graduate?",
+  1: "Which high school did you graduate from?",
+  2: "What year did you graduate high school?",
+  3: "What is your unweighted GPA?",
+  4: "What was your highest SAT score?",
+  5: "What was your highest ACT score?",
+  6: "What is your family income?",
+  7: "What are your preferred pronouns",
+  8: "How do you identify yourself?",
 };
 
 const parentFlow = {
-  1: "When is your child graduating?",
+  1: "What school does your child currently attend?",
+  2: "When is your child graduating?",
 };
 
 const counselorFlow = {
-  1: "Are you helping a student?",
+  1: "What school or district do you work at?",
+  2: "What year will your students graduate high school in?",
 };
 
 const flow = {
@@ -42,11 +51,8 @@ const flow = {
   2: "What is your preferred name?",
   3: "What type of user are you?",
   4: { highSchoolFlow, collegeFlow, parentFlow, counselorFlow },
-  5: "What is your family income?",
-  6: "What are your preferred pronouns",
-  7: "What is your ethnicity?",
-  8: "How did you hear about us?",
-  9: "You are done!",
+  5: "How did you hear about Tilt?",
+  6: "Thank you!",
 };
 
 const flows = {
@@ -114,7 +120,7 @@ const Onboarding = () => {
   }
 
   useEffect(() => {
-    console.log(flowType, flowIndex);
+    // console.log(flowType, flowIndex);
   }, [flowType, flowIndex]);
 
   useEffect(() => {
@@ -139,17 +145,30 @@ const Onboarding = () => {
         {flowType[flowIndex] === flow[3] && (
           <UserType {...props} {...flows} userTypes={userTypes} />
         )}
-        {flowType[flowIndex] === flow[5] && (
-          <PreferredPronoun {...props} {...flows} userTypes={userTypes} />
-        )}
-        {flowType[flowIndex] === flow[6] && <Ethnicity {...props} />}
-        {flowType[flowIndex] === flow[7] && <Source {...props} />}
-        {flowType[flowIndex] === flow[8] && <Completion {...props} />}
-        {flowType === highSchoolFlow && <HighSchoolStudent {...props} />}
-        {flowType === collegeFlow && <CollegeStudent {...props} />}
+        {/* fork */}
+        {flowType === highSchoolFlow && <Student highSchool {...props} />}
+        {flowType === collegeFlow && <Student college {...props} />}
         {flowType === parentFlow && <Parent {...props} />}
         {flowType === counselorFlow && <Counselor {...props} />}
+        {/* merge */}
+        {flowType[flowIndex] === flow[5] && (
+          <Source
+            {...props}
+            flows={flows}
+            userTypes={userTypes}
+            answers={answers}
+          />
+        )}
+        {flowType[flowIndex] === flow[6] && <Completion {...props} />}
       </div>
+      {/* <div style={{ position: "absolute" }}>
+        <ul>
+          {Object.entries(answers).length > 0 &&
+            Object.entries(answers).map(([key, value]) => (
+              <li key={value}>{`${key}:${value}`}</li>
+            ))}
+        </ul>
+      </div> */}
     </div>
   );
 };

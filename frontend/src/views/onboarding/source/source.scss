@@ -1,6 +1,4 @@
-.user-type-container {
-  .form-header {
-  }
+.source-container {
   .form-body {
     display: grid;
     justify-content: center;
@@ -18,8 +16,12 @@
       .second-row {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(2, 47.5%);
+        grid-template-columns: repeat(3, 30%);
         column-gap: 5%;
+      }
+      .selected {
+        background: #aaa;
+        color: white;
       }
     }
   }

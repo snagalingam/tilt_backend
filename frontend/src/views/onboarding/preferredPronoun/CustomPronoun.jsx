@@ -1,6 +1,7 @@
 import React from "react";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 const CustomPronoun = ({ previous, next, setAnswers }) => {
   function handleSubmit(values) {
@@ -9,20 +10,27 @@ const CustomPronoun = ({ previous, next, setAnswers }) => {
     next();
   }
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.preferredPronoun) delete copy.preferredPronoun;
+      return copy;
+    });
+    previous();
+  }
+
   return (
-    <div className="custom-pronoun-container form-container">
-      <div className="form-header">
-        <h1>What is your preferred pronoun?</h1>
-      </div>
+    <OnboardingTemplate
+      name="custom-pronoun"
+      h1="What is your preferred pronoun?"
+      previousFunc={handlePrevious}
+    >
       <CustomTextInput
         field="preferredPronoun"
         handleSubmit={handleSubmit}
         errorMessage="Please enter your preferred pronoun."
       />
-      <button className="secondary-button" onClick={previous}>
-        Back
-      </button>
-    </div>
+    </OnboardingTemplate>
   );
 };
 

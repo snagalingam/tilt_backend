@@ -1,5 +1,5 @@
 .ethnicity-container {
-  .ethnicity-options {
+  .form-body {
     display: grid;
     justify-content: center;
     margin-bottom: 3rem;
@@ -20,10 +20,12 @@
         grid-template-columns: repeat(3, 31.33%);
         column-gap: 3%;
       }
-      .selected {
-        background: #aaa;
-        color: white;
-      }
     }
+  }
+}
+
+.custom-ethnicity-container {
+  .form-body {
+    margin-bottom: 0;
   }
 }

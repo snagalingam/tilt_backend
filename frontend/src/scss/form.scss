@@ -16,6 +16,9 @@
       text-align: center;
     }
   }
+  .form-body {
+    margin-bottom: 3rem;
+  }
   .form-divider {
     height: 40px;
     width: 400px;
@@ -34,6 +37,11 @@
       align-self: flex-start;
       height: 50%;
       border-bottom: 1px solid #e0e0e0;
+    }
+  }
+  .onboarding-buttons {
+    .secondary-button {
+      margin-top: 1rem;
     }
   }
   .form-footer {
@@ -78,7 +86,6 @@
     font-size: 12px;
     color: #828282;
   }
-
   button {
     height: 40px;
     background: #828282;
@@ -87,7 +94,6 @@
     font-weight: 500;
 
     &.secondary-button {
-      margin-top: 1rem;
       background: transparent;
       border: 1px solid #e0e0e0;
       color: #828282;

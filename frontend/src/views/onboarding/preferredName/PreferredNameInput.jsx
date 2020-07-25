@@ -3,35 +3,39 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const CustomEthnicity = ({ previous, setAnswers, next }) => {
+const PreferredNameInput = ({
+  next,
+  setAnswers,
+  toggleShowPreferredNameInput,
+}) => {
   function handleSubmit(values) {
-    const { ethnicity } = values;
-    setAnswers((prev) => ({ ...prev, ethnicity }));
+    setAnswers((prev) => ({ ...prev, preferredName: values.preferredName }));
     next();
   }
 
   function handlePrevious() {
+    console.log("preferredname");
     setAnswers((prev) => {
       const copy = { ...prev };
-      if (copy.ethnicity) delete copy.ethnicity;
+      if (copy.preferredName) delete copy.preferredName;
       return copy;
     });
-    previous();
+    toggleShowPreferredNameInput(false);
   }
 
   return (
     <OnboardingTemplate
-      name="custom-ethnicity"
-      h1="Which ethnicities do you identify with?"
+      name="preferred-name"
+      h1="Please enter your preferred name"
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="ethnicity"
+        field="preferredName"
         handleSubmit={handleSubmit}
-        errorMessage="Please enter your ethnicity."
+        errorMessage="Please enter your preferred name."
       />
     </OnboardingTemplate>
   );
 };
 
-export default CustomEthnicity;
+export default PreferredNameInput;

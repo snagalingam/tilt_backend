@@ -1,36 +1,43 @@
 import React, { useState } from "react";
 
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 import SatScore from "./SatScore";
 import TwoOptions from "../twoOptions/TwoOptions";
 
-const Sat = ({ next, previous, setAnswers }) => {
+const Sat = ({ next, previous, setAnswers, college }) => {
   const [didTakeSat, setDidTakeSat] = useState(false);
 
+  function handlePrevious() {
+    setAnswers((prev) => {
+      const copy = { ...prev };
+      if (copy.sat) delete copy.sat;
+      return copy;
+    });
+    previous();
+  }
+
+  if (didTakeSat || college)
+    return (
+      <SatScore
+        next={next}
+        previous={college ? previous : () => setDidTakeSat(false)}
+        setAnswers={setAnswers}
+      />
+    );
+
   return (
-    <>
-      {didTakeSat ? (
-        <SatScore
-          next={next}
-          previous={() => setDidTakeSat(false)}
-          setAnswers={setAnswers}
-        />
-      ) : (
-        <div className="sat-container form-container">
-          <div className="form-header">
-            <h1>Have you taken the SAT yet?</h1>
-          </div>
-          <TwoOptions
-            first="Yes"
-            handleFirst={() => setDidTakeSat(true)}
-            second="No"
-            handleSecond={next}
-          />
-          <button className="secondary-button" onClick={previous}>
-            Back
-          </button>
-        </div>
-      )}
-    </>
+    <OnboardingTemplate
+      name="sat"
+      h1="Have you taken the SAT yet?"
+      previousFunc={handlePrevious}
+    >
+      <TwoOptions
+        first="Yes"
+        handleFirst={() => setDidTakeSat(true)}
+        second="No"
+        handleSecond={next}
+      />
+    </OnboardingTemplate>
   );
 };
 
