@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route } from "react-router-dom";
 import { loadReCaptcha } from "react-recaptcha-google";
@@ -24,7 +24,7 @@ import {
   initializeSmoothScroll,
   initializeTyped,
 } from "./js/helpers";
-import { GET_ME, GET_IS_LOGGED_IN } from "./apollo/queries/account";
+import { GET_ME } from "./apollo/queries/account";
 import { isLoggedInVar } from "./apollo/reactiveVariables/account";
 
 import "./scss/main.scss";
@@ -41,11 +41,6 @@ const SignUp = lazy(() => import("./views/signUp/SignUp"));
 
 const App = () => {
   const { data, loading, error } = useQuery(GET_ME);
-  const {
-    data: data_isLoggedIn,
-    loading: loading_isLoggedIn,
-    error: error_isLoggedIn,
-  } = useQuery(GET_IS_LOGGED_IN);
 
   useEffect(() => {
     if (data) {
@@ -81,11 +76,12 @@ const App = () => {
         />
         <Route exact path="/resources/terminology" component={Terminology} />
         <Suspense fallback={<div>Loading...</div>}>
-          <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/onboarding" component={Onboarding} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/signup" component={SignUp} />
+          {/* protected routes */}
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/onboarding" component={Onboarding} />
         </Suspense>
         <Route exact path="/signup-survey" component={SignupSurvey} />
         <Route exact path="/signup-thank-you" component={SignupThankYou} />

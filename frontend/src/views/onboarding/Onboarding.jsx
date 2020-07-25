@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { useHistory, useLocation } from "react-router-dom";
 
 import Completion from "./completion/Completion";
 import Counselor from "./counselor/Counselor";
@@ -77,7 +75,7 @@ const userTypes = {
 };
 
 const Onboarding = () => {
-  const { data, error, loading } = useQuery(GET_ME);
+  const { data } = useQuery(GET_ME);
 
   const [flowType, setFlowType] = useState(flow);
   const [flowIndex, setFlowIndex] = useState(1);

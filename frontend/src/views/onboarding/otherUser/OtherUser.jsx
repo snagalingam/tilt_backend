@@ -1,7 +1,6 @@
 import React from "react";
 
 import Organization from "../organization/Organization";
-import GradYear from "../graduationYear/GradYear";
 
 const OtherUser = (props) => {
   const { flowIndex } = props;
