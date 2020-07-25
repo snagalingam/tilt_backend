@@ -3,38 +3,34 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const PreferredNameInput = ({
-  next,
-  setAnswers,
-  toggleShowPreferredNameInput,
-}) => {
+const SchoolDistrict = ({ previous, next, setAnswers }) => {
   function handleSubmit(values) {
-    setAnswers((prev) => ({ ...prev, preferredName: values.preferredName }));
+    const { schoolDistrict } = values;
+    setAnswers((prev) => ({ ...prev, schoolDistrict }));
     next();
   }
 
   function handlePrevious() {
     setAnswers((prev) => {
       const copy = { ...prev };
-      if (copy.preferredName) delete copy.preferredName;
+      if (copy.schoolDistrict) delete copy.schoolDistrict;
       return copy;
     });
-    toggleShowPreferredNameInput(false);
+    previous();
   }
-
   return (
     <OnboardingTemplate
-      name="preferred-name"
-      h1="Please enter your preferred name"
+      name="school-district"
+      h1="What school or district do you work at?"
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="preferredName"
+        field="schoolDistrict"
         handleSubmit={handleSubmit}
-        errorMessage="Please enter your preferred name."
+        errorMessage="Please enter a school or district name"
       />
     </OnboardingTemplate>
   );
 };
 
-export default PreferredNameInput;
+export default SchoolDistrict;
