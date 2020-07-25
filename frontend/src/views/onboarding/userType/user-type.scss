@@ -13,10 +13,6 @@
   .user-type-buttons {
     display: grid;
     justify-content: center;
-    button {
-      height: 100px;
-      padding: 1rem;
-    }
     .user-type-buttons-absolute {
       width: 550px;
       display: flex;
@@ -24,14 +20,14 @@
       .first-row {
         width: 100%;
         display: grid;
-        grid-template-columns: 30% 30% 30%;
+        grid-template-columns: repeat(3, 30%);
         column-gap: 5%;
         margin-bottom: 1rem;
       }
       .second-row {
         width: 100%;
         display: grid;
-        grid-template-columns: 47.5% 47.5%;
+        grid-template-columns: repeat(2, 47.5%);
         column-gap: 5%;
       }
     }
