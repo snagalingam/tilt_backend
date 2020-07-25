@@ -3,8 +3,13 @@ import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
 
 import { cache } from "./cache";
 
+const environment = process.env.NODE_ENV || "development";
+
 const httpLink = createHttpLink({
-  uri: "https://tilt-website-staging.herokuapp.com//graphql",
+  uri:
+    environment === "development"
+      ? "http://localhost:8000/graphql"
+      : "https://tilt-website-staging.herokuapp.com/graphql",
   credentials: "same-origin",
 });
 
