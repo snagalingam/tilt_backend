@@ -4,7 +4,7 @@ import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
 import { cache } from "./cache";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:8000/graphql",
+  uri: "https://tilt-website-staging.herokuapp.com//graphql",
   credentials: "same-origin",
 });
 
