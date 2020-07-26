@@ -66,10 +66,10 @@ export const ONBOARD_USER = gql`
 `;
 
 export const LOGOUT_USER = gql`
-  mutation LogoutUser($id: ID) {
+  mutation LogoutUser {
     logoutUser {
       user {
-        id: $id
+        email
       }
     }
   }
