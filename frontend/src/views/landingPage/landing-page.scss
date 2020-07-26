@@ -1,0 +1,24 @@
+@import "../../scss/variables";
+.landing-page-container {
+  color: $home-page-dark;
+  h1 {
+    font-weight: 600;
+    font-size: 48px;
+  }
+  p {
+    font-size: 16px;
+  }
+  .tilt-email-input {
+    display: flex;
+    width: 100%;
+    input {
+      padding: 12px 30px;
+      border-radius: 4px;
+      background: $home-page-gray;
+      border: none;
+      outline: none;
+      flex: 1;
+      margin-right: 2rem;
+    }
+  }
+}

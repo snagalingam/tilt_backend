@@ -34,6 +34,7 @@ import "./scss/theme.scss";
 import "cross-fetch/polyfill";
 
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
+const LandingPage = lazy(() => import("./views/landingPage/LandingPage"));
 const Login = lazy(() => import("./views/login/Login"));
 const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
 const ResetPassword = lazy(() => import("./views/resetPassword/ResetPassword"));
@@ -62,7 +63,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop>
-        <Route exact path="/" component={HomePage} />
+        {/* <Route exact path="/" component={HomePage} /> */}
         <Route exact path="/contact" component={ContactUs} />
         <Route exact path="/privacy-policy" component={PrivacyPolicy} />
         <Route exact path="/terms-of-service" component={TermsOfService} />
@@ -76,6 +77,7 @@ const App = () => {
         />
         <Route exact path="/resources/terminology" component={Terminology} />
         <Suspense fallback={<div>Loading...</div>}>
+          <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/signup" component={SignUp} />
