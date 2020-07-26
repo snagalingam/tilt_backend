@@ -1,5 +1,5 @@
 import graphene
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 
@@ -121,7 +121,16 @@ class OnboardUser(graphene.Mutation):
             raise Exception("User is not logged in")
 
 
+class LogoutUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_logged_out: graphene.Boolean()
+
+    def mutate(self, info):
+        logout(info.context)
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     onboard_user = OnboardUser.Field()
+    logout_user = LogoutUser.Field()
