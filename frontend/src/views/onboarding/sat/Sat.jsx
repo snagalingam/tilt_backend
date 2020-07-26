@@ -11,20 +11,15 @@ const Sat = ({ next, previous, college }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handlePrevious() {
-    if (onboardingAnswers?.sat) {
-      delete onboardingAnswers.sat;
+    if (onboardingAnswers?.satScore) {
+      delete onboardingAnswers.satScore;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
   }
 
-  if (didTakeSat || college)
-    return (
-      <SatScore
-        next={next}
-        previous={college ? previous : () => setDidTakeSat(false)}
-      />
-    );
+  if (didTakeSat)
+    return <SatScore next={next} previous={() => setDidTakeSat(false)} />;
 
   return (
     <OnboardingTemplate

@@ -6,6 +6,8 @@ import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
+import "./organization.scss";
+
 const OrganizationName = ({ next, toggleShowOrgInput }) => {
   const [showGradYear, toggleShowGradYear] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
@@ -20,8 +22,8 @@ const OrganizationName = ({ next, toggleShowOrgInput }) => {
     if (onboardingAnswers?.organizationName) {
       delete onboardingAnswers.organizationName;
     }
-    if (onboardingAnswers?.graduationYear) {
-      delete onboardingAnswers.graduationYear;
+    if (onboardingAnswers?.highschoolGraduationYear) {
+      delete onboardingAnswers.highschoolGraduationYear;
     }
     onboardingAnswersVar(onboardingAnswers);
     toggleShowOrgInput(false);

@@ -9,7 +9,7 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 import "./preferred-name.scss";
 
 const PreferredName = ({ me, previous, next }) => {
-  const { firstName } = me;
+  const firstName = me ? me?.firstName : "anonymous";
   const [showPreferredNameInput, toggleShowPreferredNameInput] = useState(
     false
   );
@@ -43,9 +43,7 @@ const PreferredName = ({ me, previous, next }) => {
   return (
     <OnboardingTemplate
       name="preferred-name-options"
-      h1={`Should we call you ${
-        firstName || "default"
-      }, or do you have another preferred name?`}
+      h1={`Should we call you ${firstName}, or do you have another preferred name?`}
       previousFunc={handlePrevious}
     >
       <TwoOptions

@@ -47,11 +47,10 @@ const Source = ({ previous, next, userTypes, flows }) => {
       previous(counselorFlow);
     }
     if (userType === OTHER) {
-      if (onboardingAnswers?.organizationName)
-        delete onboardingAnswers.organizationName;
-      if (onboardingAnswers?.graduationYear)
-        delete onboardingAnswers.graduationYear;
-      onboardingAnswersVar(onboardingAnswers);
+      const copy = { ...onboardingAnswers };
+      if (copy?.organizationName) delete copy.organizationName;
+      if (copy?.highschoolGraduationYear) delete copy.highschoolGraduationYear;
+      onboardingAnswersVar(copy);
       previous(otherFlow);
     }
   }

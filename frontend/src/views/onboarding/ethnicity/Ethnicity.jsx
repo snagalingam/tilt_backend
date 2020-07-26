@@ -12,14 +12,15 @@ const Ethnicity = ({ previous, next }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleClick(ethnicity) {
-    if (ethnicity) {
-      onboardingAnswersVar({ ...onboardingAnswers, ethnicity });
-    } else {
-      onboardingAnswersVar({
-        ...onboardingAnswers,
-        ethnicity: "Prefer not to answer",
-      });
-    }
+    onboardingAnswersVar({ ...onboardingAnswers, ethnicity });
+    next();
+  }
+
+  function handlePreferNotToAnswer() {
+    onboardingAnswersVar({
+      ...onboardingAnswers,
+      ethnicity: "Prefer not to answer",
+    });
     next();
   }
 
@@ -52,7 +53,7 @@ const Ethnicity = ({ previous, next }) => {
       h1="Which ethnicities do you identify with?"
       previousFunc={handlePrevious}
       nextText={"Prefer not to answer"}
-      nextFunc={handleClick}
+      nextFunc={handlePreferNotToAnswer}
     >
       <div>
         <div className="first-row">

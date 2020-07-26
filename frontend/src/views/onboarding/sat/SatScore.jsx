@@ -36,7 +36,7 @@ const SatScore = ({ next, previous }) => {
   return (
     <OnboardingTemplate
       name="sat-score"
-      h1="What was your highest score?"
+      h1="What was your highest SAT score?"
       previousFunc={handlePrevious}
     >
       <CustomTextInput
