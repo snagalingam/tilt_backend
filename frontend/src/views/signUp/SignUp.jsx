@@ -11,8 +11,9 @@ import "./sign-up.scss";
 
 const SignUp = () => {
   const { data: data_isLoggedIn } = useQuery(GET_IS_LOGGED_IN);
+  const { isLoggedIn } = data_isLoggedIn;
 
-  if (data_isLoggedIn) return <Redirect push to="/dashboard" />;
+  if (isLoggedIn) return <Redirect push to="/dashboard" />;
 
   return (
     <div className="authentication-container sign-up-container">
