@@ -14,10 +14,11 @@ const Organization = ({ next, previous }) => {
     if (onboardingAnswers?.organizationName) {
       delete onboardingAnswers.organizationName;
     }
-    if (onboardingAnswers?.graduationYear) {
-      delete onboardingAnswers.graduationYear;
+    if (onboardingAnswers?.highschoolGraduationYear) {
+      delete onboardingAnswers.highschoolGraduationYear;
     }
     onboardingAnswersVar(onboardingAnswers);
+    previous();
   }
 
   if (showOrgInput)

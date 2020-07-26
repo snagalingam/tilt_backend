@@ -35,7 +35,7 @@ const ActScore = ({ next, previous }) => {
     <OnboardingTemplate
       name="act-score"
       h1="What was your highest ACT score?"
-      previous={handlePrevious}
+      previousFunc={handlePrevious}
     >
       <CustomTextInput
         field="actScore"

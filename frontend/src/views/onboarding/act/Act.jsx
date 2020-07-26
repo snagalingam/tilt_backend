@@ -6,13 +6,15 @@ import TwoOptions from "../twoOptions/TwoOptions";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
+import "./act.scss";
+
 const Act = ({ next, previous, college }) => {
   const [didTakeAct, setDidTakeAct] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handlePrevious() {
-    if (onboardingAnswers?.act) {
-      delete onboardingAnswers.act;
+    if (onboardingAnswers?.actScore) {
+      delete onboardingAnswers.actScore;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();

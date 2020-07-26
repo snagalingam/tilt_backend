@@ -5,6 +5,8 @@ import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
+import "./school-district.scss";
+
 const SchoolDistrict = ({ previous, next }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 

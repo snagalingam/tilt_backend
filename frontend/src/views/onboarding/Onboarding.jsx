@@ -76,7 +76,6 @@ const userTypes = {
 
 const Onboarding = () => {
   const { data: meData, error: meError } = useQuery(GET_ME);
-  const { me } = meData;
   const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
   const { onboardingAnswers } = onboardingData;
 
@@ -126,7 +125,7 @@ const Onboarding = () => {
   }
 
   const props = {
-    me,
+    me: meData?.me,
     next,
     previous,
     flowIndex,
