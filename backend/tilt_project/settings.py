@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'graphene_django',
 
     # local
-    'scholarships.apps.ScholarshipsConfig',
     'users.apps.UsersConfig',
-    'services.apps.ServicesConfig'
+    'scholarships.apps.ScholarshipsConfig',
+    'services.apps.ServicesConfig',
+    'organizations.apps.OrganizationsConfig'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'tilt_project.urls'
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'tilt_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -160,6 +161,9 @@ SITE_ID = 1
 # graphene
 GRAPHENE = {
     'SCHEMA': 'tilt_project.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
 
 # heroku database
@@ -177,7 +181,7 @@ if ENVIRONMENT == 'production':
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_REFERRER_POLICY = 'same-origin'
-    # SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
 
