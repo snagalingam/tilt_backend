@@ -1,3 +1,25 @@
 import { InMemoryCache } from "@apollo/client";
 
-export const cache = new InMemoryCache();
+import {
+  isLoggedInVar,
+  onboardingAnswersVar,
+} from "../reactiveVariables/account";
+
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        isLoggedIn: {
+          read() {
+            return isLoggedInVar();
+          },
+        },
+        onboardingAnswers: {
+          read() {
+            return onboardingAnswersVar();
+          },
+        },
+      },
+    },
+  },
+});
