@@ -1,0 +1,26 @@
+.user-type-container {
+  .form-header {
+  }
+  .form-body {
+    display: grid;
+    justify-content: center;
+    > div {
+      width: 550px;
+      display: flex;
+      flex-wrap: wrap;
+      .first-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 30%);
+        column-gap: 5%;
+        margin-bottom: 1rem;
+      }
+      .second-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 47.5%);
+        column-gap: 5%;
+      }
+    }
+  }
+}

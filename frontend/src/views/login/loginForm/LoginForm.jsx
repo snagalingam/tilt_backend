@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { Redirect } from "react-router-dom";
 import * as yup from "yup";
 
-import { LOGIN_MUTATION } from "../../../apollo/mutations/account";
+import { LOGIN } from "../../../apollo/mutations/account";
+import { isLoggedInVar } from "../../../apollo/reactiveVariables/account";
 
 import "./login-form.scss";
 
-const signUpSchema = yup.object().shape({
+const loginSchema = yup.object().shape({
   email: yup
     .string()
     .email("Invalid email")
@@ -43,9 +43,7 @@ const FieldSet = ({
 );
 
 const LoginForm = () => {
-  // Will move this to Index.js once I figure out how to use Apollo
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loginUser, response] = useMutation(LOGIN_MUTATION);
+  const [loginUser, response] = useMutation(LOGIN);
 
   function handleSubmit(values) {
     if (values) {
@@ -55,41 +53,35 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (response?.data?.loginUser?.user?.email) {
-      setIsAuthenticated(true);
+      isLoggedInVar(true);
     } else {
       // TODO: try again
     }
   }, [response]);
 
   return (
-    <>
-      {isAuthenticated ? (
-        <Redirect to="/dashboard" />
-      ) : (
-        <Formik
-          initialValues={{
-            email: "",
-            password: undefined,
-          }}
-          validationSchema={signUpSchema}
-          onSubmit={handleSubmit}
-        >
-          {(state) => (
-            <Form className="login-form">
-              <FieldSet name="email" label="Email" {...state} />
-              <FieldSet
-                name="password"
-                label="Password"
-                type="password"
-                {...state}
-              />
+    <Formik
+      initialValues={{
+        email: "",
+        password: undefined,
+      }}
+      validationSchema={loginSchema}
+      onSubmit={handleSubmit}
+    >
+      {(state) => (
+        <Form className="login-form">
+          <FieldSet name="email" label="Email" {...state} />
+          <FieldSet
+            name="password"
+            label="Password"
+            type="password"
+            {...state}
+          />
 
-              <button>Login</button>
-            </Form>
-          )}
-        </Formik>
+          <button>Login</button>
+        </Form>
       )}
-    </>
+    </Formik>
   );
 };
 

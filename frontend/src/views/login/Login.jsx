@@ -1,13 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
 import GoogleOAuth from "../../components/googleOAuth/GoogleOAuth";
 import LoginForm from "./loginForm/LoginForm";
 import SideCarousel from "../../components/sideCarousel/SideCarousel";
 
+import { GET_IS_LOGGED_IN } from "../../apollo/queries/account";
+
 import "./login.scss";
 
 const Login = () => {
+  const { data: data_isLoggedIn } = useQuery(GET_IS_LOGGED_IN);
+  const { isLoggedIn } = data_isLoggedIn;
+
+  if (isLoggedIn) return <Redirect push to="/dashboard" />;
+
   return (
     <div className="authentication-container login-container">
       <div className="authentication-left">
