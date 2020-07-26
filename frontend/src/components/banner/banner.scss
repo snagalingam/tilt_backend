@@ -1,0 +1,28 @@
+@import "../../scss/mixins";
+
+.tilt-banner-container {
+  height: 700px;
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  .left {
+    height: 510px;
+    width: 540px;
+    @include flex-center;
+    flex-direction: column;
+    h1 {
+      margin-bottom: 2rem;
+    }
+    p {
+      margin-bottom: 3rem;
+    }
+    .tilt-email-input {
+      width: 90%;
+    }
+  }
+  .right {
+    @include flex-center;
+  }
+}
