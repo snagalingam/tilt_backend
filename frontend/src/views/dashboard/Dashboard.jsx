@@ -6,11 +6,11 @@ import { GET_ME } from "../../apollo/queries/account";
 import "./dashboard.scss";
 
 const Dashboard = () => {
-  const { data, error, loading } = useQuery(GET_ME);
+  const { data: meData, error, loading } = useQuery(GET_ME);
 
   return (
     <div className="dashboard-container">
-      <h1>{`Welcome ${data?.me?.firstName}!`}</h1>
+      <h1>{`Welcome ${meData?.me?.firstName}!`}</h1>
     </div>
   );
 };

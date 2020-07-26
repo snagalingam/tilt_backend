@@ -12,7 +12,7 @@ import Sat from "../sat/Sat";
 import SatScore from "../sat/SatScore";
 
 const Student = (props) => {
-  const { flowIndex, highSchool, college } = props;
+  const { flowIndex, highSchool } = props;
 
   return (
     <div className="student-container">

@@ -22,8 +22,8 @@ const OrganizationName = ({ next, toggleShowOrgInput }) => {
     if (onboardingAnswers?.organizationName) {
       delete onboardingAnswers.organizationName;
     }
-    if (onboardingAnswers?.highschoolGraduationYear) {
-      delete onboardingAnswers.highschoolGraduationYear;
+    if (onboardingAnswers?.highSchoolGradYear) {
+      delete onboardingAnswers.highSchoolGradYear;
     }
     onboardingAnswersVar(onboardingAnswers);
     toggleShowOrgInput(false);

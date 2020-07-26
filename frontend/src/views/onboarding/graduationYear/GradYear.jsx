@@ -7,18 +7,18 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 
 import "./grad-year.scss";
 
-const GradYear = ({ highSchool, parent, counselor, other, next, previous }) => {
+const GradYear = ({ highSchool, parent, staff, other, next, previous }) => {
   const [showCustomGradYear, toggleShowCustomGradYear] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
-  function handleNext(highschoolGraduationYear) {
-    onboardingAnswersVar({ ...onboardingAnswers, highschoolGraduationYear });
+  function handleNext(highSchoolGradYear) {
+    onboardingAnswersVar({ ...onboardingAnswers, highSchoolGradYear });
     next();
   }
 
   function handlePrevious() {
-    if (onboardingAnswers?.highschoolGraduationYear) {
-      delete onboardingAnswers.highschoolGraduationYear;
+    if (onboardingAnswers?.highSchoolGradYear) {
+      delete onboardingAnswers.highSchoolGradYear;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
@@ -46,7 +46,7 @@ const GradYear = ({ highSchool, parent, counselor, other, next, previous }) => {
           ? "When will you be graduating high school?"
           : parent
           ? "When is your child graduating?"
-          : counselor || other
+          : staff || other
           ? "What year will your students graduate high school in?"
           : "When did you graduate from high school?"
       }

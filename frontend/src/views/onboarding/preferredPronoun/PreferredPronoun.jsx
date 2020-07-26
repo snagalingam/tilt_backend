@@ -6,6 +6,13 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 
 import "./preferred-pronoun.scss";
 
+const pronouns = {
+  he: "He",
+  she: "She",
+  they: "They",
+  other: "Other",
+};
+
 const PreferredPronoun = ({ next, previous }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
@@ -22,13 +29,13 @@ const PreferredPronoun = ({ next, previous }) => {
     previous();
   }
 
-  const pronounButton = (option) => (
+  const pronounButton = (key, value) => (
     <button
-      key={option}
-      onClick={() => handleClick(option)}
+      key={`${key}:${value}`}
+      onClick={() => handleClick(key)}
       className="block-button"
     >
-      {option}
+      {value}
     </button>
   );
 
@@ -39,13 +46,9 @@ const PreferredPronoun = ({ next, previous }) => {
       previousFunc={handlePrevious}
     >
       <div>
-        {["He", "She", "They"].map((pronoun) => pronounButton(pronoun))}
-        <button
-          onClick={() => setIsCustomPronoun(true)}
-          className="block-button"
-        >
-          Other
-        </button>
+        {Object.entries(pronouns).map(([key, value]) =>
+          pronounButton(key, value)
+        )}
       </div>
     </OnboardingTemplate>
   );

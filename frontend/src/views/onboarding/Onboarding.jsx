@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 
 import Completion from "./completion/Completion";
-import Counselor from "./counselor/Counselor";
+import Staff from "./staff/Staff";
 import OtherUser from "./otherUser/OtherUser";
 import Parent from "./parent/Parent";
 import PreferredName from "./preferredName/PreferredName";
@@ -24,7 +24,7 @@ const highSchoolFlow = {
   8: "How do you identify yourself?",
 };
 
-const collegeFlow = {
+const transferFlow = {
   1: "Which high school did you graduate from?",
   2: "What year did you graduate high school?",
   3: "What is your unweighted GPA?",
@@ -40,7 +40,7 @@ const parentFlow = {
   2: "When is your child graduating?",
 };
 
-const counselorFlow = {
+const staffFlow = {
   1: "What school or district do you work at?",
   2: "What year will your students graduate high school in?",
 };
@@ -53,25 +53,25 @@ const flow = {
   1: "Would you like to proceed or skip onboarding?",
   2: "What is your preferred name?",
   3: "What type of user are you?",
-  4: { highSchoolFlow, collegeFlow, parentFlow, counselorFlow },
+  4: { highSchoolFlow, transferFlow, parentFlow, staffFlow },
   5: "How did you hear about Tilt?",
   6: "Thank you!",
 };
 
 const flows = {
   highSchoolFlow,
-  collegeFlow,
+  transferFlow,
   parentFlow,
-  counselorFlow,
+  staffFlow,
   otherFlow,
 };
 
 const userTypes = {
-  HIGH_SCHOOL: "High School",
-  COLLEGE: "College",
-  PARENT: "Parent",
-  COUNSELOR: "Counselor",
-  OTHER: "Other",
+  HIGH_SCHOOL: "student",
+  TRANSFER: "transfer",
+  PARENT: "parent",
+  STAFF: "staff",
+  OTHER: "other",
 };
 
 const Onboarding = () => {
@@ -138,13 +138,13 @@ const Onboarding = () => {
         {flowType[flowIndex] === flow[1] && <SkipOnboarding {...props} />}
         {flowType[flowIndex] === flow[2] && <PreferredName {...props} />}
         {flowType[flowIndex] === flow[3] && (
-          <UserType {...props} {...flows} userTypes={userTypes} />
+          <UserType {...props} flows={flows} userTypes={userTypes} />
         )}
         {/* fork */}
         {flowType === highSchoolFlow && <Student highSchool {...props} />}
-        {flowType === collegeFlow && <Student college {...props} />}
+        {flowType === transferFlow && <Student transfer {...props} />}
         {flowType === parentFlow && <Parent {...props} />}
-        {flowType === counselorFlow && <Counselor {...props} />}
+        {flowType === staffFlow && <Staff {...props} />}
         {flowType === otherFlow && <OtherUser {...props} />}
         {/* merge */}
         {flowType[flowIndex] === flow[5] && (

@@ -12,7 +12,7 @@ const Completion = () => {
     <OnboardingTemplate
       name="completion"
       h1="That's it!"
-      p=" We are now set to find you soem affordable colleges, so you don't
+      p=" We are now set to find you some affordable colleges, so you don't
     graduate with $$$ in debt."
       nextFunc={() => setGoToDashboard(true)}
       nextText="Go to Dashboard"

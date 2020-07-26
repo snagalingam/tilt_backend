@@ -14,8 +14,8 @@ const Organization = ({ next, previous }) => {
     if (onboardingAnswers?.organizationName) {
       delete onboardingAnswers.organizationName;
     }
-    if (onboardingAnswers?.highschoolGraduationYear) {
-      delete onboardingAnswers.highschoolGraduationYear;
+    if (onboardingAnswers?.highSchoolGradYear) {
+      delete onboardingAnswers.highSchoolGradYear;
     }
     onboardingAnswersVar(onboardingAnswers);
     previous();

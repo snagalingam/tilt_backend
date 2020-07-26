@@ -10,25 +10,21 @@ const ActScore = ({ next, previous }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleSubmit(values) {
-    const { actScore } = values;
-    onboardingAnswersVar({ ...onboardingAnswers, actScore });
+    const { act } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, act });
     next();
   }
 
   function handlePrevious() {
-    if (onboardingAnswers?.actScore) {
-      delete onboardingAnswers.actScore;
+    if (onboardingAnswers?.act) {
+      delete onboardingAnswers.act;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
   }
 
   const schema = yup.object().shape({
-    actScore: yup
-      .number()
-      .min(1)
-      .max(36)
-      .required("Please enter a valid score"),
+    act: yup.number().min(1).max(36).required("Please enter a valid score"),
   });
 
   return (
@@ -38,7 +34,7 @@ const ActScore = ({ next, previous }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="actScore"
+        field="act"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />

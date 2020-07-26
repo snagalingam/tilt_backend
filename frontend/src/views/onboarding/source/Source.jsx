@@ -10,48 +10,54 @@ import {
   GET_ME,
 } from "../../../apollo/queries/account";
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+import { USER_TYPE, FOUND_FROM } from "../../../helper/databaseVariables";
 
 import "./source.scss";
 
-const Source = ({ previous, next, userTypes, flows }) => {
+const { K12, TRANSFER, PARENT, STAFF, OTHER } = USER_TYPE;
+const { IG, FB, PARENT_SOURCE, STAFF_SOURCE, FRIEND } = FOUND_FROM;
+
+const Source = ({ previous, next, flows }) => {
   const [onboardUser, response] = useMutation(ONBOARD_USER);
   const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
   const { data: meData } = useQuery(GET_ME);
   const { onboardingAnswers } = onboardingData;
+  const { userType } = onboardingAnswers;
 
   const [isCustomSource, toggleIsCustomSource] = useState(false);
   const [otherSource, setOther] = useState(null);
   const [sources, selectSources] = useState([]);
 
-  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
   const {
     highSchoolFlow,
-    collegeFlow,
+    transferFlow,
     parentFlow,
-    counselorFlow,
+    staffFlow,
     otherFlow,
   } = flows;
-  const { userType } = onboardingAnswers;
 
   function handlePrevious() {
-    if (userType === HIGH_SCHOOL) {
-      previous(highSchoolFlow);
-    }
-    if (userType === COLLEGE) {
-      previous(collegeFlow);
-    }
-    if (userType === PARENT) {
-      previous(parentFlow);
-    }
-    if (userType === COUNSELOR) {
-      previous(counselorFlow);
-    }
-    if (userType === OTHER) {
-      const copy = { ...onboardingAnswers };
-      if (copy?.organizationName) delete copy.organizationName;
-      if (copy?.highschoolGraduationYear) delete copy.highschoolGraduationYear;
-      onboardingAnswersVar(copy);
-      previous(otherFlow);
+    switch (userType) {
+      case K12.value:
+        previous(highSchoolFlow);
+        break;
+      case TRANSFER.value:
+        previous(transferFlow);
+        break;
+      case PARENT.value:
+        previous(parentFlow);
+        break;
+      case STAFF.value:
+        previous(staffFlow);
+        break;
+      case OTHER.value:
+        const copy = { ...onboardingAnswers };
+        if (copy?.organizationName) delete copy.organizationName;
+        if (copy?.highSchoolGradYear) delete copy.highSchoolGradYear;
+        onboardingAnswersVar(copy);
+        previous(otherFlow);
+        break;
+      default:
     }
   }
 
@@ -66,15 +72,15 @@ const Source = ({ previous, next, userTypes, flows }) => {
     selectSources(copy);
   }
 
-  const sourceButton = (option) => {
-    const index = sources.indexOf(option);
+  const sourceButton = ({ display, value }) => {
+    const index = sources.indexOf(value);
     return (
       <button
-        key={option}
-        onClick={() => handleClick(option)}
+        key={value}
+        onClick={() => handleClick(value)}
         className={`block-button${index >= 0 ? " selected" : ""}`}
       >
-        {option}
+        {display}
       </button>
     );
   };
@@ -111,14 +117,10 @@ const Source = ({ previous, next, userTypes, flows }) => {
     >
       <div>
         <div className="first-row">
-          {["Instagram", "Facebook", "Parent"].map((source) =>
-            sourceButton(source)
-          )}
+          {[IG, FB, PARENT_SOURCE].map((object) => sourceButton(object))}
         </div>
         <div className="second-row">
-          {["School or District Staff", "Friend"].map((source) =>
-            sourceButton(source)
-          )}
+          {[STAFF_SOURCE, FRIEND].map((source) => sourceButton(source))}
           <button
             className={`block-button${otherSource ? " selected" : ""}`}
             onClick={() => toggleIsCustomSource(true)}

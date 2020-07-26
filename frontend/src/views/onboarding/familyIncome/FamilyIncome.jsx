@@ -3,25 +3,36 @@ import React from "react";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+import { INCOME_QUINTILE } from "../../../helper/databaseVariables";
+
+import "./family-income.scss";
+
+const { LO, M1, M2, H1, H2 } = INCOME_QUINTILE;
 
 const FamilyIncome = ({ next, previous }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
-  function handleClick(familyIncome) {
-    onboardingAnswersVar({ ...onboardingAnswers, familyIncome });
+  function handleClick(incomeQuintile) {
+    onboardingAnswersVar({ ...onboardingAnswers, incomeQuintile });
     next();
   }
 
   function handlePrevious() {
-    if (onboardingAnswers?.familyIncome) {
-      delete onboardingAnswers.familyIncome;
+    if (onboardingAnswers?.incomeQuintile) {
+      delete onboardingAnswers.incomeQuintile;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
   }
 
-  const familyIncomeButton = (income) => (
-    <button onClick={() => handleClick(income)}>{income}</button>
+  const familyIncomeButton = ({ display, value }) => (
+    <button
+      className="block-button"
+      key={value}
+      onClick={() => handleClick(value)}
+    >
+      {display}
+    </button>
   );
 
   return (
@@ -30,7 +41,14 @@ const FamilyIncome = ({ next, previous }) => {
       h1="What is your family income?"
       previousFunc={handlePrevious}
     >
-      <div>{familyIncomeButton(10000)}</div>
+      <div>
+        <div className="first-row">
+          {[LO, M1, M2].map((object) => familyIncomeButton(object))}
+        </div>
+        <div className="second-row">
+          {[H1, H2].map((object) => familyIncomeButton(object))}
+        </div>
+      </div>
     </OnboardingTemplate>
   );
 };
