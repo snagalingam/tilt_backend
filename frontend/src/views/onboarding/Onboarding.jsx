@@ -152,14 +152,14 @@ const Onboarding = () => {
         )}
         {flowType[flowIndex] === flow[6] && <Completion {...props} />}
       </div>
-      <div style={{ position: "absolute" }}>
+      {/* <div style={{ position: "absolute" }}>
         <ul>
           {Object.entries(onboardingAnswers).length > 0 &&
             Object.entries(onboardingAnswers).map(([key, value]) => (
               <li key={`${key}:${value}`}>{`${key}:${value}`}</li>
             ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
