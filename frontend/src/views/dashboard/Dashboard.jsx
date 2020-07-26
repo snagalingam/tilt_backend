@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [logoutUser, response] = useMutation(LOGOUT_USER);
 
   function handleLogout() {
-    logoutUser({ variables: { id: meData?.me?.id } });
+    logoutUser();
   }
 
   return (
