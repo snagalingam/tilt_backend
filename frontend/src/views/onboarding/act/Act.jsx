@@ -8,7 +8,7 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 
 import "./act.scss";
 
-const Act = ({ next, previous, college }) => {
+const Act = ({ next, previous }) => {
   const [didTakeAct, setDidTakeAct] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
@@ -20,7 +20,7 @@ const Act = ({ next, previous, college }) => {
     previous();
   }
 
-  if (didTakeAct || college)
+  if (didTakeAct)
     return <ActScore next={next} previous={() => setDidTakeAct(false)} />;
 
   return (

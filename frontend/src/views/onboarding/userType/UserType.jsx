@@ -3,48 +3,49 @@ import { useQuery } from "@apollo/client";
 
 import { GET_ONBOARDING_ANSWERS } from "../../../apollo/queries/account";
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+import { USER_TYPE } from "../../../helper/databaseVariables";
 
 import "./user-type.scss";
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const UserType = ({
-  previous,
-  next,
-  highSchoolFlow,
-  collegeFlow,
-  parentFlow,
-  counselorFlow,
-  otherFlow,
-  userTypes,
-}) => {
+const { K12, TRANSFER, PARENT, STAFF, OTHER } = USER_TYPE;
+
+const UserType = ({ previous, next, flows }) => {
   const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
   const { onboardingAnswers } = onboardingData;
   const { preferredName } = onboardingAnswers;
 
-  const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
+  const {
+    highSchoolFlow,
+    transferFlow,
+    parentFlow,
+    staffFlow,
+    otherFlow,
+  } = flows;
 
-  function handleHighSchool() {
-    onboardingAnswersVar({ ...onboardingAnswers, userType: HIGH_SCHOOL });
-    next(highSchoolFlow);
-  }
+  function handleClick(value) {
+    onboardingAnswersVar({ ...onboardingAnswers, userType: value });
+    console.log(value);
+    console.log(K12);
 
-  function handleCollege() {
-    onboardingAnswersVar({ ...onboardingAnswers, userType: COLLEGE });
-    next(collegeFlow);
-  }
-
-  function handleParent() {
-    onboardingAnswersVar({ ...onboardingAnswers, userType: PARENT });
-    next(parentFlow);
-  }
-
-  function handleCounselor() {
-    onboardingAnswersVar({ ...onboardingAnswers, userType: COUNSELOR });
-    next(counselorFlow);
-  }
-
-  function handleOther() {
-    onboardingAnswersVar({ ...onboardingAnswers, userType: OTHER });
-    next(otherFlow);
+    switch (value) {
+      case K12.value:
+        next(highSchoolFlow);
+        break;
+      case TRANSFER.value:
+        next(transferFlow);
+        break;
+      case PARENT.value:
+        next(parentFlow);
+        break;
+      case STAFF.value:
+        next(staffFlow);
+        break;
+      case OTHER.value:
+        next(otherFlow);
+        break;
+      default:
+    }
   }
 
   function handlePrevious() {
@@ -54,41 +55,31 @@ const UserType = ({
     previous();
   }
 
+  const userTypeButton = ({ display, value }) => (
+    <button
+      key={value}
+      className="block-button"
+      onClick={() => handleClick(value)}
+    >
+      {display}
+    </button>
+  );
+
   return (
-    <div className="user-type-container form-container">
-      <div className="form-header">
-        <h1>{`Thanks ${preferredName}!`}</h1>
-        <h1>So, are you a...?</h1>
-      </div>
-      <div className="form-body">
-        <div>
-          <div className="first-row">
-            <button onClick={handleHighSchool} className="block-button ">
-              High School Student
-            </button>
-            <button onClick={handleCollege} className="block-button ">
-              College Student
-            </button>
-            <button onClick={handleParent} className="block-button ">
-              Parent
-            </button>
-          </div>
-          <div className="second-row">
-            <button onClick={handleCounselor} className="block-button ">
-              Counselor, Teacher or Administrator
-            </button>
-            <button className="block-button" onClick={handleOther}>
-              Other
-            </button>
-          </div>
+    <OnboardingTemplate
+      name="user-type"
+      h1Array={[`Thanks ${preferredName}!`, "So, are you a...?"]}
+      previousFunc={handlePrevious}
+    >
+      <div>
+        <div className="first-row">
+          {[K12, TRANSFER, PARENT].map((object) => userTypeButton(object))}
+        </div>
+        <div className="second-row">
+          {[STAFF, OTHER].map((object) => userTypeButton(object))}
         </div>
       </div>
-      <div className="onboarding-buttons">
-        <button className="secondary-button" onClick={handlePrevious}>
-          Back
-        </button>
-      </div>
-    </div>
+    </OnboardingTemplate>
   );
 };
 

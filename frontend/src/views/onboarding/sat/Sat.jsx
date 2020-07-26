@@ -6,7 +6,7 @@ import TwoOptions from "../twoOptions/TwoOptions";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
-const Sat = ({ next, previous, college }) => {
+const Sat = ({ next, previous }) => {
   const [didTakeSat, setDidTakeSat] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 

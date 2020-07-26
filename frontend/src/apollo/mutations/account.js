@@ -42,7 +42,7 @@ export const ONBOARD_USER = gql`
     $pronouns: String
     $ethnicity: String
     $userType: String
-    $highschoolGraduationYear: Int
+    $highSchoolGradYear: Int
   ) {
     onboardUser(
       id: $id
@@ -53,7 +53,7 @@ export const ONBOARD_USER = gql`
       pronouns: $pronouns
       ethnicity: $ethnicity
       userType: $userType
-      highschoolGraduationYear: $highschoolGraduationYear
+      highSchoolGradYear: $highSchoolGradYear
     ) {
       user {
         email

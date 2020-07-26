@@ -10,21 +10,21 @@ const CustomGradYear = ({ next, previous, highSchool }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleSubmit(values) {
-    const { highschoolGraduationYear } = values;
-    onboardingAnswersVar({ ...onboardingAnswers, highschoolGraduationYear });
+    const { highSchoolGradYear } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, highSchoolGradYear });
     next();
   }
 
   function handlePrevious() {
-    if (onboardingAnswers?.highschoolGraduationYear) {
-      delete onboardingAnswers.highschoolGraduationYear;
+    if (onboardingAnswers?.highSchoolGradYear) {
+      delete onboardingAnswers.highSchoolGradYear;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
   }
 
   const schema = yup.object().shape({
-    highschoolGraduationYear: yup
+    highSchoolGradYear: yup
       .number()
       .min("2000")
       .max("2025")
@@ -40,7 +40,7 @@ const CustomGradYear = ({ next, previous, highSchool }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="highschoolGraduationYear"
+        field="highSchoolGradYear"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />

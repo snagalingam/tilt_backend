@@ -3,8 +3,20 @@ import React from "react";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+import { ETHNICITY } from "../../../helper/databaseVariables";
 
 import "./ethnicity.scss";
+
+const {
+  AMERICAN_INDIAN,
+  ASIAN,
+  BLACK,
+  HISPANIC,
+  ISLANDER,
+  WHITE,
+  TWO_OR_MORE,
+  OTHER,
+} = ETHNICITY;
 
 const Ethnicity = ({ previous, next }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
@@ -30,14 +42,14 @@ const Ethnicity = ({ previous, next }) => {
     previous();
   }
 
-  const ethnicityButton = (option) => {
+  const ethnicityButton = ({ display, value }) => {
     return (
       <button
-        key={option}
-        onClick={() => handleClick(option)}
+        key={value}
+        onClick={() => handleClick(value)}
         className="block-button"
       >
-        {option}
+        {display}
       </button>
     );
   };
@@ -52,21 +64,14 @@ const Ethnicity = ({ previous, next }) => {
     >
       <div>
         <div className="first-row">
-          {[
-            "Pacific Islander",
-            "Black/African",
-            "Hispanic/Latinx",
-            "Native American",
-          ].map((ethnicity) => ethnicityButton(ethnicity))}
+          {[AMERICAN_INDIAN, ASIAN, BLACK, HISPANIC].map((object) =>
+            ethnicityButton(object)
+          )}
         </div>
         <div className="second-row">
-          {["Asian", "White"].map((ethnicity) => ethnicityButton(ethnicity))}
-          <button
-            className="block-button"
-            onClick={() => setOtherEthnicity(true)}
-          >
-            Other
-          </button>
+          {[ISLANDER, WHITE, TWO_OR_MORE, OTHER].map((object) =>
+            ethnicityButton(object)
+          )}
         </div>
       </div>
     </OnboardingTemplate>
