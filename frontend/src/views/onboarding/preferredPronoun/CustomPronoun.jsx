@@ -3,19 +3,22 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const CustomPronoun = ({ previous, next, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const CustomPronoun = ({ previous, next }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
-    const { preferredPronoun } = values;
-    setAnswers((prev) => ({ ...prev, preferredPronoun }));
+    const { pronouns } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, pronouns });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.preferredPronoun) delete copy.preferredPronoun;
-      return copy;
-    });
+    if (onboardingAnswers?.pronouns) {
+      delete onboardingAnswers.pronouns;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
@@ -26,7 +29,7 @@ const CustomPronoun = ({ previous, next, setAnswers }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="preferredPronoun"
+        field="pronouns"
         handleSubmit={handleSubmit}
         errorMessage="Please enter your preferred pronoun."
       />

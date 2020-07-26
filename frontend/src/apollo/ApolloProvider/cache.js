@@ -1,6 +1,9 @@
 import { InMemoryCache } from "@apollo/client";
 
-import { isLoggedInVar } from "../reactiveVariables/account";
+import {
+  isLoggedInVar,
+  onboardingAnswersVar,
+} from "../reactiveVariables/account";
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -9,6 +12,11 @@ export const cache = new InMemoryCache({
         isLoggedIn: {
           read() {
             return isLoggedInVar();
+          },
+        },
+        onboardingAnswers: {
+          read() {
+            return onboardingAnswersVar();
           },
         },
       },

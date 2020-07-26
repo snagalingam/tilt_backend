@@ -1,53 +1,56 @@
 import React from "react";
+import { useQuery } from "@apollo/client";
+
+import { GET_ONBOARDING_ANSWERS } from "../../../apollo/queries/account";
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
 import "./user-type.scss";
 
 const UserType = ({
-  answers,
-  setAnswers,
   previous,
   next,
-  highSchool,
-  college,
-  parent,
-  counselor,
-  other,
+  highSchoolFlow,
+  collegeFlow,
+  parentFlow,
+  counselorFlow,
+  otherFlow,
   userTypes,
 }) => {
-  const { preferredName } = answers;
+  const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
+  const { onboardingAnswers } = onboardingData;
+  const { preferredName } = onboardingAnswers;
+
   const { HIGH_SCHOOL, COLLEGE, PARENT, COUNSELOR, OTHER } = userTypes;
 
   function handleHighSchool() {
-    next(highSchool);
-    setAnswers((prev) => ({ ...prev, userType: HIGH_SCHOOL }));
+    onboardingAnswersVar({ ...onboardingAnswers, userType: HIGH_SCHOOL });
+    next(highSchoolFlow);
   }
 
   function handleCollege() {
-    next(college);
-    setAnswers((prev) => ({ ...prev, userType: COLLEGE }));
+    onboardingAnswersVar({ ...onboardingAnswers, userType: COLLEGE });
+    next(collegeFlow);
   }
 
   function handleParent() {
-    next(parent);
-    setAnswers((prev) => ({ ...prev, userType: PARENT }));
+    onboardingAnswersVar({ ...onboardingAnswers, userType: PARENT });
+    next(parentFlow);
   }
 
   function handleCounselor() {
-    next(counselor);
-    setAnswers((prev) => ({ ...prev, userType: COUNSELOR }));
+    onboardingAnswersVar({ ...onboardingAnswers, userType: COUNSELOR });
+    next(counselorFlow);
   }
 
   function handleOther() {
-    next(other);
-    setAnswers((prev) => ({ ...prev, userType: OTHER }));
+    onboardingAnswersVar({ ...onboardingAnswers, userType: OTHER });
+    next(otherFlow);
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.userType) delete copy.userType;
-      return copy;
-    });
+    const copy = { ...onboardingAnswers };
+    if (copy.userType) delete copy.userType;
+    onboardingAnswersVar(copy);
     previous();
   }
 

@@ -4,24 +4,31 @@ import * as yup from "yup";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const ActScore = ({ next, previous, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const ActScore = ({ next, previous }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
-    const { act } = values;
-    setAnswers((prev) => ({ ...prev, act }));
+    const { actScore } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, actScore });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.act) delete copy.act;
-      return copy;
-    });
+    if (onboardingAnswers?.actScore) {
+      delete onboardingAnswers.actScore;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   const schema = yup.object().shape({
-    act: yup.number().min(1).max(36).required("Please enter a valid score"),
+    actScore: yup
+      .number()
+      .min(1)
+      .max(36)
+      .required("Please enter a valid score"),
   });
 
   return (
@@ -31,7 +38,7 @@ const ActScore = ({ next, previous, setAnswers }) => {
       previous={handlePrevious}
     >
       <CustomTextInput
-        field="act"
+        field="actScore"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />

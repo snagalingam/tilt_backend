@@ -3,21 +3,24 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
 import "./high-school-name.scss";
 
-const HighSchoolName = ({ next, previous, setAnswers, highSchool, parent }) => {
+const HighSchoolName = ({ next, previous, highSchool, parent }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
     const { highSchoolName } = values;
-    setAnswers((prev) => ({ ...prev, highSchoolName }));
+    onboardingAnswersVar({ ...onboardingAnswers, highSchoolName });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.highSchoolName) delete copy.highSchoolName;
-      return copy;
-    });
+    if (onboardingAnswers?.highSchoolName) {
+      delete onboardingAnswers.highSchoolName;
+      onboardingAnswersVar({ ...onboardingAnswers });
+    }
     previous();
   }
 

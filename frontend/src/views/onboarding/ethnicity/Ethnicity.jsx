@@ -3,47 +3,56 @@ import React, { useState } from "react";
 import CustomEthnicity from "./CustomEthnicity";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
 import "./ethnicity.scss";
 
-const Ethnicity = ({ previous, next, setAnswers }) => {
+const Ethnicity = ({ previous, next }) => {
   const [otherEthnicity, setOtherEthnicity] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleClick(ethnicity) {
-    setAnswers((prev) => ({ ...prev, ethnicity }));
+    if (ethnicity) {
+      onboardingAnswersVar({ ...onboardingAnswers, ethnicity });
+    } else {
+      onboardingAnswersVar({
+        ...onboardingAnswers,
+        ethnicity: "Prefer not to answer",
+      });
+    }
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.ethnicity) delete copy.ethnicity;
-      return copy;
-    });
+    if (onboardingAnswers?.ethnicity) {
+      delete onboardingAnswers.ethnicity;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   const ethnicityButton = (option) => {
     return (
-      <button onClick={() => handleClick(option)} className="block-button">
+      <button
+        key={option}
+        onClick={() => handleClick(option)}
+        className="block-button"
+      >
         {option}
       </button>
     );
   };
 
   if (otherEthnicity)
-    return (
-      <CustomEthnicity
-        previous={previous}
-        next={next}
-        setAnswers={setAnswers}
-      />
-    );
+    return <CustomEthnicity previous={previous} next={next} />;
 
   return (
     <OnboardingTemplate
       name="ethnicity"
       h1="Which ethnicities do you identify with?"
       previousFunc={handlePrevious}
+      nextText={"Prefer not to answer"}
+      nextFunc={handleClick}
     >
       <div>
         <div className="first-row">

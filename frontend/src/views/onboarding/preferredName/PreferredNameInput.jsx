@@ -3,22 +3,26 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const PreferredNameInput = ({
-  next,
-  setAnswers,
-  toggleShowPreferredNameInput,
-}) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const PreferredNameInput = ({ next, toggleShowPreferredNameInput }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
-    setAnswers((prev) => ({ ...prev, preferredName: values.preferredName }));
+    const { preferredName } = values;
+    if (onboardingAnswers) {
+      onboardingAnswersVar({ ...onboardingAnswers, preferredName });
+    } else {
+      onboardingAnswersVar({ preferredName });
+    }
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.preferredName) delete copy.preferredName;
-      return copy;
-    });
+    if (onboardingAnswers?.preferredName) {
+      delete onboardingAnswers.preferredName;
+      onboardingAnswersVar({ ...onboardingAnswers });
+    }
     toggleShowPreferredNameInput(false);
   }
 

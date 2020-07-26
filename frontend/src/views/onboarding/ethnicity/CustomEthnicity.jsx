@@ -3,19 +3,22 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const CustomEthnicity = ({ previous, setAnswers, next }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const CustomEthnicity = ({ previous, next }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
     const { ethnicity } = values;
-    setAnswers((prev) => ({ ...prev, ethnicity }));
+    onboardingAnswersVar({ ...onboardingAnswers, ethnicity });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.ethnicity) delete copy.ethnicity;
-      return copy;
-    });
+    if (onboardingAnswers?.ethnicity) {
+      delete onboardingAnswers.ethnicity;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 

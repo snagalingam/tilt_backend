@@ -95,14 +95,14 @@ class OnboardUser(graphene.Mutation):
         self,
         info,
         id,
-        gpa,
-        act_score,
-        sat_score,
-        terms_and_conditions,
-        pronouns,
-        ethnicity,
-        user_type,
-        highschool_graduation_year
+        gpa=None,
+        act_score=None,
+        sat_score=None,
+        terms_and_conditions=None,
+        pronouns=None,
+        ethnicity=None,
+        user_type=None,
+        highschool_graduation_year=None
     ):
         user = get_user_model().objects.get(pk=id)
 

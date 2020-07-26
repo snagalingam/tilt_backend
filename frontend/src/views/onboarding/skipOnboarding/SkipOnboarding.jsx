@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const SkipOnboarding = ({ me, next }) => {
+const SkipOnboarding = ({ me = {}, next }) => {
   const { firstName = "default" } = me;
   const [isSkip, setIsSkip] = useState(false);
 

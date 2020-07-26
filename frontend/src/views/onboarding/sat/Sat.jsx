@@ -4,15 +4,17 @@ import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 import SatScore from "./SatScore";
 import TwoOptions from "../twoOptions/TwoOptions";
 
-const Sat = ({ next, previous, setAnswers, college }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const Sat = ({ next, previous, college }) => {
   const [didTakeSat, setDidTakeSat] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.sat) delete copy.sat;
-      return copy;
-    });
+    if (onboardingAnswers?.sat) {
+      delete onboardingAnswers.sat;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
@@ -21,7 +23,6 @@ const Sat = ({ next, previous, setAnswers, college }) => {
       <SatScore
         next={next}
         previous={college ? previous : () => setDidTakeSat(false)}
-        setAnswers={setAnswers}
       />
     );
 

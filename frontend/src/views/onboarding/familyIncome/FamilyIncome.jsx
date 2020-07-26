@@ -2,18 +2,21 @@ import React from "react";
 
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const FamilyIncome = ({ next, previous, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const FamilyIncome = ({ next, previous }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleClick(familyIncome) {
-    setAnswers((prev) => ({ ...prev, familyIncome }));
+    onboardingAnswersVar({ ...onboardingAnswers, familyIncome });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.familyIncome) delete copy.familyIncome;
-      return copy;
-    });
+    if (onboardingAnswers?.familyIncome) {
+      delete onboardingAnswers.familyIncome;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
@@ -24,7 +27,7 @@ const FamilyIncome = ({ next, previous, setAnswers }) => {
   return (
     <OnboardingTemplate
       name="family-income"
-      h1="What is your familyIncome?"
+      h1="What is your family income?"
       previousFunc={handlePrevious}
     >
       <div>{familyIncomeButton(10000)}</div>
