@@ -2,28 +2,35 @@ import React from "react";
 import * as yup from "yup";
 
 import CustomTextInput from "../customTextInput/CustomTextInput";
-
-import "./sat.scss";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const SatScore = ({ next, previous, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+import "./sat.scss";
+
+const SatScore = ({ next, previous }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
-    const { sat } = values;
-    setAnswers((prev) => ({ ...prev, sat }));
+    const { satScore } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, satScore });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.sat) delete copy.sat;
-      return copy;
-    });
+    if (onboardingAnswers?.satScore) {
+      delete onboardingAnswers.satScore;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   const schema = yup.object().shape({
-    sat: yup.number().min(400).max(1600).required("Please enter a valid score"),
+    satScore: yup
+      .number()
+      .min(400)
+      .max(1600)
+      .required("Please enter a valid score"),
   });
 
   return (
@@ -33,7 +40,7 @@ const SatScore = ({ next, previous, setAnswers }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="sat"
+        field="satScore"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />

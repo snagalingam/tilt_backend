@@ -4,26 +4,22 @@ import ActScore from "./ActScore";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 import TwoOptions from "../twoOptions/TwoOptions";
 
-const Act = ({ next, previous, setAnswers, highScool, college }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const Act = ({ next, previous, college }) => {
   const [didTakeAct, setDidTakeAct] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.act) delete copy.act;
-      return copy;
-    });
+    if (onboardingAnswers?.act) {
+      delete onboardingAnswers.act;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   if (didTakeAct || college)
-    return (
-      <ActScore
-        next={next}
-        previous={() => setDidTakeAct(false)}
-        setAnswers={setAnswers}
-      />
-    );
+    return <ActScore next={next} previous={() => setDidTakeAct(false)} />;
 
   return (
     <OnboardingTemplate

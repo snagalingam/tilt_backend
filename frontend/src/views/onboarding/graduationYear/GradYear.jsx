@@ -1,32 +1,26 @@
 import React, { useState } from "react";
 
 import CustomGradYear from "./CustomGradYear";
-
-import "./grad-year.scss";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const GradYear = ({
-  highSchool,
-  parent,
-  counselor,
-  other,
-  next,
-  previous,
-  setAnswers,
-}) => {
-  const [showCustomGradYear, toggleShowCustomGradYear] = useState(false);
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
-  function handleNext(graduationYear) {
-    setAnswers((prev) => ({ ...prev, graduationYear }));
+import "./grad-year.scss";
+
+const GradYear = ({ highSchool, parent, counselor, other, next, previous }) => {
+  const [showCustomGradYear, toggleShowCustomGradYear] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
+  function handleNext(highschoolGraduationYear) {
+    onboardingAnswersVar({ ...onboardingAnswers, highschoolGraduationYear });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.graduationYear) delete copy.graduationYear;
-      return copy;
-    });
+    if (onboardingAnswers?.highschoolGraduationYear) {
+      delete onboardingAnswers.highschoolGraduationYear;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
@@ -41,7 +35,6 @@ const GradYear = ({
       <CustomGradYear
         next={next}
         previous={() => toggleShowCustomGradYear(false)}
-        setAnswers={setAnswers}
       />
     );
 

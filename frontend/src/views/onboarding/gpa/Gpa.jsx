@@ -4,21 +4,24 @@ import * as yup from "yup";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
 import "./gpa.scss";
 
-const Gpa = ({ next, previous, setAnswers }) => {
+const Gpa = ({ next, previous }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
     const { gpa } = values;
-    setAnswers((prev) => ({ ...prev, gpa }));
+    onboardingAnswersVar({ ...onboardingAnswers, gpa });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.gpa) delete copy.gpa;
-      return copy;
-    });
+    if (onboardingAnswers?.gpa) {
+      delete onboardingAnswers.gpa;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 

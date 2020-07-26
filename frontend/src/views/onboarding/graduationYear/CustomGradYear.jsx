@@ -4,24 +4,27 @@ import * as yup from "yup";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const CustomGradYear = ({ next, previous, setAnswers, highSchool }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const CustomGradYear = ({ next, previous, highSchool }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
-    const { graduationYear } = values;
-    setAnswers((prev) => ({ ...prev, graduationYear }));
+    const { highschoolGraduationYear } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, highschoolGraduationYear });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.graduationYear) delete copy.graduationYear;
-      return copy;
-    });
+    if (onboardingAnswers?.highschoolGraduationYear) {
+      delete onboardingAnswers.highschoolGraduationYear;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   const schema = yup.object().shape({
-    graduationYear: yup
+    highschoolGraduationYear: yup
       .number()
       .min("2000")
       .max("2025")
@@ -37,7 +40,7 @@ const CustomGradYear = ({ next, previous, setAnswers, highSchool }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="graduationYear"
+        field="highschoolGraduationYear"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />

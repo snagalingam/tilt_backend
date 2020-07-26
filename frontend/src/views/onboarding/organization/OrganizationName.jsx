@@ -4,33 +4,32 @@ import CustomTextInput from "../customTextInput/CustomTextInput";
 import GradYear from "../graduationYear/GradYear";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const OrganizationName = ({ next, setAnswers, toggleShowOrgInput }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const OrganizationName = ({ next, toggleShowOrgInput }) => {
   const [showGradYear, toggleShowGradYear] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleSubmit(values) {
     const { organizationName } = values;
-    setAnswers((prev) => ({ ...prev, organizationName }));
+    onboardingAnswersVar({ ...onboardingAnswers, organizationName });
     toggleShowGradYear(true);
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.organizationName) delete copy.organizationName;
-      if (copy.graduationYear) delete copy.graduationYear;
-      return copy;
-    });
+    if (onboardingAnswers?.organizationName) {
+      delete onboardingAnswers.organizationName;
+    }
+    if (onboardingAnswers?.graduationYear) {
+      delete onboardingAnswers.graduationYear;
+    }
+    onboardingAnswersVar(onboardingAnswers);
     toggleShowOrgInput(false);
   }
 
   if (showGradYear)
     return (
-      <GradYear
-        other
-        next={next}
-        previous={() => toggleShowGradYear(false)}
-        setAnswers={setAnswers}
-      />
+      <GradYear other next={next} previous={() => toggleShowGradYear(false)} />
     );
 
   return (

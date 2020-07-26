@@ -4,16 +4,20 @@ import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 import OrganizationName from "./OrganizationName";
 import TwoOptions from "../twoOptions/TwoOptions";
 
-const Organization = ({ next, previous, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const Organization = ({ next, previous }) => {
   const [showOrgInput, toggleShowOrgInput] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.organizationName) delete copy.organizationName;
-      if (copy.graduationYear) delete copy.graduationYear;
-      return copy;
-    });
+    if (onboardingAnswers?.organizationName) {
+      delete onboardingAnswers.organizationName;
+    }
+    if (onboardingAnswers?.graduationYear) {
+      delete onboardingAnswers.graduationYear;
+    }
+    onboardingAnswersVar(onboardingAnswers);
   }
 
   if (showOrgInput)
@@ -21,7 +25,6 @@ const Organization = ({ next, previous, setAnswers }) => {
       <OrganizationName
         next={next}
         previous={previous}
-        setAnswers={setAnswers}
         toggleShowOrgInput={toggleShowOrgInput}
       />
     );

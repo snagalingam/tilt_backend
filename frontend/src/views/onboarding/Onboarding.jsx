@@ -11,7 +11,7 @@ import Source from "./source/Source";
 import Student from "./student/Student";
 import UserType from "./userType/UserType";
 
-import { GET_ME } from "../../apollo/queries/account";
+import { GET_ME, GET_ONBOARDING_ANSWERS } from "../../apollo/queries/account";
 
 const highSchoolFlow = {
   1: "Which school are you currently enrolled at?",
@@ -67,19 +67,21 @@ const flows = {
 };
 
 const userTypes = {
-  HIGH_SCHOOL: "high school",
-  COLLEGE: "college",
-  PARENT: "parent",
-  COUNSELOR: "counselor",
-  OTHER: "other",
+  HIGH_SCHOOL: "High School",
+  COLLEGE: "College",
+  PARENT: "Parent",
+  COUNSELOR: "Counselor",
+  OTHER: "Other",
 };
 
 const Onboarding = () => {
-  const { data } = useQuery(GET_ME);
+  const { data: meData, error: meError } = useQuery(GET_ME);
+  const { me } = meData;
+  const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
+  const { onboardingAnswers } = onboardingData;
 
   const [flowType, setFlowType] = useState(flow);
   const [flowIndex, setFlowIndex] = useState(1);
-  const [answers, setAnswers] = useState({});
 
   function next(newFlow) {
     const indexBeforeFork = 3;
@@ -114,7 +116,6 @@ const Onboarding = () => {
       setFlowIndex((prev) => (prev -= 1));
     }
     if (flowType !== flow && flowIndex === 1) {
-      console.log("hi");
       setFlowType(flow);
       setFlowIndex(indexBeforeFork);
     }
@@ -125,9 +126,7 @@ const Onboarding = () => {
   }
 
   const props = {
-    me: data?.me || {},
-    answers,
-    setAnswers,
+    me,
     next,
     previous,
     flowIndex,
@@ -150,23 +149,18 @@ const Onboarding = () => {
         {flowType === otherFlow && <OtherUser {...props} />}
         {/* merge */}
         {flowType[flowIndex] === flow[5] && (
-          <Source
-            {...props}
-            flows={flows}
-            userTypes={userTypes}
-            answers={answers}
-          />
+          <Source {...props} flows={flows} userTypes={userTypes} />
         )}
         {flowType[flowIndex] === flow[6] && <Completion {...props} />}
       </div>
-      {/* <div style={{ position: "absolute" }}>
+      <div style={{ position: "absolute" }}>
         <ul>
-          {Object.entries(answers).length > 0 &&
-            Object.entries(answers).map(([key, value]) => (
-              <li key={value}>{`${key}:${value}`}</li>
+          {Object.entries(onboardingAnswers).length > 0 &&
+            Object.entries(onboardingAnswers).map(([key, value]) => (
+              <li key={`${key}:${value}`}>{`${key}:${value}`}</li>
             ))}
         </ul>
-      </div> */}
+      </div>
     </div>
   );
 };

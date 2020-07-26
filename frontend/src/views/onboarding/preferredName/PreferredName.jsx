@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 
+import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 import PreferredNameInput from "./PreferredNameInput";
 import TwoOptions from "../twoOptions/TwoOptions";
 
-import "./preferred-name.scss";
-import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
 
-const PreferredName = ({ me, previous, next, setAnswers }) => {
+import "./preferred-name.scss";
+
+const PreferredName = ({ me, previous, next }) => {
   const { firstName } = me;
   const [showPreferredNameInput, toggleShowPreferredNameInput] = useState(
     false
   );
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleNext() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.preferredName) delete copy.preferredName;
-      return copy;
-    });
+    if (onboardingAnswers?.preferredName) {
+      delete onboardingAnswers.preferredName;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.preferredName) delete copy.preferredName;
-      return copy;
-    });
+    if (onboardingAnswers?.preferredName) {
+      delete onboardingAnswers.preferredName;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
@@ -35,7 +36,6 @@ const PreferredName = ({ me, previous, next, setAnswers }) => {
       <PreferredNameInput
         next={next}
         previous={previous}
-        setAnswers={setAnswers}
         toggleShowPreferredNameInput={toggleShowPreferredNameInput}
       />
     );

@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 
 import CustomSource from "./CustomSource";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
+import { ONBOARD_USER } from "../../../apollo/mutations/account";
+import {
+  GET_ONBOARDING_ANSWERS,
+  GET_ME,
+} from "../../../apollo/queries/account";
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
 import "./source.scss";
 
-const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
+const Source = ({ previous, next, userTypes, flows }) => {
+  const [onboardUser, response] = useMutation(ONBOARD_USER);
+  const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
+  const { data: meData } = useQuery(GET_ME);
+  const { onboardingAnswers } = onboardingData;
+
   const [isCustomSource, toggleIsCustomSource] = useState(false);
   const [otherSource, setOther] = useState(null);
   const [sources, selectSources] = useState([]);
@@ -18,19 +31,9 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
     counselorFlow,
     otherFlow,
   } = flows;
-  const { userType } = answers;
+  const { userType } = onboardingAnswers;
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (userType === OTHER) {
-        if (copy.organizationName) delete copy.organizationName;
-        if (copy.graduationYear) delete copy.graduationYear;
-      }
-      if (copy.source) delete copy.source;
-      return copy;
-    });
-
     if (userType === HIGH_SCHOOL) {
       previous(highSchoolFlow);
     }
@@ -44,6 +47,11 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
       previous(counselorFlow);
     }
     if (userType === OTHER) {
+      if (onboardingAnswers?.organizationName)
+        delete onboardingAnswers.organizationName;
+      if (onboardingAnswers?.graduationYear)
+        delete onboardingAnswers.graduationYear;
+      onboardingAnswersVar(onboardingAnswers);
       previous(otherFlow);
     }
   }
@@ -63,6 +71,7 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
     const index = sources.indexOf(option);
     return (
       <button
+        key={option}
         onClick={() => handleClick(option)}
         className={`block-button${index >= 0 ? " selected" : ""}`}
       >
@@ -74,13 +83,15 @@ const Source = ({ previous, next, setAnswers, userTypes, flows, answers }) => {
   function handleSave() {
     const copy = [...sources];
     const index = copy.indexOf(otherSource);
-    if (index >= 0) {
-      copy.splice(index, 1);
-    } else {
+    if (index < 0 && otherSource) {
       copy.push(otherSource);
     }
     selectSources(copy);
-    setAnswers((prev) => ({ ...prev, sources: copy }));
+    const updatedOnboardingAnswers = { ...onboardingAnswers, sources: copy };
+    onboardingAnswersVar(updatedOnboardingAnswers);
+    onboardUser({
+      variables: { ...updatedOnboardingAnswers, id: meData?.me?.id },
+    });
     next();
   }
 

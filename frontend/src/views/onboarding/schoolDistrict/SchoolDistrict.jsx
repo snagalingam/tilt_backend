@@ -3,19 +3,22 @@ import React from "react";
 import CustomTextInput from "../customTextInput/CustomTextInput";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const SchoolDistrict = ({ previous, next, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+const SchoolDistrict = ({ previous, next }) => {
+  const onboardingAnswers = { ...onboardingAnswersVar() };
+
   function handleSubmit(values) {
     const { schoolDistrict } = values;
-    setAnswers((prev) => ({ ...prev, schoolDistrict }));
+    onboardingAnswersVar({ ...onboardingAnswers, schoolDistrict });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.schoolDistrict) delete copy.schoolDistrict;
-      return copy;
-    });
+    if (onboardingAnswers?.schoolDistrict) {
+      delete onboardingAnswers.schoolDistrict;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
   return (

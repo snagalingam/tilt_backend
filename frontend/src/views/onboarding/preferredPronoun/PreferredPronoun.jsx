@@ -1,40 +1,42 @@
 import React, { useState } from "react";
 
 import CustomPronoun from "./CustomPronoun";
-
-import "./preferred-pronoun.scss";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
-const PreferredPronoun = ({ next, previous, setAnswers }) => {
+import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
+
+import "./preferred-pronoun.scss";
+
+const PreferredPronoun = ({ next, previous }) => {
   const [isCustomPronoun, setIsCustomPronoun] = useState(false);
+  const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleClick(option) {
-    setAnswers((prev) => ({ ...prev, preferredPronoun: option }));
+    onboardingAnswersVar({ ...onboardingAnswers, pronouns: option });
     next();
   }
 
   function handlePrevious() {
-    setAnswers((prev) => {
-      const copy = { ...prev };
-      if (copy.preferredPronoun) delete copy.preferredPronoun;
-      return copy;
-    });
+    if (onboardingAnswers.pronouns) {
+      delete onboardingAnswers.pronouns;
+      onboardingAnswersVar(onboardingAnswers);
+    }
     previous();
   }
 
   const pronounButton = (option) => (
-    <button onClick={() => handleClick(option)} className="block-button">
+    <button
+      key={option}
+      onClick={() => handleClick(option)}
+      className="block-button"
+    >
       {option}
     </button>
   );
 
   if (isCustomPronoun)
     return (
-      <CustomPronoun
-        previous={() => setIsCustomPronoun(false)}
-        next={next}
-        setAnswers={setAnswers}
-      />
+      <CustomPronoun previous={() => setIsCustomPronoun(false)} next={next} />
     );
 
   return (
