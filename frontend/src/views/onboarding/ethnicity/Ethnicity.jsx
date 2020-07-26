@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 
-import CustomEthnicity from "./CustomEthnicity";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
@@ -8,7 +7,6 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 import "./ethnicity.scss";
 
 const Ethnicity = ({ previous, next }) => {
-  const [otherEthnicity, setOtherEthnicity] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleClick(ethnicity) {
@@ -43,9 +41,6 @@ const Ethnicity = ({ previous, next }) => {
       </button>
     );
   };
-
-  if (otherEthnicity)
-    return <CustomEthnicity previous={previous} next={next} />;
 
   return (
     <OnboardingTemplate

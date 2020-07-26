@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 
-import CustomPronoun from "./CustomPronoun";
 import OnboardingTemplate from "../onboardingTemplate/OnboardingTemplate";
 
 import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account";
@@ -8,7 +7,6 @@ import { onboardingAnswersVar } from "../../../apollo/reactiveVariables/account"
 import "./preferred-pronoun.scss";
 
 const PreferredPronoun = ({ next, previous }) => {
-  const [isCustomPronoun, setIsCustomPronoun] = useState(false);
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleClick(option) {
@@ -33,11 +31,6 @@ const PreferredPronoun = ({ next, previous }) => {
       {option}
     </button>
   );
-
-  if (isCustomPronoun)
-    return (
-      <CustomPronoun previous={() => setIsCustomPronoun(false)} next={next} />
-    );
 
   return (
     <OnboardingTemplate
