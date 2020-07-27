@@ -1,9 +1,19 @@
 @import "../../scss/variables";
+@import "../../scss/mixins";
+
 .landing-page-container {
   color: $home-page-dark;
   h1 {
     font-weight: 600;
     font-size: 48px;
+  }
+  h2 {
+    font-size: 36px;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 22px;
+    font-weight: 500;
   }
   p {
     font-size: 16px;
@@ -19,6 +29,72 @@
       outline: none;
       flex: 1;
       margin-right: 2rem;
+    }
+  }
+  .tilt-banner-container,
+  .landing-page-community-container,
+  .tilt-couple,
+  .black-box,
+  .testimonials-container {
+    width: 1150px;
+    margin: 0 auto;
+  }
+  .tilt-couple {
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .text,
+    .image {
+      width: 45%;
+    }
+    .text {
+      h2 {
+        margin-bottom: 2rem;
+      }
+      p {
+        margin-bottom: 4rem;
+      }
+      .get-started {
+        display: flex;
+        align-content: space-between;
+        div {
+          flex: 1;
+          padding: 0 2rem;
+          p {
+            margin: 0;
+            font-size: 14px;
+          }
+          span {
+            font-size: 12px;
+            color: gray;
+          }
+        }
+      }
+    }
+  }
+  .black-box {
+    height: 400px;
+    border-radius: 4px;
+    background: #333333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 90px;
+    .text,
+    .image {
+      width: 50%;
+      padding: 1rem;
+    }
+    .text {
+      h2,
+      p {
+        margin-bottom: 2rem;
+      }
+      p {
+        color: gray;
+      }
     }
   }
 }

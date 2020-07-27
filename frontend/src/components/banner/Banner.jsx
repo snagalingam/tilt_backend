@@ -2,6 +2,8 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 
+import TiltButton from "../tiltButton/TiltButton";
+
 import banner1 from "../../img/banner1.png";
 import "./banner.scss";
 
@@ -38,9 +40,9 @@ const Banner = () => {
               {state.errors[field]}
             </span>
           )} */}
-                <button className="tilt-button dark" type="submit">
+                <TiltButton classes={["dark"]} type="submit">
                   Get Started
-                </button>
+                </TiltButton>
               </Form>
             )}
           </Formik>

@@ -76,7 +76,7 @@ const App = () => {
           component={CreateScholarship}
         />
         <Route exact path="/resources/terminology" component={Terminology} />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div />}>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/reset-password" component={ResetPassword} />

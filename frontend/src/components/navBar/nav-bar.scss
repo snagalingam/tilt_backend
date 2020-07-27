@@ -3,7 +3,8 @@
 
 .tilt-nav-bar-container {
   padding: 2rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 275px 1fr 275px;
   position: absolute;
   left: 0;
   right: 0;
@@ -14,11 +15,21 @@
   nav {
     flex: 1;
     @include flex-center;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        display: inline-block;
+        text-align: center;
+      }
+    }
     a {
       color: $home-page-dark;
     }
   }
   .login-and-get-started {
     @include flex-center;
+    justify-content: flex-end;
   }
 }

@@ -4,7 +4,9 @@
 @import "./variables";
 
 :root {
-  font-family: "Inter", sans-serif;
+  body {
+    font-family: "Inter", sans-serif;
+  }
   font-size: 14px;
   h1 {
     font-size: 24px;
@@ -41,18 +43,4 @@
   }
 }
 
-.tilt-button {
-  padding: 12px 30px;
-  background: transparent;
-  border-radius: 4px;
-  color: $home-page-dark;
-  font-weight: 600;
-  &.dark {
-    background: $home-page-dark;
-    color: white;
-  }
-  &.light {
-    color: $home-page-dark;
-    background: $home-page-gray;
-  }
-}
+
