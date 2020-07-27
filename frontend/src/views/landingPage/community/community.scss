@@ -1,0 +1,34 @@
+@import "../../../scss/mixins";
+
+.landing-page-community-container {
+  height: 1100px;
+  padding: 100px 0;
+  margin-bottom: 100px;
+  .clients {
+    .client-logos {
+      padding: 75px 0 150px 0;
+      display: flex;
+      justify-content: space-between;
+      img {
+        width: 90px;
+      }
+      div {
+        @include flex-center;
+        width: 25%;
+        opacity: 0.6;
+        &.butler-logo {
+          img {
+            width: 75%;
+          }
+        }
+      }
+    }
+  }
+  .join {
+    .community-cards {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
