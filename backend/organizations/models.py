@@ -17,7 +17,7 @@ class Organization(models.Model):
     partnership = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    member = models.ForeignKey(
+    members = models.ManyToManyField(
         get_user_model(), null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
