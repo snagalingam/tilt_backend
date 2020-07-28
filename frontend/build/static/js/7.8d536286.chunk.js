@@ -1,2 +1,0 @@
-(this.webpackJsonpfrontend=this.webpackJsonpfrontend||[]).push([[7],{222:function(t,e,n){"use strict";n.r(e);var a=n(0),i=n.n(a);e.default=function(){return i.a.createElement("div",{className:"authentication-container onboarding-container"},i.a.createElement("div",{className:"authentication-left"}),i.a.createElement("div",{className:"authentication-right"}))}}}]);
-//# sourceMappingURL=7.8d536286.chunk.js.map

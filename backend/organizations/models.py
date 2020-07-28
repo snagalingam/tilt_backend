@@ -9,7 +9,7 @@ class Organization(models.Model):
     place_id = models.CharField(max_length=250)
     name = models.CharField(max_length=250)
     formatted_address = models.CharField(max_length=250, blank=True, null=True)
-    formatted_phone_number = models.IntegerField(null=True, blank=True)
+    formatted_phone_number = models.CharField(max_length=15, null=True, blank=True)
     geo_location = models.CharField(max_length=250, null=True, blank=True)
     business_status = models.CharField(max_length=250, null=True, blank=True)
     url = models.CharField(max_length=250, null=True, blank=True)
@@ -17,8 +17,6 @@ class Organization(models.Model):
     partnership = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    members = models.ManyToManyField(
-        get_user_model(), null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     # local
     'users.apps.UsersConfig',
     'scholarships.apps.ScholarshipsConfig',
-    'services.apps.ServicesConfig',
     'organizations.apps.OrganizationsConfig'
 ]
 
