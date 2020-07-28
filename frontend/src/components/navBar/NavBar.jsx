@@ -10,7 +10,7 @@ const NavBar = () => {
   const history = useHistory();
 
   return (
-    <div className="tilt-nav-bar-container">
+    <div className="tilt-nav-bar">
       <img src={tiltLogo} alt="tilt logo" />
       <nav>
         <ul>

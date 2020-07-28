@@ -1,32 +1,6 @@
 @import "../../scss/mixins";
 
-.tilt-banner-container {
-  height: 700px;
+.tilt-banner {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  .left {
-    height: 510px;
-    width: 540px;
-    @include flex-center;
-    flex-direction: column;
-    h1 {
-      margin-bottom: 2rem;
-    }
-    p {
-      margin-bottom: 5rem;
-    }
-    div {
-      width: 100%;
-    }
-    .tilt-email-input {
-      width: 90%;
-    }
-  }
-  .right {
-    @include flex-center;
-    img {
-      margin-right: -4rem;
-    }
-  }
+  align-items: center;
 }

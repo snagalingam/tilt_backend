@@ -1,11 +1,11 @@
-@import "../../../../scss/mixins";
-@import "../../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/variables";
 
 .community-card {
   width: 350px;
   padding: 1rem;
   .community-image {
-    margin: 3rem 0;
+    margin-bottom: 3rem;
     position: relative;
     div {
       position: absolute;
