@@ -18,6 +18,7 @@
         display: flex;
         align-items: flex-start;
         flex-direction: column;
+        width: 50%;
         &:first-child {
           margin-right: 5rem;
         }
@@ -34,4 +35,3 @@
     }
   }
 }
-

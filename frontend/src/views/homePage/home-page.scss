@@ -16,10 +16,14 @@
   .tilt-banner {
     margin-top: 2.5rem;
   }
-  .tilt-clients {
+  .tilt-partners {
     margin-top: 15rem;
-    h2 {
+    .tilt-partners-header {
+      width: 50%;
       margin-bottom: 5rem;
+      h2 {
+        margin-bottom: 2rem;
+      }
     }
     .client-logos {
       display: flex;
@@ -168,7 +172,7 @@
         }
       }
     }
-    .benefits {
+    .features {
       display: flex;
       justify-content: space-between;
     }
