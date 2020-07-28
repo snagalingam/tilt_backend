@@ -201,7 +201,7 @@ const HomePage = () => {
               {state.errors[field]}
             </span>
           )} */}
-                    <TiltButton classes={["dark"]} type="submit">
+                    <TiltButton classes={["light"]} type="submit">
                       Get Started
                     </TiltButton>
                   </Form>
