@@ -25,8 +25,7 @@ class Scholarship(models.Model):
     hbcu = models.BooleanField()
 
     # automatically added
-    author = models.ForeignKey(
-        get_user_model(), null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(get_user_model(), null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

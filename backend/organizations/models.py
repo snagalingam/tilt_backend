@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Organization(models.Model):
-
+    
     # user inputted
     place_id = models.CharField(max_length=250)
     name = models.CharField(max_length=250)
@@ -17,6 +17,7 @@ class Organization(models.Model):
     partnership = models.BooleanField(null=True, blank=True)
 
     # automatically added
+    members = models.ManyToManyField(get_user_model())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
