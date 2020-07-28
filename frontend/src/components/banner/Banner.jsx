@@ -20,10 +20,10 @@ const Banner = () => {
   return (
     <div className="tilt-banner tilt-couple">
       <div className="text">
-        <h1>Make smart financial decisions when choosing a college</h1>
+        <h1>Find an affordable path to a college degree</h1>
         <p>
-          We provide friendly reports simplifying your financial aid packages
-          and helping you compare across colleges
+          We help you find and select colleges that will offer you the most
+          money.
         </p>
         <div>
           <Formik
