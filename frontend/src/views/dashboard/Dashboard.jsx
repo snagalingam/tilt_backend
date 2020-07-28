@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import React from "react";
+import { useQuery, useMutation } from "@apollo/client";
 
 import { GET_ME } from "../../apollo/queries/account";
+import { LOGOUT_USER } from "../../apollo/mutations/account";
 
 import "./dashboard.scss";
 
 const Dashboard = () => {
-  const { data, error, loading } = useQuery(GET_ME);
+  const { data: meData, error, loading } = useQuery(GET_ME);
+  const [logoutUser, response] = useMutation(LOGOUT_USER);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <Redirect to="/login" />;
+  function handleLogout() {
+    logoutUser();
+  }
 
   return (
     <div className="dashboard-container">
-      <h1>{`Welcome ${data?.me?.firstName}!`}</h1>
+      <h1>{`Welcome ${meData?.me?.firstName}!`}</h1>
+      <button onClick={handleLogout}>Log out</button>
     </div>
   );
-
-  return;
 };
 
 export default Dashboard;

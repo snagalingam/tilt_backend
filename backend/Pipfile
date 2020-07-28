@@ -21,6 +21,7 @@ sendgrid = "==6.4.3"
 pyjwt = "==1.7.1"
 django-graphql-jwt = "==0.3.0"
 requests = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.8"
