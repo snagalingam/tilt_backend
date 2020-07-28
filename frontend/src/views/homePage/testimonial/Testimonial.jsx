@@ -72,6 +72,7 @@ const Testimonial = () => {
           perPage={perPage}
           next={handleNext}
           previous={handlePrevious}
+          barColor="purple"
         />
       </div>
     </div>

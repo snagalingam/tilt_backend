@@ -1,4 +1,5 @@
 @import "../../../../scss/mixins";
+@import "../../../../scss/variables";
 
 .tilt-pagination-container {
   width: 100%;
@@ -39,6 +40,11 @@
       }
       &.selected {
         background: #302d3d;
+      }
+    }
+    &.purple {
+      .selected {
+        background: $tilt-purple;
       }
     }
   }

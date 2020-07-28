@@ -2,7 +2,7 @@
 @import "../../scss/mixins";
 
 .home-page-container {
-  color: $home-page-dark;
+  color: $font-color-primary;
   padding: 10rem;
   > div {
     width: 100%;
@@ -78,19 +78,20 @@
     margin-top: 10rem;
   }
   a {
-    color: $home-page-dark;
+    color: $font-color-primary;
     text-decoration: none;
     &:hover {
       color: $tilt-purple;
     }
   }
+
   .tilt-email-input {
     display: flex;
     width: 100%;
     input {
       padding: 12px 30px;
       border-radius: 4px;
-      background: $home-page-gray;
+      background: $light-gray;
       border: none;
       outline: none;
       flex: 1;
@@ -136,9 +137,9 @@
     }
   }
 
-  .black-box {
+  .purple-box {
     border-radius: 4px;
-    background: #333333;
+    background: $tilt-purple;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -153,7 +154,17 @@
       }
       .text {
         p {
-          color: gray;
+          color: darken($gray, 20%);
+          font-size: 14px;
+        }
+      }
+      .tilt-email-input {
+        input {
+          background: lighten($tilt-purple, 5%);
+          color: white;
+          &::placeholder {
+            color: darken($gray, 20%);
+          }
         }
       }
     }
