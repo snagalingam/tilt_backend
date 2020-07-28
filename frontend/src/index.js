@@ -7,7 +7,7 @@ import { useQuery } from "@apollo/client";
 import Apollo from "./apollo/ApolloProvider/Apollo";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
-import HomePage from "./components/HomePage";
+// import HomePage from "./components/HomePage";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ResourcesFAQs from "./components/resources/ResourcesFAQs";
 import ResourcesIntro from "./components/resources/ResourcesIntro";
@@ -34,6 +34,7 @@ import "./scss/theme.scss";
 import "cross-fetch/polyfill";
 
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
+const HomePage = lazy(() => import("./views/homePage/HomePage"));
 const Login = lazy(() => import("./views/login/Login"));
 const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
 const ResetPassword = lazy(() => import("./views/resetPassword/ResetPassword"));
@@ -62,7 +63,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop>
-        <Route exact path="/" component={HomePage} />
+        {/* <Route exact path="/" component={HomePage} /> */}
         <Route exact path="/contact" component={ContactUs} />
         <Route exact path="/privacy-policy" component={PrivacyPolicy} />
         <Route exact path="/terms-of-service" component={TermsOfService} />
@@ -75,7 +76,8 @@ const App = () => {
           component={CreateScholarship}
         />
         <Route exact path="/resources/terminology" component={Terminology} />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div />}>
+          <Route exact path="/" component={HomePage} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/signup" component={SignUp} />
