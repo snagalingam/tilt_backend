@@ -30,9 +30,6 @@
         list-style: none;
         li {
           margin-bottom: 1rem;
-          a {
-            color: $home-page-dark;
-          }
         }
       }
     }
@@ -45,6 +42,9 @@
       .MuiSvgIcon-root {
         color: #a4adbb;
         cursor: pointer;
+        &:hover {
+          color: $tilt-purple;
+        }
       }
     }
   }

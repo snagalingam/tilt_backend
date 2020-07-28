@@ -9,6 +9,13 @@
   top: 0;
   left: 0;
   right: 0;
+  a {
+    color: $home-page-dark;
+    text-decoration: none;
+    &:hover {
+      color: $tilt-purple;
+    }
+  }
   img {
     width: 70px;
     object-fit: contain;

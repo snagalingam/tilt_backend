@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Formik, Form, Field } from "formik";
+import * as yup from "yup";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 import Banner from "../../components/banner/Banner";
 import CommunityCard from "./communityCard/CommunityCard";
@@ -15,7 +18,19 @@ import hfs from "../../img/clients/hfs.svg";
 import solorio from "../../img/clients/solorio.svg";
 import westinghouse from "../../img/clients/westinghouse.svg";
 
+const emailSchema = yup.object().shape({
+  email: yup.string().email().required("Please enter a valid email"),
+});
+
 const HomePage = () => {
+  function handleSubmit(values) {
+    console.log(values);
+  }
+
+  useEffect(() => {
+    document.title = "Financial aid help for high school students - Tilt";
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -169,14 +184,59 @@ const HomePage = () => {
         <FaqSection />
 
         <div className="black-box" style={{ marginTop: "5rem" }}>
-          <div className="text">
-            <h2>Become a partner</h2>
-            <p>
-              Interested in bring Tilt to your school or community organization?
-            </p>
-            {/* <TiltButton classes={["light"]}>Download Sample</TiltButton> */}
+          <div className="organization">
+            <div className="text">
+              <h2>Become a partner</h2>
+              <p>
+                Interested in bring Tilt to your school or community
+                organization?
+              </p>
+            </div>
+
+            <div className="form">
+              <Formik
+                initialValues={{
+                  email: "",
+                }}
+                validationSchema={emailSchema}
+                onSubmit={handleSubmit}
+              >
+                {(state) => (
+                  <Form className="tilt-email-input">
+                    <Field name="email" placeholder="Enter your email"></Field>
+                    {/* {state.errors && state.touched && (
+            <span className="custom-text-input-error">
+              {state.errors[field]}
+            </span>
+          )} */}
+                    <TiltButton classes={["dark"]} type="submit">
+                      Get Started
+                    </TiltButton>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </div>
-          <div className="image"></div>
+
+          <div
+            style={{
+              margin: "2rem 0",
+              width: "100%",
+              border: "1px solid gray",
+            }}
+          />
+
+          <div className="benefits">
+            <span>
+              <CheckCircleIcon /> Access to student accounts
+            </span>
+            <span>
+              <CheckCircleIcon /> Customized reporting
+            </span>
+            <span>
+              <CheckCircleIcon /> Satisfaction guarantee
+            </span>
+          </div>
         </div>
 
         <Footer />
