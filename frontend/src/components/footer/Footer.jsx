@@ -5,6 +5,7 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import SendIcon from "@material-ui/icons/Send";
 import YouTubeIcon from "@material-ui/icons/YouTube";
+import TwitterIcon from "@material-ui/icons/Twitter";
 
 import "./footer.scss";
 import tiltLogo from "../../img/tilt_logo.png";
@@ -44,16 +45,19 @@ const Footer = () => {
           </ul>
         </nav>
         <div className="social-media">
-          <a href="https://www.facebook.com">
+          <a href="https://www.facebook.com/tiltaccess">
             <FacebookIcon color="gray" />
           </a>
-          <a href="https://instagram.com">
+          <a href="https://www.instagram.com/tiltaccess/">
             <InstagramIcon />
           </a>
-          <a href="https://youtube.com">
+          <a href="https://twitter.com/tiltaccess">
+            <TwitterIcon />
+          </a>
+          <a href="https://www.youtube.com/channel/UCZX9Hvj51dhREUibI_LDaFA">
             <YouTubeIcon />
           </a>
-          <a href="https://gmail.com">
+          <a href="mailto: hello@tiltaccess.com">
             <SendIcon />
           </a>
         </div>
