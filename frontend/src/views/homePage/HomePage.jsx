@@ -175,7 +175,7 @@ const HomePage = () => {
 
         <FaqSection />
 
-        <div className="black-box" style={{ marginTop: "5rem" }}>
+        <div className="black-box" style={{ marginTop: "10rem" }}>
           <div className="organization">
             <div className="text">
               <h2>Become a partner</h2>
