@@ -23,6 +23,15 @@ const Testimonial = () => {
       user: "Ariel",
       testimonial: "This is such an amazin tool!",
     },
+    {
+      user: "Corey",
+      testimonial: "Tilt assisted me throughout my college application process",
+    },
+    {
+      user: "Anonymous",
+      testimonial:
+        "I learned about Tilt from my friend and it has been incredibly helpful",
+    },
   ];
 
   useEffect(() => {
@@ -46,7 +55,7 @@ const Testimonial = () => {
   }
 
   return (
-    <div className="testimonials-container">
+    <div className="tilt-testimonial">
       <div className="testimonials">
         {toBeDisplayed.map((item) => {
           return (

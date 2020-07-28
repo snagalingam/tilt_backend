@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 
@@ -6,6 +6,7 @@ import TiltButton from "../tiltButton/TiltButton";
 
 import banner1 from "../../img/banner1.png";
 import "./banner.scss";
+import { useEffect } from "react";
 
 const emailSchema = yup.object().shape({
   email: yup.string().email().required("Please enter a valid email"),
@@ -17,8 +18,8 @@ const Banner = () => {
   }
 
   return (
-    <div className="tilt-banner-container">
-      <div className="left">
+    <div className="tilt-banner tilt-couple">
+      <div className="text">
         <h1>Make smart financial decisions when choosing a college</h1>
         <p>
           We provide friendly reports simplifying your financial aid packages
@@ -48,7 +49,7 @@ const Banner = () => {
           </Formik>
         </div>
       </div>
-      <div className="right">
+      <div className="image">
         <img src={banner1} alt="girl waiting" />
       </div>
     </div>

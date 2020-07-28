@@ -27,6 +27,8 @@
       flex: 1;
       background: #f2f2f2;
       transition: background 0.25s;
+      border-left: 2px solid white;
+      border-right: 2px solid white;
       &:first-child {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;

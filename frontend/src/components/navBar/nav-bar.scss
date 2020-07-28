@@ -1,11 +1,12 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.tilt-nav-bar-container {
+.tilt-nav-bar {
   padding: 2rem;
   display: grid;
   grid-template-columns: 275px 1fr 275px;
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
   img {

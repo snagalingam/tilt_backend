@@ -1,8 +1,8 @@
 @import "../../../scss/mixins";
 
-.testimonials-container {
+.tilt-testimonial {
   .testimonials {
-    height: 125px;
+    min-height: 125px;
     display: flex;
     margin-bottom: 2rem;
     .testimonial {
