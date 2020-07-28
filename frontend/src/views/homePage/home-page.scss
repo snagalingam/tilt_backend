@@ -3,10 +3,10 @@
 
 .home-page-container {
   color: $home-page-dark;
-  padding: 5rem;
+  padding: 10rem;
   > div {
     width: 100%;
-    max-width: 1150px;
+    max-width: 1400px;
     margin: 0 auto;
   }
   .tilt-nav-bar {
@@ -14,7 +14,7 @@
     right: -5rem;
   }
   .tilt-banner {
-    margin-top: 6rem;
+    margin-top: 2.5rem;
   }
   .tilt-clients {
     margin-top: 15rem;
@@ -54,8 +54,8 @@
   }
   .tilt-faq {
     margin-top: 15rem;
-    margin-left: -5rem;
-    margin-right: -5rem;
+    margin-left: -10rem;
+    margin-right: -10rem;
     width: inherit !important;
     max-width: inherit !important;
   }
