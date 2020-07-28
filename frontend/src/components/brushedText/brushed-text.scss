@@ -1,0 +1,23 @@
+@import "../../scss/variables";
+
+.stroke {
+  z-index: 0;
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  padding: 0 1rem;
+  .stroke-text {
+    display: inline-block;
+    position: relative;
+    color: $tilt-purple;
+  }
+  img {
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    right: 0;
+    left: -5%;
+    width: 110% !important;
+    height: 75%;
+  }
+}
