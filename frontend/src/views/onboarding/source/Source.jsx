@@ -37,7 +37,7 @@ const Source = ({ previous, next, flows }) => {
   } = flows;
 
   function handlePrevious() {
-    switch (userType) {
+  switch (userType) {
       case K12.value:
         previous(highSchoolFlow);
         break;

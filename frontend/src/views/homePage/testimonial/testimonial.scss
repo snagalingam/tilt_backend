@@ -1,0 +1,20 @@
+@import "../../../scss/mixins";
+
+.tilt-testimonial {
+  .testimonials {
+    min-height: 125px;
+    display: flex;
+    margin-bottom: 2rem;
+    .testimonial {
+      width: 50%;
+      p {
+        font-size: 24px;
+        margin-bottom: 1rem;
+      }
+      span {
+        font-size: 16px;
+        color: gray;
+      }
+    }
+  }
+}
