@@ -77,6 +77,13 @@
   .tilt-footer {
     margin-top: 5rem;
   }
+  a {
+    color: $home-page-dark;
+    text-decoration: none;
+    &:hover {
+      color: $tilt-purple;
+    }
+  }
   .tilt-email-input {
     display: flex;
     width: 100%;
@@ -130,27 +137,29 @@
   }
 
   .black-box {
-    height: 400px;
     border-radius: 4px;
     background: #333333;
     color: #fff;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 60px 90px;
-    .text,
-    .image {
-      width: 50%;
-      padding: 1rem;
+    flex-direction: column;
+    padding: 5rem;
+    .organization {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .text,
+      .form {
+        width: 45%;
+      }
+      .text {
+        p {
+          color: gray;
+        }
+      }
     }
-    .text {
-      h2,
-      p {
-        margin-bottom: 2rem;
-      }
-      p {
-        color: gray;
-      }
+    .benefits {
+      display: flex;
+      justify-content: space-between;
     }
   }
 }
