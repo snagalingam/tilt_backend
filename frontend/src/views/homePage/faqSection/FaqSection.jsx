@@ -15,27 +15,25 @@ const FaqSection = () => {
             content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
           />
           <TiltAccordion
-            preview="What is financial aid?"
+            preview="Do I qualify for financial aid?"
+            content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
+          />
+          <TiltAccordion
+            preview="Don't only students with good grades receive financial aid?"
             content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
           />
         </div>
         <div>
           <TiltAccordion
-            preview="What is financial aid?"
+            preview="How does financial aid work?"
             content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
           />
           <TiltAccordion
-            preview="What is financial aid?"
-            content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
-          />
-        </div>
-        <div>
-          <TiltAccordion
-            preview="What is financial aid?"
+            preview={`What if my parents make "too much money"?`}
             content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
           />
           <TiltAccordion
-            preview="What is financial aid?"
+            preview="Will this service always be free?"
             content="Yes, we are commited to helping students access financial aid free-of-charge. We only charge schools and organizations for additional services to help their students."
           />
         </div>
