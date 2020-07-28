@@ -49,6 +49,10 @@
     button {
       background: transparent;
       @include no-select;
+      &:focus {
+        border: none;
+        outline: none;
+      }
       &:last-child {
         margin-left: 1rem;
       }
