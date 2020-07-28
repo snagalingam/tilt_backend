@@ -4,9 +4,10 @@
   .testimonials {
     min-height: 125px;
     display: flex;
-    margin-bottom: 2rem;
+    justify-content: space-between;
+    margin-bottom: 3rem;
     .testimonial {
-      width: 50%;
+      width: 45%;
       p {
         font-size: 24px;
         margin-bottom: 1rem;

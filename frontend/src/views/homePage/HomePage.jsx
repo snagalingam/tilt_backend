@@ -38,8 +38,14 @@ const HomePage = () => {
       <div className="home-page-container">
         <Banner />
 
-        <div className="tilt-clients">
-          <h2>Our Clients</h2>
+        <div className="tilt-partners">
+          <div className="tilt-partners-header">
+            <h2>Our Partners</h2>
+            <p>
+              Not only do we support students directly, we also partner with
+              high schools and community organizations to help their students.
+            </p>
+          </div>
           <div className="client-logos">
             <div className="butler-logo">
               <img src={butler} alt="butler logo" />
@@ -199,7 +205,7 @@ const HomePage = () => {
             <div className="text">
               <h2>Become a partner</h2>
               <p>
-                Interested in bring Tilt to your school or community
+                Interested in bringing Tilt to your school or community
                 organization?
               </p>
             </div>
@@ -237,7 +243,7 @@ const HomePage = () => {
             }}
           />
 
-          <div className="benefits">
+          <div className="features">
             <span>
               <CheckCircleIcon /> Access to student accounts
             </span>
