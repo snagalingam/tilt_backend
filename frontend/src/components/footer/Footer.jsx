@@ -45,22 +45,39 @@ const Footer = () => {
           </ul>
         </nav>
         <div className="social-media">
-          <a href="https://www.facebook.com/tiltaccess" target="_blank">
+          <a
+            href="https://www.facebook.com/tiltaccess"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FacebookIcon color="gray" />
           </a>
-          <a href="https://www.instagram.com/tiltaccess/" target="_blank">
+          <a
+            href="https://www.instagram.com/tiltaccess/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <InstagramIcon />
           </a>
-          <a href="https://twitter.com/tiltaccess" target="_blank">
+          <a
+            href="https://twitter.com/tiltaccess"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <TwitterIcon />
           </a>
           <a
             href="https://www.youtube.com/channel/UCZX9Hvj51dhREUibI_LDaFA"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <YouTubeIcon />
           </a>
-          <a href="mailto: hello@tiltaccess.com" target="_blank">
+          <a
+            href="mailto: hello@tiltaccess.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <SendIcon />
           </a>
         </div>

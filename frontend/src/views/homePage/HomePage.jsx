@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
+import BrushedText from "../../components/brushedText/BrushedText";
 import Banner from "../../components/banner/Banner";
 import CommunityCard from "./communityCard/CommunityCard";
 import FaqSection from "./faqSection/FaqSection";
@@ -61,7 +62,9 @@ const HomePage = () => {
 
         <div className="tilt-join">
           <div className="tilt-join-header">
-            <h2>Join the Tilt community</h2>
+            <h2>
+              Join the <BrushedText text="Tilt" /> community
+            </h2>
           </div>
           <div className="community-cards">
             <CommunityCard
@@ -87,13 +90,17 @@ const HomePage = () => {
 
         <div className="tilt-couple" style={{ marginTop: "10rem" }}>
           <div className="text">
-            <h2>Find &#38; select affordable colleges</h2>
+            <h2>
+              Find &#38; select <BrushedText text="affordable" /> colleges
+            </h2>
             <p>
               Based on your background, we can help you find colleges that will
               offer you the most amount of grants and scholarships.
             </p>
             <div className="get-started">
-              <button className="tilt-button dark">Get Started</button>
+              <TiltButton classes={["purple", "secondary"]}>
+                Get Started
+              </TiltButton>
               <div>
                 <p>"We tripled our direct orders with Tilt"</p>
                 <span>Tamer, Owner of Harvard University</span>
@@ -109,13 +116,17 @@ const HomePage = () => {
             <img src={dog} />
           </div>
           <div className="text">
-            <h2>Get help applying to financial aid</h2>
+            <h2>
+              Get help applying to <BrushedText text="financial" /> aid
+            </h2>
             <p>
               We will walk you through how to fill out financial aid forms and
               compare your financial aid packages once you have been accepted.
             </p>
             <div className="get-started">
-              <TiltButton classes={["dark"]}>Get Started</TiltButton>
+              <TiltButton classes={["orange", "secondary"]}>
+                Get Started
+              </TiltButton>
               <div>
                 <p>"We tripled our direct orders with Tilt"</p>
                 <span>Tamer, Owner of Harvard University</span>
@@ -126,14 +137,18 @@ const HomePage = () => {
 
         <div className="tilt-couple" style={{ marginTop: "10rem" }}>
           <div className="text">
-            <h2>On-demand advisors to answer questions</h2>
+            <h2>
+              On-demand <BrushedText text="advisors" /> to answer questions
+            </h2>
             <p>
               We know that figuring out how to pay for college can be confusing
               and overwhelming—that's why you'll always have access to our
               advisors who are ready to answer your questions.
             </p>
             <div className="get-started">
-              <TiltButton classes={["dark"]}>Get Started</TiltButton>
+              <TiltButton classes={["purple", "secondary"]}>
+                Get Started
+              </TiltButton>
               <div>
                 <p>"We tripled our direct orders with Tilt"</p>
                 <span>Tamer, Owner of Harvard University</span>
@@ -150,13 +165,17 @@ const HomePage = () => {
             <img src={dog} />
           </div>
           <div className="text">
-            <h2>Database of vetted scholarships</h2>
+            <h2>
+              Database of <BrushedText text="vetted" /> scholarships
+            </h2>
             <p>
               We find and evaluate scholarships offered across the country, so
               you don't have to.
             </p>
             <div className="get-started">
-              <TiltButton classes={["dark"]}>Get Started</TiltButton>
+              <TiltButton classes={["orange", "secondary"]}>
+                Get Started
+              </TiltButton>
               <div>
                 <p>"We tripled our direct orders with Tilt"</p>
                 <span>Tamer, Owner of Harvard University</span>
@@ -175,7 +194,7 @@ const HomePage = () => {
 
         <FaqSection />
 
-        <div className="black-box" style={{ marginTop: "10rem" }}>
+        <div className="purple-box" style={{ marginTop: "10rem" }}>
           <div className="organization">
             <div className="text">
               <h2>Become a partner</h2>
@@ -201,7 +220,7 @@ const HomePage = () => {
               {state.errors[field]}
             </span>
           )} */}
-                    <TiltButton classes={["light"]} type="submit">
+                    <TiltButton classes={["white"]} type="submit">
                       Get Started
                     </TiltButton>
                   </Form>
