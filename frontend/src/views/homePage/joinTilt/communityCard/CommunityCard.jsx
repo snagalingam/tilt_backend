@@ -2,12 +2,12 @@ import React from "react";
 
 import "./community-card.scss";
 
-const CommunityCard = ({ img, header, text, step }) => {
+const CommunityCard = ({ card, header, text, step, stepColor }) => {
   return (
     <div className="community-card">
       <div className="community-image">
-        <img src={img} alt="community card" />
-        <div>{step}</div>
+        {card}
+        <div className={`step ${stepColor}`}>{step}</div>
       </div>
       <h3>{header}</h3>
       <p>{text}</p>

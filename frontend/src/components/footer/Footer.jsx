@@ -50,7 +50,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FacebookIcon color="gray" />
+            <FacebookIcon />
           </a>
           <a
             href="https://www.instagram.com/tiltaccess/"

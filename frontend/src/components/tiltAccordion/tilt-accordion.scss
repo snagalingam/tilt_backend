@@ -13,6 +13,9 @@
     grid-template-columns: 1fr 40px;
     align-items: center;
   }
+  .MuiAccordionDetails-root {
+    color: #a4aed1;
+  }
   &::before {
     display: none;
   }
