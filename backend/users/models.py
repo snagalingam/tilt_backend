@@ -179,8 +179,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ("other", "Other")
     ]
 
-    found_from = models.CharField(
-        _("found from"), max_length=25, choices=FOUND_FROM_CHOICES)
+    found_from = ArrayField(
+        models.CharField(
+        _("found from"), max_length=25, choices=FOUND_FROM_CHOICES), 
+        default=list
+    )
 
     found_from_other_value = models.CharField(
         max_length=75, null=True, blank=True

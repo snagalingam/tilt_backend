@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 
 import { GET_ME } from "../../apollo/queries/account";
@@ -17,6 +18,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <h1>{`Welcome ${meData?.me?.firstName}!`}</h1>
+      <Link to="/onboarding">Onboarding</Link>
       <button onClick={handleLogout}>Log out</button>
     </div>
   );
