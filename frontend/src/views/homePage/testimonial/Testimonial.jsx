@@ -11,26 +11,41 @@ const Testimonial = () => {
 
   const items = [
     {
-      user: "Tony",
+      user: "Student who chose Notre Dame University",
       testimonial:
-        "It made it easier to see which college was financially better",
+        "The financial aid report that Tilt made and sent to me made it a lot easier for me to compare the different financial aid packages that I received from each college, by using one standard template that was easy to understand.",
     },
     {
-      user: "Johnny",
-      testimonial: "I found the right school for me.",
-    },
-    {
-      user: "Ariel",
-      testimonial: "This is such an amazin tool!",
-    },
-    {
-      user: "Corey",
-      testimonial: "Tilt assisted me throughout my college application process",
-    },
-    {
-      user: "Anonymous",
+      user: "Student who chose Ohio State University",
       testimonial:
-        "I learned about Tilt from my friend and it has been incredibly helpful",
+        "It was really helpful in deciding what college fit me best.",
+    },
+    {
+      user: "Student who chose Bradley University",
+      testimonial:
+        "It made it easier to see which college was financially better.",
+    },
+    {
+      user: "Student who chose Bradley University",
+      testimonial: "Very helpful when it came to explaining my financial aid.",
+    },
+    {
+      user: "Student who chose Notre Dame University",
+      testimonial:
+        "I found it extremely helpful, and I think others that I know would as well.",
+    },
+    {
+      user: "Student who chose Ohio State University",
+      testimonial:
+        "It was superrr useful and they listen to feedback or any concerns in a timely manner.",
+    },
+    {
+      user: "Student who chose Bradley University",
+      testimonial: "It was quick and easy to use and a very helpful tool.",
+    },
+    {
+      user: "Student who chose Bradley University",
+      testimonial: "They were very helpful.",
     },
   ];
 
@@ -59,7 +74,7 @@ const Testimonial = () => {
       <div className="testimonials">
         {toBeDisplayed.map((item) => {
           return (
-            <div className="testimonial">
+            <div key={item.testimonial} className="testimonial">
               <p>{item.testimonial}</p>
               <span>- {item.user}</span>
             </div>
@@ -72,6 +87,7 @@ const Testimonial = () => {
           perPage={perPage}
           next={handleNext}
           previous={handlePrevious}
+          barColor="purple"
         />
       </div>
     </div>

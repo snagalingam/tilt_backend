@@ -7,7 +7,6 @@
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: $home-page-dark;
   text-transform: none !important;
   font-size: 14px !important;
   font-weight: 600 !important;
@@ -15,18 +14,43 @@
     border: none;
     outline: none;
   }
-  &.dark {
-    background: $home-page-dark;
-    color: white;
-    &:hover {
-      background: lighten($home-page-dark, 10%);
+  &.purple {
+    &.primary {
+      background: $tilt-purple;
+      color: white;
+      &:hover {
+        background: darken($tilt-purple, 5%);
+      }
+    }
+    &.secondary {
+      color: $tilt-purple;
+      background: $tilt-light-purple;
+      &:hover {
+        background: darken($tilt-light-purple, 5%);
+      }
     }
   }
-  &.light {
-    color: $home-page-dark;
-    background: $home-page-gray;
+  &.orange {
+    &.primary {
+      background: $tilt-orange;
+      color: white;
+      &:hover {
+        background: darken($tilt-orange, 5%);
+      }
+    }
+    &.secondary {
+      background: $tilt-light-orange;
+      color: $tilt-orange;
+      &:hover {
+        background: darken($tilt-light-orange, 5%);
+      }
+    }
+  }
+  &.white {
+    background: white;
+    color: $tilt-purple;
     &:hover {
-      background: darken($home-page-gray, 5%);
+      background: $tilt-light-purple;
     }
   }
 }

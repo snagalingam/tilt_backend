@@ -2,7 +2,16 @@
 @import "../../scss/mixins";
 
 .home-page-container {
-  color: $home-page-dark;
+  background: linear-gradient(
+    180deg,
+    #f2f7ff 0%,
+    #ffffff 10.07%,
+    #ffffff 37.21%,
+    #ffffff 63.69%,
+    #ffffff 91.34%,
+    #f3f7ff 100%
+  );
+  color: $font-color-primary;
   padding: 10rem;
   > div {
     width: 100%;
@@ -16,10 +25,14 @@
   .tilt-banner {
     margin-top: 2.5rem;
   }
-  .tilt-clients {
+  .tilt-partners {
     margin-top: 15rem;
-    h2 {
+    .tilt-partners-header {
+      width: 50%;
       margin-bottom: 5rem;
+      h2 {
+        margin-bottom: 2rem;
+      }
     }
     .client-logos {
       display: flex;
@@ -43,10 +56,6 @@
     margin-top: 15rem;
     .tilt-join-header {
       margin-bottom: 5rem;
-    }
-    .community-cards {
-      display: flex;
-      justify-content: space-between;
     }
   }
   .tilt-testimonial {
@@ -78,19 +87,20 @@
     margin-top: 10rem;
   }
   a {
-    color: $home-page-dark;
+    color: $font-color-primary;
     text-decoration: none;
     &:hover {
       color: $tilt-purple;
     }
   }
+
   .tilt-email-input {
     display: flex;
     width: 100%;
     input {
       padding: 12px 30px;
       border-radius: 4px;
-      background: $home-page-gray;
+      background: $light-gray;
       border: none;
       outline: none;
       flex: 1;
@@ -136,9 +146,9 @@
     }
   }
 
-  .black-box {
+  .purple-box {
     border-radius: 4px;
-    background: #333333;
+    background: $tilt-purple;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -153,11 +163,21 @@
       }
       .text {
         p {
-          color: gray;
+          color: darken($gray, 20%);
+          font-size: 14px;
+        }
+      }
+      .tilt-email-input {
+        input {
+          background: lighten($tilt-purple, 5%);
+          color: white;
+          &::placeholder {
+            color: darken($gray, 20%);
+          }
         }
       }
     }
-    .benefits {
+    .features {
       display: flex;
       justify-content: space-between;
     }
