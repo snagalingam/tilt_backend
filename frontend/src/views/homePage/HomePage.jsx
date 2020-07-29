@@ -56,7 +56,7 @@ const HomePage = () => {
             <div>
               <img src={solorio} className="solorio-logo" alt="solorio logo" />
             </div>
-          <div>
+            <div>
               <img
                 src={westinghouse}
                 className="westinghouse-logo"
