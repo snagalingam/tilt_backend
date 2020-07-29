@@ -81,42 +81,56 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
+        last_name = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
         sat_score = graphene.Int()
+        efc = graphene.Int()
         terms_and_conditions = graphene.Boolean()
         pronouns = graphene.String()
         ethnicity = graphene.String()
         user_type = graphene.String()
-        highschool_graduation_year = graphene.Int()
+        high_school_grad_year = graphene.Int()
+        income_quintile = graphene.String()
+        found_from = graphene.String()
 
     def mutate(
         self,
         info,
         id,
+        last_name=None,
+        preferred_name=None,
         gpa=None,
         act_score=None,
         sat_score=None,
+        efc=None,
         terms_and_conditions=None,
         pronouns=None,
         ethnicity=None,
         user_type=None,
-        highschool_graduation_year=None
+        high_school_grad_year=None,
+        income_quintile=None,
+        found_from=None
     ):
         user = get_user_model().objects.get(pk=id)
 
         if user is not None:
+            user.last_name = last_name
+            user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
             user.sat_score = sat_score
-            terms_and_conditions = terms_and_conditions
-            pronouns = pronouns
-            ethnicity = ethnicity
-            user_type = user_type
-            highschool_graduation_year = highschool_graduation_year
+            user.efc = efc
+            user.terms_and_conditions = terms_and_conditions
+            user.pronouns = pronouns
+            user.ethnicity = ethnicity
+            user.user_type = user_type
+            user.high_school_grad_year = high_school_grad_year
+            user.income_quintile = income_quintile
+            user.found_from = found_from
             user.save()
-            return user
+            return OnboardUser(user=user)
         else:
             raise Exception("User is not logged in")
 
