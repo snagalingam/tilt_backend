@@ -1,0 +1,11 @@
+.tilt-accordion {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgb(201, 201, 201);
+  .MuiAccordionSummary-root {
+    padding: 0;
+  }
+  &::before {
+    display: none;
+  }
+}
