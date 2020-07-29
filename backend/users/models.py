@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import (
     AbstractBaseUser,
     BaseUserManager,
 )
-# from django import Organization
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
@@ -81,7 +80,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     efc = models.IntegerField(
         _("Expected Family Contribution"), null=True, blank=True)
     terms_and_conditions = models.BooleanField(default=False)
-    # organization = models.ManyToManyField(Organization)
 
     # Pronouns Field
     PRONOUN_CHOICES = [
