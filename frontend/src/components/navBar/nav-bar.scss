@@ -10,7 +10,7 @@
   left: 0;
   right: 0;
   a {
-    color: $home-page-dark;
+    color: $font-color-primary;
     text-decoration: none;
     &:hover {
       color: $tilt-purple;
@@ -33,7 +33,7 @@
       }
     }
     a {
-      color: $home-page-dark;
+      color: $font-color-primary;
     }
   }
   .login-and-get-started {

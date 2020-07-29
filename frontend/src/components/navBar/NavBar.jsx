@@ -35,8 +35,11 @@ const NavBar = () => {
         <Link to="/login" className="tilt-button">
           Login
         </Link>
-        <TiltButton classes={["light"]} onClick={() => history.push("/signup")}>
-          Get Started
+        <TiltButton
+          classes={["purple", "primary"]}
+          onClick={() => history.push("/signup")}
+        >
+          Try Free
         </TiltButton>
       </div>
     </div>

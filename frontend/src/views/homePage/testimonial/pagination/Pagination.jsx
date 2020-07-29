@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./pagination.scss";
 
-const Pagination = ({ total, perPage, next, previous }) => {
+const Pagination = ({ total, perPage, next, previous, barColor }) => {
   const [currentPage, changePage] = useState(1);
   const [pages, setPages] = useState(Math.ceil(total / perPage));
 
@@ -11,6 +11,7 @@ const Pagination = ({ total, perPage, next, previous }) => {
     for (let i = 1; i <= numberOfPages; i++) {
       bars.push(
         <div
+          key={i}
           className={`page-bar${i === currentPage ? " selected" : ""}`}
         ></div>
       );
@@ -49,7 +50,9 @@ const Pagination = ({ total, perPage, next, previous }) => {
           <span>{pages}</span>
         </div>
       </div>
-      <div className="pagination-bar">{createBars(pages)}</div>
+      <div className={`pagination-bar${barColor ? ` ${barColor}` : ""}`}>
+        {createBars(pages)}
+      </div>
       <div className="pagination-buttons">
         <button onClick={handlePrevious} disabled={currentPage === 1}>
           Previous
