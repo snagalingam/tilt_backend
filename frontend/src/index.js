@@ -7,7 +7,6 @@ import { useQuery } from "@apollo/client";
 import Apollo from "./apollo/ApolloProvider/Apollo";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
 import ContactUs from "./components/ContactUs";
-// import HomePage from "./components/HomePage";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ResourcesFAQs from "./components/resources/ResourcesFAQs";
 import ResourcesIntro from "./components/resources/ResourcesIntro";
@@ -63,7 +62,15 @@ const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop>
-        {/* <Route exact path="/" component={HomePage} /> */}
+        <Suspense fallback={<div />}>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/reset-password" component={ResetPassword} />
+          <Route exact path="/signup" component={SignUp} />
+          {/* protected routes */}
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/onboarding" component={Onboarding} />
+        </Suspense>
         <Route exact path="/contact" component={ContactUs} />
         <Route exact path="/privacy-policy" component={PrivacyPolicy} />
         <Route exact path="/terms-of-service" component={TermsOfService} />
@@ -76,15 +83,6 @@ const App = () => {
           component={CreateScholarship}
         />
         <Route exact path="/resources/terminology" component={Terminology} />
-        <Suspense fallback={<div />}>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/reset-password" component={ResetPassword} />
-          <Route exact path="/signup" component={SignUp} />
-          {/* protected routes */}
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/onboarding" component={Onboarding} />
-        </Suspense>
         <Route exact path="/signup-survey" component={SignupSurvey} />
         <Route exact path="/signup-thank-you" component={SignupThankYou} />
         <Route exact path="/sitemap" component={Sitemap} />
