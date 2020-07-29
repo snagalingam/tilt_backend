@@ -74,7 +74,7 @@ const Testimonial = () => {
       <div className="testimonials">
         {toBeDisplayed.map((item) => {
           return (
-            <div className="testimonial">
+            <div key={item.testimonial} className="testimonial">
               <p>{item.testimonial}</p>
               <span>- {item.user}</span>
             </div>

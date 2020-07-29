@@ -11,6 +11,7 @@ const Pagination = ({ total, perPage, next, previous, barColor }) => {
     for (let i = 1; i <= numberOfPages; i++) {
       bars.push(
         <div
+          key={i}
           className={`page-bar${i === currentPage ? " selected" : ""}`}
         ></div>
       );
