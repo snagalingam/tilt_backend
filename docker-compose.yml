@@ -28,7 +28,7 @@ services:
   frontend:
     container_name: frontend
     build: ./frontend
-    command: yarn start
+    command: npm run start
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules

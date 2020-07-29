@@ -5,8 +5,8 @@ FROM node:12.16.1-alpine as build-stage
 WORKDIR /app/frontend
 
 # Install dependencies
-COPY package.json yarn.lock /app/frontend/
-RUN yarn
+COPY package.json package-lock.json /app/frontend/
+RUN npm install
 
 # Add the rest of the code
 COPY . /app/frontend/
