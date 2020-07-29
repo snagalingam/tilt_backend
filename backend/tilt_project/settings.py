@@ -80,8 +80,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tilt_project.wsgi.application'
 
 
-Database
-https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
