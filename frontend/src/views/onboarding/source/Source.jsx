@@ -37,7 +37,7 @@ const Source = ({ previous, next, flows }) => {
   } = flows;
 
   function handlePrevious() {
-  switch (userType) {
+    switch (userType) {
       case K12.value:
         previous(highSchoolFlow);
         break;
@@ -92,7 +92,7 @@ const Source = ({ previous, next, flows }) => {
       copy.push(otherSource);
     }
     selectSources(copy);
-    const updatedOnboardingAnswers = { ...onboardingAnswers, sources: copy };
+    const updatedOnboardingAnswers = { ...onboardingAnswers, foundFrom: copy };
     onboardingAnswersVar(updatedOnboardingAnswers);
     onboardUser({
       variables: { ...updatedOnboardingAnswers, id: meData?.me?.id },

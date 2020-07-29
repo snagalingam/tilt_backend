@@ -25,8 +25,6 @@ const UserType = ({ previous, next, flows }) => {
 
   function handleClick(value) {
     onboardingAnswersVar({ ...onboardingAnswers, userType: value });
-    console.log(value);
-    console.log(K12);
 
     switch (value) {
       case K12.value:

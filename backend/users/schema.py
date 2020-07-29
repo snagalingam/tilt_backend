@@ -93,7 +93,7 @@ class OnboardUser(graphene.Mutation):
         user_type = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
-        found_from = graphene.String()
+        found_from = graphene.List(graphene.String)
 
     def mutate(
         self,
@@ -105,7 +105,7 @@ class OnboardUser(graphene.Mutation):
         act_score=None,
         sat_score=None,
         efc=None,
-        terms_and_conditions=None,
+        terms_and_conditions=False,
         pronouns=None,
         ethnicity=None,
         user_type=None,

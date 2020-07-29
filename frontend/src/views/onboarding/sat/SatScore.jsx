@@ -12,21 +12,25 @@ const SatScore = ({ next, previous }) => {
   const onboardingAnswers = { ...onboardingAnswersVar() };
 
   function handleSubmit(values) {
-    const { sat } = values;
-    onboardingAnswersVar({ ...onboardingAnswers, sat });
+    const { satScore } = values;
+    onboardingAnswersVar({ ...onboardingAnswers, satScore });
     next();
   }
 
   function handlePrevious() {
-    if (onboardingAnswers?.sat) {
-      delete onboardingAnswers.sat;
+    if (onboardingAnswers?.satScore) {
+      delete onboardingAnswers.satScore;
       onboardingAnswersVar(onboardingAnswers);
     }
     previous();
   }
 
   const schema = yup.object().shape({
-    sat: yup.number().min(400).max(1600).required("Please enter a valid score"),
+    satScore: yup
+      .number()
+      .min(400)
+      .max(1600)
+      .required("Please enter a valid score"),
   });
 
   return (
@@ -36,7 +40,7 @@ const SatScore = ({ next, previous }) => {
       previousFunc={handlePrevious}
     >
       <CustomTextInput
-        field="sat"
+        field="satScore"
         handleSubmit={handleSubmit}
         customSchema={schema}
       />
