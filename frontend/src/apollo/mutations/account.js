@@ -35,31 +35,53 @@ export const SIGN_UP = gql`
 export const ONBOARD_USER = gql`
   mutation OnboardUser(
     $id: ID
+    $lastName: String
+    $preferredName: String
     $gpa: Float
     $actScore: Int
     $satScore: Int
+    $efc: Int
     $termsAndConditions: Boolean
     $pronouns: String
     $ethnicity: String
     $userType: String
     $highSchoolGradYear: Int
+    $incomeQuintile: String
+    $foundFrom: String
   ) {
     onboardUser(
       id: $id
+      lastName: $lastName
+      preferredName: $preferredName
       gpa: $gpa
       actScore: $actScore
       satScore: $satScore
+      efc: $efc
       termsAndConditions: $termsAndConditions
       pronouns: $pronouns
       ethnicity: $ethnicity
       userType: $userType
       highSchoolGradYear: $highSchoolGradYear
+      incomeQuintile: $incomeQuintile
+      foundFrom: $foundFrom
     ) {
       user {
         email
         firstName
         lastName
         email
+        preferredName
+        gpa
+        actScore
+        satScore
+        efc
+        termsAndConditions
+        pronouns
+        ethnicity
+        userType
+        highSchoolGradYear
+        incomeQuintile
+        foundFrom
       }
     }
   }
@@ -74,3 +96,19 @@ export const LOGOUT_USER = gql`
     }
   }
 `;
+
+// {
+//   "preferredName": "Anthony",
+//     "id": 5,
+//     "gpa": 4.0,
+//     "actScore": 25,
+//     "satScore": 1550,
+//     "efc": 10000,
+//     "termsAndConditions": true,
+//     "pronouns": "he",
+//     "ethnicity": "asian",
+//     "userType": "student",
+//     "highSchoolGradYear": 2020,
+//     "incomeQuintile": "lo",
+//     "foundFrom": "instagram"
+//   }
