@@ -17,6 +17,7 @@ import SignupSurvey from "./components/signup/SignupSurvey";
 import SignupThankYou from "./components/signup/SignupThankYou";
 import Terminology from "./components/resources/Terminology";
 import TermsOfService from "./components/TermsOfService";
+import Navbar from "./components/navBar/NavBar";
 
 import {
   initializeAOS,
@@ -33,6 +34,7 @@ import "./scss/theme.scss";
 import "cross-fetch/polyfill";
 
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
+const FaqPage = lazy(() => import("./views/faqPage/FaqPage"));
 const HomePage = lazy(() => import("./views/homePage/HomePage"));
 const Login = lazy(() => import("./views/login/Login"));
 const Onboarding = lazy(() => import("./views/onboarding/Onboarding"));
@@ -62,8 +64,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop>
+        <Navbar />
         <Suspense fallback={<div />}>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/faq" component={FaqPage} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/signup" component={SignUp} />
