@@ -25,6 +25,9 @@
     border: none;
     border-radius: 4px;
   }
+  a {
+    text-decoration: none !important;
+  }
 }
 
 .authentication-container {
@@ -42,5 +45,3 @@
     @include flex-center;
   }
 }
-
-
