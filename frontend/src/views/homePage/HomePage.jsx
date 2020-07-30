@@ -35,7 +35,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="home-page-container">
+      <div className="home-page-container view-container">
         <Banner />
 
         <div className="tilt-partners">
