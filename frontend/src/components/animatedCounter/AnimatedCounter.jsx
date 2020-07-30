@@ -18,7 +18,6 @@ const AnimatedCounter = () => {
   const [isAnimated, setIsAnimated] = useState(false);
 
   function handleScroll() {
-    console.log("handling");
     const numbers = document.querySelectorAll(".number");
     if (counterRef?.current && !isAnimated) {
       if (
