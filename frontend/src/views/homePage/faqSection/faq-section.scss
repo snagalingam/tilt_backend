@@ -15,21 +15,16 @@
     > div {
       display: flex;
       > div {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
-        width: 50%;
+        flex: 1;
         &:first-child {
           margin-right: 5rem;
         }
-      }
-      .tilt-accordion {
-        width: 100%;
-        display: inline-block;
-        padding-bottom: 1rem;
-        margin-bottom: 2rem;
-        &:last-child {
-          margin-bottom: 0;
+        .tilt-accordion {
+          padding-bottom: 1rem;
+          margin-bottom: 2rem;
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
     }

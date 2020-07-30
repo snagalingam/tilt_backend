@@ -6,8 +6,19 @@
 :root {
   body {
     font-family: "Inter", sans-serif;
+    font-size: 14px;
+    h1 {
+      font-weight: 600;
+      font-size: 48px;
+    }
+    a {
+      text-decoration: none;
+    }
+    button {
+      border: none;
+      border-radius: 4px;
+    }
   }
-  font-size: 14px;
   h1 {
     font-size: 24px;
     font-weight: 600;
@@ -20,13 +31,6 @@
   }
   p {
     margin: 0;
-  }
-  button {
-    border: none;
-    border-radius: 4px;
-  }
-  a {
-    text-decoration: none !important;
   }
 }
 
