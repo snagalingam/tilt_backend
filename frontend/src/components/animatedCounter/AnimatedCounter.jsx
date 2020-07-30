@@ -23,13 +23,12 @@ const AnimatedCounter = () => {
     if (counterRef?.current && !isAnimated) {
       if (
         counterRef.current.getBoundingClientRect().top <
-        (window.innerHeight * 2) / 3
+        (window.innerHeight * 3) / 4
       ) {
         setIsAnimated((prev) => {
           if (!prev) {
             anime({
               targets: initialState,
-              delay: anime.stagger(100, { start: 500 }),
               "1": 2,
               "2": 6,
               "3": 1,
@@ -39,12 +38,9 @@ const AnimatedCounter = () => {
               "7": 5,
               round: 1,
               easing: "linear",
+              duration: 500,
               update: function () {
-                for (
-                  let i = numbers.length - 1, delay = 0;
-                  i >= 0;
-                  i--, delay += 250
-                ) {
+                for (let i = numbers.length - 1; i >= 0; i--) {
                   numbers[i].innerHTML = initialState[i + 1];
                 }
               },
