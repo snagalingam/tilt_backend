@@ -35,7 +35,6 @@ const HomePage = () => {
 
   return (
     <>
-      <NavBar />
       <div className="home-page-container">
         <Banner />
 
