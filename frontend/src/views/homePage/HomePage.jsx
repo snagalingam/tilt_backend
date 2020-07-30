@@ -9,7 +9,6 @@ import BrushedText from "../../components/brushedText/BrushedText";
 import FaqSection from "./faqSection/FaqSection";
 import Footer from "../../components/footer/Footer";
 import JoinTilt from "./joinTilt/JoinTilt";
-import NavBar from "../../components/navBar/NavBar";
 import Testimonial from "./testimonial/Testimonial";
 import TiltButton from "../../components/tiltButton/TiltButton";
 

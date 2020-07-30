@@ -1,6 +1,6 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, useLocation } from "react-router-dom";
 import { loadReCaptcha } from "react-recaptcha-google";
 import { useQuery } from "@apollo/client";
 
@@ -44,6 +44,9 @@ const SignUp = lazy(() => import("./views/signUp/SignUp"));
 const App = () => {
   const { data, loading, error } = useQuery(GET_ME);
 
+  const location = useLocation();
+  const { pathname } = location;
+
   useEffect(() => {
     if (data) {
       isLoggedInVar(true);
@@ -61,43 +64,45 @@ const App = () => {
     initializeTyped();
   }, []);
 
+  const hideNavbar = ["/onboarding", "/login", "/signup", "/reset-password"];
+
   return (
-    <BrowserRouter>
-      <ScrollToTop>
-        <Navbar />
-        <Suspense fallback={<div />}>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/faq" component={FaqPage} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/reset-password" component={ResetPassword} />
-          <Route exact path="/signup" component={SignUp} />
-          {/* protected routes */}
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/onboarding" component={Onboarding} />
-        </Suspense>
-        <Route exact path="/contact" component={ContactUs} />
-        <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-        <Route exact path="/terms-of-service" component={TermsOfService} />
-        <Route exact path="/resources" component={ResourcesIntro} />
-        <Route exact path="/resources/faqs" component={ResourcesFAQs} />
-        <Route exact path="/resources/scholarships" component={Scholarships} />
-        <Route
-          exact
-          path="/resources/scholarships/create"
-          component={CreateScholarship}
-        />
-        <Route exact path="/resources/terminology" component={Terminology} />
-        <Route exact path="/signup-survey" component={SignupSurvey} />
-        <Route exact path="/signup-thank-you" component={SignupThankYou} />
-        <Route exact path="/sitemap" component={Sitemap} />
-      </ScrollToTop>
-    </BrowserRouter>
+    <ScrollToTop>
+      {hideNavbar.indexOf(pathname) < 0 && <Navbar />}
+      <Suspense fallback={<div />}>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/faq" component={FaqPage} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/reset-password" component={ResetPassword} />
+        <Route exact path="/signup" component={SignUp} />
+        {/* protected routes */}
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/onboarding" component={Onboarding} />
+      </Suspense>
+      <Route exact path="/contact" component={ContactUs} />
+      <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+      <Route exact path="/terms-of-service" component={TermsOfService} />
+      <Route exact path="/resources" component={ResourcesIntro} />
+      <Route exact path="/resources/faqs" component={ResourcesFAQs} />
+      <Route exact path="/resources/scholarships" component={Scholarships} />
+      <Route
+        exact
+        path="/resources/scholarships/create"
+        component={CreateScholarship}
+      />
+      <Route exact path="/resources/terminology" component={Terminology} />
+      <Route exact path="/signup-survey" component={SignupSurvey} />
+      <Route exact path="/signup-thank-you" component={SignupThankYou} />
+      <Route exact path="/sitemap" component={Sitemap} />
+    </ScrollToTop>
   );
 };
 
 ReactDOM.render(
-  <Apollo>
-    <App />
-  </Apollo>,
+  <BrowserRouter>
+    <Apollo>
+      <App />
+    </Apollo>
+  </BrowserRouter>,
   document.querySelector("#root")
 );
