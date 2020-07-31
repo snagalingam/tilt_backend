@@ -6,10 +6,7 @@ import { cache } from "./cache";
 const environment = process.env.NODE_ENV || "development";
 
 const httpLink = createHttpLink({
-  uri:
-    environment === "development"
-      ? "http://localhost:8000/graphql"
-      : "https://tilt-website-staging.herokuapp.com/graphql",
+  uri: "/graphql",
   credentials: "same-origin",
 });
 

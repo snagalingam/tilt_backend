@@ -3,8 +3,9 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
-import BrushedText from "../../components/brushedText/BrushedText";
+import AnimatedCounter from "../../components/animatedCounter/AnimatedCounter";
 import Banner from "../../components/banner/Banner";
+import BrushedText from "../../components/brushedText/BrushedText";
 import FaqSection from "./faqSection/FaqSection";
 import Footer from "../../components/footer/Footer";
 import JoinTilt from "./joinTilt/JoinTilt";
@@ -164,9 +165,16 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="tilt-couple" style={{ marginTop: "10rem" }}>
+        <div
+          className="tilt-couple tilt-financial-aid"
+          style={{ marginTop: "10rem" }}
+        >
           <div className="text">
             <h2>Financial aid for students</h2>
+          </div>
+          <div className="image">
+            <AnimatedCounter />
+            <p>Last year, we helped students get financial aid.</p>
           </div>
         </div>
 

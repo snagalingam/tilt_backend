@@ -1,0 +1,28 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.animated-counter {
+  display: flex;
+  background: $tilt-light-purple;
+  padding: 0.5rem;
+  border-radius: 10px;
+  width: max-content;
+  div {
+    @include flex-center;
+    @include no-select;
+    font-size: 40px;
+    font-weight: 500;
+    color: darken($tilt-light-purple, 10%);
+    margin: 0.5rem;
+    vertical-align: bottom;
+    padding: 0.5rem 0;
+  }
+  .number {
+    border-radius: 4px;
+    background: white;
+    color: $font-color-primary;
+    padding: 0.5rem 1rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+    width: 55px;
+  }
+}
