@@ -72,12 +72,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     gpa = models.DecimalField(
         _("GPA"), max_digits=4, decimal_places=2, null=True, blank=True
     )
-    act_score = models.PositiveSmallIntegerField(
-        _("ACT score"), null=True, blank=True)
-    sat_score = models.PositiveSmallIntegerField(
-        _("SAT score"), null=True, blank=True)
-    efc = models.IntegerField(
-        _("Expected Family Contribution"), null=True, blank=True)
+    act_score = models.PositiveSmallIntegerField(_("ACT score"), null=True, blank=True)
+    sat_score = models.PositiveSmallIntegerField(_("SAT score"), null=True, blank=True)
+    efc = models.IntegerField(_("Expected Family Contribution"), null=True, blank=True)
     terms_and_conditions = models.BooleanField(default=False)
 
     # Pronouns Field
@@ -100,8 +97,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ("asian", "Asian"),
         ("black and african", "Black/African"),
         ("hispanic and latinx", "Hispanic/Latinx"),
-        ("native hawaiian and pacific islander",
-         "Native Hawaiian/Pacific Islander"),
+        ("native hawaiian and pacific islander", "Native Hawaiian/Pacific Islander"),
         ("white", "White"),
         ("other", "Other"),
     ]
@@ -131,12 +127,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
 
     user_type = models.CharField(
-        _("user type"), max_length=10, choices=USER_TYPE_CHOICES
+        _("user type"), max_length=10, choices=USER_TYPE_CHOICES, null=True
     )
 
-    high_school_grad_year = models.CharField(
+    highschool_graduation_year = models.CharField(
         _("high school graduation year"),
-        max_length=4
+        max_length=4,
+        null=True,
+        blank=False
     )
 
     # UI Value                 | Database Value
@@ -157,7 +155,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=2, choices=INCOME_QUINTILE_CHOICES, null=True, blank=True
+        _("income quintile"), max_length=2, choices=INCOME_QUINTILE_CHOICES, null=True
     )
 
     # UI Value                 | Database Value
