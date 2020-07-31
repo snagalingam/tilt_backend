@@ -1,0 +1,26 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.tilt-faq {
+  display: flex;
+  flex-direction: column;
+  h2 {
+    margin-bottom: 5rem;
+  }
+  > div {
+    display: flex;
+    > div {
+      flex: 1;
+      &:first-child {
+        margin-right: 5rem;
+      }
+      .tilt-accordion {
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
