@@ -37,7 +37,9 @@ const Testimonial = () => {
         {toBeDisplayed.map((item) => {
           const stars = [];
           for (let i = 0; i < item.rating; i++) {
-            stars.push(<StarIcon className="star" />);
+            stars.push(
+              <StarIcon key={`${item.testimonial}-${item.rating}-${i}`} className="star" />
+            );
           }
           return (
             <div key={item.testimonial} className="testimonial">

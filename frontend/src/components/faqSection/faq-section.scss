@@ -1,26 +1,27 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.tilt-faq {
+.FaqSection {
   display: flex;
   flex-direction: column;
   h2 {
     margin-bottom: 5rem;
   }
-  > div {
+  .FaqSection_columns {
     display: flex;
-    > div {
+    .FaqSection_column-1,
+    .FaqSection_column-2 {
       flex: 1;
-      &:first-child {
-        margin-right: 5rem;
-      }
-      .tilt-accordion {
+      .TiltAccordion {
         padding-bottom: 1rem;
         margin-bottom: 2rem;
         &:last-child {
           margin-bottom: 0;
         }
       }
+    }
+    .FaqSection_column-1 {
+      margin-right: 5rem;
     }
   }
 }

@@ -1,12 +1,13 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.tilt-accordion {
+.TiltAccordion {
   background: transparent !important;
   box-shadow: none !important;
   border-bottom: 1px solid rgb(201, 201, 201);
   .MuiAccordionSummary-root {
     padding: 0;
+    height: 60px;
   }
   .MuiAccordionSummary-content {
     display: grid;
