@@ -7,10 +7,6 @@
   body {
     font-family: "Inter", sans-serif;
     font-size: 14px;
-    h1 {
-      font-weight: 600;
-      font-size: 48px;
-    }
     a {
       text-decoration: none;
     }
@@ -19,6 +15,41 @@
       border-radius: 4px;
     }
   }
+
+  .view-container {
+    min-height: 100vh;
+    padding: 10rem 10rem 5rem 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1 {
+      font-weight: 600;
+      font-size: 48px;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 600;
+    }
+    h3 {
+      font-size: 22px;
+      font-weight: 500;
+    }
+    p {
+      font-size: 16px;
+      margin: 0;
+    }
+    > div {
+      width: 100%;
+      max-width: 1400px;
+    }
+  }
+}
+
+.authentication-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background: $light-gray;
   h1 {
     font-size: 24px;
     font-weight: 600;
@@ -32,24 +63,6 @@
   p {
     margin: 0;
   }
-  .view-container {
-    min-height: 100vh;
-    padding: 10rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    > div {
-      width: 100%;
-      max-width: 1400px;
-    }
-  }
-}
-
-.authentication-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  background: $light-gray;
   .authentication-left {
     width: 30%;
     background: $gray;

@@ -11,7 +11,7 @@ function FaqPage() {
   return (
     <div className="faq-page-container view-container">
       <div>
-        <h1>How Can We Help You?</h1>
+        <h2>How Can We Help You?</h2>
       </div>
       <div className="faq-search">
         <input placeholder="Search for questions" />
