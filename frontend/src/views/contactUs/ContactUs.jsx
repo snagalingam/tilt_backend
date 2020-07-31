@@ -1,6 +1,6 @@
 import React from "react";
 
-import FaqSection from "../homePage/faqSection/FaqSection";
+import FaqSection from "../../components/faqSection/FaqSection";
 import Footer from "../../components/footer/Footer";
 
 import "./contact-us.scss";
