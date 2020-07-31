@@ -36,11 +36,9 @@ const NavBar = () => {
         <ul>
           {links.map((link) => {
             const selected = pathname === link.pathname;
+            const classList = selected ? "selected" : "";
             return (
-              <li
-                key={link.pathname}
-                className={`${selected ? "selected" : ""}`}
-              >
+              <li key={link.pathname} className={classList}>
                 <Link to={link.pathname}>{link.display}</Link>
                 <div className="underline" />
               </li>
