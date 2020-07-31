@@ -22,9 +22,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: linear-gradient(
+      180deg,
+      #f2f7ff 0%,
+      #ffffff 10.07%,
+      #ffffff 37.21%,
+      #ffffff 63.69%,
+      #ffffff 91.34%,
+      #f3f7ff 100%
+    );
     h1 {
       font-weight: 600;
       font-size: 48px;
+      line-height: 130%;
     }
     h2 {
       font-size: 36px;
@@ -35,8 +45,9 @@
       font-weight: 500;
     }
     p {
-      font-size: 16px;
+      font-size: 18px;
       margin: 0;
+      line-height: 150%;
     }
     > div {
       width: 100%;

@@ -25,7 +25,6 @@ const NavBar = () => {
   const history = useHistory();
   const location = useLocation();
   const { pathname } = location;
-  console.log(pathname);
 
   return (
     <div className="tilt-nav-bar">

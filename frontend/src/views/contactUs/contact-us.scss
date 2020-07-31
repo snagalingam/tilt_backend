@@ -6,6 +6,9 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 10rem;
+    p {
+      font-size: 16px;
+    }
     .left,
     .right {
       width: 45%;
@@ -40,6 +43,11 @@
             color: $tilt-purple;
           }
         }
+      }
+    }
+    .right {
+      > p {
+        margin-bottom: 4rem;
       }
     }
   }
