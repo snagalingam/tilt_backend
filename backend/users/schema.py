@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 
+from .sendgrid import *
+
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -68,6 +70,9 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+
+        # send email verification after signup
+        send_verification(user.email, user.first_name)
 
         # login user after signup
         user = authenticate(username=email, password=password)

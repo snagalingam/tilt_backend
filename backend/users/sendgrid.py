@@ -1,4 +1,5 @@
 import os
+import jwt
 import json
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
