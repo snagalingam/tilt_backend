@@ -1,0 +1,45 @@
+.ContactUsForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  input,
+  textarea {
+    border: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 1rem;
+    height: 40px;
+    width: 100%;
+    &:focus {
+      border: none;
+    }
+  }
+  textarea {
+    height: 120px;
+  }
+  .ContactUsForm__name-fields {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    fieldset {
+      &:first-child {
+        margin-right: 2rem;
+      }
+    }
+  }
+  button {
+    margin-top: 2rem;
+    width: 175px;
+  }
+}

@@ -3,6 +3,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import HeadsetIcon from "@material-ui/icons/Headset";
 
 import BrushedText from "../../components/brushedText/BrushedText";
+import ContactUsForm from "./contactUsForm/ContactUsForm";
 import FaqSection from "../../components/faqSection/FaqSection";
 import Footer from "../../components/footer/Footer";
 
@@ -58,6 +59,7 @@ function ContactUs() {
             or drop us a message to{" "}
             <a href="mailto: hello@tilt.com">hello@tilt.com</a>
           </p>
+          <ContactUsForm />
         </div>
       </div>
       <FaqSection />
