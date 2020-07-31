@@ -6,7 +6,6 @@ import { useQuery } from "@apollo/client";
 
 import Apollo from "./apollo/ApolloProvider/Apollo";
 import CreateScholarship from "./components/resources/scholarships/CreateScholarship";
-import ContactUs from "./components/ContactUs";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ResourcesFAQs from "./components/resources/ResourcesFAQs";
 import ResourcesIntro from "./components/resources/ResourcesIntro";
@@ -33,6 +32,7 @@ import "./fonts/Feather/feather.css";
 import "./scss/theme.scss";
 import "cross-fetch/polyfill";
 
+const ContactUs = lazy(() => import("./views/contactUs/ContactUs"));
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
 const FaqPage = lazy(() => import("./views/faqPage/FaqPage"));
 const HomePage = lazy(() => import("./views/homePage/HomePage"));
@@ -71,6 +71,7 @@ const App = () => {
       {hideNavbar.indexOf(pathname) < 0 && <Navbar />}
       <Suspense fallback={<div />}>
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/contacts" component={ContactUs} />
         <Route exact path="/faq" component={FaqPage} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/reset-password" component={ResetPassword} />
@@ -79,7 +80,6 @@ const App = () => {
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/onboarding" component={Onboarding} />
       </Suspense>
-      <Route exact path="/contact" component={ContactUs} />
       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
       <Route exact path="/terms-of-service" component={TermsOfService} />
       <Route exact path="/resources" component={ResourcesIntro} />
