@@ -1,0 +1,87 @@
+@import "../../scss/mixins";
+@import "../../scss/variables";
+
+.FaqPage {
+  .FaqPage__header {
+    h2 {
+      margin-bottom: 2rem;
+    }
+  }
+  p {
+    font-size: 16px;
+  }
+  .FaqPage__search {
+    margin-bottom: 5rem;
+    height: 55px;
+    display: flex;
+    input {
+      border-top: 1px solid #eaeaec;
+      border-bottom: 1px solid #eaeaec;
+      border-left: 1px solid #eaeaec;
+      border-right: none;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      height: 55px;
+      width: 50%;
+      padding: 0 1rem;
+      &:focus {
+        outline: none;
+      }
+      &::placeholder {
+        color: $gray;
+      }
+    }
+    div {
+      height: 100%;
+      @include flex-center;
+      width: 50px;
+      border-top: 1px solid #eaeaec;
+      border-right: 1px solid #eaeaec;
+      border-bottom: 1px solid #eaeaec;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      .search-icon {
+        color: $gray;
+        cursor: pointer;
+        &:hover {
+          color: darken($gray, 10%);
+        }
+      }
+    }
+  }
+  .FaqPage__slide {
+    display: grid;
+    grid-template-columns: repeat(2, 100%);
+    margin-bottom: 10rem;
+  }
+  .FaqPage__search-results {
+    width: 100%;
+  }
+  .FaqPage__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 2rem;
+    row-gap: 2rem;
+    margin-bottom: 5rem;
+    .FaqCard {
+      width: 100%;
+      margin-right: 3rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  .FaqPage__faq-section {
+    .FaqSection {
+      margin-bottom: 15rem;
+    }
+  }
+  .FaqPage_footer {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    .Footer {
+      flex: 1;
+    }
+  }
+}

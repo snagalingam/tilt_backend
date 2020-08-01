@@ -1,0 +1,57 @@
+@import "../../scss/mixins";
+@import "../../scss/variables";
+
+.ContactUs {
+  .ContactUs__contacts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10rem;
+    p {
+      font-size: 16px;
+    }
+    .left,
+    .right {
+      width: 45%;
+    }
+    .left {
+      > h2 {
+        margin-bottom: 2rem;
+      }
+      > p {
+        margin-bottom: 4rem;
+      }
+      .ContactUs__contact-information {
+        display: flex;
+        justify-content: space-between;
+        div {
+          width: 45%;
+        }
+        .ContactUs__contact-information-address {
+          display: flex;
+          flex-direction: column;
+        }
+        .ContactUs__contact-information-number {
+        }
+        .ContactUs__contact-information-icon {
+          @include flex-center;
+          background: $tilt-light-purple;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          margin-bottom: 2rem;
+          svg {
+            color: $tilt-purple;
+          }
+        }
+      }
+    }
+    .right {
+      > p {
+        margin-bottom: 4rem;
+      }
+    }
+  }
+  .FaqSection {
+    margin-bottom: 10rem;
+  }
+}

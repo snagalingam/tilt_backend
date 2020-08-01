@@ -1,40 +1,24 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.home-page-container {
-  background: linear-gradient(
-    180deg,
-    #f2f7ff 0%,
-    #ffffff 10.07%,
-    #ffffff 37.21%,
-    #ffffff 63.69%,
-    #ffffff 91.34%,
-    #f3f7ff 100%
-  );
-  color: $font-color-primary;
-  padding: 10rem;
-  > div {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .tilt-nav-bar {
+.HomePage {
+  .NavBar {
     left: -5rem;
     right: -5rem;
   }
-  .tilt-banner {
+  .Banner {
     margin-top: 2.5rem;
   }
-  .tilt-partners {
+  .HomePage__partners {
     margin-top: 15rem;
-    .tilt-partners-header {
+    .HomePage__partners-header {
       width: 50%;
       margin-bottom: 5rem;
       h2 {
         margin-bottom: 2rem;
       }
     }
-    .client-logos {
+    .HomePage__partners-client-logos {
       display: flex;
       justify-content: space-between;
       img {
@@ -52,9 +36,9 @@
       }
     }
   }
-  .tilt-join {
+  .JoinTilt {
     margin-top: 15rem;
-    .tilt-join-header {
+    .JoinTilt__header {
       margin-bottom: 5rem;
     }
   }
@@ -67,32 +51,14 @@
       }
     }
   }
-  .tilt-testimonial {
+  .TiltTestimonial {
     margin-top: 15rem;
   }
-  .tilt-faq {
+  .FaqSection {
     margin-top: 15rem;
-    margin-left: -10rem;
-    margin-right: -10rem;
-    width: inherit !important;
-    max-width: inherit !important;
   }
-  h1 {
-    font-weight: 600;
-    font-size: 48px;
-  }
-  h2 {
-    font-size: 36px;
-    font-weight: 600;
-  }
-  h3 {
-    font-size: 22px;
-    font-weight: 500;
-  }
-  p {
-    font-size: 16px;
-  }
-  .tilt-footer {
+
+  .Footer {
     margin-top: 10rem;
   }
   a {
@@ -189,6 +155,18 @@
     .features {
       display: flex;
       justify-content: space-between;
+    }
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .HomePage {
+    .tilt-financial-aid {
+      flex-direction: column;
+      .text,
+      .image {
+        width: 100%;
+      }
     }
   }
 }

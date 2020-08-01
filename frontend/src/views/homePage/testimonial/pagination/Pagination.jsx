@@ -4,7 +4,7 @@ import "./pagination.scss";
 
 const Pagination = ({ total, perPage, next, previous, barColor }) => {
   const [currentPage, changePage] = useState(1);
-  const [pages, setPages] = useState(Math.ceil(total / perPage));
+  const [pages] = useState(Math.ceil(total / perPage));
 
   function createBars(numberOfPages) {
     const bars = [];
@@ -42,8 +42,8 @@ const Pagination = ({ total, perPage, next, previous, barColor }) => {
   }, [pages]);
 
   return (
-    <div className="tilt-pagination-container">
-      <div className="pagination-pages">
+    <div className="Pagination">
+      <div className="Pagination__pages">
         <div>
           <span>{currentPage}</span>
           <span>/</span>
@@ -53,7 +53,7 @@ const Pagination = ({ total, perPage, next, previous, barColor }) => {
       <div className={`pagination-bar${barColor ? ` ${barColor}` : ""}`}>
         {createBars(pages)}
       </div>
-      <div className="pagination-buttons">
+      <div className="Pagination__buttons">
         <button onClick={handlePrevious} disabled={currentPage === 1}>
           Previous
         </button>

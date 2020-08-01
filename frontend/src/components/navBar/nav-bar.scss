@@ -1,7 +1,7 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.tilt-nav-bar {
+.NavBar {
   padding: 2rem;
   display: grid;
   grid-template-columns: 275px 1fr 275px;
@@ -9,6 +9,7 @@
   top: 0;
   left: 0;
   right: 0;
+
   a {
     color: $font-color-primary;
     text-decoration: none;
@@ -30,13 +31,35 @@
       li {
         display: inline-block;
         text-align: center;
+        margin: 0 2rem;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        position: relative;
+        .underline {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: $tilt-purple;
+          border-radius: 100px;
+          margin: 1rem 2px 0 2px;
+          opacity: 0;
+        }
+        &.selected {
+          .underline {
+            opacity: 1;
+          }
+          a {
+            color: $tilt-purple;
+          }
+        }
       }
     }
     a {
       color: $font-color-primary;
     }
   }
-  .login-and-get-started {
+  .NavBar__buttons {
     @include flex-center;
     justify-content: flex-end;
   }

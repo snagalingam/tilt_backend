@@ -20,10 +20,12 @@ const Login = () => {
     <div className="authentication-container login-container">
       <div className="authentication-left">
         <div className="tilt-logo">
-          <img
-            src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"
-            alt="tilt-logo"
-          ></img>
+          <a href="/">
+            <img
+              src="https://www.tiltaccess.com/static/media/tilt_logo.e727179e.png"
+              alt="tilt-logo"
+            />
+          </a>
         </div>
 
         <SideCarousel />
