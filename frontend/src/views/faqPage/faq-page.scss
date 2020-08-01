@@ -49,10 +49,18 @@
       }
     }
   }
+  .FaqPage__slide {
+    display: grid;
+    grid-template-columns: repeat(2, 100%);
+    margin-bottom: 10rem;
+  }
+  .FaqPage__search-results {
+    width: 100%;
+  }
   .FaqPage__cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 5rem;
+    column-gap: 2rem;
     row-gap: 2rem;
     margin-bottom: 5rem;
     .FaqCard {
@@ -63,8 +71,10 @@
       }
     }
   }
-  .FaqSection {
-    margin-bottom: 10rem;
+  .FaqPage__faq-section {
+    .FaqSection {
+      margin-bottom: 15rem;
+    }
   }
   .FaqPage_footer {
     flex: 1;
