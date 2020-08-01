@@ -50,13 +50,14 @@
     }
   }
   .FaqPage__cards {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 5rem;
+    row-gap: 2rem;
     margin-bottom: 5rem;
-    .faq-card {
+    .FaqCard {
+      width: 100%;
       margin-right: 3rem;
-      flex: 1;
       &:last-child {
         margin-right: 0;
       }
