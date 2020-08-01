@@ -24,7 +24,7 @@ const TiltAccordion = ({ preview, content }) => {
 
   return (
     <Accordion
-      className="tilt-accordion"
+      className="TiltAccordion"
       square={true}
       expanded={isExpanded}
       onChange={() => setIsExpanded(!isExpanded)}

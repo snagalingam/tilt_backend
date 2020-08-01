@@ -22,7 +22,7 @@ const AnimatedCounter = () => {
     if (counterRef?.current && !isAnimated) {
       if (
         counterRef.current.getBoundingClientRect().top <
-        (window.innerHeight * 3) / 4
+        window.innerHeight / 2
       ) {
         setIsAnimated((prev) => {
           if (!prev) {
@@ -62,7 +62,7 @@ const AnimatedCounter = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [counterRef?.current, isAnimated]);
+  }, [counterRef, isAnimated]);
 
   return (
     <div className="animated-counter" ref={counterRef}>

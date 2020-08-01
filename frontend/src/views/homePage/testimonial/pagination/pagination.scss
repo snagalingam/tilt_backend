@@ -1,14 +1,14 @@
 @import "../../../../scss/mixins";
 @import "../../../../scss/variables";
 
-.tilt-pagination-container {
+.Pagination {
   width: 100%;
   display: grid;
   min-height: 50px;
   grid-template-columns: 250px 1fr 250px;
   font-size: 16px;
   color: #302d3d;
-  .pagination-pages {
+  .Pagination__pages {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -48,7 +48,7 @@
       }
     }
   }
-  .pagination-buttons {
+  .Pagination__buttons {
     display: flex;
     justify-content: flex-end;
     align-items: center;

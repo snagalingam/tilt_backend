@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 
 import CustomSource from "./CustomSource";

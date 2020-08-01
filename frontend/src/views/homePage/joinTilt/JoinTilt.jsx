@@ -27,11 +27,11 @@ const cardOne = (
 const cardTwo = (
   <div className="card-two">
     <div>
-      <img src={gwIcon} />
+      <img src={gwIcon} alt="George Westinghouse logo" />
       <p>George Westinghouse College Prep</p>
     </div>
     <div>
-      <img src={esIcon} />
+      <img src={esIcon} alt="Eric Solorio logo" />
       <p>Eric Solorio High School</p>
     </div>
   </div>
@@ -40,7 +40,7 @@ const cardTwo = (
 const cardThree = (
   <div className="card-three">
     <div className="card-three-message">
-      <img src={sin} />
+      <img src={sin} alt="Sinthuja" />
       <div>
         <p>Congratulations!</p>
         <p>Your application has been approved.</p>
@@ -55,13 +55,13 @@ const cardThree = (
 
 const JoinTilt = () => {
   return (
-    <div className="tilt-join">
-      <div className="tilt-join-header">
+    <div className="JoinTilt">
+      <div className="JoinTilt__header">
         <h2>
           Join the <BrushedText text="Tilt" /> community
         </h2>
       </div>
-      <div className="community-cards">
+      <div className="JoinTilt__community-cards">
         <CommunityCard
           step="1"
           stepColor="purple"

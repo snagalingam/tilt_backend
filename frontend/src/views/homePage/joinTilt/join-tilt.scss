@@ -1,11 +1,11 @@
 @import "../../../scss/variables";
 
-.tilt-join {
-  .community-cards {
+.JoinTilt {
+  .JoinTilt__community-cards {
     display: flex;
     justify-content: space-between;
   }
-  .community-card {
+  .CommunityCard {
     &:nth-child(2) {
       margin-top: 4rem;
     }
