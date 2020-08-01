@@ -8,15 +8,8 @@ import "./testimonial.scss";
 
 const Testimonial = () => {
   const [currentPage, changePage] = useState(1);
-  const [perPage, changePerPage] = useState(2);
+  const [perPage] = useState(2);
   const [toBeDisplayed, changeToBeDisplayed] = useState([]);
-
-  useEffect(() => {
-    const lastIndex = perPage * currentPage - 1;
-    const startingIndex = lastIndex - (perPage - 1);
-    const itemsToBeDisplayed = testimonials.slice(startingIndex, lastIndex + 1);
-    changeToBeDisplayed(itemsToBeDisplayed);
-  }, [currentPage]);
 
   function handleNext() {
     const totalPaginations = Math.ceil(testimonials.length / perPage);
@@ -30,6 +23,13 @@ const Testimonial = () => {
       changePage((prev) => (prev -= 1));
     }
   }
+
+  useEffect(() => {
+    const lastIndex = perPage * currentPage - 1;
+    const startingIndex = lastIndex - (perPage - 1);
+    const itemsToBeDisplayed = testimonials.slice(startingIndex, lastIndex + 1);
+    changeToBeDisplayed(itemsToBeDisplayed);
+  }, [currentPage, perPage]);
 
   return (
     <div className="TiltTestimonial">

@@ -12,7 +12,7 @@ import tiltLogo from "../../img/tilt_logo.png";
 
 const Footer = () => {
   return (
-    <div className="tilt-footer">
+    <div className="Footer">
       <div className="company-info">
         <img src={tiltLogo} alt="tilt-logo" />
         <div>

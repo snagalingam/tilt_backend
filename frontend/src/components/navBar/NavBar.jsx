@@ -27,7 +27,7 @@ const NavBar = () => {
   const { pathname } = location;
 
   return (
-    <div className="tilt-nav-bar">
+    <div className="NavBar">
       <Link to="/">
         <img src={tiltLogo} alt="tilt logo" />
       </Link>
@@ -45,8 +45,8 @@ const NavBar = () => {
           })}
         </ul>
       </nav>
-      <div className="login-and-get-started">
-        <Link to="/login" className="tilt-button">
+      <div className="NavBar__buttons">
+        <Link to="/login" className="TiltButton">
           Login
         </Link>
         <TiltButton

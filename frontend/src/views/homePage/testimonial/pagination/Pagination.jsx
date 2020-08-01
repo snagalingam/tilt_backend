@@ -4,7 +4,7 @@ import "./pagination.scss";
 
 const Pagination = ({ total, perPage, next, previous, barColor }) => {
   const [currentPage, changePage] = useState(1);
-  const [pages, setPages] = useState(Math.ceil(total / perPage));
+  const [pages] = useState(Math.ceil(total / perPage));
 
   function createBars(numberOfPages) {
     const bars = [];

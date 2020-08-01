@@ -3,8 +3,6 @@ import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
 
 import { cache } from "./cache";
 
-const environment = process.env.NODE_ENV || "development";
-
 const httpLink = createHttpLink({
   uri: "/graphql",
   credentials: "same-origin",
