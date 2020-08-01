@@ -37,23 +37,22 @@ function FaqPage() {
 
   const faqCardsRef = useRef(null);
   const searchResultsRef = useRef(null);
-  useEffect(() => {
+  const handleAnimation = (zeroDuration) => {
     if (searchResultsRef.current && faqCardsRef.current) {
       if (searchString) {
-        console.log(searchResultsRef.current);
         anime({
           targets: searchResultsRef.current,
           translateX: -searchResultsRef.current.clientWidth,
           opacity: 1,
           easing: "linear",
-          duration: 300,
+          duration: zeroDuration ? 0 : 300,
         });
         anime({
           targets: faqCardsRef.current,
           translateX: -searchResultsRef.current.clientWidth,
           opacity: 0,
           easing: "linear",
-          duration: 300,
+          duration: zeroDuration ? 0 : 300,
         });
       } else {
         anime({
@@ -61,18 +60,33 @@ function FaqPage() {
           translateX: 0,
           opacity: 0,
           easing: "linear",
-          duration: 300,
+          duration: zeroDuration ? 0 : 300,
         });
         anime({
           targets: faqCardsRef.current,
           translateX: 0,
           opacity: 1,
           easing: "linear",
-          duration: 300,
+          duration: zeroDuration ? 0 : 300,
         });
       }
     }
+  };
+
+  const handleResize = () => {
+    handleAnimation(true);
+  };
+
+  useEffect(() => {
+    handleAnimation();
   }, [searchResults]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   return (
     <div className="FaqPage view-container">
