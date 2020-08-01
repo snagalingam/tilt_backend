@@ -1,12 +1,12 @@
 @import "../../scss/variables";
 
-.stroke {
+.BrushedText {
   z-index: 0;
   position: relative;
   display: inline-block;
   width: max-content;
   padding: 0 1rem;
-  .stroke-text {
+  .BrushedText__text {
     display: inline-block;
     position: relative;
     color: $tilt-purple;

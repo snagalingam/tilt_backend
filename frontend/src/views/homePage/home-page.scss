@@ -1,7 +1,7 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.home-page-container {
+.HomePage {
   .tilt-nav-bar {
     left: -5rem;
     right: -5rem;
@@ -9,16 +9,16 @@
   .tilt-banner {
     margin-top: 2.5rem;
   }
-  .tilt-partners {
+  .HomePage__partners {
     margin-top: 15rem;
-    .tilt-partners-header {
+    .HomePage__partners-header {
       width: 50%;
       margin-bottom: 5rem;
       h2 {
         margin-bottom: 2rem;
       }
     }
-    .client-logos {
+    .HomePage__partners-client-logos {
       display: flex;
       justify-content: space-between;
       img {
@@ -36,9 +36,9 @@
       }
     }
   }
-  .tilt-join {
+  .JoinTilt {
     margin-top: 15rem;
-    .tilt-join-header {
+    .JoinTilt__header {
       margin-bottom: 5rem;
     }
   }
@@ -51,7 +51,7 @@
       }
     }
   }
-  .tilt-testimonial {
+  .TiltTestimonial {
     margin-top: 15rem;
   }
   .FaqSection {
@@ -160,7 +160,7 @@
 }
 
 @media only screen and (max-width: 1400px) {
-  .home-page-container {
+  .HomePage {
     .tilt-financial-aid {
       flex-direction: column;
       .text,

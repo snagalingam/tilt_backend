@@ -33,18 +33,18 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="home-page-container view-container">
+    <div className="HomePage view-container">
       <Banner />
 
-      <div className="tilt-partners">
-        <div className="tilt-partners-header">
+      <div className="HomePage__partners">
+        <div className="HomePage__partners-header">
           <h2>Our Partners</h2>
           <p>
             Not only do we support students directly, we also partner with high
             schools and community organizations to help their students.
           </p>
         </div>
-        <div className="client-logos">
+        <div className="HomePage__partners-client-logos">
           <div className="butler-logo">
             <img src={butler} alt="butler logo" />
           </div>
