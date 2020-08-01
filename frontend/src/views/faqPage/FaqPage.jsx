@@ -23,10 +23,10 @@ function FaqPage() {
         </div>
       </div>
       <div className="FaqPage__cards">
-        <FaqCard />
-        <FaqCard />
-        <FaqCard />
-        <FaqCard />
+        <FaqCard question="What is financial aid?" />
+        <FaqCard question="How does financial aid work?" />
+        <FaqCard question="Do I qualify for financial aid?" />
+        <FaqCard question="Will this service always be free?" />
       </div>
 
       <FaqSection />
