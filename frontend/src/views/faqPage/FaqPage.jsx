@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import { debounce } from "throttle-debounce";
 import anime from "animejs/lib/anime.es.js";
@@ -10,11 +10,13 @@ import Footer from "../../components/footer/Footer";
 import { faqs } from "../../helper/faqs";
 
 import "./faq-page.scss";
-import { useEffect } from "react";
 
 function FaqPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchString, setSearchString] = useState("");
+
+  const faqCardsRef = useRef(null);
+  const searchResultsRef = useRef(null);
 
   const searchFunction = debounce(500, (target) => {
     const { value } = target;
@@ -35,8 +37,6 @@ function FaqPage() {
     }
   });
 
-  const faqCardsRef = useRef(null);
-  const searchResultsRef = useRef(null);
   const handleAnimation = (zeroDuration) => {
     if (searchResultsRef.current && faqCardsRef.current) {
       if (searchString) {
@@ -86,7 +86,7 @@ function FaqPage() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  });
+  }, []);
 
   return (
     <div className="FaqPage view-container">

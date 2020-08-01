@@ -1,10 +1,10 @@
 @import "../../../../scss/mixins";
 @import "../../../../scss/variables";
 
-.community-card {
+.CommunityCard {
   width: 350px;
   padding: 1rem;
-  .community-image {
+  .CommunityCard__image {
     margin-bottom: 4rem;
     position: relative;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);

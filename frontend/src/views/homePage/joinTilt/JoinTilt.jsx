@@ -55,13 +55,13 @@ const cardThree = (
 
 const JoinTilt = () => {
   return (
-    <div className="tilt-join">
-      <div className="tilt-join-header">
+    <div className="JoinTilt">
+      <div className="JoinTilt__header">
         <h2>
           Join the <BrushedText text="Tilt" /> community
         </h2>
       </div>
-      <div className="community-cards">
+      <div className="JoinTilt__community-cards">
         <CommunityCard
           step="1"
           stepColor="purple"

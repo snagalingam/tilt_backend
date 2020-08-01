@@ -32,13 +32,16 @@ const Testimonial = () => {
   }
 
   return (
-    <div className="tilt-testimonial">
-      <div className="testimonials">
+    <div className="TiltTestimonial">
+      <div className="TiltTestimonial__testimonials">
         {toBeDisplayed.map((item) => {
           const stars = [];
           for (let i = 0; i < item.rating; i++) {
             stars.push(
-              <StarIcon key={`${item.testimonial}-${item.rating}-${i}`} className="star" />
+              <StarIcon
+                key={`${item.testimonial}-${item.rating}-${i}`}
+                className="star"
+              />
             );
           }
           return (
@@ -50,7 +53,7 @@ const Testimonial = () => {
           );
         })}
       </div>
-      <div className="pagination">
+      <div className="TiltTestimonial__pagination">
         <Pagination
           total={testimonials.length}
           perPage={perPage}
