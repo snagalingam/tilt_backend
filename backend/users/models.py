@@ -63,6 +63,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
+
+    is_verified = models.BooleanField(default=False)
     first_name = models.CharField(_("first name"), max_length=50)
     last_name = models.CharField(
         _("last name"), max_length=150, null=True, blank=True)

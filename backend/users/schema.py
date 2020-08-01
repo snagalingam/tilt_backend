@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 
-from .sendgrid import *
+from .send_emails import *
 
 
 class UserType(DjangoObjectType):
@@ -38,11 +38,14 @@ class LoginUser(graphene.Mutation):
         email = BaseUserManager.normalize_email(email)
         user = authenticate(username=email, password=password)
 
-        if user is not None:
-            login(info.context, user)
-            return LoginUser(user=user, is_authenticated=user.is_authenticated)
+        if user.is_verified: 
+            if user is not None:
+                login(info.context, user)
+                return LoginUser(user=user, is_authenticated=user.is_authenticated)
+            else:
+                raise Exception("Incorrect credentials")
         else:
-            raise Exception("Incorrect credentials")
+            raise Exception("Email is not verifed")
 
 
 class CreateUser(graphene.Mutation):
@@ -71,7 +74,7 @@ class CreateUser(graphene.Mutation):
         user.set_password(password)
         user.save()
 
-        # send email verification after signup
+        # send email verification user after signup
         send_verification(user.email, user.first_name)
 
         # login user after signup
@@ -146,6 +149,39 @@ class LogoutUser(graphene.Mutation):
 
     def mutate(self, info):
         logout(info.context)
+
+
+class VerifyEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    token = graphene.String(required=True)
+    
+    def mutate(self, info, request, token):
+        email = jwt.decode(token, 
+                           os.environ.get('SECRET_KEY'), 
+                           algorithms=['HS256'])["user"]
+
+        user = User.objects.get(email=email)
+
+        if email and not user.is_verified:
+            user.is_verified = True
+            user.save()
+            login(info.context, user)
+            return redirect('https://www.tiltaccess.com/dashboard/')
+
+
+class ResetPassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(self, info, email):
+        email = BaseUserManager.normalize_email(email)
+        user = User.objects.get(email=email)
+        if user: 
+            return send_reset_password(user.email, user.first_name)
+        else:
+            raise Exception("Email not found")
 
 
 class Mutation(graphene.ObjectType):
