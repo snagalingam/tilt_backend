@@ -43,32 +43,32 @@ function FaqPage() {
         console.log(searchResultsRef.current);
         anime({
           targets: searchResultsRef.current,
-          translateX: 0,
+          translateX: -searchResultsRef.current.clientWidth,
           opacity: 1,
           easing: "linear",
-          duration: 250,
+          duration: 300,
         });
         anime({
           targets: faqCardsRef.current,
-          translateX: 0,
+          translateX: -searchResultsRef.current.clientWidth,
           opacity: 0,
           easing: "linear",
-          duration: 250,
+          duration: 300,
         });
       } else {
         anime({
           targets: searchResultsRef.current,
-          translateX: -searchResultsRef.current.clientWidth,
+          translateX: 0,
           opacity: 0,
           easing: "linear",
-          duration: 250,
+          duration: 300,
         });
         anime({
           targets: faqCardsRef.current,
-          translateX: -faqCardsRef.current.clientWidth,
+          translateX: 0,
           opacity: 1,
           easing: "linear",
-          duration: 250,
+          duration: 300,
         });
       }
     }
@@ -89,14 +89,14 @@ function FaqPage() {
         </div>
       </div>
       <div className="FaqPage__slide">
-        <div className="FaqPage__search-results" ref={searchResultsRef}>
-          <FaqSection searchResults={searchResults} />
-        </div>
         <div className="FaqPage__cards" ref={faqCardsRef}>
           <FaqCard question="What is financial aid?" />
           <FaqCard question="How does financial aid work?" />
           <FaqCard question="Do I qualify for financial aid?" />
           <FaqCard question="Will this service always be free?" />
+        </div>
+        <div className="FaqPage__search-results" ref={searchResultsRef}>
+          <FaqSection searchResults={searchResults} />
         </div>
       </div>
 
