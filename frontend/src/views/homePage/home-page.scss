@@ -2,11 +2,11 @@
 @import "../../scss/mixins";
 
 .HomePage {
-  .tilt-nav-bar {
+  .NavBar {
     left: -5rem;
     right: -5rem;
   }
-  .tilt-banner {
+  .Banner {
     margin-top: 2.5rem;
   }
   .HomePage__partners {
@@ -58,7 +58,7 @@
     margin-top: 15rem;
   }
 
-  .tilt-footer {
+  .Footer {
     margin-top: 10rem;
   }
   a {

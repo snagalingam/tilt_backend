@@ -1,5 +1,4 @@
 import React from "react";
-import HelpIcon from "@material-ui/icons/Help";
 
 import "./faq-card.scss";
 

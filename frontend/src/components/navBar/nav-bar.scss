@@ -1,7 +1,7 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.tilt-nav-bar {
+.NavBar {
   padding: 2rem;
   display: grid;
   grid-template-columns: 275px 1fr 275px;
@@ -59,7 +59,7 @@
       color: $font-color-primary;
     }
   }
-  .login-and-get-started {
+  .NavBar__buttons {
     @include flex-center;
     justify-content: flex-end;
   }

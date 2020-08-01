@@ -18,7 +18,7 @@ const Banner = () => {
   }
 
   return (
-    <div className="tilt-banner tilt-couple">
+    <div className="Banner tilt-couple">
       <div className="text">
         <h1>
           Find an affordable <BrushedText text="path" /> to a{" "}

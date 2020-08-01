@@ -62,7 +62,7 @@ const AnimatedCounter = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [counterRef?.current, isAnimated]);
+  }, [counterRef, isAnimated]);
 
   return (
     <div className="animated-counter" ref={counterRef}>

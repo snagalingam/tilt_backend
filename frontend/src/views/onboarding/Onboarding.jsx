@@ -76,8 +76,8 @@ const userTypes = {
 
 const Onboarding = () => {
   const { data: meData, error: meError } = useQuery(GET_ME);
-  const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
-  const { onboardingAnswers } = onboardingData;
+  // const { data: onboardingData } = useQuery(GET_ONBOARDING_ANSWERS);
+  // const { onboardingAnswers } = onboardingData;
 
   const [flowType, setFlowType] = useState(flow);
   const [flowIndex, setFlowIndex] = useState(1);
