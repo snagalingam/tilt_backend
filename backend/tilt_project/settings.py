@@ -18,8 +18,13 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['*']
 
+
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = [
+    "https://next-js-mauve-one.vercel.app/"
+]
 
 # Application definition
 
