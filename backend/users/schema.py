@@ -2,7 +2,7 @@ import graphene
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
-
+from django.shortcuts import redirect
 from .send_emails import *
 
 
@@ -150,24 +150,26 @@ class LogoutUser(graphene.Mutation):
     def mutate(self, info):
         logout(info.context)
 
-
 class VerifyEmail(graphene.Mutation):
     user = graphene.Field(UserType)
-    token = graphene.String(required=True)
+
+    class Arguments:
+        token = graphene.String(required=True)
     
-    def mutate(self, info, request, token):
+    def mutate(self, info, token):
+        domain = os.environ.get('DOMAIN')
         email = jwt.decode(token, 
                            os.environ.get('SECRET_KEY'), 
-                           algorithms=['HS256'])["user"]
+                           algorithms=['HS256'])["email"]
 
-        user = User.objects.get(email=email)
+        user = get_user_model().objects.get(email=email)
+        print(user.is_verified)
 
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
             login(info.context, user)
-            return redirect('https://www.tiltaccess.com/dashboard/')
-
+            return redirect(f"https://{domain}/dashboard/")
 
 class ResetPassword(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -184,8 +186,20 @@ class ResetPassword(graphene.Mutation):
             raise Exception("Email not found")
 
 
+# class SendForgotPassword(graphene.Mutation):
+#     user = graphene.Field(UserType)
+
+#     class Arguments:
+#         email = graphene.String()
+
+#         def mutate(self, info, request, token):
+#             pass
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
+    verify_email = VerifyEmail.Field()
+    reset_password = ResetPassword.Field()

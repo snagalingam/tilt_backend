@@ -16,9 +16,10 @@ def send_verification(email, first_name):
                    to_emails=email)
 
     token = jwt.encode({'email': email,
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=2)}, 
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=5)}, 
                         os.environ.get('SECRET_KEY'),
-                        algorithm='HS256').decode('utf-8')
+                        algorithm='HS256',
+                        headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
 
     url = f"https://www.tiltaccess.com/activate/{token}"
 
@@ -50,7 +51,8 @@ def send_reset_password(email, first_name):
     token = jwt.encode({'email': email,
                         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=900)},
                         os.environ.get('SECRET_KEY'),
-                        algorithm='HS256').decode('utf-8')
+                        algorithm='HS256',
+                        headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
 
     url = f"https://www.tiltaccess.com/forgot-password/{token}"
 
