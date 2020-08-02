@@ -163,13 +163,12 @@ class VerifyEmail(graphene.Mutation):
                            algorithms=['HS256'])["email"]
 
         user = get_user_model().objects.get(email=email)
-        print(user.is_verified)
 
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
             login(info.context, user)
-            return redirect(f"https://{domain}/dashboard/")
+            return redirect(f"{domain}/dashboard/")
 
 class ResetPassword(graphene.Mutation):
     user = graphene.Field(UserType)
