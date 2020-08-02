@@ -66,8 +66,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     is_verified = models.BooleanField(default=False)
     first_name = models.CharField(_("first name"), max_length=50)
-    last_name = models.CharField(
-        _("last name"), max_length=150, null=True, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150)
     preferred_name = models.CharField(
         _("preferred name"), max_length=120, null=True, blank=True
     )
@@ -107,8 +106,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("ethinicity"),
         max_length=40,
         choices=ETHNICITY_CHOICES,
-        default=None,
         null=True,
+        default=None,
     )
 
     # UI Value                 | Database Value
@@ -126,17 +125,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ("parent", "Parent"),
         ("staff", "Staff"),
         ("other", "Other"),
+        ("none", "None"),
     ]
 
     user_type = models.CharField(
-        _("user type"), max_length=10, choices=USER_TYPE_CHOICES, null=True
+        _("user type"), 
+        max_length=10, 
+        choices=USER_TYPE_CHOICES, 
+        null=True, 
+        default=None
     )
 
-    highschool_graduation_year = models.CharField(
+    highschool_graduation_year = models.IntegerField(
         _("high school graduation year"),
         max_length=4,
         null=True,
-        blank=False
+        default=None
     )
 
     # UI Value                 | Database Value
@@ -149,6 +153,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     # income_quintile Field
     INCOME_QUINTILE_CHOICES = [
+        ("none", "None"),
         ("lo", "$0 - $30,000"),
         ("m1", "$30,001 - $48,000"),
         ("m2", "$48,001 - $75,000"),
@@ -157,7 +162,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=2, choices=INCOME_QUINTILE_CHOICES, null=True
+        _("income quintile"), 
+        max_length=4, 
+        choices=INCOME_QUINTILE_CHOICES, 
+        null=True, 
+        default=None
     )
 
     # UI Value                 | Database Value
@@ -182,7 +191,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     found_from = ArrayField(
         models.CharField(
         _("found from"), max_length=25, choices=FOUND_FROM_CHOICES), 
-        default=list
+        default=None
     )
 
     found_from_other_value = models.CharField(
