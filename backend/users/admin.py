@@ -14,7 +14,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (_('Account info'), {'fields': ('email', 'password', 'user_type')}),
         (_('Personal info'), {
-            'fields': ('first_name','last_name', 'preferred_name', 'pronouns', 'verified')
+            'fields': ('first_name','last_name', 'preferred_name', 'pronouns', 'is_verified')
         }),
         (_('Academic info'), {
             'fields': ('highschool_graduation_year', 'gpa', 'act_score', 'sat_score')
