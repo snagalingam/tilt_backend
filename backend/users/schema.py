@@ -160,7 +160,7 @@ class VerifyEmail(graphene.Mutation):
         domain = os.environ.get('DOMAIN')
         email = jwt.decode(token, 
                            os.environ.get('SECRET_KEY'), 
-                           algorithms=['HS256'])["email"]
+                           algorithms=['HS256'])['email']
 
         user = get_user_model().objects.get(email=email)
 
@@ -170,29 +170,49 @@ class VerifyEmail(graphene.Mutation):
             login(info.context, user)
             return redirect(f"{domain}/dashboard/")
 
-class ResetPassword(graphene.Mutation):
+class SendForgotEmail(graphene.Mutation):
     user = graphene.Field(UserType)
+    success = graphene.Boolean()
 
     class Arguments:
         email = graphene.String()
 
     def mutate(self, info, email):
         email = BaseUserManager.normalize_email(email)
-        user = User.objects.get(email=email)
-        if user: 
-            return send_reset_password(user.email, user.first_name)
+        user = get_user_model().objects.get(email=email)
+
+        if user.is_verified: 
+            send_reset_password(user.email, user.first_name)
+            return SendForgotEmail(success=True)
         else:
             raise Exception("Email not found")
 
 
-# class SendForgotPassword(graphene.Mutation):
-#     user = graphene.Field(UserType)
+class ResetPassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
 
-#     class Arguments:
-#         email = graphene.String()
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        password_repeat = graphene.String()
+        token = graphene.String(required=True)
 
-#         def mutate(self, info, request, token):
-#             pass
+    def mutate(self, info, token, email, password, password_repeat):
+        user = get_user_model().objects.get(email=email)
+        domain = os.environ.get('DOMAIN')
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
+
+        if email == user.email and password == password_repeat:
+            user.set_password(password)
+            user.save()
+            return ResetPassword(success=True)
+        elif password != password_repeat:
+            raise Exception("Passwords do not match")
+        else:
+            raise Exception("Password did not reset")
 
 
 class Mutation(graphene.ObjectType):
@@ -201,4 +221,5 @@ class Mutation(graphene.ObjectType):
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
     verify_email = VerifyEmail.Field()
+    send_forgot_email = SendForgotEmail.Field()
     reset_password = ResetPassword.Field()
