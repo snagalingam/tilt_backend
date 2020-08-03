@@ -23,7 +23,12 @@ if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
-    "https://next-js-mauve-one.vercel.app/"
+    "https://tilt-next.vercel.app"
+]
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = None
+CSRF_TRUSTED_ORIGINS = [
+    'https://tilt-next.vercel.app'
 ]
 
 # Application definition
