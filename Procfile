@@ -1,2 +1,2 @@
-release: chmod u+x release.sh && ./release.sh
+release: python manage.py migrate
 web: gunicorn tilt_project.wsgi --log-file -
