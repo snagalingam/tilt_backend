@@ -1,1 +1,0 @@
-web: gunicorn tilt_project.wsgi
