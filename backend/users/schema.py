@@ -168,6 +168,27 @@ class SendForgotEmail(graphene.Mutation):
             raise Exception("Email not found")
 
 
+class VerifyEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        token = graphene.String(required=True)
+
+    def mutate(self, info, token):
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
+
+        user = get_user_model().objects.get(email=email)
+
+        if email and not user.is_verified:
+            user.is_verified = True
+            user.save()
+            login(info.context, user)
+            return VerifyEmail(success=True)
+
+
 class ResetPassword(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
@@ -199,5 +220,6 @@ class Mutation(graphene.ObjectType):
     login_user = LoginUser.Field()
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
+    verify_email = VerifyEmail.Field()
     send_forgot_email = SendForgotEmail.Field()
     reset_password = ResetPassword.Field()
