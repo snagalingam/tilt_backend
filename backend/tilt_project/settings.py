@@ -27,6 +27,9 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = None
+CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     'https://tilt-next.vercel.app'
 ]
@@ -51,21 +54,21 @@ INSTALLED_APPS = [
     'graphene_django',
 
     # local
-    'scholarships.apps.ScholarshipsConfig',
     'users.apps.UsersConfig',
+    'scholarships.apps.ScholarshipsConfig',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'tilt_project.urls'
@@ -107,6 +110,15 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -140,7 +152,7 @@ USE_TZ = True
 
 # authentication
 AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
+    # 'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -150,6 +162,9 @@ SITE_ID = 1
 # graphene
 GRAPHENE = {
     'SCHEMA': 'tilt_project.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
 
 # heroku database
