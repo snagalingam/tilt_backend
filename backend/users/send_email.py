@@ -10,6 +10,8 @@ import datetime
 # -------------- To Verify Email Address
 # Template ID: d-274ce0ccdabc445eb7c488c7c98695e6
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+
 
 def send_verification(email, first_name):
 
@@ -21,8 +23,10 @@ def send_verification(email, first_name):
                        os.environ.get('SECRET_KEY'),
                        algorithm='HS256',
                        headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
-
-    url = f"https://tilt-next.vercel.app/activate/{token}"
+    if ENVIRONMENT == 'development':
+        url = f"http://localhost:3000/activate/{token}"
+    if ENVIRONMENT == 'production':
+        url = f"https://tilt-next.vercel.app/activate/{token}"
 
     message.template_id = 'd-274ce0ccdabc445eb7c488c7c98695e6'
     message.dynamic_template_data = {
@@ -56,7 +60,10 @@ def send_reset_password(email, first_name):
                        algorithm='HS256',
                        headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
 
-    url = f"https://tilt-next.vercel.app/forgot-password/{token}"
+    if ENVIRONMENT == 'development':
+        url = f"http://localhost:3000/forgot-password/{token}"
+    if ENVIRONMENT == 'production':
+        url = f"https://tilt-next.vercel.app/forgot-password/{token}"
 
     message.template_id = 'd-721a69f0688d484db91503c611d87d1c'
     message.dynamic_template_data = {
