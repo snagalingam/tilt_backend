@@ -1,7 +1,11 @@
 import graphene
+import jwt
+import os
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
+from django.shortcuts import redirect
+from .send_email import send_verification, send_reset_password
 
 
 class UserType(DjangoObjectType):
@@ -68,6 +72,9 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+
+        # send email verification user after signup
+        send_verification(user.email, user.first_name)
 
         # login user after signup
         user = authenticate(username=email, password=password)
@@ -143,8 +150,54 @@ class LogoutUser(graphene.Mutation):
         logout(info.context)
 
 
+class SendForgotEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(self, info, email):
+        email = BaseUserManager.normalize_email(email)
+        user = get_user_model().objects.get(email=email)
+
+        if user is not None:
+            send_reset_password(user.email, user.first_name)
+            return SendForgotEmail(success=True)
+        else:
+            raise Exception("Email not found")
+
+
+class ResetPassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        password_repeat = graphene.String()
+        token = graphene.String(required=True)
+
+    def mutate(self, info, token, password, password_repeat):
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
+        user = get_user_model().objects.get(email=email)
+
+        if user is not None and password == password_repeat:
+            user.set_password(password)
+            user.save()
+            return ResetPassword(success=True)
+        elif password != password_repeat:
+            raise Exception("Passwords do not match")
+        else:
+            raise Exception("Password did not reset")
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
+    send_forgot_email = SendForgotEmail.Field()
+    reset_password = ResetPassword.Field()

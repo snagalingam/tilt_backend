@@ -12,7 +12,6 @@ if ENVIRONMENT == 'development':
     urlpatterns = [
         path("teamtilt", admin.site.urls),
         path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
-        re_path(".*", TemplateView.as_view(template_name="index.html"), name='react'),
     ]
 
 if ENVIRONMENT == 'production':
