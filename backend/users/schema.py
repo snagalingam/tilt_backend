@@ -185,8 +185,7 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
-            login(info.context, user)
-            return VerifyEmail(success=True)
+            return VerifyEmail(success=user.is_verified)
 
 
 class ResetPassword(graphene.Mutation):

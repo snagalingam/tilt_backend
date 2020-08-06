@@ -63,6 +63,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
+
+    is_verified = models.BooleanField(default=False)
     first_name = models.CharField(_("first name"), max_length=50)
     last_name = models.CharField(
         _("last name"), max_length=150, null=True, blank=True)
@@ -181,7 +183,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     found_from = ArrayField(
         models.CharField(
-        _("found from"), max_length=25, choices=FOUND_FROM_CHOICES), 
+            _("found from"), max_length=25, choices=FOUND_FROM_CHOICES),
         default=list
     )
 
