@@ -138,7 +138,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     high_school_grad_year = models.CharField(
         _("high school graduation year"),
-        max_length=4
+        max_length=4, null=True, blank=True
     )
 
     # UI Value                 | Database Value

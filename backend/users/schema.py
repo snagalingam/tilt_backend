@@ -24,7 +24,7 @@ class Query(graphene.ObjectType):
         user = info.context.user
         if user.is_anonymous:
             raise Exception('Not logged in!')
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_verified:
             return user
 
 
@@ -41,8 +41,11 @@ class LoginUser(graphene.Mutation):
         user = authenticate(username=email, password=password)
 
         if user is not None:
-            login(info.context, user)
-            return LoginUser(user=user, is_authenticated=user.is_authenticated)
+            if (user.is_verified):
+                login(info.context, user)
+                return LoginUser(user=user, is_authenticated=user.is_authenticated)
+            else:
+                raise Exception("User is not verified")
         else:
             raise Exception("Incorrect credentials")
 
@@ -76,11 +79,10 @@ class CreateUser(graphene.Mutation):
         # send email verification user after signup
         send_verification(user.email, user.first_name)
 
-        # login user after signup
-        user = authenticate(username=email, password=password)
-        login(info.context, user)
-
-        return CreateUser(user=user)
+        if user is not None:
+            return CreateUser(user=user)
+        else:
+            raise Exception("Unable to create user")
 
 
 class OnboardUser(graphene.Mutation):
@@ -148,6 +150,28 @@ class LogoutUser(graphene.Mutation):
 
     def mutate(self, info):
         logout(info.context)
+
+
+class SendVerificationEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        email,
+
+    ):
+        email = BaseUserManager.normalize_email(email)
+        user = get_user_model().objects.get(email=email)
+        if user is not None:
+            send_verification(user.email, user.first_name)
+            return SendVerificationEmail(success=True)
+        else:
+            raise Exception("Email not found")
 
 
 class SendForgotEmail(graphene.Mutation):
@@ -222,3 +246,4 @@ class Mutation(graphene.ObjectType):
     verify_email = VerifyEmail.Field()
     send_forgot_email = SendForgotEmail.Field()
     reset_password = ResetPassword.Field()
+    send_verification_email = SendVerificationEmail.Field()

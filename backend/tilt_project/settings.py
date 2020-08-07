@@ -19,21 +19,6 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 ALLOWED_HOSTS = ['*']
 
 
-if ENVIRONMENT == 'development':
-    CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ORIGIN_WHITELIST = [
-    "https://tilt-next.vercel.app"
-]
-CORS_ALLOW_CREDENTIALS = True
-SESSION_COOKIE_SAMESITE = None
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = None
-CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [
-    'https://tilt-next.vercel.app'
-]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -171,7 +156,19 @@ GRAPHENE = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-
+# security
+SESSION_COOKIE_SAMESITE = None
+CSRF_COOKIE_SAMESITE = None
+CSRF_TRUSTED_ORIGINS = [
+    'https://tilt-next.vercel.app'
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    "https://tilt-next.vercel.app"
+]
+# security for development
+if ENVIRONMENT == 'development':
+    CORS_ORIGIN_ALLOW_ALL = True
 # security for production
 if ENVIRONMENT == 'production':
     CSRF_COOKIE_SECURE = True
