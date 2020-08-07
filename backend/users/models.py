@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def _create_user(self, email, first_name, last_name, password, **extra_fields):
+    def _create_user(self, email, first_name=None, last_name=None, password=None, **extra_fields):
         if not email:
             raise ValueError("Email must be provided")
         email = self.normalize_email(email)
@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, first_name, last_name, password=None, **extra_fields):
+    def create_user(self, email, first_name=None, last_name=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, first_name, last_name, password, **extra_fields)
@@ -65,7 +65,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
-    first_name = models.CharField(_("first name"), max_length=50)
+    first_name = models.CharField(
+        _("first name"), max_length=50, null=True, blank=True)
     last_name = models.CharField(
         _("last name"), max_length=150, null=True, blank=True)
     preferred_name = models.CharField(
