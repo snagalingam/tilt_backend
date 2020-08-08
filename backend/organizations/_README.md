@@ -1,104 +1,91 @@
 
-# Sample API 
+## Google Places API
 
-https://maps.googleapis.com/maps/api/place/nearbysearch/json
-  ?location=-33.8670522,151.1957362
-  &radius=500
-  &types=food
-  &name=harbour
-  &key=YOUR_API_KEY
+# Status Codes
 
+   `OK`
+      indicates that no errors occurred; the place was successfully detected and at least one result was returned.
+   `UNKNOWN_ERROR`
+      indicates a server-side error; trying again may be successful.
+   `ZERO_RESULTS`
+      indicates that the referenced location (place_id) was valid but no longer refers to a valid result. This may occur if the establishment is no longer in business.
+   `OVER_QUERY_LIMIT`
+      indicates any of the following:
+         - You have exceeded the QPS limits.
+         - Billing has not been enabled on your account.
+         - The monthly $200 credit, or a self-imposed usage cap, has been exceeded.
+         - The provided method of payment is no longer valid (for example, a credit card has expired).
+         - ee the Maps FAQ for more information about how to resolve this error.
+   `REQUEST_DENIED`
+      indicates that your request was denied, generally because:
+         - The request is missing an API key.
+         - The key parameter is invalid.
+   `INVALID_REQUEST`
+      generally indicates that the query (place_id) is missing.
+   `NOT_FOUND`
+      indicates that the referenced location (place_id) was not found in the Places database.
 
-# Place Details Responses (JSON)
-{
-   "html_attributions" : [],
-   "result" : {
-      "address_components" : [
-         {
-            "long_name" : "5",
-            "short_name" : "5",
-            "types" : [ "floor" ]
-         },
-         {
-            "long_name" : "48",
-            "short_name" : "48",
-            "types" : [ "street_number" ]
-         },
-         {
-            "long_name" : "Pirrama Road",
-            "short_name" : "Pirrama Rd",
-            "types" : [ "route" ]
-         },
-         {
-            "long_name" : "Pyrmont",
-            "short_name" : "Pyrmont",
-            "types" : [ "locality", "political" ]
-         },
-         {
-            "long_name" : "Council of the City of Sydney",
-            "short_name" : "Sydney",
-            "types" : [ "administrative_area_level_2", "political" ]
-         },
-         {
-            "long_name" : "New South Wales",
-            "short_name" : "NSW",
-            "types" : [ "administrative_area_level_1", "political" ]
-         },
-         {
-            "long_name" : "Australia",
-            "short_name" : "AU",
-            "types" : [ "country", "political" ]
-         },
-         {
-            "long_name" : "2009",
-            "short_name" : "2009",
-            "types" : [ "postal_code" ]
-         }
-      ],
-      "adr_address" : "5, \u003cspan class=\"street-address\"\u003e48 Pirrama Rd\u003c/span\u003e, \u003cspan class=\"locality\"\u003ePyrmont\u003c/span\u003e \u003cspan class=\"region\"\u003eNSW\u003c/span\u003e \u003cspan class=\"postal-code\"\u003e2009\u003c/span\u003e, \u003cspan class=\"country-name\"\u003eAustralia\u003c/span\u003e",
-      "formatted_address" : "5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia",
-      "formatted_phone_number" : "(02) 9374 4000",
-      "geometry" : {
-         "location" : {
-            "lat" : -33.866651,
-            "lng" : 151.195827
-         },
-         "viewport" : {
-            "northeast" : {
-               "lat" : -33.8653881697085,
-               "lng" : 151.1969739802915
-            },
-            "southwest" : {
-               "lat" : -33.86808613029149,
-               "lng" : 151.1942760197085
-            }
-         }
-      },
-      "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
-      "id" : "4f89212bf76dde31f092cfc14d7506555d85b5c7",
-      "international_phone_number" : "+61 2 9374 4000",
-      "name" : "Google",
-      "place_id" : "ChIJN1t_tDeuEmsRUsoyG83frY4",
-      "rating" : 4.5,
-      "reference" : "CmRSAAAAjiEr2_A4yI-DyqGcfsceTv-IBJXHB5-W3ckmGk9QAYk4USgeV8ihBcGBEK5Z1w4ajRZNVAfSbROiKbbuniq0c9rIq_xqkrf_3HpZzX-pFJuJY3cBtG68LSAHzWXB8UzwEhAx04rgN0_WieYLfVp4K0duGhTU58LFaqwcaex73Kcyy0ghYOQTkg",
-      "reviews" : [
-         {
-            "author_name" : "Robert Ardill",
-            "author_url" : "https://www.google.com/maps/contrib/106422854611155436041/reviews",
-            "language" : "en",
-            "profile_photo_url" : "https://lh3.googleusercontent.com/-T47KxWuAoJU/AAAAAAAAAAI/AAAAAAAAAZo/BDmyI12BZAs/s128-c0x00000000-cc-rp-mo-ba1/photo.jpg",
-            "rating" : 5,
-            "relative_time_description" : "a month ago",
-            "text" : "Awesome offices. Great facilities, location and views. Staff are great hosts",
-            "time" : 1491144016
-         }
-      ],
-      "types" : [ "point_of_interest", "establishment" ],
-      "url" : "https://maps.google.com/?cid=10281119596374313554",
-      "utc_offset" : 600,
-      "vicinity" : "5, 48 Pirrama Road, Pyrmont",
-      "website" : "https://www.google.com.au/about/careers/locations/sydney/"
-   },
-   "status" : "OK"
+# Deconstructed Code
+
+lat, lng = 37.42230960000001, -122.0846244
+base_endpoint_places = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
+params = {
+    "key": os.environ.get('GOOGLE_API'),
+    "input": "Mexican food",
+    "inputtype": "textquery",
+    "fields": "place_id,formatted_address,name,geometry,permanently_closed"
 }
-     
+locationbias = f"point:{lat},{lng}"
+use_cirular = True
+if use_cirular:
+    radius = 5000
+    locationbias = f"circle:{radius}@{lat},{lng}"
+
+params['locationbias'] = locationbias
+
+params_encoded = urlencode(params)
+places_endpoint = f"{base_endpoint_places}?{params_encoded}"
+print(places_endpoint) -->
+
+<!-- # https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyD8PCLxbKHRBrJWg6JYp-YXYz0ph4LKiQw
+# &input=Mexican+food 
+# &inputtype=textquery
+# &fields=place_id%2Cformatted_address%2Cname%2Cgeometry%2Cpermanently_closed
+# &locationbias=circle%3A5000%4037.42230960000001%2C-122.0846244 -->
+
+r = requests.get(places_endpoint)
+print(r.status_code)
+print(r.json())
+
+
+# Sample JSON (Based on Tilt Request Fields)
+
+<!-- 
+result': {
+    'business_status': 'OPERATIONAL', 
+    'formatted_address': '240 Villa St, Mountain View, CA 94041, USA', 
+    'formatted_phone_number': '(650) 968-1364', 
+    'geometry': {
+        'location': {
+            'lat': 37.3916289, 
+            'lng': -122.0728897
+            }, 
+        'viewport': {
+            'northeast': {
+                'lat': 37.3929083302915, 
+                'lng': -122.0715775197085
+                }, 
+            'southwest': {
+                'lat': 37.3902103697085, 
+                'lng': -122.0742754802915
+                }
+            }
+        }, 
+    'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png', 
+    'name': 'La Fiesta',    
+    'types': ['restaurant', 'food', 'point_of_interest', 'establishment'], 
+    'url': 'https://maps.google.com/?cid=6266944973401139661', 
+    'website': 'http://www.lafiestamexicancuisine.com/'
+    }, 
+'status': 'OK'
+} -->
