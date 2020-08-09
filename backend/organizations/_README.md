@@ -25,39 +25,6 @@
    `NOT_FOUND`
       indicates that the referenced location (place_id) was not found in the Places database.
 
-# Deconstructed Code
-
-lat, lng = 37.42230960000001, -122.0846244
-base_endpoint_places = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
-params = {
-    "key": os.environ.get('GOOGLE_API'),
-    "input": "Mexican food",
-    "inputtype": "textquery",
-    "fields": "place_id,formatted_address,name,geometry,permanently_closed"
-}
-locationbias = f"point:{lat},{lng}"
-use_cirular = True
-if use_cirular:
-    radius = 5000
-    locationbias = f"circle:{radius}@{lat},{lng}"
-
-params['locationbias'] = locationbias
-
-params_encoded = urlencode(params)
-places_endpoint = f"{base_endpoint_places}?{params_encoded}"
-print(places_endpoint) -->
-
-<!-- # https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyD8PCLxbKHRBrJWg6JYp-YXYz0ph4LKiQw
-# &input=Mexican+food 
-# &inputtype=textquery
-# &fields=place_id%2Cformatted_address%2Cname%2Cgeometry%2Cpermanently_closed
-# &locationbias=circle%3A5000%4037.42230960000001%2C-122.0846244 -->
-
-r = requests.get(places_endpoint)
-print(r.status_code)
-print(r.json())
-
-
 # Sample JSON (Based on Tilt Request Fields)
 
 <!-- 
