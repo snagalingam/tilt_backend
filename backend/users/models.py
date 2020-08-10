@@ -138,12 +138,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     highschool_graduation_year = models.IntegerField(
         _("high school graduation year"),
-<<<<<<< HEAD
-        null=True,
-        default=None
-=======
         max_length=4, null=True, blank=True
->>>>>>> 81bb949ffe1d2f438f197ca5cd5e1e9ca6bc806c
     )
 
     # UI Value                 | Database Value
@@ -193,14 +188,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     found_from = ArrayField(
         models.CharField(
-<<<<<<< HEAD
         _("found from"), max_length=25, choices=FOUND_FROM_CHOICES), 
         null=True,
         default=None
-=======
-            _("found from"), max_length=25, choices=FOUND_FROM_CHOICES),
-        default=list
->>>>>>> 81bb949ffe1d2f438f197ca5cd5e1e9ca6bc806c
     )
 
     found_from_other_value = models.CharField(
