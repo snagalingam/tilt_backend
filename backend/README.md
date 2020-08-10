@@ -16,10 +16,16 @@
       - Remember to not commit these changes
 3. Execute `python3 manage.py migrate` to run the migrations on your local database instance.
 
-## To run local development mode, run following commands in terminal:
-1. `export ENVIRONMENT="development"`
-2. `export DEBUG=1`
-3. `export SECRET_KEY={'<any_random_string>'}`
+## Add to .env file:
+1. `export SENDGRID_API_KEY="api_key"`
+2. `export SECRET_KEY="generate_random_string"`
+3. `export DOMAIN="http://127.0.0.1:8000"`
+
+4. `export GOOGLE_API="api_key"`
+
+5. `export DB_NAME="local_db_name"`
+6. `export DB_USER="local_db_user"`
+7. `export DB_PASSWORD="local_db_password"`
 
 ## Start Server
 

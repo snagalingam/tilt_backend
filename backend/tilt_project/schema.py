@@ -1,20 +1,23 @@
 import graphene
 import graphql_jwt
 
-import scholarships.schema
 import users.schema
+import scholarships.schema
+import organizations.schema
 
 class Query(
-    scholarships.schema.Query,
     users.schema.Query,
-    graphene.ObjectType
+    scholarships.schema.Query,
+    organizations.schema.Query,
+    graphene.ObjectType,
 ):
     pass
 
 class Mutation(
-    scholarships.schema.Mutation,
     users.schema.Mutation,
-    graphene.ObjectType
+    scholarships.schema.Mutation,
+    organizations.schema.Mutation,
+    graphene.ObjectType,
 ):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

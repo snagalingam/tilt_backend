@@ -2,6 +2,8 @@ import graphene
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
+from django.shortcuts import redirect
+from .send_emails import *
 
 
 class UserType(DjangoObjectType):
@@ -36,11 +38,14 @@ class LoginUser(graphene.Mutation):
         email = BaseUserManager.normalize_email(email)
         user = authenticate(username=email, password=password)
 
-        if user is not None:
-            login(info.context, user)
-            return LoginUser(user=user, is_authenticated=user.is_authenticated)
+        if user.is_verified: 
+            if user is not None:
+                login(info.context, user)
+                return LoginUser(user=user, is_authenticated=user.is_authenticated)
+            else:
+                raise Exception("Incorrect credentials")
         else:
-            raise Exception("Incorrect credentials")
+            raise Exception("Email is not verifed")
 
 
 class CreateUser(graphene.Mutation):
@@ -68,6 +73,9 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+
+        # send email verification user after signup
+        send_verification(user.email, user.first_name)
 
         # login user after signup
         user = authenticate(username=email, password=password)
@@ -142,9 +150,76 @@ class LogoutUser(graphene.Mutation):
     def mutate(self, info):
         logout(info.context)
 
+class VerifyEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        token = graphene.String(required=True)
+    
+    def mutate(self, info, token):
+        domain = os.environ.get('DOMAIN')
+        email = jwt.decode(token, 
+                           os.environ.get('SECRET_KEY'), 
+                           algorithms=['HS256'])['email']
+
+        user = get_user_model().objects.get(email=email)
+
+        if email and not user.is_verified:
+            user.is_verified = True
+            user.save()
+            login(info.context, user)
+            return redirect(f"{domain}/dashboard/")
+
+class SendForgotEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(self, info, email):
+        email = BaseUserManager.normalize_email(email)
+        user = get_user_model().objects.get(email=email)
+
+        if user.is_verified: 
+            send_reset_password(user.email, user.first_name)
+            return SendForgotEmail(success=True)
+        else:
+            raise Exception("Email not found")
+
+
+class ResetPassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        password_repeat = graphene.String()
+        token = graphene.String(required=True)
+
+    def mutate(self, info, token, email, password, password_repeat):
+        user = get_user_model().objects.get(email=email)
+        domain = os.environ.get('DOMAIN')
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
+
+        if email == user.email and password == password_repeat:
+            user.set_password(password)
+            user.save()
+            return ResetPassword(success=True)
+        elif password != password_repeat:
+            raise Exception("Passwords do not match")
+        else:
+            raise Exception("Password did not reset")
+
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
+    verify_email = VerifyEmail.Field()
+    send_forgot_email = SendForgotEmail.Field()
+    reset_password = ResetPassword.Field()
