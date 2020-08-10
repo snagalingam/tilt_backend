@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'scholarships.apps.ScholarshipsConfig',
     'organizations.apps.OrganizationsConfig',
-    'tilt_partners.apps.TiltPartnersConfig'
 ]
 
 MIDDLEWARE = [
