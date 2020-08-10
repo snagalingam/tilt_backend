@@ -87,9 +87,9 @@ class GooglePlacesAPI(object):
     location_query = None
     api_key = os.environ.get('GOOGLE_API')
 
-    def __init__(self, zipcode=None, *args, **kwargs):
+    def __init__(self, location=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.location_query = zipcode
+        self.location_query = location
         if self.location_query is not None:
             self.extract_lat_lng()
 
@@ -111,6 +111,8 @@ class GooglePlacesAPI(object):
 
         if r.status_code not in range(200, 299):
             return print(url)
+        if r.json()["status"] == 'OVER_QUERY_LIMIT':
+            raise Exception("Over query limit error")
         latlng = {}
         try:
             latlng = r.json()['results'][0]['geometry']['location']
@@ -142,8 +144,8 @@ class GooglePlacesAPI(object):
         r = requests.get(places_url)
         print("search_for_place_id:", r.status_code, "=>", r.json()["status"])
 
-        if r.status_code not in range(200, 299):
-            return "No places found within the range of zipcode"
+        if r.json()["status"] == 'ZERO_RESULTS':
+            raise Exception ("Zero results")
         try: 
             return r.json()['candidates'][0]['place_id']
         except:
@@ -168,15 +170,18 @@ class GooglePlacesAPI(object):
         result["place_id"] = place_id
         print("details:", r.status_code, "=>", r.json()["status"])
 
-        if r.status_code not in range(200, 299):
-            return "No details found"
-        return result
+        if r.json()["status"] == 'INVALID_REQUEST':
+            raise Exception("Place_id might be is missing")
+        elif r.json()["status"] == 'NOT_FOUND':
+            raise Exception("Referenced location was not found")
+        else: 
+            return result
 
 
 # api = GooglePlacesAPI()
 # place = "Cardozo"
-# zipcode = "11360"
-# data = api.details(place, zipcode)
+# location = "11360"
+# data = api.details(place, location)
 # print(json.dumps(data, indent=4))
 
 # place_id = data['place_id']

@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     # local
     'users.apps.UsersConfig',
     'scholarships.apps.ScholarshipsConfig',
-    'organizations.apps.OrganizationsConfig'
+    'organizations.apps.OrganizationsConfig',
+    'tilt_partners.apps.TiltPartnersConfig'
 ]
 
 MIDDLEWARE = [
