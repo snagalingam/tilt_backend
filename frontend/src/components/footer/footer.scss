@@ -1,0 +1,51 @@
+@import "../../scss/variables";
+
+.Footer {
+  display: flex;
+  .company-info,
+  .links {
+    width: 50%;
+  }
+  .company-info {
+    img {
+      width: 70px;
+      object-fit: contain;
+      margin-bottom: 3rem;
+    }
+    div {
+      p {
+        font-size: 14px;
+        color: #a4adbb;
+      }
+    }
+  }
+  .links {
+    display: flex;
+    justify-content: flex-end;
+    nav {
+      display: flex;
+      ul {
+        margin: 0 5rem 0 0;
+        padding: 0;
+        list-style: none;
+        li {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    .social-media {
+      display: flex;
+      justify-content: flex-end;
+      a {
+        margin-left: 1rem;
+      }
+      .MuiSvgIcon-root {
+        color: #a4adbb;
+        cursor: pointer;
+        &:hover {
+          color: $tilt-purple;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.FaqSection {
+  display: flex;
+  flex-direction: column;
+  h2 {
+    margin-bottom: 5rem;
+  }
+  .FaqSection_columns {
+    display: flex;
+    .FaqSection_column-1,
+    .FaqSection_column-2 {
+      flex: 1;
+      .TiltAccordion {
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    .FaqSection_column-1 {
+      margin-right: 5rem;
+    }
+  }
+}

@@ -1,0 +1,89 @@
+@import "../../../scss/variables";
+
+.JoinTilt {
+  .JoinTilt__community-cards {
+    display: flex;
+    justify-content: space-between;
+  }
+  .CommunityCard {
+    &:nth-child(2) {
+      margin-top: 4rem;
+    }
+    &:nth-child(3) {
+      margin-top: 8rem;
+    }
+  }
+  .card-one,
+  .card-two,
+  .card-three {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-one {
+    h3 {
+      font-size: 16px;
+      color: $tilt-purple;
+      font-weight: 600;
+      margin: 0;
+    }
+    div {
+      label {
+        color: gray;
+        margin-bottom: 0.5rem;
+        font-size: 12px;
+      }
+      p {
+        font-weight: 600;
+        font-size: 14px;
+      }
+    }
+  }
+  .card-two {
+    div {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 70px 1fr;
+      p {
+        font-weight: 500;
+        font-size: 18px;
+      }
+    }
+  }
+  .card-three {
+    justify-content: center;
+    .card-three-message {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 1rem;
+      img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 1rem;
+      }
+      div {
+        background: $tilt-light-purple;
+        border-radius: 15px;
+        border-bottom-left-radius: 0;
+        padding: 1rem;
+        p {
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+    }
+    .card-three-approve {
+      text-align: end;
+      .cancel {
+        color: #eb5757;
+        font-size: 45px;
+      }
+      .approve {
+        color: #7ed321;
+        font-size: 45px;
+      }
+    }
+  }
+}
