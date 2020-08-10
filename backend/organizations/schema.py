@@ -71,7 +71,10 @@ class CreateOrganization(graphene.Mutation):
         tilt_partnership
     ):
 
-        organization = Organization.objects.get(place_id=place_id)
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except Organization.DoesNotExist:
+            organization = None
 
         if organization is None: 
             organization = Organization(
