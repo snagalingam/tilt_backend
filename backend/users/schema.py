@@ -1,4 +1,5 @@
 import graphene
+import graphql_social_auth
 import jwt
 import os
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -24,8 +25,13 @@ class Query(graphene.ObjectType):
         user = info.context.user
         if user.is_anonymous:
             raise Exception('Not logged in!')
-        if user.is_authenticated and user.is_verified:
-            return user
+        if user.is_authenticated:
+            if user.social_auth.exists():
+                return user
+            if user.is_verified:
+                return user
+            else:
+                raise Exception("User is not verified")
 
 
 class LoginUser(graphene.Mutation):
@@ -247,3 +253,4 @@ class Mutation(graphene.ObjectType):
     send_forgot_email = SendForgotEmail.Field()
     reset_password = ResetPassword.Field()
     send_verification_email = SendVerificationEmail.Field()
+    social_auth = graphql_social_auth.SocialAuth.Field()
