@@ -23,6 +23,7 @@ django-graphql-jwt = "==0.3.0"
 requests = "*"
 django-heroku = "*"
 django-graphql-social-auth = "*"
+googlemaps = "*"
 
 [requires]
 python_version = "3.8"
