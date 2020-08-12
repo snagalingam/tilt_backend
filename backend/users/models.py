@@ -65,8 +65,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
-    first_name = models.CharField(_("first name"), max_length=50)
-    last_name = models.CharField(_("last name"), max_length=150)
+    first_name = models.CharField(
+        _("first name"), max_length=50, null=True, blank=True)
+    last_name = models.CharField(
+        _("last name"), max_length=150, null=True, blank=True)
     preferred_name = models.CharField(
         _("preferred name"), max_length=120, null=True, blank=True
     )
@@ -138,7 +140,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     highschool_graduation_year = models.IntegerField(
         _("high school graduation year"),
-        max_length=4, null=True, blank=True
+        null=True,
+        default=None
     )
 
     # UI Value                 | Database Value
