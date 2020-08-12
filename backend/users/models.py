@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def _create_user(self, email, first_name, last_name, password, **extra_fields):
+    def _create_user(self, email, first_name=None, last_name=None, password=None, **extra_fields):
         if not email:
             raise ValueError("Email must be provided")
         email = self.normalize_email(email)
@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, first_name, last_name, password=None, **extra_fields):
+    def create_user(self, email, first_name=None, last_name=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, first_name, last_name, password, **extra_fields)
@@ -65,8 +65,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
-    first_name = models.CharField(_("first name"), max_length=50)
-    last_name = models.CharField(_("last name"), max_length=150)
+    first_name = models.CharField(
+        _("first name"), max_length=50, null=True, blank=True)
+    last_name = models.CharField(
+        _("last name"), max_length=150, null=True, blank=True)
     preferred_name = models.CharField(
         _("preferred name"), max_length=120, null=True, blank=True
     )
@@ -138,12 +140,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     highschool_graduation_year = models.IntegerField(
         _("high school graduation year"),
-<<<<<<< HEAD
         null=True,
         default=None
-=======
-        max_length=4, null=True, blank=True
->>>>>>> 81bb949ffe1d2f438f197ca5cd5e1e9ca6bc806c
     )
 
     # UI Value                 | Database Value
@@ -193,14 +191,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     found_from = ArrayField(
         models.CharField(
-<<<<<<< HEAD
         _("found from"), max_length=25, choices=FOUND_FROM_CHOICES), 
         null=True,
         default=None
-=======
-            _("found from"), max_length=25, choices=FOUND_FROM_CHOICES),
-        default=list
->>>>>>> 81bb949ffe1d2f438f197ca5cd5e1e9ca6bc806c
     )
 
     found_from_other_value = models.CharField(
