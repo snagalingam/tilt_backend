@@ -25,8 +25,4 @@ django-heroku = "*"
 googlemaps = "*"
 
 [requires]
-<<<<<<< HEAD
 python_version = "3.8"
-=======
-python_version = "3.8"
->>>>>>> 81bb949ffe1d2f438f197ca5cd5e1e9ca6bc806c
