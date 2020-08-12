@@ -2,16 +2,25 @@ import graphene
 import graphql_social_auth
 import jwt
 import os
+import requests
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
 from .send_email import send_verification, send_reset_password
+from urllib.parse import urlencode, urlparse, parse_qsl
+from organizations.models import Organization
 
 
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
+
+
+class OrganizationT(DjangoObjectType):
+    class Meta:
+        model = Organization
+        fields = "__all__"
 
 
 class Query(graphene.ObjectType):
@@ -93,6 +102,7 @@ class CreateUser(graphene.Mutation):
 
 class OnboardUser(graphene.Mutation):
     user = graphene.Field(UserType)
+    organization = graphene.Field(OrganizationT)
 
     class Arguments:
         id = graphene.ID()
@@ -106,6 +116,7 @@ class OnboardUser(graphene.Mutation):
         pronouns = graphene.String()
         ethnicity = graphene.String()
         user_type = graphene.String()
+        place_id = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
         found_from = graphene.List(graphene.String)
@@ -124,12 +135,42 @@ class OnboardUser(graphene.Mutation):
         pronouns=None,
         ethnicity=None,
         user_type=None,
+        place_id=None,
         high_school_grad_year=None,
         income_quintile=None,
         found_from=None
     ):
-        user = get_user_model().objects.get(pk=id)
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except:
+            base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
+            fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
+            params = {
+                "key": "AIzaSyAJbF6EQA5ozs8lqI0xNs7PcFdQ1CvsZ1s",
+                "place_id": place_id,
+                "fields": fields
+            }
+            params_encoded = urlencode(params)
+            url = f"{base_endpoint}?{params_encoded}"
+            r = requests.get(url)
+            print('search_by_id:', r.status_code)
+            result = r.json()['result']
+            organization = Organization(
+                place_id=place_id,
+                business_status=result['business_status'],
+                icon=result['icon'],
+                name=result['name'],
+                address=result['formatted_address'],
+                phone_number=result['formatted_phone_number'],
+                url=result['url'],
+                website=result['website'],
+                lat=result['geometry']['location']['lat'],
+                lng=result['geometry']['location']['lng'],
+                types=result['types']
+            )
+            organization.save()
 
+        user = get_user_model().objects.get(pk=id)
         if user is not None:
             user.last_name = last_name
             user.preferred_name = preferred_name
@@ -141,6 +182,7 @@ class OnboardUser(graphene.Mutation):
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
+            user.high_school = organization
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
             user.found_from = found_from
