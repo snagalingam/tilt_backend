@@ -24,7 +24,6 @@ class Organization(models.Model):
     tilt_partnership = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    members = models.ManyToManyField(get_user_model())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
