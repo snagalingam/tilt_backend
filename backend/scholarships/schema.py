@@ -9,11 +9,13 @@ class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
+
 class Query(graphene.ObjectType):
     scholarships = graphene.List(ScholarshipType)
 
     def resolve_scholarships(self, info, **kwargs):
         return Scholarship.objects.all()
+
 
 class CreateScholarship(graphene.Mutation):
     id = graphene.Int()
@@ -98,25 +100,9 @@ class CreateScholarship(graphene.Mutation):
         scholarship.save()
 
         return CreateScholarship(
-            id=scholarship.id,
-            name=scholraship.name,
-            organization=scholarship.organization,
-            url=scholarship.url,
-            due_date=scholarship.due_date,
-            max_amount=scholarship.max_amount,
-            renewable=scholarship.renewable,
-            category=scholarship.category,
-            area_of_study=scholarship.area_of_study,
-            location=scholarship.location,
-            state=scholarship.state,
-            ethnicity=scholarship.ethnicity,
-            gender=scholarship.gender,
-            gpa=scholarship.gpa,
-            us_citizen=scholarship.us_citizen,
-            daca_status=scholaraship.daca_status,
-            financial_need=scholarship.financial_need,
-            hbcu=scholarship.hbcu,
+            scholarship=scholarship
         )
+
 
 class Mutation(graphene.ObjectType):
     create_scholarship = CreateScholarship.Field()
