@@ -66,6 +66,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
+    is_onboarded = models.BooleanField(default=False)
+
     first_name = models.CharField(
         _("first name"), max_length=50, null=True, blank=True)
     last_name = models.CharField(
