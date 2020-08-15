@@ -186,6 +186,7 @@ class OnboardUser(graphene.Mutation):
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
             user.found_from = found_from
+            user.is_onboarded = True
             user.save()
             return OnboardUser(user=user)
         else:
