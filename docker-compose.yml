@@ -10,6 +10,10 @@ services:
       - ENVIRONMENT=development
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
       - DEBUG=1
+      - DATABASE_NAME=postgres
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=db
     volumes:
       - .:/app
     ports:
