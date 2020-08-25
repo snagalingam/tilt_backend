@@ -7,6 +7,7 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 CustomUser = get_user_model()
 
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -14,7 +15,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (_('Account info'), {'fields': ('email', 'password', 'user_type')}),
         (_('Personal info'), {
-            'fields': ('first_name','last_name', 'preferred_name', 'pronouns', 'is_verified')
+            'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns', 'is_verified')
         }),
         (_('Academic info'), {
             'fields': ('highschool_graduation_year', 'gpa', 'act_score', 'sat_score')
@@ -23,8 +24,8 @@ class CustomUserAdmin(UserAdmin):
             'fields': ()
         }),
         (_('Background info'), {
-            'fields': ('ethnicity', 'income_quintile', 'efc', 'found_from', 
-            'found_from_other_value', 'terms_and_conditions')
+            'fields': ('ethnicity', 'income_quintile', 'efc', 'found_from',
+                       'found_from_other_value', 'terms_and_conditions')
         }),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
@@ -42,5 +43,6 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
     model = CustomUser
-    
+
+
 admin.site.register(CustomUser, CustomUserAdmin)

@@ -9,7 +9,6 @@ class OrganizationType(DjangoObjectType):
         model = Organization
         fields = "__all__"
 
-
 class Query(graphene.ObjectType):
     organizations = graphene.List(OrganizationType)
     organization_by_id = graphene.Field(
@@ -26,7 +25,7 @@ class Query(graphene.ObjectType):
 
     def resolve_organization_by_id(root, info, id):
         return Organization.objects.get(pk=id)
-    
+
     def resolve_organization_by_place_id(root, info, place_id):
         return Organization.objects.get(place_id=place_id)
 
@@ -71,9 +70,13 @@ class CreateOrganization(graphene.Mutation):
         tilt_partnership
     ):
 
-        organization = Organization.objects.get(place_id=place_id)
 
-        if organization is None: 
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except Organization.DoesNotExist:
+            organization = None
+
+        if organization is None:
             organization = Organization(
                 place_id=place_id,
                 business_status=business_status,
@@ -96,6 +99,7 @@ class CreateOrganization(graphene.Mutation):
 
 class OrganizationSearch(graphene.Mutation):
     organization = graphene.Field(OrganizationType)
+
     class Arguments:
         place = graphene.String()
         location = graphene.String()
@@ -103,7 +107,6 @@ class OrganizationSearch(graphene.Mutation):
     def mutate(self, info, place, location):
         api = GooglePlacesAPI()
         data = api.details(place, location)
-        
         place_id = data['place_id']
         business_status = data['result']['business_status']
         icon = data['result']['icon']

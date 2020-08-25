@@ -3,8 +3,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+
 class Organization(models.Model):
-    
+
     # google api inputted
     place_id = models.CharField(max_length=250, blank=True, null=True)
     business_status = models.CharField(max_length=25, blank=True, null=True)
@@ -24,6 +25,7 @@ class Organization(models.Model):
 
     # automatically added
     members = models.ManyToManyField(get_user_model())
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

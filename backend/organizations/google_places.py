@@ -1,3 +1,4 @@
+
 import os 
 import json
 import requests
@@ -97,12 +98,11 @@ class GooglePlacesAPI(object):
         loc_query = self.location_query
         if location is not None:
             loc_query = location
-            
-        endpoint = f"https://maps.googleapis.com/maps/api/geocode/{self.data_type}"
-        params = {
-            "address": loc_query, 
+            endpoint = f"https://maps.googleapis.com/maps/api/geocode/{self.data_type}"
+            params = {
+            "address": loc_query,
             "key": self.api_key
-            }
+        }
 
         url_params = urlencode(params)
         url = f"{endpoint}?{url_params}"
@@ -146,7 +146,7 @@ class GooglePlacesAPI(object):
 
         if r.json()["status"] == 'ZERO_RESULTS':
             raise Exception ("Zero results")
-        try: 
+        try:
             return r.json()['candidates'][0]['place_id']
         except:
             return r.json()
@@ -174,7 +174,7 @@ class GooglePlacesAPI(object):
             raise Exception("Place_id might be is missing")
         elif r.json()["status"] == 'NOT_FOUND':
             raise Exception("Referenced location was not found")
-        else: 
+        else:
             return result
 
 

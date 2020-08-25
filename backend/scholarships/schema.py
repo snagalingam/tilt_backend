@@ -9,11 +9,13 @@ class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
+
 class Query(graphene.ObjectType):
     scholarships = graphene.List(ScholarshipType)
 
     def resolve_scholarships(self, info, **kwargs):
         return Scholarship.objects.all()
+
 
 class CreateScholarship(graphene.Mutation):
     id = graphene.Int()
