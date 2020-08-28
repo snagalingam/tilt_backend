@@ -2,7 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from .models import Organization
-from .google_places import GooglePlacesAPI
+from services.google_api.google_places import GooglePlacesAPI
 
 
 class OrganizationType(DjangoObjectType):

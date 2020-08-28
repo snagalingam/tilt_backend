@@ -7,9 +7,9 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
-from .send_email import send_verification, send_reset_password
 from urllib.parse import urlencode, urlparse, parse_qsl
 from organizations.models import Organization
+from services.sendgrid_api.send_email import send_verification, send_reset_password
 
 
 class UserType(DjangoObjectType):
@@ -153,8 +153,8 @@ class OnboardUser(graphene.Mutation):
             params_encoded = urlencode(params)
             url = f"{base_endpoint}?{params_encoded}"
             r = requests.get(url)
-            print('search_by_id:', r.status_code)
             result = r.json()['result']
+
             organization = Organization(
                 place_id=place_id,
                 business_status=result['business_status'],
@@ -258,6 +258,7 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
+            login(info.context, user)
             return VerifyEmail(success=user.is_verified)
 
 
