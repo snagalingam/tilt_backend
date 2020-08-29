@@ -6,7 +6,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from enum import Enum
-import uuid
 
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -59,7 +58,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(
         _("email address"),
         unique=True,
