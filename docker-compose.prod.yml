@@ -7,7 +7,7 @@ services:
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
       - ENVIRONMENT=production
-      - DATABASE_HOST=tiltpostgresdev.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
+      - DATABASE_HOST=tiltpostgres.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
       - DATABASE_NAME=tiltpostgres
       - DATABASE_PASSWORD=tiltpostgres
       - DATABASE_USER=tiltpostgres
