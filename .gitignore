@@ -11,4 +11,4 @@
 __pycache__/
 
 # ENV
-backend/.env
+.env
