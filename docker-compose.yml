@@ -1,44 +1,21 @@
 version: '3.7'
 
 services:
-
   backend:
     container_name: backend
-    build: ./backend
+    build: .
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
       - ENVIRONMENT=development
-      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
+      - DATABASE_HOST=tiltpostgresdev.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
+      - DATABASE_NAME=tiltpostgresdev
+      - DATABASE_PASSWORD=tiltpostgresdev
+      - DATABASE_USER=tiltpostgresdev
       - DEBUG=1
+      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
     volumes:
-      - ./backend:/app/backend
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
-
-  db:
-    container_name: db
-    image: postgres:11
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
-
-  frontend:
-    container_name: frontend
-    build: ./frontend
-    command: npm run start
-    volumes:
-      - ./frontend:/app/frontend
-      - /app/frontend/node_modules
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - backend
-    tty: true
-
-volumes:
-  postgres_data:

@@ -1,45 +1,23 @@
-FROM python:3.6
+# Pull base image
+FROM python:3.8
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install curl, node, & yarn
-RUN apt-get -y install curl \
-  && curl -sL https://deb.nodesource.com/setup_12.x | bash \
-  && apt-get install nodejs \
-  && curl -o- -L https://yarnpkg.com/install.sh | bash
-
-WORKDIR /app/backend
+# Set working directory
+WORKDIR /app/
 
 # Install Python dependencies
-COPY ./backend/Pipfile ./backend/Pipfile.lock /app/backend/
+COPY Pipfile Pipfile.lock /app/
 RUN pip install pipenv && pipenv install --system
-
-# Install JS dependencies
-WORKDIR /app/frontend
-
-COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
-RUN $HOME/.yarn/bin/yarn install
 
 # Add the rest of the code
 COPY . /app/
 
-# Build static files
-RUN $HOME/.yarn/bin/yarn build
-
-# Have to move all static files other than index.html to root/
-# for whitenoise middleware
-WORKDIR /app/frontend/build
-RUN mkdir root && mv *.ico *.js *.json root
-
-# Collect static files
-RUN mkdir /app/backend/staticfiles
-WORKDIR /app
-
 # SECRET_KEY is only included here to avoid raising an error when generating static files.
-# Be sure to add a real SECRET_KEY config variable in Heroku.
+# Be sure to add a real SECRET_KEY config variable in deployment.
 RUN SECRET_KEY=somethingsupersecret \
-  python3 backend/manage.py collectstatic --noinput
+  python3 manage.py collectstatic --noinput
 
 EXPOSE $PORT
