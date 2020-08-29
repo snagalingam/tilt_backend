@@ -24,6 +24,7 @@ requests = "*"
 django-heroku = "*"
 django-graphql-social-auth = "*"
 googlemaps = "*"
+favicon = "*"
 
 [requires]
 python_version = "3.8"
