@@ -1,6 +1,5 @@
 import dj_database_url
 import os
-import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
@@ -87,10 +86,10 @@ WSGI_APPLICATION = 'tilt_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'localhost',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': 5432,
     }
 }
@@ -222,7 +221,7 @@ GRAPHENE = {
     ],
 }
 
-# heroku database
+# database
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
@@ -257,16 +256,3 @@ if ENVIRONMENT == 'production':
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
-
-if ENVIRONMENT == 'development':
-    TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "frontend", "build")]
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend", "build", "static")]
-    # STATICFILES_DIRS = [os.path.join(BASE_DIR)]
-    WHITENOISE_ROOT = os.path.join(BASE_DIR)
-
-if ENVIRONMENT == 'production':
-    TEMPLATES[0]["DIRS"] = [os.path.join("frontend", "build")]
-    STATICFILES_DIRS = [os.path.join("frontend", "build", "static")]
-    WHITENOISE_ROOT = os.path.join("frontend", "build", "root")
-
-django_heroku.settings(locals())
