@@ -13,7 +13,7 @@ services:
       - DATABASE_USER=tiltpostgresdev
       - DEBUG=1
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
-    volumes:
-      - .:/app
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
