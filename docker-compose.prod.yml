@@ -6,14 +6,13 @@ services:
     build: .
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
-      - ENVIRONMENT=development
+      - ENVIRONMENT=production
       - DATABASE_HOST=tiltpostgresdev.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
-      - DATABASE_NAME=tiltpostgresdev
-      - DATABASE_PASSWORD=tiltpostgresdev
-      - DATABASE_USER=tiltpostgresdev
-      - DEBUG=1
+      - DATABASE_NAME=tiltpostgres
+      - DATABASE_PASSWORD=tiltpostgres
+      - DATABASE_USER=tiltpostgres
+      - DEBUG=0
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
-    volumes:
-      - .:/app
     ports:
       - "8000:8000"
+    restart: always
