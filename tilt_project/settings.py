@@ -229,11 +229,13 @@ DATABASES['default'].update(db_from_env)
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
-    'https://tilt-next.vercel.app'
+    'https://tiltaccess.com',
+    'https://wwww.tiltaccess.com'
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    "https://tilt-next.vercel.app"
+    'https://tiltaccess.com',
+    'https://wwww.tiltaccess.com'
 ]
 # security for development
 if ENVIRONMENT == 'development':

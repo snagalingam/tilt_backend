@@ -4,6 +4,13 @@ FROM python:3.8
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV ENVIRONMENT 'development'
+ENV DATABASE_HOST 'tiltpostgresdev.co1g8hkhkrwp.us-east-2.rds.amazonaws.com'
+ENV DATABASE_NAME 'tiltpostgresdev'
+ENV DATABASE_PASSWORD 'tiltpostgresdev'
+ENV DATABASE_USER 'tiltpostgresdev'
+ENV DEBUG 1
+ENV SECRET_KEY '((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm'
 
 # Set working directory
 WORKDIR /app/
