@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from urllib.parse import urlencode, urlparse, parse_qsl
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
+from services.sendgrid_api.add_subscriber_email import add_subscriber
 
 
 class UserType(DjangoObjectType):
@@ -288,6 +289,21 @@ class ResetPassword(graphene.Mutation):
             raise Exception("Password did not reset")
 
 
+class AddSubscriber(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        email
+    ):
+        email = BaseUserManager.normalize_email(email)
+        add_subscriber(email)
+        return AddSubscriber(success=True)
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
@@ -298,3 +314,4 @@ class Mutation(graphene.ObjectType):
     reset_password = ResetPassword.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
+    add_subscriber = AddSubscriber.Field()
