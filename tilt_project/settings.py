@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '.tiltapi.dev']
 
 
 # Application definition
@@ -46,10 +46,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -228,15 +228,33 @@ DATABASES['default'].update(db_from_env)
 # security
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
-CSRF_TRUSTED_ORIGINS = 'https://tiltaccess.com'
+CSRF_TRUSTED_ORIGINS = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = 'https://tiltaccess.com',
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+CORS_ORIGIN_WHITELIST = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
 
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
 # security for production
 if ENVIRONMENT == 'production':
+    CORS_ORIGIN_ALLOW_ALL = False
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
