@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['localhost', '.tiltapi.dev',
-                 'https://tilt-website-staging.herokuapp.com/']
+                 'tilt-website-staging.herokuapp.com']
 
 
 # Application definition
