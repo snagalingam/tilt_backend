@@ -37,7 +37,8 @@ class CreateCollege(graphene.Mutation):
     college = graphene.Field(CollegeType)
 
     class Arguments:
-        college_scorecard_id = graphene.Int()
+        unit_id = graphene.Int()
+        ope_id = graphene.Int()
         place_id = graphene.String()
         business_status = graphene.String()
         name = graphene.String()
@@ -55,7 +56,8 @@ class CreateCollege(graphene.Mutation):
     def mutate(
         self,
         info,
-        college_scorecard_id,
+        unit_id,
+        ope_id,
         place_id,
         business_status,
         name,
@@ -78,7 +80,8 @@ class CreateCollege(graphene.Mutation):
 
         if college is None:
             college = College(
-                college_scorecard_id=college_scorecard_id,
+                unit_id=unit_id,
+                ope_id=ope_id,
                 place_id=place_id,
                 business_status=business_status,
                 name=name,
