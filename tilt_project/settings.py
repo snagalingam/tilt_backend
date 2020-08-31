@@ -232,7 +232,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
-CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = (
     'accept',
     'accept-encoding',
@@ -244,19 +243,10 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
-CORS_ALLOW_METHODS = (
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-)
-CORS_ALLOWED_ORIGINS = [
+CORS_ORIGIN_WHITELIST = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
-CORS_REPLACE_HTTPS_REFERER = True
 
 # security for development
 if ENVIRONMENT == 'development':
