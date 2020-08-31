@@ -229,16 +229,17 @@ DATABASES['default'].update(db_from_env)
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
-    "https://tiltaccess.com/",
-    "https://www.tiltaccess.com/",
-    "tiltaccess.com/",
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://tiltaccess.com/",
-    "https://www.tiltaccess.com/",
-    "tiltaccess.com/",
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
 ]
+CORS_EXPOSE_HEADERS = (
+    'Access-Control-Allow-Origin: *',
+)
 
 # security for development
 if ENVIRONMENT == 'development':
@@ -246,7 +247,6 @@ if ENVIRONMENT == 'development':
 # security for production
 if ENVIRONMENT == 'production':
     CORS_ORIGIN_ALLOW_ALL = False
-    CORS_ALLOW_CREDENTIALS = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
