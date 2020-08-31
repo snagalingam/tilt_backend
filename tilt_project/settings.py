@@ -237,6 +237,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com/",
+    "tiltaccess.com",
 ]
 
 # security for development
@@ -244,6 +245,7 @@ if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
 # security for production
 if ENVIRONMENT == 'production':
+    CORS_ORIGIN_ALLOW_ALL = False
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
