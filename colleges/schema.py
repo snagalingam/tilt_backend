@@ -16,8 +16,10 @@ class Query(graphene.ObjectType):
     college = graphene.List(CollegeType)
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
-    college_by_place_id = graphene.Field(
-        CollegeType, place_id=graphene.String())
+    college_by_unit_id = graphene.Field(
+        CollegeType, unit_id=graphene.String())
+    college_by_ope_id = graphene.Field(
+        CollegeType, ope_id=graphene.String())
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
 
@@ -27,8 +29,11 @@ class Query(graphene.ObjectType):
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
 
-    def resolve_college_by_place_id(root, info, place_id):
-        return College.objects.get(place_id=place_id)
+    def resolve_college_by_unit_id(root, info, unit_id):
+        return College.objects.get(unit_id=unit_id)
+
+    def resolve_college_by_ope_id(root, info, ope_id):
+        return College.objects.get(ope_id=ope_id)
 
     def resolve_college_by_name(root, info, name):
         return College.objects.filter(name=name)
