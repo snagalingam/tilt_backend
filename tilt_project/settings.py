@@ -232,6 +232,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = (
     'accept',
     'accept-encoding',
