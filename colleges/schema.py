@@ -32,7 +32,7 @@ class Query(graphene.ObjectType):
     def resolve_college_by_unit_id(root, info, unit_id):
         return College.objects.get(unit_id=unit_id)
 
-    def resolve_college_by_peid(root, info, ope_id):
+    def resolve_college_by_ope_id(root, info, ope_id):
         return College.objects.get(ope_id=ope_id)
 
     def resolve_college_by_name(root, info, name):
