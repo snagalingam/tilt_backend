@@ -16,7 +16,7 @@ class Query(graphene.ObjectType):
     college = graphene.List(CollegeType)
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
-    college_by_place_id = graphene.Field(
+    college_by_unit_id = graphene.Field(
         CollegeType, unit_id=graphene.String())
     college_by_ope_id = graphene.Field(
         CollegeType, ope_id=graphene.String())
