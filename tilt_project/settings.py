@@ -255,6 +255,8 @@ CORS_ALLOW_METHODS = (
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
+]
+CORS_REPLACE_HTTPS_REFERER = True
 
 # security for development
 if ENVIRONMENT == 'development':
