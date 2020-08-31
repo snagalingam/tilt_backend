@@ -229,13 +229,13 @@ DATABASES['default'].update(db_from_env)
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
-    "http://tiltaccess.com",
-    "http://www.tiltaccess.com",
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://tiltaccess.com",
-    "http://www.tiltaccess.com",
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
 ]
 
 # security for development
