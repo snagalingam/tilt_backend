@@ -5,6 +5,7 @@ from urllib.parse import urlencode, urlparse, parse_qsl
 
 # ---------- Results a JSON object of details based place_id -------------------
 
+
 def extract_photo_urls(photos):
     photo_array = []
 
@@ -16,7 +17,7 @@ def extract_photo_urls(photos):
 
         photo_url = url + maxwidth + reference + key
         photo_array.append(photo_url)
-        
+
     return photo_array
 
 
@@ -46,7 +47,7 @@ def search_details(place_id):
 
 # ---------- Results in a list of searches based on category -------------------
 
-def search_nearby(category, lat, lng, miles=25):
+def search_nearby(category, lat, lng, miles=200):
     base_endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     fields = "place_id,name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
     radius = miles * 0.00062137
@@ -71,7 +72,7 @@ def search_nearby(category, lat, lng, miles=25):
 
 # ---------- Results in one location matching name -------------------
 
-def search_for_place(place, lat, lng, miles=25):
+def search_for_place(place, lat, lng, miles=200):
     base_endpoint_places = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
     fields = "place_id,name,formatted_address,geometry,business_status,types"
     radius = miles * 0.00062137
@@ -141,7 +142,7 @@ class GooglePlacesAPI(object):
         self.lng = lng
         return lat, lng
 
-    def search_for_place_id(self, place=None, location=None, miles=25):
+    def search_for_place_id(self, place=None, location=None, miles=200):
         lat, lng = self.lat, self.lng
         if location is not None:
             lat, lng = self.extract_lat_lng(location)
@@ -163,13 +164,15 @@ class GooglePlacesAPI(object):
         print("search_for_place_id:", r.status_code, "=>", r.json()["status"])
 
         if r.json()["status"] == 'ZERO_RESULTS':
-            raise Exception("Zero results")
+            print("Zero results")
         try:
             return r.json()['candidates'][0]['place_id']
         except:
-            return r.json()
+            print("Zero results")
+            pass
 
-    def details(self, place=None, location=None, miles=25, place_id=None):
+    def details(self, place=None, location=None, miles=200, place_id=None):
+
         place_id = self.search_for_place_id(place, location)
 
         fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types,photos"
@@ -189,7 +192,8 @@ class GooglePlacesAPI(object):
         print("details:", r.status_code, "=>", r.json()["status"])
 
         if r.json()["status"] == 'INVALID_REQUEST':
-            raise Exception("Place_id might be is missing")
+            print("Place_id might be is missing")
+            pass
         elif r.json()["status"] == 'NOT_FOUND':
             raise Exception("Referenced location was not found")
         else:
@@ -230,4 +234,3 @@ class GooglePlacesAPI(object):
 # print('main_photo:', main_photo)
 # print('photos:', photos)
 # print('types:', types)
-
