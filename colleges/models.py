@@ -7,22 +7,23 @@ from django.contrib.postgres.fields import ArrayField
 class College(models.Model):
 
     # college scorecard info
-    college_scorecard_id = models.IntegerField(blank=True, null=True)
+    unit_id = models.CharField(max_length=250, blank=True, null=True)
+    ope_id = models.CharField(max_length=250, blank=True, null=True)
 
     # google api inputted
     place_id = models.CharField(max_length=250, blank=True, null=True)
-    business_status = models.CharField(max_length=25, blank=True, null=True)
+    business_status = models.CharField(max_length=250, blank=True, null=True)
     name = models.CharField(max_length=250, blank=True, null=True)
     address = models.CharField(max_length=250, blank=True, null=True)
     phone_number = models.CharField(max_length=25, null=True, blank=True)
-    lat = models.CharField(max_length=250, null=True, blank=True)
-    lng = models.CharField(max_length=250, null=True, blank=True)
-    url = models.CharField(max_length=250, null=True, blank=True)
-    website = models.CharField(max_length=250, null=True, blank=True)
-    favicon = models.CharField(max_length=250, null=True, blank=True)
-    main_photo = models.CharField(max_length=250, null=True, blank=True)
+    lat = models.IntegerField(null=True, blank=True)
+    lng = models.IntegerField(null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
+    website = models.TextField(null=True, blank=True)
+    favicon = models.TextField(null=True, blank=True)
+    main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
-        models.CharField(max_length=250, null=True, blank=True),
+        models.TextField(null=True, blank=True),
         null=True, default=None
     )
     types = ArrayField(
@@ -31,8 +32,8 @@ class College(models.Model):
     )
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return self.name

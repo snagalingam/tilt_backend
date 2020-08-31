@@ -13,10 +13,10 @@ class Organization(models.Model):
     name = models.CharField(max_length=250, blank=True, null=True)
     address = models.CharField(max_length=250, blank=True, null=True)
     phone_number = models.CharField(max_length=25, null=True, blank=True)
-    lat = models.CharField(max_length=250, null=True, blank=True)
-    lng = models.CharField(max_length=250, null=True, blank=True)
-    url = models.CharField(max_length=250, null=True, blank=True)
-    website = models.CharField(max_length=250, null=True, blank=True)
+    lat = models.IntegerField(null=True, blank=True)
+    lng = models.IntegerField(null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
+    website = models.TextField(null=True, blank=True)
     types = ArrayField(
         models.CharField(max_length=250, null=True, blank=True),
         null=True, default=None
