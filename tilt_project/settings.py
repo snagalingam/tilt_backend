@@ -237,9 +237,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
-CORS_EXPOSE_HEADERS = [
-    "access-control-allow-origin",
-]
 
 # security for development
 if ENVIRONMENT == 'development':
