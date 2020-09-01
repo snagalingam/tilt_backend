@@ -14,7 +14,7 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 if ENVIRONMENT == 'development':
     domain = "http://localhost:3000"
 elif ENVIRONMENT == 'production':
-    domain = 'https://tilt-next.vercel.app'
+    domain = 'https://tiltaccess.com'
 
 
 def send_verification(email, first_name):
