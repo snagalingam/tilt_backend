@@ -263,7 +263,7 @@ if ENVIRONMENT == 'production':
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SAMESITE = None
     X_FRAME_OPTIONS = 'DENY'
 
 # static files
