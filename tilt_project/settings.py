@@ -231,29 +231,6 @@ if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
 # security for production
 if ENVIRONMENT == 'production':
-    CORS_ORIGIN_ALLOW_ALL = False
-    CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOW_HEADERS = (
-        'accept',
-        'accept-encoding',
-        'authorization',
-        'content-type',
-        'dnt',
-        'origin',
-        'user-agent',
-        'x-csrftoken',
-        'x-requested-with',
-    )
-    CORS_ORIGIN_WHITELIST = [
-        "https://tiltaccess.com",
-        "https://www.tiltaccess.com",
-    ]
-    CSRF_COOKIE_SECURE = True
-    CSRF_COOKIE_SAMESITE = None
-    CSRF_TRUSTED_ORIGINS = [
-        "https://tiltaccess.com",
-        "https://www.tiltaccess.com",
-    ]
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -262,9 +239,31 @@ if ENVIRONMENT == 'production':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = 'None'
     X_FRAME_OPTIONS = 'DENY'
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+CORS_ORIGIN_WHITELIST = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = None
+CSRF_TRUSTED_ORIGINS = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = None
 
 # static files
 STATIC_URL = '/static/'
