@@ -16,8 +16,10 @@ class Query(graphene.ObjectType):
     college = graphene.List(CollegeType)
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
-    college_by_place_id = graphene.Field(
-        CollegeType, place_id=graphene.String())
+    college_by_unit_id = graphene.Field(
+        CollegeType, unit_id=graphene.String())
+    college_by_ope_id = graphene.Field(
+        CollegeType, ope_id=graphene.String())
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
 
@@ -27,8 +29,11 @@ class Query(graphene.ObjectType):
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
 
-    def resolve_college_by_place_id(root, info, place_id):
-        return College.objects.get(place_id=place_id)
+    def resolve_college_by_unit_id(root, info, unit_id):
+        return College.objects.get(unit_id=unit_id)
+
+    def resolve_college_by_ope_id(root, info, ope_id):
+        return College.objects.get(ope_id=ope_id)
 
     def resolve_college_by_name(root, info, name):
         return College.objects.filter(name=name)
@@ -37,7 +42,8 @@ class CreateCollege(graphene.Mutation):
     college = graphene.Field(CollegeType)
 
     class Arguments:
-        college_scorecard_id = graphene.Int()
+        unit_id = graphene.Int()
+        ope_id = graphene.Int()
         place_id = graphene.String()
         business_status = graphene.String()
         name = graphene.String()
@@ -55,7 +61,8 @@ class CreateCollege(graphene.Mutation):
     def mutate(
         self,
         info,
-        college_scorecard_id,
+        unit_id,
+        ope_id,
         place_id,
         business_status,
         name,
@@ -78,7 +85,8 @@ class CreateCollege(graphene.Mutation):
 
         if college is None:
             college = College(
-                college_scorecard_id=college_scorecard_id,
+                unit_id=unit_id,
+                ope_id=ope_id,
                 place_id=place_id,
                 business_status=business_status,
                 name=name,
