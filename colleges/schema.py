@@ -79,7 +79,7 @@ class CreateCollege(graphene.Mutation):
     ):
 
         try:
-            college = College.objects.get(college_scorecard_id=college_scorecard_id)
+            college = College.objects.get(unit_id=unit_id)
         except College.DoesNotExist:
             college = None
 
