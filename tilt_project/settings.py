@@ -48,10 +48,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -225,6 +225,20 @@ GRAPHENE = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+# security
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = None
+CSRF_TRUSTED_ORIGINS = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+]
 
 # security for development
 if ENVIRONMENT == 'development':
@@ -240,30 +254,7 @@ if ENVIRONMENT == 'production':
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_SSL_REDIRECT = True
     X_FRAME_OPTIONS = 'DENY'
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-)
-CORS_ORIGIN_WHITELIST = [
-    "https://tiltaccess.com",
-    "https://www.tiltaccess.com",
-]
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = None
-CSRF_TRUSTED_ORIGINS = [
-    "https://tiltaccess.com",
-    "https://www.tiltaccess.com",
-]
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = None
+
 
 # static files
 STATIC_URL = '/static/'
