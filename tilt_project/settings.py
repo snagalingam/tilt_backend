@@ -228,13 +228,11 @@ DATABASES['default'].update(db_from_env)
 
 # security
 SESSION_COOKIE_SAMESITE = None
-SESSION_COOKIE_SECURE = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
-CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "https://tiltaccess.com",
@@ -246,6 +244,7 @@ if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
 # security for production
 if ENVIRONMENT == 'production':
+    CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -254,6 +253,7 @@ if ENVIRONMENT == 'production':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
 
 
