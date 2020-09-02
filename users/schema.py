@@ -147,7 +147,7 @@ class OnboardUser(graphene.Mutation):
             base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
             fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
             params = {
-                "key": "AIzaSyAJbF6EQA5ozs8lqI0xNs7PcFdQ1CvsZ1s",
+                "key": os.environ.get('GOOGLE_API'),
                 "place_id": place_id,
                 "fields": fields
             }
