@@ -229,18 +229,7 @@ DATABASES['default'].update(db_from_env)
 SESSION_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-)
-CORS_ORIGIN_WHITELIST = [
+CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
 ]
