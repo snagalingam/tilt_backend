@@ -3,8 +3,11 @@ import graphql_social_auth
 import jwt
 import os
 import requests
+
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.decorators import login_required, user_passes_test, staff_member_required
+
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
 from urllib.parse import urlencode, urlparse, parse_qsl
@@ -27,13 +30,17 @@ class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
 
+    @staff_member_required
     def resolve_users(self, info):
         return get_user_model().objects.all()
 
+    @login_required
     def resolve_me(self, info):
         user = info.context.user
+
         if user.is_anonymous:
             raise Exception('Not logged in!')
+
         if user.is_authenticated:
             if user.social_auth.exists():
                 return user
