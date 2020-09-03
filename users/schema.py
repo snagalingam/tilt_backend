@@ -6,7 +6,7 @@ import requests
 
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
-from django.contrib.auth.decorators import login_required, user_passes_test, staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
@@ -31,7 +31,6 @@ class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
 
-    @staff_member_required
     def resolve_users(self, info):
         return get_user_model().objects.all()
 
