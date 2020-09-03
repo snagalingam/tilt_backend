@@ -3,8 +3,11 @@ import graphql_social_auth
 import jwt
 import os
 import requests
+
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.decorators import login_required, user_passes_test, staff_member_required
+
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
 from urllib.parse import urlencode, urlparse, parse_qsl
@@ -28,13 +31,17 @@ class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
 
+    @staff_member_required
     def resolve_users(self, info):
         return get_user_model().objects.all()
 
+    @login_required
     def resolve_me(self, info):
         user = info.context.user
+
         if user.is_anonymous:
             raise Exception('Not logged in!')
+
         if user.is_authenticated:
             if user.social_auth.exists():
                 return user
@@ -113,7 +120,6 @@ class OnboardUser(graphene.Mutation):
         act_score = graphene.Int()
         sat_score = graphene.Int()
         efc = graphene.Int()
-        terms_and_conditions = graphene.Boolean()
         pronouns = graphene.String()
         ethnicity = graphene.String()
         user_type = graphene.String()
@@ -132,7 +138,6 @@ class OnboardUser(graphene.Mutation):
         act_score=None,
         sat_score=None,
         efc=None,
-        terms_and_conditions=False,
         pronouns=None,
         ethnicity=None,
         user_type=None,
@@ -147,7 +152,7 @@ class OnboardUser(graphene.Mutation):
             base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
             fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
             params = {
-                "key": "AIzaSyAJbF6EQA5ozs8lqI0xNs7PcFdQ1CvsZ1s",
+                "key": os.environ.get('GOOGLE_API'),
                 "place_id": place_id,
                 "fields": fields
             }
@@ -179,7 +184,6 @@ class OnboardUser(graphene.Mutation):
             user.act_score = act_score
             user.sat_score = sat_score
             user.efc = efc
-            user.terms_and_conditions = terms_and_conditions
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
@@ -292,6 +296,7 @@ class ResetPassword(graphene.Mutation):
 class AddSubscriber(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
+
     class Arguments:
         email = graphene.String()
 
@@ -303,6 +308,7 @@ class AddSubscriber(graphene.Mutation):
         email = BaseUserManager.normalize_email(email)
         add_subscriber(email)
         return AddSubscriber(success=True)
+
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
