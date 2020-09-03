@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from urllib.parse import urlencode, urlparse, parse_qsl
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
+from services.sendgrid_api.add_subscriber_email import add_subscriber
 
 
 class UserType(DjangoObjectType):
@@ -112,7 +113,6 @@ class OnboardUser(graphene.Mutation):
         act_score = graphene.Int()
         sat_score = graphene.Int()
         efc = graphene.Int()
-        terms_and_conditions = graphene.Boolean()
         pronouns = graphene.String()
         ethnicity = graphene.String()
         user_type = graphene.String()
@@ -131,7 +131,6 @@ class OnboardUser(graphene.Mutation):
         act_score=None,
         sat_score=None,
         efc=None,
-        terms_and_conditions=False,
         pronouns=None,
         ethnicity=None,
         user_type=None,
@@ -146,7 +145,7 @@ class OnboardUser(graphene.Mutation):
             base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
             fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
             params = {
-                "key": "AIzaSyAJbF6EQA5ozs8lqI0xNs7PcFdQ1CvsZ1s",
+                "key": os.environ.get('GOOGLE_API'),
                 "place_id": place_id,
                 "fields": fields
             }
@@ -178,7 +177,6 @@ class OnboardUser(graphene.Mutation):
             user.act_score = act_score
             user.sat_score = sat_score
             user.efc = efc
-            user.terms_and_conditions = terms_and_conditions
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
@@ -288,6 +286,23 @@ class ResetPassword(graphene.Mutation):
             raise Exception("Password did not reset")
 
 
+class AddSubscriber(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        email
+    ):
+        email = BaseUserManager.normalize_email(email)
+        add_subscriber(email)
+        return AddSubscriber(success=True)
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
@@ -298,3 +313,4 @@ class Mutation(graphene.ObjectType):
     reset_password = ResetPassword.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
+    add_subscriber = AddSubscriber.Field()
