@@ -85,7 +85,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("SAT score"), null=True, blank=True)
     efc = models.IntegerField(
         _("Expected Family Contribution"), null=True, blank=True)
-    terms_and_conditions = models.BooleanField(default=False)
 
     # Pronouns Field
     PRONOUN_CHOICES = [

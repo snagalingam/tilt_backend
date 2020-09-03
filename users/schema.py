@@ -113,7 +113,6 @@ class OnboardUser(graphene.Mutation):
         act_score = graphene.Int()
         sat_score = graphene.Int()
         efc = graphene.Int()
-        terms_and_conditions = graphene.Boolean()
         pronouns = graphene.String()
         ethnicity = graphene.String()
         user_type = graphene.String()
@@ -132,7 +131,6 @@ class OnboardUser(graphene.Mutation):
         act_score=None,
         sat_score=None,
         efc=None,
-        terms_and_conditions=False,
         pronouns=None,
         ethnicity=None,
         user_type=None,
@@ -147,7 +145,7 @@ class OnboardUser(graphene.Mutation):
             base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
             fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
             params = {
-                "key": "AIzaSyAJbF6EQA5ozs8lqI0xNs7PcFdQ1CvsZ1s",
+                "key": os.environ.get('GOOGLE_API'),
                 "place_id": place_id,
                 "fields": fields
             }
@@ -179,7 +177,6 @@ class OnboardUser(graphene.Mutation):
             user.act_score = act_score
             user.sat_score = sat_score
             user.efc = efc
-            user.terms_and_conditions = terms_and_conditions
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
