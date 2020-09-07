@@ -4,9 +4,10 @@ import jwt
 import os
 import requests
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
@@ -58,7 +59,8 @@ class LoginUser(graphene.Mutation):
         password = graphene.String()
 
     def mutate(self, info, email, password):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = authenticate(username=email, password=password)
 
         if user is not None:
@@ -88,12 +90,20 @@ class CreateUser(graphene.Mutation):
         first_name,
         last_name,
     ):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model()(
             email=email,
             first_name=first_name,
             last_name=last_name,
             is_staff=False,
         )
+
+        try: 
+            password_validation.validate_password(password, user=user)
+        except ValidationError as e:
+            return e
+        
         user.set_password(password)
         user.save()
 
@@ -217,7 +227,8 @@ class SendVerificationEmail(graphene.Mutation):
         email,
 
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
         if user is not None:
             send_verification(user.email, user.first_name)
@@ -234,7 +245,8 @@ class SendForgotEmail(graphene.Mutation):
         email = graphene.String()
 
     def mutate(self, info, email):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
 
         if user is not None:
@@ -303,7 +315,8 @@ class AddSubscriber(graphene.Mutation):
         info,
         email
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         add_subscriber(email)
         return AddSubscriber(success=True)
 
