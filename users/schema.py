@@ -59,7 +59,8 @@ class LoginUser(graphene.Mutation):
         password = graphene.String()
 
     def mutate(self, info, email, password):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = authenticate(username=email, password=password)
 
         if user is not None:
@@ -89,7 +90,8 @@ class CreateUser(graphene.Mutation):
         first_name,
         last_name,
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model()(
             email=email,
             first_name=first_name,
@@ -97,11 +99,11 @@ class CreateUser(graphene.Mutation):
             is_staff=False,
         )
 
-        try:
+        try: 
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
             return e
-
+        
         user.set_password(password)
         user.save()
 
@@ -225,7 +227,8 @@ class SendVerificationEmail(graphene.Mutation):
         email,
 
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
         if user is not None:
             send_verification(user.email, user.first_name)
@@ -242,7 +245,8 @@ class SendForgotEmail(graphene.Mutation):
         email = graphene.String()
 
     def mutate(self, info, email):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
 
         if user is not None:
@@ -311,7 +315,8 @@ class AddSubscriber(graphene.Mutation):
         info,
         email
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         add_subscriber(email)
         return AddSubscriber(success=True)
 
