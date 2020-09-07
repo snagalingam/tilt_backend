@@ -4,9 +4,10 @@ import jwt
 import os
 import requests
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
@@ -88,12 +89,20 @@ class CreateUser(graphene.Mutation):
         first_name,
         last_name,
     ):
+    
+        email = BaseUserManager.normalize_email(email)
         user = get_user_model()(
             email=email,
             first_name=first_name,
             last_name=last_name,
             is_staff=False,
         )
+
+        try: 
+            password_validation.validate_password(password, user=user)
+        except ValidationError as e:
+            return e
+        
         user.set_password(password)
         user.save()
 
