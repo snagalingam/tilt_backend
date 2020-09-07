@@ -200,11 +200,11 @@ class GooglePlacesAPI(object):
             return result
 
 
-# api = GooglePlacesAPI()
-# place = "Cardozo"
-# location = "11360"
-# data = api.details(place, location)
-# print(json.dumps(data, indent=4))
+api = GooglePlacesAPI()
+place = "Cardozo"
+location = "11360"
+data = api.details(place, location)
+print(json.dumps(data, indent=4))
 # photos_result = data["result"]["photos"]
 # photo_arr = extract_photo_urls(photos_result)
 
