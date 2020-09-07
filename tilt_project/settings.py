@@ -234,14 +234,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
     "https://tiltapi.dev",
-    "https://tiltapi.dev/graphql"
 ]
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
     "https://tiltapi.dev",
-    "https://tiltapi.dev/graphql"
 ]
 
 # security for development
