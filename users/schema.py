@@ -89,7 +89,6 @@ class CreateUser(graphene.Mutation):
         first_name,
         last_name,
     ):
-    
         email = BaseUserManager.normalize_email(email)
         user = get_user_model()(
             email=email,
@@ -98,11 +97,11 @@ class CreateUser(graphene.Mutation):
             is_staff=False,
         )
 
-        try: 
+        try:
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
             return e
-        
+
         user.set_password(password)
         user.save()
 
