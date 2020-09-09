@@ -233,15 +233,14 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
-    "https://tiltapi.dev",
-    "https://tilt-website-staging.herokuapp.com/"
+    "https://tilt-staging.vercel.app"
+
 ]
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
-    "https://tiltapi.dev",
-    "https://tilt-website-staging.herokuapp.com/"
+    "https://tilt-staging.vercel.app",
 ]
 
 # security for development
