@@ -47,9 +47,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django_samesite_none.middleware.SameSiteNoneMiddleware",
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -95,6 +95,12 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+
+# Fixtures directory to load seed data
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, "../", "fixtures")
+)
 
 
 # Password validation
@@ -236,11 +242,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://tilt-staging.vercel.app"
 
 ]
+
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
-    "https://tiltaccess.com",
-    "https://www.tiltaccess.com",
-    "https://tilt-staging.vercel.app",
+    "tiltaccess.com",
+    "www.tiltaccess.com",
+    "tilt-staging.vercel.app",
 ]
 
 # security for development

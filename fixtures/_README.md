@@ -5,3 +5,6 @@
 
 2. Fields
     `Unit ID, PE ID, Name, City, Zipcode`
+
+3. Run all fixtures
+   `python manage.py loaddata fixtures/*.json`
