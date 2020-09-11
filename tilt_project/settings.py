@@ -97,6 +97,12 @@ DATABASES = {
 }
 
 
+# Fixtures directory to load seed data
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, "../", "fixtures")
+)
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
