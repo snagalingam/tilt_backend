@@ -94,8 +94,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     pronouns = models.CharField(
         _("pronoun"), max_length=10, default=None, null=True)
 
-    ethnicity = models.CharField(
-        _("ethinicity"), max_length=40, default=None, null=True,)
+    ethnicity = ArrayField(
+        models.CharField(
+            _("ethnicity"), max_length=25, null=True))
+
 
     user_type = models.CharField(
         _("user type"), max_length=10, null=True, default=None)
