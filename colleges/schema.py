@@ -118,54 +118,55 @@ class CollegeSearch(graphene.Mutation):
         api = GooglePlacesAPI()
         data = api.details(place, location)
 
-        try: 
-            photos_result = data["result"]["photos"]
-            photos = extract_photo_urls(photos_result)
-            main_photo = photos[0]
-        except: 
-            main_photo = ""
-            photos = []
-            raise Exception("No photos found")
-
-        try: 
-            website = data["result"]["website"]
-            favicon = get_favicon(website)
-        except: 
-            website = data["result"]["website"]
-            favicon = ""
-            raise Exception("No favicon found")
-
         try:
-            place_id = data["place_id"]
-            business_status = data["result"]["business_status"]
-            name = data["result"]["name"]
+            if data["errors"] is not None:
+                return ValueError(data["errors"])
+
+        except:
+            results = data['result']
+
+            photos_result = results.get("photos", "")
+            if photos_result != "":
+                photo_arr = extract_photo_urls(photos_result)
+                main_photo = photo_arr[0]
+                photos = photo_arr
+            else:
+                main_photo = ""
+                photos = []
+
+            website = results.get('website', "")
+            try:
+                favicon = get_favicon(website)
+            except:
+                favicon = ""
+
+            place_id = data['place_id']
+            business_status = results.get('business_status', "")
+            name = results.get('name', "")
             lat = data["result"]["geometry"]["location"]["lat"]
             lng = data["result"]["geometry"]["location"]["lng"]
-            address = data["result"]["formatted_address"]
-            phone_number = data["result"]["formatted_phone_number"]
-            url = data["result"]["url"]
-            types = data["result"]["types"]
-        except:
-            print(json.dumps(data, indent=4))
-            raise Exception("One of the attributes required not found")
+            address = results.get('formatted_address', "")
+            phone_number = results.get('formatted_phone_number', "")
+            url = results.get('url', "")
+            types = results.get('types', "")
+            
+            college = College(
+                place_id=place_id,
+                business_status=business_status,
+                name=name,
+                lat=lat,
+                lng=lng,
+                address=address,
+                phone_number=phone_number,
+                url=url,
+                website=website,
+                favicon=favicon,
+                main_photo=main_photo,
+                photos=photos,
+                types=types,
+            )
 
-        college = College(
-            place_id=place_id,
-            business_status=business_status,
-            name=name,
-            lat=lat,
-            lng=lng,
-            address=address,
-            phone_number=phone_number,
-            url=url,
-            website=website,
-            favicon=favicon,
-            main_photo=main_photo,
-            photos=photos,
-            types=types,
-        )
-
-        return CollegeSearch(college=college)
+            return CollegeSearch(college=college)
 
 
 class Mutation(graphene.ObjectType):
