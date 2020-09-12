@@ -21,7 +21,7 @@ class Organization(models.Model):
         models.CharField(max_length=250, null=True, blank=True),
         null=True, default=None
     )
-    tilt_partnership = models.BooleanField(null=True, blank=True)
+    tilt_partnership = models.BooleanField(null=True, blank=True, default=False)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)

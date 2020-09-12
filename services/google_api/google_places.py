@@ -35,14 +35,14 @@ def search_details(place_id):
     params_encoded = urlencode(params)
     url = f"{base_endpoint}?{params_encoded}"
     r = requests.get(url)
-    print('search_by_id:', r.status_code)
+
+
     return r.json()
 
-
-# data = search_by_id('ChIJlXOKcDC3j4ARzal-5j-p-FY')
+# data = search_details('jkgkljh;kj-5j-p-FY')
 # print(json.dumps(data, indent=4))
-# print(data['result'])
-# print(data['status'])
+# # print(data['result'])
+# print(data)
 
 
 # ---------- Results in a list of searches based on category -------------------
@@ -105,6 +105,7 @@ class GooglePlacesAPI(object):
     data_type = 'json'
     location_query = None
     api_key = os.environ.get('GOOGLE_API')
+    error = {"errors": {}}
 
     def __init__(self, location=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -126,20 +127,21 @@ class GooglePlacesAPI(object):
         url_params = urlencode(params)
         url = f"{endpoint}?{url_params}"
         r = requests.get(url)
-        print("extract_lat_lng:", r.status_code, "=>", r.json()["status"])
 
-        if r.status_code not in range(200, 299):
-            return print(url)
-        if r.json()["status"] == 'OVER_QUERY_LIMIT':
-            raise Exception("Over query limit error")
+        self.error["errors"]["get_location"] = f"{r.status_code} ==>: {r.json()['status']}"
+        print(f"get_location ==>: {self.error['errors']['get_location']}")
+
         latlng = {}
+
         try:
             latlng = r.json()['results'][0]['geometry']['location']
         except:
             pass
+
         lat, lng = latlng.get("lat"), latlng.get("lng")
         self.lat = lat
         self.lng = lng
+
         return lat, lng
 
     def search_for_place_id(self, place=None, location=None, miles=200):
@@ -161,14 +163,13 @@ class GooglePlacesAPI(object):
         params_encoded = urlencode(params)
         places_url = f"{endpoint}?{params_encoded}"
         r = requests.get(places_url)
-        print("search_for_place_id:", r.status_code, "=>", r.json()["status"])
 
-        if r.json()["status"] == 'ZERO_RESULTS':
-            print("Zero results")
+        self.error["errors"]['place_id_search'] = f"{r.status_code} ==>: {r.json()['status']}"
+        print(f"place_id_search ==>: {self.error['errors']['place_id_search']}")
+
         try:
             return r.json()['candidates'][0]['place_id']
         except:
-            print("Zero results")
             pass
 
     def details(self, place=None, location=None, miles=200, place_id=None):
@@ -189,22 +190,22 @@ class GooglePlacesAPI(object):
         r = requests.get(url)
         result = r.json()
         result["place_id"] = place_id
-        print("details:", r.status_code, "=>", r.json()["status"])
 
-        if r.json()["status"] == 'INVALID_REQUEST':
-            print("Place_id might be is missing")
-            pass
-        elif r.json()["status"] == 'NOT_FOUND':
-            raise Exception("Referenced location was not found")
+        self.error["errors"]["details"] = f"{r.status_code} ==>: {r.json()['status']}"
+        print(f"details ==>: {self.error['errors']['details']}")
+
+        if r.json()["status"] == ("INVALID_REQUEST" or "NOT_FOUND"):
+            return self.error
         else:
             return result
 
+# ---------- format places data to match model -------------------
 
-api = GooglePlacesAPI()
-place = "Cardozo"
-location = "11360"
-data = api.details(place, location)
-print(json.dumps(data, indent=4))
+# api = GooglePlacesAPI()
+# place = "asdfasdg"
+# location = "11360"
+# data = api.details(place, location)
+# print(json.dumps(data, indent=4))
 # photos_result = data["result"]["photos"]
 # photo_arr = extract_photo_urls(photos_result)
 

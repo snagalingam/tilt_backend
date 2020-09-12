@@ -109,33 +109,40 @@ class OrganizationSearch(graphene.Mutation):
         api = GooglePlacesAPI()
         data = api.details(place, location)
 
-        place_id = data['place_id']
-        business_status = data['result']['business_status']
-        icon = data['result']['icon']
-        name = data['result']['name']
-        lat = data['result']['geometry']['location']['lat']
-        lng = data['result']['geometry']['location']['lng']
-        address = data['result']['formatted_address']
-        phone_number = data['result']['formatted_phone_number']
-        url = data['result']['url']
-        website = data['result']['website']
-        types = data['result']['types']
+        try:
+            if data["errors"] is not None:
+                return ValueError(data["errors"])
 
-        organization = Organization(
-            place_id=place_id,
-            business_status=business_status,
-            icon=icon,
-            name=name,
-            lat=lat,
-            lng=lng,
-            address=address,
-            phone_number=phone_number,
-            url=url,
-            website=website,
-            types=types,
-        )
+        except:
+            results = data['result']
 
-        return OrganizationSearch(organization=organization)
+            place_id = data['place_id']
+            business_status = results.get('business_status', "")
+            icon = results.get('icon', "")
+            name = results.get('name', "")
+            lat = data["result"]["geometry"]["location"]["lat"]
+            lng = data["result"]["geometry"]["location"]["lng"]
+            address = results.get('formatted_address', "")
+            phone_number = results.get('formatted_phone_number', "")
+            url = results.get('url', "")
+            website = results.get('website', "")
+            types = results.get('types', "")
+
+            organization = Organization(
+                place_id=place_id,
+                business_status=business_status,
+                icon=icon,
+                name=name,
+                lat=lat,
+                lng=lng,
+                address=address,
+                phone_number=phone_number,
+                url=url,
+                website=website,
+                types=types,
+            )
+
+            return OrganizationSearch(organization=organization)
 
 
 class Mutation(graphene.ObjectType):
