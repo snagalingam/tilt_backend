@@ -12,14 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='customuser',
-            name='found_from_other_value',
-        ),
-        migrations.RemoveField(
-            model_name='customuser',
-            name='high_school',
-        ),
         migrations.AddField(
             model_name='customuser',
             name='organization',
