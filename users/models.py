@@ -67,137 +67,53 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
+
     is_onboarded = models.BooleanField(default=False)
 
     first_name = models.CharField(
         _("first name"), max_length=50, null=True, blank=True)
+
     last_name = models.CharField(
         _("last name"), max_length=150, null=True, blank=True)
+
     preferred_name = models.CharField(
-        _("preferred name"), max_length=120, null=True, blank=True
-    )
+        _("preferred name"), max_length=120, null=True, blank=True)
+
     gpa = models.DecimalField(
-        _("GPA"), max_digits=4, decimal_places=2, null=True, blank=True
-    )
+        _("GPA"), max_digits=4, decimal_places=2, null=True, blank=True)
+
     act_score = models.PositiveSmallIntegerField(
         _("ACT score"), null=True, blank=True)
+
     sat_score = models.PositiveSmallIntegerField(
         _("SAT score"), null=True, blank=True)
+
     efc = models.IntegerField(
         _("Expected Family Contribution"), null=True, blank=True)
 
-    # Pronouns Field
-    PRONOUN_CHOICES = [
-        (None, ""),
-        ("he", "He/His"),
-        ("she", "She/Hers"),
-        ("they", "They/their"),
-        ("other", "Other"),
-    ]
-
     pronouns = models.CharField(
-        _("pronoun"), max_length=10, choices=PRONOUN_CHOICES, default=None, null=True
-    )
+        _("pronoun"), max_length=10, default=None, null=True)
 
-    # Ethnicty Field
-    ETHNICITY_CHOICES = [
-        (None, ""),
-        ("american indian and alaska native", "American Indian/Alaska Native"),
-        ("asian", "Asian"),
-        ("black and african", "Black/African"),
-        ("hispanic and latinx", "Hispanic/Latinx"),
-        ("native hawaiian and pacific islander",
-         "Native Hawaiian/Pacific Islander"),
-        ("white", "White"),
-        ("other", "Other"),
-        ("none", "None"),
-    ]
-    ethnicity = models.CharField(
-        _("ethinicity"),
-        max_length=40,
-        choices=ETHNICITY_CHOICES,
-        default=None,
-        null=True,
-    )
+    ethnicity = ArrayField(
+        models.CharField(
+            _("ethnicity"), max_length=25, null=True))
 
-    # UI Value                 | Database Value
-    # -----------------------------------------
-    # K-12 Student             | Student
-    # Transfer Student         | Transfer
-    # Parent                   | Parent
-    # School or District Staff | Staff
-    # Other                    | Other
-
-    # UserType Field
-    USER_TYPE_CHOICES = [
-        ("student", "Student"),
-        ("transfer", "Transfer"),
-        ("parent", "Parent"),
-        ("staff", "Staff"),
-        ("other", "Other"),
-    ]
 
     user_type = models.CharField(
-        _("user type"), max_length=10, choices=USER_TYPE_CHOICES, null=True, default=None
-    )
+        _("user type"), max_length=10, null=True, default=None)
 
-    high_school = models.ForeignKey(
-        Organization, on_delete=models.SET_NULL, blank=True, null=True)
+    organization = models.ManyToManyField(Organization)
 
     high_school_grad_year = models.IntegerField(
         _("high school graduation year"), null=True, blank=True
     )
 
-    # UI Value                 | Database Value
-    # -----------------------------------------
-    # $0 - $30,000             | lo
-    # $30,001 - $48,000        | m1
-    # $48,001 - $75,000        | m2
-    # $75,001 - $110,000       | h1
-    # $110,001+                | h2
-
-    # income_quintile Field
-    INCOME_QUINTILE_CHOICES = [
-        ("none", "None"),
-        ("lo", "$0 - $30,000"),
-        ("m1", "$30,001 - $48,000"),
-        ("m2", "$48,001 - $75,000"),
-        ("h1", "$75,001 - $110,000"),
-        ("h2", "$110,001+"),
-    ]
-
     income_quintile = models.CharField(
-        _("income quintile"), max_length=4, choices=INCOME_QUINTILE_CHOICES, null=True, default=None
-    )
-
-    # UI Value                 | Database Value
-    # -----------------------------------------
-    # Instagram                | instagram
-    # Facebook                 | facebook
-    # Parent                   | parent
-    # School or District Staff | school or district staff
-    # Friend                   | friend
-    # Other                    | (user inputs value)
-
-    # income_quintile Field
-    FOUND_FROM_CHOICES = [
-        ("instagram", "Instagram"),
-        ("facebook", "Facebook"),
-        ("parent", "Parent"),
-        ("school or district staff", "School or District Staff"),
-        ("friend", "Friend"),
-        ("other", "Other")
-    ]
+        _("income quintile"), max_length=4, null=True, default=None)
 
     found_from = ArrayField(
         models.CharField(
-            _("found from"), max_length=25, choices=FOUND_FROM_CHOICES),
-        null=True, default=None
-    )
-
-    found_from_other_value = models.CharField(
-        max_length=75, null=True, blank=True
-    )
+            _("found from"), max_length=25, null=True))
 
     is_staff = models.BooleanField(
         _("staff status"),
