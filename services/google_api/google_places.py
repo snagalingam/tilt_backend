@@ -39,10 +39,10 @@ def search_details(place_id):
 
     return r.json()
 
-data = search_details('jkgkljh;kj-5j-p-FY')
-print(json.dumps(data, indent=4))
-# print(data['result'])
-print(data)
+# data = search_details('jkgkljh;kj-5j-p-FY')
+# print(json.dumps(data, indent=4))
+# # print(data['result'])
+# print(data)
 
 
 # ---------- Results in a list of searches based on category -------------------
