@@ -7,15 +7,15 @@ from django.contrib.postgres.fields import ArrayField
 class College(models.Model):
 
     # college scorecard info
-    unit_id = models.CharField(max_length=250, blank=True, null=True)
-    ope_id = models.CharField(max_length=250, blank=True, null=True)
+    unit_id = models.CharField(max_length=255, blank=True, null=True)
+    ope_id = models.CharField(max_length=255, blank=True, null=True)
 
     # google api inputted
-    place_id = models.CharField(max_length=250, blank=True, null=True)
-    business_status = models.CharField(max_length=250, blank=True, null=True)
-    name = models.CharField(max_length=250, blank=True, null=True)
-    address = models.CharField(max_length=250, blank=True, null=True)
-    phone_number = models.CharField(max_length=25, null=True, blank=True)
+    place_id = models.CharField(max_length=255, blank=True, null=True)
+    business_status = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
     lat = models.IntegerField(null=True, blank=True)
     lng = models.IntegerField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
@@ -27,7 +27,7 @@ class College(models.Model):
         null=True, default=None
     )
     types = ArrayField(
-        models.CharField(max_length=250, null=True, blank=True),
+        models.CharField(max_length=255, null=True, blank=True),
         null=True, default=None
     )
 

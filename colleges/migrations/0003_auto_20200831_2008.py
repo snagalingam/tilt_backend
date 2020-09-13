@@ -17,21 +17,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='college',
             name='ope_id',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='college',
             name='unit_id',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
             model_name='college',
             name='lat',
-            field=models.IntegerField(blank=True, max_length=250, null=True),
+            field=models.IntegerField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
             model_name='college',
             name='lng',
-            field=models.IntegerField(blank=True, max_length=250, null=True),
+            field=models.IntegerField(blank=True, max_length=255, null=True),
         ),
     ]
