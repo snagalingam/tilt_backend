@@ -7,14 +7,20 @@ from sendgrid import SendGridAPIClient
 # -------------- To add subscriber to list
 # List ID: 4dabef7f-34ee-4c60-a4c8-b4525c8115c5
 
+
 def add_subscriber(email):
     try:
+
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        response = sg.client.marketing.contacts.put(request_body=dict(
-        list_ids=["4dabef7f-34ee-4c60-a4c8-b4525c8115c5"], 
-        contacts=[{'email': email}]
-    ))
+        response = sg.client.asm.groups._(23297).suppressions._(email).delete()
+        response2 = sg.client.marketing.contacts.put(request_body=dict(
+            list_ids=["4dabef7f-34ee-4c60-a4c8-b4525c8115c5"],
+            contacts=[{'email': email}]
+
+        ))
         print(response.status_code)
         print(response.headers)
+        print(response2.status_code)
+        print(response2.headers)
     except Exception as e:
         print(e)

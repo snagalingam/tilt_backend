@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='organization',
             name='lat',
-            field=models.IntegerField(blank=True, max_length=250, null=True),
+            field=models.IntegerField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
             model_name='organization',
             name='lng',
-            field=models.IntegerField(blank=True, max_length=250, null=True),
+            field=models.IntegerField(blank=True, max_length=255, null=True),
         ),
     ]
