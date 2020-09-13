@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('highschool_graduation_year', 'gpa', 'act_score', 'sat_score')
         }),
         (_('Organizations'), {
-            'fields': ([Organization])
+            'fields': ('organization')
         }),
         (_('Background info'), {
             'fields': ('ethnicity', 'income_quintile', 'efc', 'found_from')
