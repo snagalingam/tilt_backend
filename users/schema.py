@@ -66,7 +66,7 @@ class LoginUser(graphene.Mutation):
 
         if user is not None:
             if (user.is_verified):
-                login(info.context, user)
+                login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
@@ -291,7 +291,7 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
-            login(info.context, user)
+            login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
             return VerifyEmail(success=user.is_verified)
 
 
