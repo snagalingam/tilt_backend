@@ -59,7 +59,7 @@ def send_reset_password(email, first_name):
                         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=900)},
                        os.environ.get('SECRET_KEY'),
                        algorithm='HS256',
-                       headers={'domain': domain}).decode('utf-8')
+                       headers={'domain': 'tilt-staging.vercel.app'}).decode('utf-8')
 
     url = f"{domain}/forgot-password/{token}"
 
