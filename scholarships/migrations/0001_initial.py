@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Scholarship',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=250)),
+                ('name', models.CharField(max_length=255)),
                 ('url', models.URLField(max_length=500)),
                 ('amount', models.IntegerField()),
                 ('amount_descriptor', models.CharField(choices=[('upto', 'up to'), ('exact', 'exact')], default='exact', max_length=5)),
