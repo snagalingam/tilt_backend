@@ -126,7 +126,7 @@ class OrganizationSearch(graphene.Mutation):
             phone_number = results.get('formatted_phone_number', "")
             url = results.get('url', "")
             website = results.get('website', "")
-            types = results.get('types', "")
+            types = results.get('types', [])
 
             organization = Organization(
                 place_id=place_id,

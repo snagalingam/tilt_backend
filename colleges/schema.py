@@ -148,7 +148,7 @@ class CollegeSearch(graphene.Mutation):
             address = results.get('formatted_address', "")
             phone_number = results.get('formatted_phone_number', "")
             url = results.get('url', "")
-            types = results.get('types', "")
+            types = results.get('types', [])
             
             college = College(
                 place_id=place_id,
