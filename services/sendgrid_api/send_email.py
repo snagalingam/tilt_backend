@@ -14,7 +14,7 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 if ENVIRONMENT == 'development':
     domain = "http://localhost:3000"
 elif ENVIRONMENT == 'production':
-    domain = 'https://tiltaccess.com'
+    domain = os.environ.get('SENDGRID_DOMAIN')
 
 
 def send_verification(email, first_name):
@@ -26,7 +26,7 @@ def send_verification(email, first_name):
                         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=5)},
                        os.environ.get('SECRET_KEY'),
                        algorithm='HS256',
-                       headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
+                       headers={'domain': domain}).decode('utf-8')
     url = f"{domain}/activate/{token}"
 
     message.template_id = 'd-274ce0ccdabc445eb7c488c7c98695e6'
@@ -59,7 +59,7 @@ def send_reset_password(email, first_name):
                         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=900)},
                        os.environ.get('SECRET_KEY'),
                        algorithm='HS256',
-                       headers={'domain': 'www.tiltaccess.com'}).decode('utf-8')
+                       headers={'domain': 'tilt-staging.vercel.app'}).decode('utf-8')
 
     url = f"{domain}/forgot-password/{token}"
 

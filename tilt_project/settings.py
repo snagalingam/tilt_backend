@@ -15,9 +15,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '.tiltapi.dev',
-                 'tilt-website-staging.herokuapp.com']
-
 
 # Application definition
 
@@ -57,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'tilt_project.urls'
@@ -95,6 +91,12 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+
+# Fixtures directory to load seed data
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, "../", "fixtures")
+)
 
 
 # Password validation
@@ -230,19 +232,30 @@ DATABASES['default'].update(db_from_env)
 # security
 SESSION_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ORIGIN_WHITELIST = [
+#     "https://tiltaccess.com",
+#     "https://www.tiltaccess.com",
+#     "https://tilt-staging.vercel.app"
+# ]
+
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
+    "https://tilt-staging.vercel.app"
 ]
+
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
-    "https://tiltaccess.com",
-    "https://www.tiltaccess.com",
+    "tiltaccess.com",
+    "www.tiltaccess.com",
+    "tilt-staging.vercel.app",
 ]
 
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 # security for production
 if ENVIRONMENT == 'production':
     CSRF_COOKIE_SECURE = True
@@ -256,6 +269,8 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+    ALLOWED_HOSTS = ['.tiltapi.dev',
+                     'tilt-website-staging.herokuapp.com']
 
 
 # static files

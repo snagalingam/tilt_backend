@@ -3,10 +3,12 @@ import graphql_social_auth
 import jwt
 import os
 import requests
+import json
 
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
 from django.shortcuts import redirect
@@ -14,7 +16,7 @@ from urllib.parse import urlencode, urlparse, parse_qsl
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
 from services.sendgrid_api.add_subscriber_email import add_subscriber
-
+from services.google_api.google_places import search_details
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -58,12 +60,13 @@ class LoginUser(graphene.Mutation):
         password = graphene.String()
 
     def mutate(self, info, email, password):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = authenticate(username=email, password=password)
 
         if user is not None:
             if (user.is_verified):
-                login(info.context, user)
+                login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
@@ -88,12 +91,20 @@ class CreateUser(graphene.Mutation):
         first_name,
         last_name,
     ):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model()(
             email=email,
             first_name=first_name,
             last_name=last_name,
             is_staff=False,
         )
+
+        try: 
+            password_validation.validate_password(password, user=user)
+        except ValidationError as e:
+            return e
+        
         user.set_password(password)
         user.save()
 
@@ -119,9 +130,10 @@ class OnboardUser(graphene.Mutation):
         sat_score = graphene.Int()
         efc = graphene.Int()
         pronouns = graphene.String()
-        ethnicity = graphene.String()
+        ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
-        place_id = graphene.String()
+        place_id = graphene.String() 
+        place_name = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
         found_from = graphene.List(graphene.String)
@@ -140,40 +152,57 @@ class OnboardUser(graphene.Mutation):
         ethnicity=None,
         user_type=None,
         place_id=None,
+        place_name=None,
         high_school_grad_year=None,
         income_quintile=None,
         found_from=None
     ):
+
         try:
             organization = Organization.objects.get(place_id=place_id)
         except:
-            base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
-            fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
-            params = {
-                "key": os.environ.get('GOOGLE_API'),
-                "place_id": place_id,
-                "fields": fields
-            }
-            params_encoded = urlencode(params)
-            url = f"{base_endpoint}?{params_encoded}"
-            r = requests.get(url)
-            result = r.json()['result']
+            organization = None 
+
+        if organization is None: 
+            data = search_details(place_id)
+            results = data.get("result", {})
+
+            if data["status"] == "INVALID_REQUEST":
+                name = place_name
+                place_id = ""
+            else: 
+                name = results.get('name', "")
+                place_id = data.get('place_id', "")
+
+            try:
+                lat = data["result"]["geometry"]["location"]["lat"]
+                lng = data["result"]["geometry"]["location"]["lng"]
+            except:
+                lat, lng = None, None
+
+            business_status = results.get('business_status', "")
+            icon = results.get('icon', "")
+            address = results.get('formatted_address', "")
+            phone_number = results.get('formatted_phone_number', "")
+            url = results.get('url', "")
+            website = results.get('website', "")
+            types = results.get('types', [])
 
             organization = Organization(
                 place_id=place_id,
-                business_status=result['business_status'],
-                icon=result['icon'],
-                name=result['name'],
-                address=result['formatted_address'],
-                phone_number=result['formatted_phone_number'],
-                url=result['url'],
-                website=result['website'],
-                lat=result['geometry']['location']['lat'],
-                lng=result['geometry']['location']['lng'],
-                types=result['types']
+                business_status=business_status,
+                icon=icon,
+                name=name,
+                lat=lat,
+                lng=lng,
+                address=address,
+                phone_number=phone_number,
+                url=url,
+                website=website,
+                types=types,
             )
             organization.save()
-
+            
         user = get_user_model().objects.get(pk=id)
         if user is not None:
             user.last_name = last_name
@@ -185,7 +214,6 @@ class OnboardUser(graphene.Mutation):
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
-            user.high_school = organization
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
             user.found_from = found_from
@@ -217,7 +245,8 @@ class SendVerificationEmail(graphene.Mutation):
         email,
 
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
         if user is not None:
             send_verification(user.email, user.first_name)
@@ -234,7 +263,8 @@ class SendForgotEmail(graphene.Mutation):
         email = graphene.String()
 
     def mutate(self, info, email):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
 
         if user is not None:
@@ -261,7 +291,7 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
-            login(info.context, user)
+            login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
             return VerifyEmail(success=user.is_verified)
 
 
@@ -303,7 +333,8 @@ class AddSubscriber(graphene.Mutation):
         info,
         email
     ):
-        email = BaseUserManager.normalize_email(email)
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
         add_subscriber(email)
         return AddSubscriber(success=True)
 

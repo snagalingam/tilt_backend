@@ -30,11 +30,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='customuser',
-            name='found_from_other_value',
-            field=models.CharField(blank=True, max_length=75, null=True),
-        ),
-        migrations.AddField(
-            model_name='customuser',
             name='high_school_grad_year',
             field=models.CharField(default=2020, max_length=4, verbose_name='high school graduation year'),
             preserve_default=False,
