@@ -271,7 +271,7 @@ if ENVIRONMENT == 'production':
     X_FRAME_OPTIONS = 'DENY'
     ALLOWED_HOSTS = ['.tiltapi.dev',
                      'tilt-website-staging.herokuapp.com', 
-                     '.tiltacess.com']
+                     '.tiltaccess.com']
 
 
 # static files
