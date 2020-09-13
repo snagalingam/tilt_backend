@@ -15,9 +15,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '.tiltapi.dev',
-                 'tilt-website-staging.herokuapp.com']
-
 
 # Application definition
 
@@ -258,6 +255,7 @@ CSRF_TRUSTED_ORIGINS = [
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 # security for production
 if ENVIRONMENT == 'production':
     CSRF_COOKIE_SECURE = True
@@ -271,6 +269,8 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+    ALLOWED_HOSTS = ['.tiltapi.dev',
+                     'tilt-website-staging.herokuapp.com']
 
 
 # static files
