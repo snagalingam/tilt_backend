@@ -71,16 +71,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_onboarded = models.BooleanField(default=False)
 
     first_name = models.CharField(
-        _("first name"), max_length=50, null=True, blank=True)
+        _("first name"), max_length=255, null=True, blank=True)
 
     last_name = models.CharField(
-        _("last name"), max_length=150, null=True, blank=True)
+        _("last name"), max_length=255, null=True, blank=True)
 
     preferred_name = models.CharField(
-        _("preferred name"), max_length=120, null=True, blank=True)
+        _("preferred name"), max_length=255, null=True, blank=True)
 
     gpa = models.DecimalField(
-        _("GPA"), max_digits=4, decimal_places=2, null=True, blank=True)
+        _("GPA"), max_digits=5, decimal_places=2, null=True, blank=True)
 
     act_score = models.PositiveSmallIntegerField(
         _("ACT score"), null=True, blank=True)
@@ -92,15 +92,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("Expected Family Contribution"), null=True, blank=True)
 
     pronouns = models.CharField(
-        _("pronoun"), max_length=10, default=None, null=True)
+        _("pronoun"), max_length=255, default=None, null=True)
 
     ethnicity = ArrayField(
         models.CharField(
-            _("ethnicity"), max_length=25, null=True))
+            _("ethnicity"), max_length=255, null=True))
 
 
     user_type = models.CharField(
-        _("user type"), max_length=10, null=True, default=None)
+        _("user type"), max_length=255, null=True, default=None)
 
     organization = models.ManyToManyField(Organization)
 
@@ -109,11 +109,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=4, null=True, default=None)
+        _("income quintile"), max_length=255, null=True, default=None)
 
     found_from = ArrayField(
         models.CharField(
-            _("found from"), max_length=25, null=True))
+            _("found from"), max_length=255, null=True))
 
     is_staff = models.BooleanField(
         _("staff status"),

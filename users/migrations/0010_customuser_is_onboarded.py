@@ -6,7 +6,8 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0008_customuser_high_school_name'),
+        ('organizations', '0002_remove_organization_members'),
+        ('users', '0007_auto_20200811_1858'),
     ]
 
     operations = [
