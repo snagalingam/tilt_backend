@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='area_of_study',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='category',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='ethnicity',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='gender',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='location',
-            field=models.CharField(blank=True, max_length=250, null=True),
+            field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -90,7 +90,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scholarship',
             name='organization',
-            field=models.CharField(blank=True, max_length=250),
+            field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
             model_name='scholarship',
@@ -116,6 +116,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scholarship',
             name='name',
-            field=models.CharField(max_length=250, unique_for_date='deadline'),
+            field=models.CharField(max_length=255, unique_for_date='deadline'),
         ),
     ]
