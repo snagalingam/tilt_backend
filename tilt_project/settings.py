@@ -270,7 +270,8 @@ if ENVIRONMENT == 'production':
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
     ALLOWED_HOSTS = ['.tiltapi.dev',
-                     'tilt-website-staging.herokuapp.com']
+                     'tilt-website-staging.herokuapp.com', 
+                     '.tiltacess.com']
 
 
 # static files
