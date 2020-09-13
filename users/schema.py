@@ -3,6 +3,7 @@ import graphql_social_auth
 import jwt
 import os
 import requests
+import json
 
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
@@ -65,7 +66,7 @@ class LoginUser(graphene.Mutation):
 
         if user is not None:
             if (user.is_verified):
-                login(info.context, user)
+                login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
@@ -129,7 +130,7 @@ class OnboardUser(graphene.Mutation):
         sat_score = graphene.Int()
         efc = graphene.Int()
         pronouns = graphene.String()
-        ethnicity = graphene.String()
+        ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
         place_id = graphene.String() 
         place_name = graphene.String()
@@ -156,6 +157,7 @@ class OnboardUser(graphene.Mutation):
         income_quintile=None,
         found_from=None
     ):
+
         try:
             organization = Organization.objects.get(place_id=place_id)
         except:
@@ -163,20 +165,20 @@ class OnboardUser(graphene.Mutation):
 
         if organization is None: 
             data = search_details(place_id)
-            results = data['result']
+            results = data.get("result", {})
 
             if data["status"] == "INVALID_REQUEST":
                 name = place_name
-                place_id = None
+                place_id = ""
             else: 
                 name = results.get('name', "")
-                place_id = data['place_id']
+                place_id = data.get('place_id', "")
 
             try:
                 lat = data["result"]["geometry"]["location"]["lat"]
                 lng = data["result"]["geometry"]["location"]["lng"]
             except:
-                lat, lng = "", ""
+                lat, lng = None, None
 
             business_status = results.get('business_status', "")
             icon = results.get('icon', "")
@@ -184,7 +186,7 @@ class OnboardUser(graphene.Mutation):
             phone_number = results.get('formatted_phone_number', "")
             url = results.get('url', "")
             website = results.get('website', "")
-            types = results.get('types', "")
+            types = results.get('types', [])
 
             organization = Organization(
                 place_id=place_id,
@@ -200,7 +202,7 @@ class OnboardUser(graphene.Mutation):
                 types=types,
             )
             organization.save()
-
+            
         user = get_user_model().objects.get(pk=id)
         if user is not None:
             user.last_name = last_name
@@ -212,7 +214,6 @@ class OnboardUser(graphene.Mutation):
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
-            user.organization = organization
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
             user.found_from = found_from
@@ -290,7 +291,7 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
-            login(info.context, user)
+            login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
             return VerifyEmail(success=user.is_verified)
 
 

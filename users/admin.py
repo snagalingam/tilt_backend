@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
+from organizations.models import Organization
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
@@ -21,11 +22,10 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('highschool_graduation_year', 'gpa', 'act_score', 'sat_score')
         }),
         (_('Organizations'), {
-            'fields': ()
+            'fields': ('organization')
         }),
         (_('Background info'), {
-            'fields': ('ethnicity', 'income_quintile', 'efc', 'found_from',
-                       'found_from_other_value', 'terms_and_conditions')
+            'fields': ('ethnicity', 'income_quintile', 'efc', 'found_from')
         }),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
