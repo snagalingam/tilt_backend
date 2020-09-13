@@ -163,11 +163,11 @@ class OnboardUser(graphene.Mutation):
 
         if organization is None: 
             data = search_details(place_id)
-            results = data['result']
 
             if data["status"] == "INVALID_REQUEST":
                 name = place_name
                 place_id = ""
+                results = data['result']
             else: 
                 name = results.get('name', "")
                 place_id = data.get('place_id', "")
