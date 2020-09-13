@@ -95,9 +95,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("pronoun"), max_length=255, default=None, null=True)
 
     ethnicity = ArrayField(
-        models.CharField(
-            _("ethnicity"), max_length=255, null=True))
-
+        models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
+        null=True, default=None
+    )
 
     user_type = models.CharField(
         _("user type"), max_length=255, null=True, default=None)
@@ -112,8 +112,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("income quintile"), max_length=255, null=True, default=None)
 
     found_from = ArrayField(
-        models.CharField(
-            _("found from"), max_length=255, null=True))
+        models.CharField(_("found from"), max_length=255, null=True, blank=True),
+        null=True, default=None
+    )
 
     is_staff = models.BooleanField(
         _("staff status"),
