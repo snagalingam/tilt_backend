@@ -167,10 +167,10 @@ class OnboardUser(graphene.Mutation):
 
             if data["status"] == "INVALID_REQUEST":
                 name = place_name
-                place_id = None
+                place_id = ""
             else: 
                 name = results.get('name', "")
-                place_id = data['place_id']
+                place_id = data.get('place_id', "")
 
             try:
                 lat = data["result"]["geometry"]["location"]["lat"]
