@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'graphene_django',
-    # 'social_django',
+    'social_django',
 
     # local
     'users.apps.UsersConfig',
