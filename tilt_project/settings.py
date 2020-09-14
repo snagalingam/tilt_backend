@@ -228,6 +228,17 @@ GRAPHENE = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+CORS_ALLOWED_ORIGINS = [	
+    "https://tiltaccess.com",	
+    "https://www.tiltaccess.com",	
+    "https://tiltstaging.dev"	
+]	
+
+CSRF_TRUSTED_ORIGINS = [	
+    "tiltaccess.com",	
+    "www.tiltaccess.com",	
+    "tiltstaging.dev",	
+]
 
 # security for development
 if ENVIRONMENT == 'development':
