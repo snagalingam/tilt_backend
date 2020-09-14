@@ -25,16 +25,16 @@ class Query(graphene.ObjectType):
     def resolve_organizations(self, info):
         return Organization.objects.all()
 
-    def resolve_organization_by_id(root, info, id):
+    def resolve_organization_by_id(self, info, id):
         return Organization.objects.get(pk=id)
 
-    def resolve_organization_by_place_id(root, info, place_id):
+    def resolve_organization_by_place_id(self, info, place_id):
         return Organization.objects.get(place_id=place_id)
 
-    def resolve_organization_by_name(root, info, name):
+    def resolve_organization_by_name(self, info, name):
         return Organization.objects.filter(name=name)
 
-    def resolve_organization_by_tilt_partnership(root, info, tilt_partnership):
+    def resolve_organization_by_tilt_partnership(self, info, tilt_partnership):
         return Organization.objects.filter(tilt_partnership=tilt_partnership)
 
 
