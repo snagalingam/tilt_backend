@@ -242,14 +242,14 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
-    "https://tilt-staging.vercel.app"
+    "https://tiltstaging.dev"
 ]
 
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "tiltaccess.com",
     "www.tiltaccess.com",
-    "tilt-staging.vercel.app",
+    "tiltstaging.dev",
 ]
 
 # security for development
@@ -269,9 +269,8 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
-    ALLOWED_HOSTS = ['.tiltapi.dev',
-                     'tilt-website-staging.herokuapp.com', 
-                     '.tiltaccess.com']
+    ALLOWED_HOSTS = ['api.tiltstaging.dev',
+                     'api.tiltaccess.com']
 
 
 # static files
