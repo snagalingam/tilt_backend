@@ -99,7 +99,8 @@ class CreateUser(graphene.Mutation):
             last_name=last_name,
             is_staff=False,
         )
-
+        
+        # password validation
         try: 
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
@@ -158,10 +159,10 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        try:
+        if place_id is not None:
             organization = Organization.objects.get(place_id=place_id)
-        except:
-            organization = None 
+        elif place_name is not None:
+            organization = Organization.objects.get(place_name=place_name)
 
         if organization is None: 
             data = search_details(place_id)
