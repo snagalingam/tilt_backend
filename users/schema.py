@@ -2,17 +2,12 @@ import graphene
 import graphql_social_auth
 import jwt
 import os
-import requests
-import json
 
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
-from django.shortcuts import redirect
-from urllib.parse import urlencode, urlparse, parse_qsl
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
 from services.sendgrid_api.add_subscriber_email import add_subscriber
@@ -99,8 +94,9 @@ class CreateUser(graphene.Mutation):
             last_name=last_name,
             is_staff=False,
         )
-
-        try: 
+        
+        # password validation
+        try:
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
             return e
@@ -123,7 +119,6 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
-        last_name = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
@@ -142,7 +137,6 @@ class OnboardUser(graphene.Mutation):
         self,
         info,
         id,
-        last_name=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
@@ -158,34 +152,44 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        try:
-            organization = Organization.objects.get(place_id=place_id)
-        except:
-            organization = None 
-
-        if organization is None: 
-            data = search_details(place_id)
-            results = data.get("result", {})
-
-            if data["status"] == "INVALID_REQUEST":
-                name = place_name
-                place_id = ""
-            else: 
-                name = results.get('name', "")
-                place_id = data.get('place_id', "")
-
+        if place_id is not None:
             try:
+                organization = Organization.objects.get(place_id=place_id)
+            except:
+                pass
+        elif place_name is not None:
+            try:
+                organization = Organization.objects.get(place_name=place_name)
+            except:
+                pass
+
+        organization = None
+
+        if organization is None:
+
+            if place_id is None:
+                if place_name is None and place_name == "":
+                    raise ValueError("Place name cannot be blank")
+
+            if place_id is not None:
+                data = search_details(place_id)
+                results = data.get("result") 
                 lat = data["result"]["geometry"]["location"]["lat"]
                 lng = data["result"]["geometry"]["location"]["lng"]
-            except:
-                lat, lng = None, None
 
-            business_status = results.get('business_status', "")
-            icon = results.get('icon', "")
-            address = results.get('formatted_address', "")
-            phone_number = results.get('formatted_phone_number', "")
-            url = results.get('url', "")
-            website = results.get('website', "")
+            else:
+                results = {}
+                name = place_name
+                place_id = None
+                lat = None
+                lng = None
+
+            business_status = results.get('business_status', None)
+            icon = results.get('icon', None)
+            address = results.get('formatted_address', None)
+            phone_number = results.get('formatted_phone_number', None)
+            url = results.get('url', None)
+            website = results.get('website', None)
             types = results.get('types', [])
 
             organization = Organization(
@@ -202,10 +206,13 @@ class OnboardUser(graphene.Mutation):
                 types=types,
             )
             organization.save()
-            
+
+        print(f'place_id ==>: {place_id}')
+        print(f'place_name ==>: {place_name}')
+        print(f'organization ==>: {organization}')
+
         user = get_user_model().objects.get(pk=id)
         if user is not None:
-            user.last_name = last_name
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
