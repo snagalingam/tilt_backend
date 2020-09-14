@@ -174,30 +174,30 @@ class OnboardUser(graphene.Mutation):
 
             if place_id is not None:
                 data = search_details(place_id)
-                results = data.get("result") 
-                lat = data["result"]["geometry"]["location"]["lat"]
-                lng = data["result"]["geometry"]["location"]["lng"]
+                results = data.get("result")
+                lat = results.get("geometry")["location"]["lat"]
+                lng = results.get("geometry")["location"]["lng"]
+                place_name = results.get("name")
 
             else:
                 results = {}
-                name = place_name
                 place_id = ""
                 lat = ""
                 lng = ""
 
-            business_status = results.get('business_status', "")
-            icon = results.get('icon', "")
-            address = results.get('formatted_address', "")
-            phone_number = results.get('formatted_phone_number', "")
-            url = results.get('url', "")
-            website = results.get('website', "")
-            types = results.get('types', [])
+            business_status = results.get("business_status", "")
+            icon = results.get("icon", "")
+            address = results.get("formatted_address", "")
+            phone_number = results.get("formatted_phone_number", "")
+            url = results.get("url", "")
+            website = results.get("website", "")
+            types = results.get("types", [])
 
             organization = Organization(
                 place_id=place_id,
                 business_status=business_status,
                 icon=icon,
-                name=name,
+                name=place_name,
                 lat=lat,
                 lng=lng,
                 address=address,
