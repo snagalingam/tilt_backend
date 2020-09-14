@@ -112,20 +112,19 @@ class OrganizationSearch(graphene.Mutation):
         try:
             if data["errors"] is not None:
                 return ValueError(data["errors"])
-
         except:
-            results = data['result']
+            results = data.get('result')
 
-            place_id = data['place_id']
-            business_status = results.get('business_status', "")
-            icon = results.get('icon', "")
-            name = results.get('name', "")
-            lat = data["result"]["geometry"]["location"]["lat"]
-            lng = data["result"]["geometry"]["location"]["lng"]
-            address = results.get('formatted_address', "")
-            phone_number = results.get('formatted_phone_number', "")
-            url = results.get('url', "")
-            website = results.get('website', "")
+            place_id = data.get('place_id')
+            business_status = results.get('business_status', None)
+            icon = results.get('icon', None)
+            name = results.get('name', None)
+            lat = results.get("geometry")["location"]["lat"]
+            lng = results.get("geometry")["location"]["lng"]
+            address = results.get('formatted_address', None)
+            phone_number = results.get('formatted_phone_number', None)
+            url = results.get('url', None)
+            website = results.get('website', None)
             types = results.get('types', [])
 
             organization = Organization(
