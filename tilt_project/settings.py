@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_samesite_none.middleware.SameSiteNoneMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -228,16 +229,27 @@ GRAPHENE = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-CORS_ALLOWED_ORIGINS = [	
-    "https://tiltaccess.com",	
-    "https://www.tiltaccess.com",	
-    "https://tiltstaging.dev"	
-]	
+# security
+SESSION_COOKIE_SAMESITE = None
+CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = [	
-    "tiltaccess.com",	
-    "www.tiltaccess.com",	
-    "tiltstaging.dev",	
+# CORS_ORIGIN_WHITELIST = [
+#     "https://tiltaccess.com",
+#     "https://www.tiltaccess.com",
+#     "https://tilt-staging.vercel.app"
+# ]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://tiltaccess.com",
+    "https://www.tiltaccess.com",
+    "https://tiltstaging.dev"
+]
+
+CSRF_COOKIE_SAMESITE = None
+CSRF_TRUSTED_ORIGINS = [
+    "tiltaccess.com",
+    "www.tiltaccess.com",
+    "tiltstaging.dev",
 ]
 
 # security for development
