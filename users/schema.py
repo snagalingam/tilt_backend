@@ -156,17 +156,15 @@ class OnboardUser(graphene.Mutation):
             try:
                 organization = Organization.objects.get(place_id=place_id)
             except:
-                pass
+                organization = None
+
         elif place_name is not None:
             try:
-                organization = Organization.objects.get(place_name=place_name)
+                organization = Organization.objects.get(name=place_name)
             except:
-                pass
-
-        organization = None
+                organization = None
 
         if organization is None:
-
             if place_id is None:
                 if place_name is None and place_name == "":
                     raise ValueError("Place name cannot be blank")
