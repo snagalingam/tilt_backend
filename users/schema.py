@@ -177,16 +177,16 @@ class OnboardUser(graphene.Mutation):
 
             else:
                 results = {}
-                place_id = ""
-                lat = ""
-                lng = ""
+                place_id = None
+                lat = None
+                lng = None
 
-            business_status = results.get("business_status", "")
-            icon = results.get("icon", "")
-            address = results.get("formatted_address", "")
-            phone_number = results.get("formatted_phone_number", "")
-            url = results.get("url", "")
-            website = results.get("website", "")
+            business_status = results.get("business_status", None)
+            icon = results.get("icon", None)
+            address = results.get("formatted_address", None)
+            phone_number = results.get("formatted_phone_number", None)
+            url = results.get("url", None)
+            website = results.get("website", None)
             types = results.get("types", [])
 
             organization = Organization(
