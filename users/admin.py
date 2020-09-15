@@ -1,5 +1,52 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext_lazy as _
+from organizations.models import Organization
+
+from .forms import CustomUserChangeForm, CustomUserCreationForm
+
 CustomUser = get_user_model()
 
-admin.site.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    list_display = ['email', 'is_staff', 'is_superuser',
+                    'is_active', 'is_verified', 'is_onboarded']
+    fieldsets = (
+        (None, {'fields': ('email', 'password',)}),
+        (_('Personal Information'), {
+            'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
+        }),
+        (_('Account Status'), {
+            'fields': ('is_staff', 'is_superuser', 'is_active', 'is_verified', 'is_onboarded', 'user_type')
+        }),
+        (_('Background Information'), {
+            'fields': ('ethnicity', 'found_from'),
+        }),
+        (_('Organization Information'), {
+            'fields': ('organization',),
+        }),
+        (_('Academic Information'), {
+            'fields': ('gpa', 'act_score', 'sat_score', 'high_school_grad_year')
+        }),
+        (_('Financial Information'), {
+            'fields': ('efc', 'income_quintile',)
+        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2'),
+        }),
+    )
+    search_fields = ('email', 'first_name', 'last_name', 'is_staff',
+                     'is_superuser', 'is_active', 'is_verified', 'is_onboarded')
+    ordering = ('email',)
+
+    model = CustomUser
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
