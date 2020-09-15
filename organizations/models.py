@@ -23,7 +23,7 @@ class Organization(models.Model):
     )
     tilt_partnership = models.BooleanField(
         null=True, blank=True, default=False)
-    students = models.ManyToManyField(
+    user_id = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="to_organization")
 
     # automatically added

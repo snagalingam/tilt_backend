@@ -102,7 +102,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_type = models.CharField(
         _("user type"), max_length=255, null=True, default=None)
 
-    organization = models.ManyToManyField(
+    organization_id = models.ManyToManyField(
         Organization, related_name="to_user")
 
     high_school_grad_year = models.IntegerField(
