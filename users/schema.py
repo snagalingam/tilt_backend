@@ -119,6 +119,7 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
+        last_name = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
@@ -127,7 +128,7 @@ class OnboardUser(graphene.Mutation):
         pronouns = graphene.String()
         ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
-        place_id = graphene.String() 
+        place_id = graphene.String()
         place_name = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
@@ -137,6 +138,7 @@ class OnboardUser(graphene.Mutation):
         self,
         info,
         id,
+        last_name=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
@@ -152,51 +154,48 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        if place_id is not None:
-            try:
-                organization = Organization.objects.get(place_id=place_id)
-            except:
-                pass
-        elif place_name is not None:
-            try:
-                organization = Organization.objects.get(place_name=place_name)
-            except:
-                pass
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except:
+            organization = None
 
-        organization = None
+        if place_name is not None:
+            try:
+                organization = Organization.objects.get(name=place_name)
+            except:
+                organization = None
 
         if organization is None:
-
             if place_id is None:
-                if place_name is None and place_name == "":
+                if place_name is None or place_name == "":
                     raise ValueError("Place name cannot be blank")
 
             if place_id is not None:
                 data = search_details(place_id)
-                results = data.get("result") 
-                lat = data["result"]["geometry"]["location"]["lat"]
-                lng = data["result"]["geometry"]["location"]["lng"]
+                results = data.get("result")
+                lat = results.get("geometry")["location"]["lat"]
+                lng = results.get("geometry")["location"]["lng"]
+                place_name = results.get("name")
 
             else:
                 results = {}
-                name = place_name
                 place_id = None
                 lat = None
                 lng = None
 
-            business_status = results.get('business_status', None)
-            icon = results.get('icon', None)
-            address = results.get('formatted_address', None)
-            phone_number = results.get('formatted_phone_number', None)
-            url = results.get('url', None)
-            website = results.get('website', None)
-            types = results.get('types', [])
+            business_status = results.get("business_status", None)
+            icon = results.get("icon", None)
+            address = results.get("formatted_address", None)
+            phone_number = results.get("formatted_phone_number", None)
+            url = results.get("url", None)
+            website = results.get("website", None)
+            types = results.get("types", [])
 
             organization = Organization(
                 place_id=place_id,
                 business_status=business_status,
                 icon=icon,
-                name=name,
+                name=place_name,
                 lat=lat,
                 lng=lng,
                 address=address,
@@ -209,7 +208,6 @@ class OnboardUser(graphene.Mutation):
 
         print(f'place_id ==>: {place_id}')
         print(f'place_name ==>: {place_name}')
-        print(f'organization ==>: {organization}')
 
         user = get_user_model().objects.get(pk=id)
         if user is not None:

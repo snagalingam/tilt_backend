@@ -17,7 +17,7 @@ if ENVIRONMENT == 'development':
 if ENVIRONMENT == 'production':
     urlpatterns = [
         path("teamtilt", admin.site.urls),
-        path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
+        path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=False))),
         path("robots.txt", TemplateView.as_view(
             template_name="robots.txt", content_type="text/plain")),
         path("sitemap.xml", TemplateView.as_view(
