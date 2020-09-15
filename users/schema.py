@@ -29,11 +29,7 @@ class Query(graphene.ObjectType):
     users = graphene.List(UserType)
 
     def resolve_users(self, info):
-        user = info.context.user
-        if user.is_staff:
-            return get_user_model().objects.all()
-        else:
-            raise Exception('User not authorized please contact admin')
+        return get_user_model().objects.all()
 
     def resolve_me(self, info):
         user = info.context.user
@@ -131,7 +127,7 @@ class OnboardUser(graphene.Mutation):
         pronouns = graphene.String()
         ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
-        place_id = graphene.String() 
+        place_id = graphene.String()
         place_name = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
