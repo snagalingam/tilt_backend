@@ -26,8 +26,6 @@ class Organization(models.Model):
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="to_organization")
 
-
-
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
