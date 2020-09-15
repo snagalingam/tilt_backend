@@ -21,7 +21,10 @@ class Organization(models.Model):
         models.CharField(max_length=255, null=True, blank=True),
         null=True, default=None
     )
-    tilt_partnership = models.BooleanField(null=True, blank=True, default=False)
+    tilt_partnership = models.BooleanField(
+        null=True, blank=True, default=False)
+    students = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="to_organization")
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
