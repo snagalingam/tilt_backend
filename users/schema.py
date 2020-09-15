@@ -272,12 +272,12 @@ class SendForgotEmail(graphene.Mutation):
     def mutate(self, info, email):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-
-        try: 
-            user = get_user_model().objects.get(email=email)
+        user = get_user_model().objects.get(email=email)
+        
+        if user is not None:
             send_reset_password(user.email, user.first_name)
             return SendForgotEmail(success=True)
-        except:
+        else:
             raise Exception("Email not found")
 
 
