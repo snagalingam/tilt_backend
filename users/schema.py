@@ -214,20 +214,20 @@ class OnboardUser(graphene.Mutation):
         if user is not None:
             if place_id is not None and place_name is not None:
                 user.organization.add(organization)
-                user.preferred_name = preferred_name
-                user.gpa = gpa
-                user.act_score = act_score
-                user.sat_score = sat_score
-                user.efc = efc
-                user.pronouns = pronouns
-                user.ethnicity = ethnicity
-                user.user_type = user_type
-                user.high_school_grad_year = high_school_grad_year
-                user.income_quintile = income_quintile
-                user.found_from = found_from
-                user.is_onboarded = True
-                user.save()
-                return OnboardUser(user=user)
+            user.preferred_name = preferred_name
+            user.gpa = gpa
+            user.act_score = act_score
+            user.sat_score = sat_score
+            user.efc = efc
+            user.pronouns = pronouns
+            user.ethnicity = ethnicity
+            user.user_type = user_type
+            user.high_school_grad_year = high_school_grad_year
+            user.income_quintile = income_quintile
+            user.found_from = found_from
+            user.is_onboarded = True
+            user.save()
+            return OnboardUser(user=user)
         else:
             raise Exception("User is not logged in")
 
