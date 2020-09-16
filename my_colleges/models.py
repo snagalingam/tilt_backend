@@ -13,7 +13,8 @@ class MyCollege(models.Model):
 
     college_status = models.CharField(max_length=255, blank=True, null=True)
     net_price = models.IntegerField(blank=True, null=True)
-
+    popularity_score = models.IntegerField(blank=True, null=True)
+    
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
