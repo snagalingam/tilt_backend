@@ -11,8 +11,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
-    lat = models.CharField(null=True, blank=True)
-    lng = models.CharField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     types = ArrayField(
