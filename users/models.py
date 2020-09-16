@@ -5,7 +5,6 @@ from django.contrib.auth.base_user import (
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from enum import Enum
 
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -92,7 +91,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("Expected Family Contribution"), null=True, blank=True)
 
     pronouns = models.CharField(
-        _("pronoun"), max_length=255, default=None, null=True)
+        _("pronoun"), max_length=255, default=None, null=True, blank=True)
 
     ethnicity = ArrayField(
         models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
@@ -100,17 +99,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     user_type = models.CharField(
-        _("user type"), max_length=255, null=True, default=None)
+        _("user type"), max_length=255, null=True, blank=True, default=None)
 
-    organization_id = models.ManyToManyField(
-        Organization, related_name="to_user")
+    organization = models.ManyToManyField(Organization)
 
     high_school_grad_year = models.IntegerField(
         _("high school graduation year"), null=True, blank=True
     )
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=255, null=True, default=None)
+        _("income quintile"), max_length=255, null=True, blank=True, default=None)
 
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),

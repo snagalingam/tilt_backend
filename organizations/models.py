@@ -1,5 +1,3 @@
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
@@ -23,8 +21,6 @@ class Organization(models.Model):
     )
     tilt_partnership = models.BooleanField(
         null=True, blank=True, default=False)
-    user_id = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="to_organization")
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)

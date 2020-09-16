@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from organizations.models import Organization
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
@@ -13,6 +12,8 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     list_display = ['email', 'is_staff', 'is_superuser',
                     'is_active', 'is_verified', 'is_onboarded']
+    list_editable = ['is_staff', 'is_superuser',
+                     'is_active', 'is_verified', 'is_onboarded']
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
         (_('Personal Information'), {
