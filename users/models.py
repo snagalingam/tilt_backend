@@ -109,7 +109,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=255, null=True, default=None)
+        _("income quintile"), max_length=255, default=None, null=True, blank=True)
 
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
