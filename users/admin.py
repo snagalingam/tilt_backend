@@ -8,8 +8,6 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 CustomUser = get_user_model()
 
 class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
     list_display = ['email', 'is_staff', 'is_superuser',
                     'is_active', 'is_verified', 'is_onboarded']
     list_editable = ['is_staff', 'is_superuser',
