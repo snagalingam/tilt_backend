@@ -156,8 +156,8 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        if place_id is not None and place_name is not None: 
 
+        if place_id is not None or place_name is not None:
             try:
                 organization = Organization.objects.get(place_id=place_id)
             except:
@@ -206,14 +206,12 @@ class OnboardUser(graphene.Mutation):
                     types=types,
                 )
                 organization.save()
-
+                
             print(f'place_id ==>: {place_id}')
             print(f'place_name ==>: {place_name}')
 
         user = get_user_model().objects.get(pk=id)
         if user is not None:
-            if place_id is not None and place_name is not None:
-                user.organization.add(organization)
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
@@ -226,11 +224,12 @@ class OnboardUser(graphene.Mutation):
             user.income_quintile = income_quintile
             user.found_from = found_from
             user.is_onboarded = True
+            if place_id is not None or place_name is not None:
+                user.organization.add(organization)
             user.save()
             return OnboardUser(user=user)
         else:
             raise Exception("User is not logged in")
-
 
 class LogoutUser(graphene.Mutation):
     user = graphene.Field(UserType)
