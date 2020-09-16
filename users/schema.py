@@ -119,7 +119,6 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
-        last_name = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
@@ -138,7 +137,6 @@ class OnboardUser(graphene.Mutation):
         self,
         info,
         id,
-        last_name=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
