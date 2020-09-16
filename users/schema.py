@@ -156,78 +156,78 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        try:
-            organization = Organization.objects.get(place_id=place_id)
-        except:
-            organization = None
+        if place_id is not None and place_name is not None: 
 
-        if place_name is not None:
             try:
-                organization = Organization.objects.get(name=place_name)
+                organization = Organization.objects.get(place_id=place_id)
             except:
                 organization = None
 
-        if organization is None:
-            if place_id is None:
-                if place_name is None or place_name == "":
-                    raise ValueError("Place name cannot be blank")
+            if place_name is not None:
+                try:
+                    organization = Organization.objects.get(name=place_name)
+                except:
+                    organization = None
 
-            if place_id is not None:
-                data = search_details(place_id)
-                results = data.get("result")
-                lat = results.get("geometry")["location"]["lat"]
-                lng = results.get("geometry")["location"]["lng"]
-                place_name = results.get("name")
+            if organization is None:
 
-            else:
-                results = {}
-                place_id = None
-                lat = None
-                lng = None
+                if place_id is not None:
+                    data = search_details(place_id)
+                    results = data.get("result")
+                    lat = results.get("geometry")["location"]["lat"]
+                    lng = results.get("geometry")["location"]["lng"]
+                    place_name = results.get("name")
 
-            business_status = results.get("business_status", None)
-            icon = results.get("icon", None)
-            address = results.get("formatted_address", None)
-            phone_number = results.get("formatted_phone_number", None)
-            url = results.get("url", None)
-            website = results.get("website", None)
-            types = results.get("types", [])
+                else:
+                    results = {}
+                    place_id = None
+                    lat = None
+                    lng = None
 
-            organization = Organization(
-                place_id=place_id,
-                business_status=business_status,
-                icon=icon,
-                name=place_name,
-                lat=lat,
-                lng=lng,
-                address=address,
-                phone_number=phone_number,
-                url=url,
-                website=website,
-                types=types,
-            )
-            organization.save()
+                business_status = results.get("business_status", None)
+                icon = results.get("icon", None)
+                address = results.get("formatted_address", None)
+                phone_number = results.get("formatted_phone_number", None)
+                url = results.get("url", None)
+                website = results.get("website", None)
+                types = results.get("types", [])
 
-        print(f'place_id ==>: {place_id}')
-        print(f'place_name ==>: {place_name}')
+                organization = Organization(
+                    place_id=place_id,
+                    business_status=business_status,
+                    icon=icon,
+                    name=place_name,
+                    lat=lat,
+                    lng=lng,
+                    address=address,
+                    phone_number=phone_number,
+                    url=url,
+                    website=website,
+                    types=types,
+                )
+                organization.save()
+
+            print(f'place_id ==>: {place_id}')
+            print(f'place_name ==>: {place_name}')
 
         user = get_user_model().objects.get(pk=id)
         if user is not None:
-            user.organization.add(organization)
-            user.preferred_name = preferred_name
-            user.gpa = gpa
-            user.act_score = act_score
-            user.sat_score = sat_score
-            user.efc = efc
-            user.pronouns = pronouns
-            user.ethnicity = ethnicity
-            user.user_type = user_type
-            user.high_school_grad_year = high_school_grad_year
-            user.income_quintile = income_quintile
-            user.found_from = found_from
-            user.is_onboarded = True
-            user.save()
-            return OnboardUser(user=user)
+            if place_id is not None and place_name is not None:
+                user.organization.add(organization)
+                user.preferred_name = preferred_name
+                user.gpa = gpa
+                user.act_score = act_score
+                user.sat_score = sat_score
+                user.efc = efc
+                user.pronouns = pronouns
+                user.ethnicity = ethnicity
+                user.user_type = user_type
+                user.high_school_grad_year = high_school_grad_year
+                user.income_quintile = income_quintile
+                user.found_from = found_from
+                user.is_onboarded = True
+                user.save()
+                return OnboardUser(user=user)
         else:
             raise Exception("User is not logged in")
 
