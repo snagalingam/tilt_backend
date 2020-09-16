@@ -178,20 +178,26 @@ class OnboardUser(graphene.Mutation):
                     lat = results.get("geometry")["location"]["lat"]
                     lng = results.get("geometry")["location"]["lng"]
                     place_name = results.get("name")
+                    business_status = results.get("business_status", None)
+                    icon = results.get("icon", None)
+                    address = results.get("formatted_address", None)
+                    phone_number = results.get("formatted_phone_number", None)
+                    url = results.get("url", None)
+                    website = results.get("website", None)
+                    types = results.get("types", [])
 
                 else:
                     results = {}
                     place_id = None
                     lat = None
                     lng = None
-
-                business_status = results.get("business_status", None)
-                icon = results.get("icon", None)
-                address = results.get("formatted_address", None)
-                phone_number = results.get("formatted_phone_number", None)
-                url = results.get("url", None)
-                website = results.get("website", None)
-                types = results.get("types", [])
+                    business_status = None
+                    icon = None
+                    address = None
+                    phone_number = None
+                    url = None
+                    website = None
+                    types = []
 
                 organization = Organization(
                     place_id=place_id,
