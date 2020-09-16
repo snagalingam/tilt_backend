@@ -5,7 +5,6 @@ from django.contrib.auth.base_user import (
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from enum import Enum
 
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -92,7 +91,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("Expected Family Contribution"), null=True, blank=True)
 
     pronouns = models.CharField(
-        _("pronoun"), max_length=255, default=None, null=True)
+        _("pronoun"), max_length=255, default=None, null=True, blank=True)
 
     ethnicity = ArrayField(
         models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
@@ -100,7 +99,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     user_type = models.CharField(
-        _("user type"), max_length=255, null=True, default=None)
+        _("user type"), max_length=255, default=None, null=True, blank=True)
 
     organization = models.ManyToManyField(
         Organization, related_name="to_user")
