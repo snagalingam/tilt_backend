@@ -21,9 +21,9 @@ class CustomUserAdmin(UserAdmin):
         (_('Background Information'), {
             'fields': ('ethnicity', 'found_from'),
         }),
-        (_('Organization Information'), {
-            'fields': ('organization',),
-        }),
+        # (_('Organization Information'), {
+        #     'fields': ('organization',),
+        # }),
         (_('Academic Information'), {
             'fields': ('gpa', 'act_score', 'sat_score', 'high_school_grad_year')
         }),
