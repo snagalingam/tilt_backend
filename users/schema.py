@@ -213,8 +213,7 @@ class OnboardUser(graphene.Mutation):
 
         user = get_user_model().objects.get(pk=id)
         if user is not None:
-            organization.user_id.add(user)
-            user.organization_id.add(organization)
+            user.organization.add(organization)
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
