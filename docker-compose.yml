@@ -16,7 +16,7 @@ services:
     depends_on:
       - db
 
-  db:
+  database:
     container_name: db
     image: postgres:11
     volumes:
