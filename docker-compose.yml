@@ -7,6 +7,10 @@ services:
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
       - ENVIRONMENT=development
+      - DATABASE_HOST=db
+      - DATABASE_NAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_USER=postgres
       - DEBUG=1
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
     ports:
@@ -14,10 +18,10 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - database
+      - db
 
-  database:
-    container_name: database
+  db:
+    container_name: db
     image: postgres:11
     volumes:
       - postgres_data:/var/lib/postgresql/data/
