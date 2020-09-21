@@ -2,45 +2,51 @@ import graphene
 from graphene_django import DjangoObjectType
 import json
 import os
-from .models import MyCollege
+from .models import CollegeStatus
+from django.db.models import Count
+from graphene.types.resolver import dict_resolver
 
-class MyCollegeType(DjangoObjectType):
+class CollegeStatusType(DjangoObjectType):
     class Meta:
-        model = MyCollege
+        model = CollegeStatus
         fields = "__all__"
 
-
 class Query(graphene.ObjectType):
-    my_college = graphene.List(MyCollegeType)
-    my_college_by_popularity = graphene.List(MyCollegeType)
+    college_statuses = graphene.List(CollegeStatusType)
+    # college_status_by_popularity = graphene.List(CollegeStatusType)
 
-    my_college_by_college_id = graphene.Field(
-        MyCollegeType, college_id=graphene.String())
+    college_status_by_college_id = graphene.Field(
+        CollegeStatusType, college_id=graphene.String())
 
-    my_college_by_user_id = graphene.Field(
-        MyCollegeType, user_id=graphene.String())
+    college_status_by_user_id = graphene.Field(
+        CollegeStatusType, user_id=graphene.String())
 
-    def resolve_my_colleges(self, info):
-        return MyCollege.objects.all()
+    def resolve_college_statuses(self, info):
+        return CollegeStatus.objects.all()
 
-    def my_college_by_popularity(root, info):
-        # query for popularity | filter college_status != Not interested
-        exclude_not_interested = MyCollege.objects.exclude(college_status="Not Interested")
-        pass
+    # def resolve_college_status_by_popularity(self, info):
+    #     # .values('<field value>') ==> gets name of model field
+    #     # .annotate(<name of key>=Count('<field value>') ==> what you want to count in each instance
 
-    def resolve_my_college_by_college_id(root, info, college_id):
-        return MyCollege.objects.get(college_id=college_id)
+    #     college_set = CollegeStatus.objects.exclude(
+    #         college_status="Not interested").values('college_id').annotate(count=Count('college_id'))
+    #     college_count = (each['college_id'] for each in college_set)
 
-    def resolve_my_college_by_user_id(root, info, user_id):
-        return MyCollege.objects.get(user_id=user_id)
+    #     return Query(college_count)
+
+    def resolve_college_status_by_college_id(root, info, college_id):
+        return CollegeStatus.objects.get(college_id=college_id)
+
+    def resolve_college_status_by_user_id(root, info, user_id):
+        return CollegeStatus.objects.get(user_id=user_id)
 
 
-class CreateMyCollege(graphene.Mutation):
-    my_college = graphene.Field(MyCollegeType)
+class CreateCollegeStatus(graphene.Mutation):
+    college_status = graphene.Field(CollegeStatusType)
 
     class Arguments:
-        user_id = graphene.String()
-        college_id = graphene.String()
+        user_id = graphene.Int()
+        college_id = graphene.Int()
         college_status = graphene.String()
         net_price = graphene.Int()
 
@@ -53,21 +59,23 @@ class CreateMyCollege(graphene.Mutation):
         net_price,
     ):
 
-        my_college = MyCollege(
+        college_status = CollegeStatus(
             user_id=user_id,
             college_id=college_id,
             college_status=college_status,
             net_price=net_price,
             )
 
-        my_college.save()
-        return CreateMyCollege(my_college=my_college)
+        college_status.save()
+        return CreateCollegeStatus(college_status=college_status)
 
 
-class UpdateMyCollegeStatus(graphene.Mutation):
-    my_college = graphene.Field(MyCollegeType)
+class UpdateCollegeStatus(graphene.Mutation):
+    college_status = graphene.Field(CollegeStatusType)
 
     class Arguments:
+        user_id = graphene.Int()
+        college_id = graphene.Int()
         college_status = graphene.String()
 
     def mutate(
@@ -79,18 +87,18 @@ class UpdateMyCollegeStatus(graphene.Mutation):
     ):
 
         try:
-            my_college = MyCollege.objects.get(
+            college_status = CollegeStatus.objects.get(
                 user_id=user_id, college_id=college_id)
         except:
-            raise Exception('No college found')
+            raise Exception('No college status found')
 
-        if my_college is not None: 
-            my_college.college_status = college_status
-            return UpdateMyCollegeStatus(my_college=my_college)
+        if college_status is not None: 
+            college_status.college_status = college_status
+            return UpdateCollegeStatus(college_status=college_status)
         else: 
             raise Exception('Status not changed')
 
 
 class Mutation(graphene.ObjectType):
-    create_my_college = CreateMyCollege.Field()
-    update_my_college_status = UpdateMyCollegeStatus.Field()
+    create_college_status = CreateCollegeStatus.Field()
+    update_college_status = UpdateCollegeStatus.Field()

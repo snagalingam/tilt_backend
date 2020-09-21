@@ -13,7 +13,7 @@ class CollegeType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    college = graphene.List(CollegeType)
+    colleges = graphene.List(CollegeType)
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
     college_by_unit_id = graphene.Field(
