@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'scholarships.apps.ScholarshipsConfig',
     'organizations.apps.OrganizationsConfig',
     'colleges.apps.CollegesConfig',
-    'my_colleges.apps.MyCollegesConfig',
+    'college_status.apps.CollegeStatusConfig',
 ]
 
 MIDDLEWARE = [
