@@ -4,7 +4,6 @@ import json
 import os
 from .models import CollegeStatus
 from django.db.models import Count
-from graphene.types.resolver import dict_resolver
 
 class CollegeStatusType(DjangoObjectType):
     class Meta:
@@ -27,7 +26,7 @@ class Query(graphene.ObjectType):
     # def resolve_college_status_by_popularity(self, info):
     #     # .values('<field value>') ==> gets name of model field
     #     # .annotate(<name of key>=Count('<field value>') ==> what you want to count in each instance
-
+    
     #     college_set = CollegeStatus.objects.exclude(
     #         college_status="Not interested").values('college_id').annotate(count=Count('college_id'))
     #     college_count = (each['college_id'] for each in college_set)
