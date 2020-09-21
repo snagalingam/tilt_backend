@@ -11,8 +11,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
-    lat = models.IntegerField(null=True, blank=True)
-    lng = models.IntegerField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     types = ArrayField(
@@ -24,3 +24,6 @@ class Organization(models.Model):
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.name)
