@@ -22,7 +22,6 @@ sender_name = os.environ.get('SENDER_NAME')
 
 
 def send_subscription_verification(email):
-
     message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
 
@@ -34,8 +33,6 @@ def send_subscription_verification(email):
         "verification_url": url
     }
 
-    print(message)
-
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
@@ -46,8 +43,8 @@ def send_subscription_verification(email):
 
 
 def add_subscriber(email):
+    print('adding subscriber')
     try:
-
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.client.asm.groups._(23297).suppressions._(email).delete()
         response2 = sg.client.marketing.contacts.put(request_body=dict(
