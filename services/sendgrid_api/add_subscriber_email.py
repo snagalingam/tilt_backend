@@ -25,7 +25,7 @@ def send_subscription_verification(email):
     message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
 
-    url = f"{domain}/confirmation#{email}"
+    url = f"{domain}/confirmation?email={email}"
 
     message.template_id = 'd-829a6f7141724253bc15a8b89289faa4'
     message.dynamic_template_data = {
