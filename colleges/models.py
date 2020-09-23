@@ -21,6 +21,7 @@ class College(models.Model):
     url = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     favicon = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
