@@ -2,7 +2,9 @@ import graphene
 from graphene_django import DjangoObjectType
 import json
 import os
+from django.contrib.auth import get_user_model
 from .models import CollegeStatus
+from .models import College
 from django.db.models import Count
 
 class CollegeStatusType(DjangoObjectType):
@@ -15,10 +17,10 @@ class Query(graphene.ObjectType):
     # college_status_by_popularity = graphene.List(CollegeStatusType)
 
     college_status_by_college_id = graphene.Field(
-        CollegeStatusType, college_id=graphene.String())
+        CollegeStatusType, college_id=graphene.Int())
 
     college_status_by_user_id = graphene.Field(
-        CollegeStatusType, user_id=graphene.String())
+        CollegeStatusType, user_id=graphene.Int())
 
     def resolve_college_statuses(self, info):
         return CollegeStatus.objects.all()
@@ -57,10 +59,12 @@ class CreateCollegeStatus(graphene.Mutation):
         college_status=None,
         net_price=None,
     ):
+        user = get_user_model().objects.get(pk=user_id)
+        college = College.objects.get(pk=college_id)
 
         college_status = CollegeStatus(
-            user_id=user_id,
-            college_id=college_id,
+            user_id=user,
+            college_id=college,
             college_status=college_status,
             net_price=net_price,
             )
