@@ -11,15 +11,15 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['college_status', 'college_id', 'user_id', ]
+    list_display = ['status', 'college_id', 'user_id', ]
     fieldsets = (
         (_('College Status Information'), {
-            'fields': ('college_status', 'college_id', 'user_id', 'net_price')
+            'fields': ('status', 'college_id', 'user_id', 'net_price')
         }),
     )
 
-    search_fields = ('college_status', 'college_id', 'user_id',)
-    ordering = ('college_status',)
+    search_fields = ('status', 'college_id', 'user_id',)
+    ordering = ('status',)
     model = CollegeStatus
 
 admin.site.register(CollegeStatus, CollegeStatusAdmin)
