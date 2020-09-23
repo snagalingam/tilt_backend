@@ -95,7 +95,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     ethnicity = ArrayField(
         models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True,
     )
 
     user_type = models.CharField(
@@ -112,7 +112,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True,
     )
 
     is_staff = models.BooleanField(
