@@ -2,8 +2,15 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from .models import Organization
 
+from django.forms import TextInput, Textarea
+from django.db import models
 
 class OrganizationAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
     list_display = ['name', 'tilt_partnership', 'address', ]
     list_editable = ['tilt_partnership', ]
     fieldsets = (
