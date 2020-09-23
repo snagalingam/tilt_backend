@@ -6,6 +6,9 @@ from django.contrib.postgres.fields import ArrayField
 
 class College(models.Model):
 
+    # popularity_score
+    popularity_score = models.IntegerField(default=0, blank=True, null=True)
+
     # college scorecard info
     unit_id = models.CharField(max_length=255, blank=True, null=True)
     ope_id = models.CharField(max_length=255, blank=True, null=True)
@@ -25,11 +28,11 @@ class College(models.Model):
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
 
     # automatically added

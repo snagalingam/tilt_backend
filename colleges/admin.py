@@ -11,9 +11,9 @@ class CollegeAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'website', 'description']
+    list_display = ['name', 'website', 'popularity_score', 'description']
     fieldsets = (
-        (None, {'fields': ('description',)}),
+        (None, {'fields': ('description', 'popularity_score')}),
         (_('College Information'), {
             'fields': ('name', 'address', 'phone_number', 'website',)
         }),
