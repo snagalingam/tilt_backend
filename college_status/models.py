@@ -13,7 +13,7 @@ class CollegeStatus(models.Model):
     college_id = models.ForeignKey(
         College, on_delete=models.CASCADE)
 
-    college_status = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=255, blank=True, null=True)
     net_price = models.IntegerField(blank=True, null=True)
 
     # automatically added
