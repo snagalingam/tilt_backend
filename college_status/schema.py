@@ -26,7 +26,7 @@ class Query(graphene.ObjectType):
     # def resolve_college_status_by_popularity(self, info):
     #     # .values('<field value>') ==> gets name of model field
     #     # .annotate(<name of key>=Count('<field value>') ==> what you want to count in each instance
-    
+
     #     college_set = CollegeStatus.objects.exclude(
     #         college_status="Not interested").values('college_id').annotate(count=Count('college_id'))
     #     college_count = (each['college_id'] for each in college_set)
@@ -52,10 +52,10 @@ class CreateCollegeStatus(graphene.Mutation):
     def mutate(
         self,
         info,
-        user_id,
-        college_id,
-        college_status,
-        net_price,
+        user_id=None,
+        college_id=None,
+        college_status=None,
+        net_price=None,
     ):
 
         college_status = CollegeStatus(
