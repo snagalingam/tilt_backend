@@ -18,7 +18,7 @@ class UserType(DjangoObjectType):
         model = get_user_model()
 
 
-class OrganizationT(DjangoObjectType):
+class OrganizationType_(DjangoObjectType):
     class Meta:
         model = Organization
         fields = "__all__"
@@ -119,7 +119,7 @@ class CreateUser(graphene.Mutation):
 
 class OnboardUser(graphene.Mutation):
     user = graphene.Field(UserType)
-    organization = graphene.Field(OrganizationT)
+    organization = graphene.Field(OrganizationType_)
 
     class Arguments:
         id = graphene.ID()
