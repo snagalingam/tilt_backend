@@ -13,7 +13,7 @@ class CollegeType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    colleges = graphene.List(CollegeType)
+    colleges = graphene.List(CollegeType, limit=graphene.Int())
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
     college_by_unit_id = graphene.Field(
@@ -23,8 +23,8 @@ class Query(graphene.ObjectType):
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
 
-    def resolve_colleges(self, info):
-        return College.objects.all()
+    def resolve_colleges(self, info, limit=None):
+        return College.objects.all()[0:limit]
 
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
