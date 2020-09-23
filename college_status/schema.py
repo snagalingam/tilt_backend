@@ -49,7 +49,6 @@ class CreateCollegeStatus(graphene.Mutation):
         net_price=None,
     ):
 
-
         status_list = ("interested",
                     "applied",
                     "accepted",
@@ -103,20 +102,33 @@ class UpdateCollegeStatus(graphene.Mutation):
         net_price=None,
     ):
 
-        not_list = ("not interested",)
+        status_list = ("interested",
+                       "applied",
+                       "accepted",
+                       "waitlisted",
+                       "not accepted")
 
         college = College.objects.get(pk=college_id)
+        
         try:
             college_status = CollegeStatus.objects.get(
                 user_id=user_id, college_id=college_id)
         except:
             raise Exception('College status does not exist')
 
-        if status in not_list:
-            college.popularity_score -= 1
-            college.save()
+        # status change from 'not interested' ==> 'status_list'
+        if college_status.status == "not interested":
+            if status in status_list:
+                college.popularity_score += 1
+                college.save()
 
-        if college_status is not None:
+        # status change from 'status_list' ==> 'not interested'
+        elif college_status.status in status_list:
+            if status == "not interested": 
+                college.popularity_score -= 1
+                college.save()
+
+        if status is not None:
             college_status.status = status
 
         if net_price is not None:
