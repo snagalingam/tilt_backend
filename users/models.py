@@ -112,11 +112,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
-<<<<<<< HEAD
-        null=True, blank=True, default=None
-=======
         null=True, blank=True,
->>>>>>> test2
     )
 
     is_staff = models.BooleanField(
