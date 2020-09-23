@@ -28,11 +28,11 @@ class College(models.Model):
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
 
     # automatically added
