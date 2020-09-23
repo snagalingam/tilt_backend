@@ -17,7 +17,7 @@ class Organization(models.Model):
     website = models.TextField(null=True, blank=True)
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
     tilt_partnership = models.BooleanField(null=True, blank=True, default=False)
 
