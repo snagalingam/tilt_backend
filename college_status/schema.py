@@ -50,10 +50,10 @@ class CreateCollegeStatus(graphene.Mutation):
     ):
 
         status_list = ("interested",
-                     "applied",
-                     "accepted",
-                     "waitlisted",
-                     "not accepted")
+                    "applied",
+                    "accepted",
+                    "waitlisted",
+                    "not accepted")
 
         user = get_user_model().objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
@@ -65,10 +65,19 @@ class CreateCollegeStatus(graphene.Mutation):
             college_status = None
             pass 
 
+        try:
+            college_status = CollegeStatus.objects.get(
+                user_id=user_id, college_id=college_id)
+        except:
+            college_status = None
+            pass
+
+
         if college_status is None:
             if status in status_list:
                 college.popularity_score += 1
                 college.save()
+
 
             college_status = CollegeStatus(
                 user_id=user,
@@ -94,32 +103,44 @@ class UpdateCollegeStatus(graphene.Mutation):
 
     def mutate(
         self,
-        info,
         user_id=None,
         college_id=None,
         status=None,
         net_price=None,
     ):
 
-        not_list = ("not interested",)
+        status_list = ("interested",
+                       "applied",
+                       "accepted",
+                       "waitlisted",
+                       "not accepted")
 
         college = College.objects.get(pk=college_id)
+        
         try:
             college_status = CollegeStatus.objects.get(
                 user_id=user_id, college_id=college_id)
         except:
             raise Exception('College status does not exist')
 
-        if status in not_list: 
-            college.popularity_score -= 1
-            college.save()
+        # status change from 'not interested' ==> 'status_list'
+        if college_status.status == "not interested":
+            if status in status_list:
+                college.popularity_score += 1
+                college.save()
 
-        if college_status is not None:
+        # status change from 'status_list' ==> 'not interested'
+        elif college_status.status in status_list:
+            if status == "not interested": 
+                college.popularity_score -= 1
+                college.save()
+
+        if status is not None:
             college_status.status = status
-        
+
         if net_price is not None:
             college_status.net_price = net_price
-        
+
         college_status.save()
         return UpdateCollegeStatus(college_status=college_status)
 

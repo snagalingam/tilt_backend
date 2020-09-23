@@ -13,7 +13,7 @@ class CollegeAdmin(admin.ModelAdmin):
     }
     list_display = ['name', 'website', 'popularity_score', 'description']
     fieldsets = (
-        (None, {'fields': ('description', 'popularity_score')}),
+        (None, {'fields': ('description', 'popularity_score',)}),
         (_('College Information'), {
             'fields': ('name', 'address', 'phone_number', 'website',)
         }),
