@@ -3,7 +3,9 @@ from graphene_django import DjangoObjectType
 import json
 import os
 from .models import CollegeStatus
+from colleges.models import College
 from django.db.models import Count
+from django.contrib.auth import get_user_model
 
 class CollegeStatusType(DjangoObjectType):
     class Meta:
@@ -57,10 +59,12 @@ class CreateCollegeStatus(graphene.Mutation):
         college_status=None,
         net_price=None,
     ):
+        user = get_user_model().objects.get(id=user_id)
+        college = College.objects.get(id=college_id)
 
         college_status = CollegeStatus(
-            user_id=user_id,
-            college_id=college_id,
+            user_id=user,
+            college_id=college,
             college_status=college_status,
             net_price=net_price,
             )
