@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import (
     AbstractBaseUser,
     BaseUserManager,
 )
-from django.contrib.postgres.fields import ArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
