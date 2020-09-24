@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 
 class Organization(models.Model):
@@ -19,7 +19,7 @@ class Organization(models.Model):
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True, default=None
     )
-    tilt_partnership = models.BooleanField(null=True, blank=True, default=False)
+    tilt_partnership = models.BooleanField(default=False)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)

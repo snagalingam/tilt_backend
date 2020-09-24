@@ -5,10 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 from django.forms import TextInput, Textarea
 from django.db import models
+from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 CustomUser = get_user_model()
 
-class CustomUserAdmin(UserAdmin):
+
+class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},

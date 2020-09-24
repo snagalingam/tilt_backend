@@ -26,6 +26,7 @@ django-graphql-social-auth = "*"
 googlemaps = "*"
 favicon = "*"
 django-samesite-none = "*"
+django-better-admin-arrayfield = "*"
 
 [requires]
 python_version = "3.8"
