@@ -30,7 +30,6 @@ def get_description(file):
                             description = meta.attrs["content"]
 
                             college['fields']['description'] = description
-
                             collection.append(college)
 
         except:
@@ -46,7 +45,7 @@ def get_description(file):
 
 # get_description('website_list')
 
-# ---------- Get description from meta tag -------------------
+# ---------- Add description key -------------------
 
 def add_blank_description(file):
 
@@ -70,4 +69,37 @@ def add_blank_description(file):
     print('done')
 
 
-add_blank_description('collection')
+# add_blank_description('collection')
+
+
+# ---------- Compare descriptions -------------------
+
+def compare_descriptions(source, target):
+
+    source_file = json.load(open(f'{source}.json'))
+    target_file = json.load(open(f'{target}.json'))
+    collection = []
+    count = 0
+
+    for college in source_file:
+        count += 1
+        print(f' count ===> : {count}')
+
+        for each in target_file:
+            source_name = college['fields']['name']
+            target_name = each['fields']['name']
+            target_description = each['fields'].get('description', '')
+
+            if source_name == target_name:
+                college['fields']['description'] = target_description
+
+        collection.append(college)
+        # breakpoint()
+
+    with open('collection2.json', 'w') as f:
+        json.dump(collection, f, indent=2, ensure_ascii=False)
+    print('collection1 done')
+    print('done')
+
+
+# compare_descriptions('collection1', 'collection')
