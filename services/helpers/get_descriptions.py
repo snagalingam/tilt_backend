@@ -45,7 +45,7 @@ def get_description(file):
 
 # get_description('website_list')
 
-# ---------- Add decription key -------------------
+# ---------- Add description key -------------------
 
 def add_blank_description(file):
 
