@@ -102,4 +102,4 @@ def compare_descriptions(source, target):
     print('done')
 
 
-compare_descriptions('collection1', 'collection')
+# compare_descriptions('collection1', 'collection')
