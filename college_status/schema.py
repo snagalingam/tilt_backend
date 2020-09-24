@@ -96,6 +96,7 @@ class UpdateCollegeStatus(graphene.Mutation):
 
     def mutate(
         self,
+        info,
         user_id=None,
         college_id=None,
         status=None,
