@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_better_admin_arrayfield',
 
+
     # local
     'users.apps.UsersConfig',
     'scholarships.apps.ScholarshipsConfig',
