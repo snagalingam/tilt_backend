@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import (
     AbstractBaseUser,
     BaseUserManager,
 )
-from django.contrib.postgres.fields import ArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
@@ -95,7 +95,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     ethnicity = ArrayField(
         models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True,
     )
 
     user_type = models.CharField(
@@ -108,11 +108,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     income_quintile = models.CharField(
-        _("income quintile"), max_length=255, null=True, default=None)
+        _("income quintile"), max_length=255, null=True, blank=True, default=None)
 
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True,
     )
 
     is_staff = models.BooleanField(
@@ -157,3 +157,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
+
+    def __str__(self):
+        return str(self.email)

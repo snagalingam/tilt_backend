@@ -13,8 +13,8 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DEBUG', default=0))
-
+# DEBUG = int(os.environ.get('DEBUG', default=0))
+DEBUG = 1
 
 # Application definition
 
@@ -35,12 +35,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'graphene_django',
     'social_django',
+    'django_better_admin_arrayfield',
+
 
     # local
     'users.apps.UsersConfig',
     'scholarships.apps.ScholarshipsConfig',
     'organizations.apps.OrganizationsConfig',
     'colleges.apps.CollegesConfig',
+    'college_status.apps.CollegeStatusConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 
 class College(models.Model):
+
+    # popularity_score
+    popularity_score = models.IntegerField(default=0, blank=True, null=True)
 
     # college scorecard info
     unit_id = models.CharField(max_length=255, blank=True, null=True)
@@ -16,19 +19,20 @@ class College(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
-    lat = models.IntegerField(null=True, blank=True)
-    lng = models.IntegerField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     favicon = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, default=None
+        null=True, blank=True, default=None
     )
 
     # automatically added
@@ -36,4 +40,4 @@ class College(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)

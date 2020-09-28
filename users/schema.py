@@ -18,7 +18,7 @@ class UserType(DjangoObjectType):
         model = get_user_model()
 
 
-class OrganizationT(DjangoObjectType):
+class OrganizationType_(DjangoObjectType):
     class Meta:
         model = Organization
         fields = "__all__"
@@ -119,7 +119,7 @@ class CreateUser(graphene.Mutation):
 
 class OnboardUser(graphene.Mutation):
     user = graphene.Field(UserType)
-    organization = graphene.Field(OrganizationT)
+    organization = graphene.Field(OrganizationType_)
 
     class Arguments:
         id = graphene.ID()
@@ -156,64 +156,70 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-        try:
-            organization = Organization.objects.get(place_id=place_id)
-        except:
-            organization = None
 
-        if place_name is not None:
+        user = get_user_model().objects.get(pk=id)
+
+        if place_id is not None or place_name is not None:
             try:
-                organization = Organization.objects.get(name=place_name)
+                organization = Organization.objects.get(place_id=place_id)
             except:
                 organization = None
 
-        if organization is None:
-            if place_id is None:
-                if place_name is None or place_name == "":
-                    raise ValueError("Place name cannot be blank")
+            if place_name is not None:
+                try:
+                    organization = Organization.objects.get(name=place_name)
+                except:
+                    organization = None
 
-            if place_id is not None:
-                data = search_details(place_id)
-                results = data.get("result")
-                lat = results.get("geometry")["location"]["lat"]
-                lng = results.get("geometry")["location"]["lng"]
-                place_name = results.get("name")
+            if organization is None:
 
-            else:
-                results = {}
-                place_id = None
-                lat = None
-                lng = None
+                if place_id is not None:
+                    data = search_details(place_id)
+                    results = data.get("result")
+                    lat = results.get("geometry")["location"]["lat"]
+                    lng = results.get("geometry")["location"]["lng"]
+                    place_name = results.get("name")
+                    business_status = results.get("business_status", None)
+                    icon = results.get("icon", None)
+                    address = results.get("formatted_address", None)
+                    phone_number = results.get("formatted_phone_number", None)
+                    url = results.get("url", None)
+                    website = results.get("website", None)
+                    types = results.get("types", [])
 
-            business_status = results.get("business_status", None)
-            icon = results.get("icon", None)
-            address = results.get("formatted_address", None)
-            phone_number = results.get("formatted_phone_number", None)
-            url = results.get("url", None)
-            website = results.get("website", None)
-            types = results.get("types", [])
+                else:
+                    results = {}
+                    place_id = None
+                    lat = None
+                    lng = None
+                    business_status = None
+                    icon = None
+                    address = None
+                    phone_number = None
+                    url = None
+                    website = None
+                    types = []
 
-            organization = Organization(
-                place_id=place_id,
-                business_status=business_status,
-                icon=icon,
-                name=place_name,
-                lat=lat,
-                lng=lng,
-                address=address,
-                phone_number=phone_number,
-                url=url,
-                website=website,
-                types=types,
-            )
-            organization.save()
+                organization = Organization(
+                    place_id=place_id,
+                    business_status=business_status,
+                    icon=icon,
+                    name=place_name,
+                    lat=lat,
+                    lng=lng,
+                    address=address,
+                    phone_number=phone_number,
+                    url=url,
+                    website=website,
+                    types=types,
+                )
+                organization.save()
+                user.organization.add(organization)
 
-        print(f'place_id ==>: {place_id}')
-        print(f'place_name ==>: {place_name}')
+            print(f'place_id ==>: {place_id}')
+            print(f'place_name ==>: {place_name}')
 
-        user = get_user_model().objects.get(pk=id)
         if user is not None:
-            user.organization.add(organization)
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
@@ -230,7 +236,6 @@ class OnboardUser(graphene.Mutation):
             return OnboardUser(user=user)
         else:
             raise Exception("User is not logged in")
-
 
 class LogoutUser(graphene.Mutation):
     user = graphene.Field(UserType)
