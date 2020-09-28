@@ -3,13 +3,19 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .forms import CustomUserChangeForm, CustomUserCreationForm
+from django.forms import TextInput, Textarea
+from django.db import models
+from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 CustomUser = get_user_model()
 
-class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
+
+class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
     list_display = ['email', 'is_staff', 'is_superuser',
                     'is_active', 'is_verified', 'is_onboarded']
     list_editable = ['is_staff', 'is_superuser',

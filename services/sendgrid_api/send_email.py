@@ -16,10 +16,12 @@ if ENVIRONMENT == 'development':
 elif ENVIRONMENT == 'production':
     domain = os.environ.get('SENDGRID_DOMAIN')
 
+from_email = os.environ.get('FROM_EMAIL')
+sender_name = os.environ.get('SENDER_NAME')
 
 def send_verification(email, first_name):
 
-    message = Mail(from_email='hello@tiltaccess.com',
+    message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
 
     token = jwt.encode({'email': email,
@@ -52,7 +54,7 @@ def send_verification(email, first_name):
 
 def send_reset_password(email, first_name):
 
-    message = Mail(from_email='hello@tiltaccess.com',
+    message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
 
     token = jwt.encode({'email': email,

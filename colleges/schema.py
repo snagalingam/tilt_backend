@@ -13,7 +13,8 @@ class CollegeType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    college = graphene.List(CollegeType)
+    colleges = graphene.List(CollegeType, limit=graphene.Int())
+    colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
     college_by_unit_id = graphene.Field(
@@ -23,8 +24,11 @@ class Query(graphene.ObjectType):
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
 
-    def resolve_colleges(self, info):
-        return College.objects.all()
+    def resolve_colleges(self, info, limit=None):
+        return College.objects.all()[0:limit]
+
+    def resolve_colleges_by_popularity(self, info, limit=None):
+        return College.objects.order_by('-popularity_score')[0:limit]
 
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
@@ -47,8 +51,8 @@ class CreateCollege(graphene.Mutation):
         place_id = graphene.String()
         business_status = graphene.String()
         name = graphene.String()
-        lat = graphene.String()
-        lng = graphene.String()
+        lat = graphene.Float()
+        lng = graphene.Float()
         address = graphene.String()
         phone_number = graphene.String()
         url = graphene.String()
@@ -61,21 +65,21 @@ class CreateCollege(graphene.Mutation):
     def mutate(
         self,
         info,
-        unit_id,
-        ope_id,
-        place_id,
-        business_status,
-        name,
-        lat,
-        lng,
-        address,
-        phone_number,
-        url,
-        website,
-        favicon,
-        main_photo,
-        photos,
-        types,
+        unit_id=None,
+        ope_id=None,
+        place_id=None,
+        business_status=None,
+        name=None,
+        lat=None,
+        lng=None,
+        address=None,
+        phone_number=None,
+        url=None,
+        website=None,
+        favicon=None,
+        main_photo=None,
+        photos=None,
+        types=None,
     ):
 
         try:
