@@ -3,14 +3,13 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from colleges.models import College
 
 class CollegeStatus(models.Model):
 
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    college_id = models.ForeignKey(
+    college = models.ForeignKey(
         College, on_delete=models.CASCADE)
 
     status = models.CharField(max_length=255, blank=True, null=True)

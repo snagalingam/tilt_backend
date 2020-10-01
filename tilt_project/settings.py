@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'graphene_django',
     'social_django',
+    'django_better_admin_arrayfield',
+
 
     # local
     'users.apps.UsersConfig',
