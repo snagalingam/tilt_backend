@@ -158,6 +158,7 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
+
         user = get_user_model().objects.get(pk=id)
 
         if place_id is not None or place_name is not None:
