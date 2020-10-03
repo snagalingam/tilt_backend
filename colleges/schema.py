@@ -15,6 +15,7 @@ class CollegeType(DjangoObjectType):
 
 
 class CollegePaginationType(graphene.ObjectType):
+    count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(CollegeType)
 
@@ -40,12 +41,13 @@ class Query(graphene.ObjectType):
         if address:
             qs = qs.filter(address__icontains=address)
 
-        pages = math.ceil(qs.count() / perPage)
+        count = qs.count()
+        pages = math.ceil(count / perPage)
         start = (page - 1) * perPage
         end = start + perPage
         search_results = qs[start:end]
         # print(search_results.explain(verbose=True, analyze=True))
-        return CollegePaginationType(search_results=search_results, pages=pages)
+        return CollegePaginationType(search_results=search_results, pages=pages, count=count)
 
     def resolve_colleges(self, info, limit=None):
         return College.objects.all()[0:limit]
