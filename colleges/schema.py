@@ -32,19 +32,38 @@ class Query(graphene.ObjectType):
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
     filter_colleges = graphene.Field(
-        CollegePaginationType, name=graphene.String(), address=graphene.String(), perPage=graphene.Int(), page=graphene.Int())
+        CollegePaginationType,
+        name=graphene.String(),
+        address=graphene.String(),
+        per_page=graphene.Int(),
+        page=graphene.Int(),
+        sort_by=graphene.String(),
+        sort_order=graphene.String()
+    )
 
-    def resolve_filter_colleges(self, info, name=None, address=None, perPage=12, page=1):
+    def resolve_filter_colleges(
+            self,
+            info,
+            name=None,
+            address=None,
+            per_page=12,
+            page=1,
+            sort_by='name',
+            sort_order='asc'
+    ):
         qs = College.objects.all()
         if name:
             qs = qs.filter(name__icontains=name)
         if address:
             qs = qs.filter(address__icontains=address)
 
+        if sort_by == "name":
+            qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
+
         count = qs.count()
-        pages = math.ceil(count / perPage)
-        start = (page - 1) * perPage
-        end = start + perPage
+        pages = math.ceil(count / per_page)
+        start = (page - 1) * per_page
+        end = start + per_page
         search_results = qs[start:end]
         # print(search_results.explain(verbose=True, analyze=True))
         return CollegePaginationType(search_results=search_results, pages=pages, count=count)
