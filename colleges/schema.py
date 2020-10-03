@@ -1,15 +1,23 @@
 import graphene
-from graphene_django import DjangoObjectType
 import json
+import math
 import os
-from .models import College
+from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
 from services.helpers.fav_finder import get_favicon
+from .models import College
+
 
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
         fields = "__all__"
+
+
+class CollegePaginationType(graphene.ObjectType):
+    count = graphene.Int()
+    pages = graphene.Int()
+    search_results = graphene.List(CollegeType)
 
 
 class Query(graphene.ObjectType):
@@ -23,6 +31,42 @@ class Query(graphene.ObjectType):
         CollegeType, ope_id=graphene.String())
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
+    filter_colleges = graphene.Field(
+        CollegePaginationType,
+        name=graphene.String(),
+        address=graphene.String(),
+        per_page=graphene.Int(),
+        page=graphene.Int(),
+        sort_by=graphene.String(),
+        sort_order=graphene.String()
+    )
+
+    def resolve_filter_colleges(
+            self,
+            info,
+            name=None,
+            address=None,
+            per_page=12,
+            page=1,
+            sort_by='name',
+            sort_order='asc'
+    ):
+        qs = College.objects.all()
+        if name:
+            qs = qs.filter(name__icontains=name)
+        if address:
+            qs = qs.filter(address__icontains=address)
+
+        if sort_by == "name":
+            qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
+
+        count = qs.count()
+        pages = math.ceil(count / per_page)
+        start = (page - 1) * per_page
+        end = start + per_page
+        search_results = qs[start:end]
+        # print(search_results.explain(verbose=True, analyze=True))
+        return CollegePaginationType(search_results=search_results, pages=pages, count=count)
 
     def resolve_colleges(self, info, limit=None):
         return College.objects.all()[0:limit]
@@ -41,6 +85,7 @@ class Query(graphene.ObjectType):
 
     def resolve_college_by_name(root, info, name):
         return College.objects.filter(name=name)
+
 
 class CreateCollege(graphene.Mutation):
     college = graphene.Field(CollegeType)
@@ -153,7 +198,7 @@ class CollegeSearch(graphene.Mutation):
             phone_number = results.get('formatted_phone_number', "")
             url = results.get('url', "")
             types = results.get('types', [])
-            
+
             college = College(
                 place_id=place_id,
                 business_status=business_status,
