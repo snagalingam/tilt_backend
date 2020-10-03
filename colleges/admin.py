@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import College
+from .models import College, Scorecard
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -35,5 +35,6 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = College
 
-
 admin.site.register(College, CollegeAdmin)
+admin.site.register(Scorecard)
+
