@@ -37,3 +37,4 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 admin.site.register(College, CollegeAdmin)
 admin.site.register(Scorecard)
+

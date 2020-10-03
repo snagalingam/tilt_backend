@@ -35,9 +35,6 @@ class College(models.Model):
         null=True, blank=True, default=None
     )
 
-    # college scorecard 
-    scorecard = models.ForeignKey(Scorecard, on_delete=models.CASCADE)
-
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
@@ -47,9 +44,11 @@ class College(models.Model):
 
 
 class Scorecard(models.Model):
+    # college model
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
 
     # school info fields
-    unit_id = models.CharField(max_length=255, blank=True, null=True)
+    unit_id = models.IntegerField(blank=True, null=True)
     ope_id = models.CharField(max_length=255, blank=True, null=True)
     ope6_id = models.CharField(max_length=255, blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
