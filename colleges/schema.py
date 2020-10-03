@@ -29,7 +29,7 @@ class Query(graphene.ObjectType):
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
-
+ 
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
 
