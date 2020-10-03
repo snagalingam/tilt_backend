@@ -168,8 +168,7 @@ class Scorecard(models.Model):
     age_entry = models.IntegerField(blank=True, null=True)
     veteran = models.FloatField(null=True, blank=True)
     first_generation = models.FloatField(null=True, blank=True)
-    alias = models.CharField(
-        max_length=255, blank=True, null=True)
+    alias = models.TextField(blank=True, null=True)
 
 
     # graduation rate fields
