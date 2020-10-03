@@ -10,8 +10,9 @@ from django.core.exceptions import ValidationError
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
-from services.sendgrid_api.add_subscriber_email import add_subscriber
+from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
+
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -65,7 +66,8 @@ class LoginUser(graphene.Mutation):
 
         if user is not None:
             if (user.is_verified):
-                login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
+                login(info.context, user,
+                      backend="django.contrib.auth.backends.ModelBackend")
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
@@ -98,13 +100,13 @@ class CreateUser(graphene.Mutation):
             last_name=last_name,
             is_staff=False,
         )
-        
+
         # password validation
         try:
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
             return e
-        
+
         user.set_password(password)
         user.save()
 
@@ -237,6 +239,7 @@ class OnboardUser(graphene.Mutation):
         else:
             raise Exception("User is not logged in")
 
+
 class LogoutUser(graphene.Mutation):
     user = graphene.Field(UserType)
     is_logged_out: graphene.Boolean()
@@ -304,7 +307,8 @@ class VerifyEmail(graphene.Mutation):
         if email and not user.is_verified:
             user.is_verified = True
             user.save()
-            login(info.context, user, backend="django.contrib.auth.backends.ModelBackend")
+            login(info.context, user,
+                  backend="django.contrib.auth.backends.ModelBackend")
             return VerifyEmail(success=user.is_verified)
 
 
@@ -332,6 +336,20 @@ class ResetPassword(graphene.Mutation):
             raise Exception("Passwords do not match")
         else:
             raise Exception("Password did not reset")
+
+
+class SendSubscriptionVerification(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(self, info, email):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+        send_subscription_verification(email)
+        return SendSubscriptionVerification(success=True)
 
 
 class AddSubscriber(graphene.Mutation):
@@ -362,4 +380,5 @@ class Mutation(graphene.ObjectType):
     reset_password = ResetPassword.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
+    send_subscription_verification = SendSubscriptionVerification.Field()
     add_subscriber = AddSubscriber.Field()
