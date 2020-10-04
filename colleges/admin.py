@@ -35,6 +35,18 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = College
 
-admin.site.register(College, CollegeAdmin)
-admin.site.register(Scorecard)
 
+class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
+    list_display = ['name', 'city', 'state', 'zipcode']
+
+    search_fields = ('name', 'unit_id', 'ope_id',)
+    ordering = ('name',)
+    model = Scorecard
+
+admin.site.register(College, CollegeAdmin)
+admin.site.register(Scorecard, ScorecardAdmin)
