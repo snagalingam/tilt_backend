@@ -223,3 +223,31 @@ class Scorecard(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class FieldOfStudy(models.Model):
+
+    # college model
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
+
+    cip_code = models.CharField(max_length=255, blank=True, null=True)
+    cip_title = models.CharField(max_length=255, blank=True, null=True)
+    credential_level = models.CharField(max_length=255, blank=True, null=True)
+
+    credential_title = models.CharField(max_length=255, blank=True, null=True)
+    num_students_debt = models.IntegerField(blank=True, null=True)
+    median_debt = models.IntegerField(blank=True, null=True)
+    monthly_debt_payment = models.IntegerField(blank=True, null=True)
+    mean_debt = models.IntegerField(blank=True, null=True)
+    num_students_titleiv = models.IntegerField(blank=True, null=True)
+    num_students_earnings = models.IntegerField(blank=True, null=True)
+    median_earnings = models.IntegerField(blank=True, null=True)
+    num_students_ipeds_awards1 = models.IntegerField(blank=True, null=True)
+    num_students_ipeds_awards2 = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.cip_title)
