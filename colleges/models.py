@@ -220,39 +220,63 @@ class Scorecard(models.Model):
     # program_percentage_degrees
     program_percentage_education = models.FloatField(null=True, blank=True)
     program_percentage_mathematics = models.FloatField(null=True, blank=True)
-    program_percentage_business_marketing = models.FloatField(null=True, blank=True)
-    program_percentage_communications_technology = models.FloatField(null=True, blank=True)
+    program_percentage_business_marketing = models.FloatField(
+        null=True, blank=True)
+    program_percentage_communications_technology = models.FloatField(
+        null=True, blank=True)
     program_percentage_language = models.FloatField(null=True, blank=True)
-    program_percentage_visual_performing = models.FloatField(null=True, blank=True)
-    program_percentage_engineering_technology = models.FloatField(null=True, blank=True)
-    program_percentage_security_law_enforcement = models.FloatField(null=True, blank=True)
+    program_percentage_visual_performing = models.FloatField(
+        null=True, blank=True)
+    program_percentage_engineering_technology = models.FloatField(
+        null=True, blank=True)
+    program_percentage_parks_recreation_fitness = models.FloatField(
+        null=True, blank=True)
+    program_percentage_agriculture = models.FloatField(
+        null=True, blank=True)
+    program_percentage_security_law_enforcement = models.FloatField(
+        null=True, blank=True)
     program_percentage_computer = models.FloatField(null=True, blank=True)
-    program_percentage_precision_production = models.FloatField(null=True, blank=True)
+    program_percentage_precision_production = models.FloatField(
+        null=True, blank=True)
     program_percentage_humanities = models.FloatField(null=True, blank=True)
     program_percentage_library = models.FloatField(null=True, blank=True)
     program_percentage_psychology = models.FloatField(null=True, blank=True)
-    program_percentage_social_science = models.FloatField(null=True, blank=True)
+    program_percentage_social_science = models.FloatField(
+        null=True, blank=True)
     program_percentage_legal = models.FloatField(null=True, blank=True)
     program_percentage_english = models.FloatField(null=True, blank=True)
     program_percentage_construction = models.FloatField(null=True, blank=True)
     program_percentage_military = models.FloatField(null=True, blank=True)
     program_percentage_communication = models.FloatField(null=True, blank=True)
-    program_percentage_public_administration_social_service = models.FloatField(null=True, blank=True)
+    program_percentage_public_administration_social_service = models.FloatField(
+        null=True, blank=True)
     program_percentage_architecture = models.FloatField(null=True, blank=True)
-    program_percentage_ethnic_cultural_gender = models.FloatField(null=True, blank=True)
+    program_percentage_ethnic_cultural_gender = models.FloatField(
+        null=True, blank=True)
     program_percentage_resources = models.FloatField(null=True, blank=True)
     program_percentage_health = models.FloatField(null=True, blank=True)
     program_percentage_engineering = models.FloatField(null=True, blank=True)
     program_percentage_history = models.FloatField(null=True, blank=True)
-    program_percentage_theology_religious_vocation = models.FloatField(null=True, blank=True)
-    program_percentage_transportation = models.FloatField(null=True, blank=True)
-    program_percentage_physical_science = models.FloatField(null=True, blank=True)
-    program_percentage_science_technology = models.FloatField(null=True, blank=True)
-    program_percentage_family_consumer_science = models.FloatField(null=True, blank=True)
-    program_percentage_philosophy_religious = models.FloatField(null=True, blank=True)
-    program_percentage_personal_culinary = models.FloatField(null=True, blank=True)
-    program_percentage_multidiscipline = models.FloatField(null=True, blank=True)
-    program_percentage_mechanic_repair_technology = models.FloatField(null=True, blank=True)
+    program_percentage_theology_religious_vocation = models.FloatField(
+        null=True, blank=True)
+    program_percentage_transportation = models.FloatField(
+        null=True, blank=True)
+    program_percentage_physical_science = models.FloatField(
+        null=True, blank=True)
+    program_percentage_science_technology = models.FloatField(
+        null=True, blank=True)
+    program_percentage_biological = models.FloatField(
+        null=True, blank=True)
+    program_percentage_family_consumer_science = models.FloatField(
+        null=True, blank=True)
+    program_percentage_philosophy_religious = models.FloatField(
+        null=True, blank=True)
+    program_percentage_personal_culinary = models.FloatField(
+        null=True, blank=True)
+    program_percentage_multidiscipline = models.FloatField(
+        null=True, blank=True)
+    program_percentage_mechanic_repair_technology = models.FloatField(
+        null=True, blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
