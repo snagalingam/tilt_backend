@@ -54,10 +54,10 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['cip_title', 'college', 'credential_list',]
+    list_display = ['cip_title', 'college', 'credential_level', ]
 
-    search_fields = ('cip_title', 'college', 'credential_list',)
-    ordering = ('college', 'credential_list',)
+    search_fields = ('cip_title', 'college', 'credential_level',)
+    ordering = ('college', 'credential_level',)
     model = FieldOfStudy
 
 admin.site.register(College, CollegeAdmin)
