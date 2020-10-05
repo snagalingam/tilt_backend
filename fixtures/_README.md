@@ -9,5 +9,9 @@
 3. Run all fixtures
    `python manage.py loaddata fixtures/*.json`
 
-3. Delete all data in table
+4. Run Python Shell 
+   `python manage.py shell`
+   Import Models
+   `from <app name>.models import <model>`
+   Delete all data in table
    `<model>.objects.all().delete()`
