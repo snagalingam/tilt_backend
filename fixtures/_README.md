@@ -10,4 +10,4 @@
    `python manage.py loaddata fixtures/*.json`
 
 3. Delete all data in table
-   `<table>.objects.all().delete()`
+   `<model>.objects.all().delete()`
