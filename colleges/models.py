@@ -71,14 +71,17 @@ class Scorecard(models.Model):
     state_fips = models.CharField(max_length=255, blank=True, null=True)
     region = models.CharField(max_length=255, blank=True, null=True)
     locale = models.CharField(max_length=255, blank=True, null=True)
-    degree_urbanization = models.CharField(
-        max_length=255, blank=True, null=True)
+    locale_updated = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     carnegie_basic = models.CharField(max_length=255, blank=True, null=True)
     carnegie_undergrad = models.CharField(
         max_length=255, blank=True, null=True)
     carnegie_size_setting = models.CharField(
+        max_length=255, blank=True, null=True)
+    carnegie_size_setting_size = models.CharField(
+        max_length=255, blank=True, null=True)
+    carnegie_size_setting_residential = models.CharField(
         max_length=255, blank=True, null=True)
 
     # diversity fields
