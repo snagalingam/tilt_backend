@@ -85,12 +85,9 @@ class Scorecard(models.Model):
         max_length=255, blank=True, null=True)
 
     # diversity fields
-    minority_serving_historically_black = models.BooleanField(
-        blank=True, null=True)
-    minority_serving_predominantly_black = models.BooleanField(
-        blank=True, null=True)
-    minority_serving_annh = models.BooleanField(
-        blank=True, null=True)
+    minority_serving_historically_black  = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_predominantly_black  = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_annh = models.BooleanField(blank=True, null=True, default=False)
     minority_serving_tribal = models.BooleanField(blank=True, null=True, default=False)
     minority_serving_aanipi = models.BooleanField(blank=True, null=True, default=False)
     minority_serving_hispanic = models.BooleanField(blank=True, null=True, default=False)
