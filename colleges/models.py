@@ -61,8 +61,8 @@ class Scorecard(models.Model):
         max_length=255, blank=True, null=True)
     predominant_degree_awarded_recoded = models.CharField(
         max_length=255, blank=True, null=True)
-    under_investigation = models.BooleanField(blank=True, null=True)
-    main_campus = models.BooleanField(blank=True, null=True)
+    under_investigation = models.BooleanField(blank=True, null=True, default=False)
+    main_campus = models.BooleanField(blank=True, null=True, default=False)
     branches = models.IntegerField(blank=True, null=True)
     predominant_degree_awarded = models.CharField(
         max_length=255, blank=True, null=True)
@@ -85,18 +85,15 @@ class Scorecard(models.Model):
         max_length=255, blank=True, null=True)
 
     # diversity fields
-    minority_serving_historically_black = models.BooleanField(
-        blank=True, null=True)
-    minority_serving_predominantly_black = models.BooleanField(
-        blank=True, null=True)
-    minority_serving_annh = models.BooleanField(
-        blank=True, null=True)
-    minority_serving_tribal = models.BooleanField(blank=True, null=True)
-    minority_serving_aanipi = models.BooleanField(blank=True, null=True)
-    minority_serving_hispanic = models.BooleanField(blank=True, null=True)
-    minority_serving_nant = models.BooleanField(blank=True, null=True)
-    men_only = models.BooleanField(blank=True, null=True)
-    women_only = models.BooleanField(blank=True, null=True)
+    minority_serving_historically_black  = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_predominantly_black  = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_annh = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_tribal = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_aanipi = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_hispanic = models.BooleanField(blank=True, null=True, default=False)
+    minority_serving_nant = models.BooleanField(blank=True, null=True, default=False)
+    men_only = models.BooleanField(blank=True, null=True, default=False)
+    women_only = models.BooleanField(blank=True, null=True, default=False)
     religious_affiliation = models.CharField(
         max_length=255, blank=True, null=True)
 
@@ -124,7 +121,7 @@ class Scorecard(models.Model):
     act_math_midpoint = models.FloatField(null=True, blank=True)
     act_writing_midpoint = models.FloatField(null=True, blank=True)
     sat_average = models.FloatField(null=True, blank=True)
-    online_only = models.BooleanField(blank=True, null=True)
+    online_only = models.BooleanField(blank=True, null=True, default=False)
 
     # undergraduate fields
     undergraduate_students = models.FloatField(null=True, blank=True)
@@ -138,7 +135,7 @@ class Scorecard(models.Model):
     undergraduate_students_nra = models.FloatField(null=True, blank=True)
     undergraduate_students_unknown = models.FloatField(null=True, blank=True)
     undergraduate_students_parttime = models.FloatField(null=True, blank=True)
-    operating = models.BooleanField(blank=True, null=True)
+    operating = models.BooleanField(blank=True, null=True, default=False)
 
     # net pricing fields
     avg_net_price = models.IntegerField(blank=True, null=True)
@@ -185,7 +182,7 @@ class Scorecard(models.Model):
     undergraduate_students_women = models.FloatField(null=True, blank=True)
     default_rate_2yr_num_students = models.IntegerField(blank=True, null=True)
     default_rate_3yr_num_students = models.IntegerField(blank=True, null=True)
-    open_admissions = models.BooleanField(blank=True, null=True)
+    open_admissions = models.BooleanField(blank=True, null=True, default=False)
     graduation_rate_150 = models.FloatField(null=True, blank=True)
     first_time_full_time = models.FloatField(null=True, blank=True)
     graduation_rate_150_white = models.FloatField(null=True, blank=True)
