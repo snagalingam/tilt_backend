@@ -10,7 +10,7 @@ class College(models.Model):
     popularity_score = models.IntegerField(default=0, blank=True, null=True)
 
     # college scorecard info
-    unit_id = models.CharField(max_length=255, blank=True, null=True)
+    unit_id = models.IntegerField(blank=True, null=True)
     ope_id = models.CharField(max_length=255, blank=True, null=True)
 
     # google api inputted
