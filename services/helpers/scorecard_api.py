@@ -1,8 +1,11 @@
 
 import os
 import json
+from json import JSONEncoder
 import requests
 from time import sleep
+import datetime
+import pytz
 
 def scorecard_api(college_id, college_pk):
     endpoint = f"https://api.data.gov/ed/collegescorecard/v1/schools"
@@ -18,7 +21,7 @@ def scorecard_api(college_id, college_pk):
         error = scorecard['error']
         print(f'   ERROR ===> : {error["code"]}')
         print(f'   MESSAGE ===> : {error["message"]}')
-        breakpoint()
+    
     except:
         pass
 
@@ -34,6 +37,7 @@ def scorecard_api(college_id, college_pk):
         degree_awarded_num = degree_awarded_data.get('predominant')
 
         if operating and undergraduate_students and degree_awarded_data:
+        
         # if operating == True
         # if undergraduate_students (population) is greater than zero
         # if degree_awarded is predominantly associate's or bachelor's
@@ -839,10 +843,30 @@ def scorecard_api(college_id, college_pk):
                         "college": college_pk
                         }
                 }
+                # grab scorecard data from api 
+                # with open(f'scorecard_updates.json', 'a+') as f:
+                #     scorecard_data = json.dumps(seed, indent=2, ensure_ascii=False)
+                #     f.write(scorecard_data + ',')
 
                 return [seed, data]
 
     return [False]
+
+
+def find_missing_colleges(file_name):
+    colleges = json.load(open(f'{file_name}.json'))
+    count = 6757
+    for college in colleges: 
+        count += 1
+    
+        data = scorecard_api(college, count)
+
+        with open(f'scorecard_updates.json', 'a+') as f:
+            scorecard_data = json.dumps(data[0], indent=2, ensure_ascii=False)
+            f.write(scorecard_data + ',')
+        print(f'  ==> COUNT: {count}')
+
+# find_missing_colleges('missing')
 
 
 def field_study_api(programs, college_pk):
@@ -896,7 +920,10 @@ def field_study_api(programs, college_pk):
             }
             field_study_list.append(seed)
             count += 1
+
     return field_study_list
+
+
 
 def get_scorecard_data(file_name):
     colleges = json.load(open(f'{file_name}.json'))
@@ -908,29 +935,31 @@ def get_scorecard_data(file_name):
         name = college.get('fields')['name']
         pk = college.get('pk')
         # 1000 calls per hour limit 
-        sleep(3.7)
+        # sleep(3.7)
         data = scorecard_api(unit_id, pk)
         scorecard = data[0]
 
         if scorecard:
-            latest = data[1].get('latest')
-            programs = latest.get('programs', None)
+            # latest = data[1].get('latest')
+            # programs = latest.get('programs', None)
 
-            if programs: 
+            # if programs: 
                 print(f'  ==> COUNT: {pk}')
-                field_studies = field_study_api(programs['cip_4_digit'], pk)
+                # field_studies = field_study_api(programs['cip_4_digit'], pk)
                 # append seed data
-                with open(f'scorecard_seeds.json', 'a+') as f:
+                with open(f'scorecard_updates.json', 'a+') as f:
                     scorecard_data = json.dumps(scorecard, indent=2, ensure_ascii=False)
                     f.write(scorecard_data + ',')
                 # append college data
-                with open(f'colleges_seeds.json', 'a+') as f:
+                with open(f'colleges_updates.json', 'a+') as f:
                     college_data = json.dumps(college, indent=2, ensure_ascii=False)
                     f.write(college_data + ',')
                 # append field of study data
-                with open(f'field_study.json', 'a+') as f:
-                    field_study_data = json.dumps(field_studies, indent=2, ensure_ascii=False)
-                    f.write(field_study_data + ',')
+                # with open(f'field_study.json', 'a+') as f:
+                #     field_study_data = json.dumps(field_studies, indent=2, ensure_ascii=False)
+                #     f.write(field_study_data + ',')
+        else: 
+            print(f' NO SCORECARD ==> {name}')
 
     return print(f'   ==> DATA ALL DONE')
 
@@ -1049,4 +1078,49 @@ def update_scorecards(file_name):
 
     return print(f'   ==> RENUMBERING ALL DONE')
 
-update_scorecards('scorecard_seeds')
+class DateTimeEncoder(JSONEncoder):
+        #Override the default method
+        def default(self, obj):
+            if isinstance(obj, (datetime.date, datetime.datetime)):
+                return obj.isoformat()
+
+def add_dates(file_name):
+    collection = json.load(open(f'{file_name}.json'))
+    d = datetime.datetime.now()
+    timezone = pytz.timezone("America/Los_Angeles")
+    d_aware = timezone.localize(d)
+    count = 1
+
+    for each in collection: 
+        each['fields']['created'] = d_aware
+        each['fields']['updated'] = d_aware
+
+        with open(f'scorecard_seeds.json', 'a+') as f:
+            data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
+            f.write(data + ',')
+
+        print(f'  COUNT ===> : {count}')
+        count += 1
+
+    return print(f'   ==> DATES ADDED TO ALL DONE')
+
+add_dates('seeds/scorecard_seeds')
+
+def find(file_name):
+    collection = json.load(open(f'{file_name}.json'))
+    count = 1
+
+    for each in collection: 
+        unit_id = each['fields']['unit_id']
+        each['fields']['unit_id'] = int(unit_id)
+
+        with open(f'colleges_seedsINT.json', 'a+') as f:
+            data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
+            f.write(data + ',')
+
+        print(f'  COUNT ===> : {count}')
+        count += 1
+
+    return print(f'   ==> INT CHANGED TO ALL DONE')
+
+# find('colleges_seeds')
