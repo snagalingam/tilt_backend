@@ -7,10 +7,12 @@ from .models import CollegeStatus
 from .models import College
 from django.db.models import Count
 
+
 class CollegeStatusType(DjangoObjectType):
     class Meta:
         model = CollegeStatus
         fields = "__all__"
+
 
 class Query(graphene.ObjectType):
     college_statuses = graphene.List(CollegeStatusType)
@@ -50,10 +52,10 @@ class CreateCollegeStatus(graphene.Mutation):
     ):
 
         status_list = ("interested",
-                    "applied",
-                    "accepted",
-                    "waitlisted",
-                    "not accepted")
+                       "applied",
+                       "accepted",
+                       "waitlisted",
+                       "not accepted")
 
         user = get_user_model().objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
@@ -65,19 +67,17 @@ class CreateCollegeStatus(graphene.Mutation):
             college_status = None
             pass
 
-
         if college_status is None:
             if status in status_list:
                 college.popularity_score += 1
                 college.save()
 
-
             college_status = CollegeStatus(
-                user_id=user,
-                college_id=college,
+                user=user,
+                college=college,
                 status=status,
                 net_price=net_price,
-                )
+            )
 
             college_status.save()
             return CreateCollegeStatus(college_status=college_status)
@@ -110,7 +110,7 @@ class UpdateCollegeStatus(graphene.Mutation):
                        "not accepted")
 
         college = College.objects.get(pk=college_id)
-        
+
         try:
             college_status = CollegeStatus.objects.get(
                 user_id=user_id, college_id=college_id)
@@ -125,7 +125,7 @@ class UpdateCollegeStatus(graphene.Mutation):
 
         # status change from 'status_list' ==> 'not interested'
         elif college_status.status in status_list:
-            if status == "not interested": 
+            if status == "not interested":
                 college.popularity_score -= 1
                 college.save()
 
