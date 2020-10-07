@@ -5,12 +5,24 @@ import os
 from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
 from services.helpers.fav_finder import get_favicon
-from .models import College
+from .models import College, FieldOfStudy, Scorecard
 
 
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
+        fields = "__all__"
+
+
+class FieldOfStudyType(DjangoObjectType):
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
+
+
+class ScorecardType(DjangoObjectType):
+    class Meta:
+        model = Scorecard
         fields = "__all__"
 
 
@@ -73,7 +85,7 @@ class Query(graphene.ObjectType):
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
- 
+
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
 
