@@ -27,6 +27,7 @@ googlemaps = "*"
 favicon = "*"
 django-samesite-none = "*"
 django-better-admin-arrayfield = "*"
+uszipcode = "*"
 
 [requires]
 python_version = "3.8"
