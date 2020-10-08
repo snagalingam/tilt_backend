@@ -6,7 +6,7 @@ from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
 from services.helpers.nearby_coordinates import check_distance, state_from_zipcode
 from services.helpers.fav_finder import get_favicon
-from .models import College, Scorecard, FieldOfStudy
+from .models import College, FieldOfStudy, Scorecard
 
 
 class CollegeType(DjangoObjectType):
@@ -23,6 +23,18 @@ class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
         fields = "__all__"
+
+class FieldOfStudyType(DjangoObjectType):
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
+
+
+class ScorecardType(DjangoObjectType):
+    class Meta:
+        model = Scorecard
+        fields = "__all__"
+
 
 class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
@@ -92,7 +104,7 @@ class Query(graphene.ObjectType):
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
- 
+
     def resolve_college_by_id(root, info, id):
         return College.objects.get(pk=id)
 
@@ -111,12 +123,13 @@ class Query(graphene.ObjectType):
         user_lat = data[1]
         user_lng = data[2]
         degree = "Predominantly bachelor's-degree granting"
-        # distance = ""
+        
         # filter by state and degree 
         qs = College.objects.filter(
             address__contains=state, 
             scorecard__predominant_degree_awarded=degree)
         nearby_colleges = []
+
         # filter by coordinates within radius of 50 miles
         for college in qs:
             college_lat = college.lat
