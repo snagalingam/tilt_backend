@@ -4,7 +4,7 @@ import math
 import os
 from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
-from services.helpers.nearby_coordinates import check_distance, state_from_zipcode
+from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
 
@@ -56,7 +56,12 @@ class Query(graphene.ObjectType):
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
     nearby_colleges = graphene.List(
-        CollegeType, zipcode=graphene.Int())
+        CollegeType, 
+        lat=graphene.Float(),
+        lng=graphene.Float(),
+        zipcode=graphene.Int(),
+        city=graphene.String(),
+        state=graphene.String())
     filter_colleges = graphene.Field(
         CollegePaginationType,
         name=graphene.String(),
@@ -117,8 +122,22 @@ class Query(graphene.ObjectType):
     def resolve_college_by_name(root, info, name):
         return College.objects.filter(name=name)
 
-    def resolve_nearby_colleges(root, info, zipcode):
-        data = state_from_zipcode(zipcode)
+    def resolve_nearby_colleges(
+        root, 
+        info, 
+        lat=None, 
+        lng=None, 
+        zipcode=None,
+        city=None, 
+        state=None):
+        
+        if zipcode:
+            data = check_by_zipcode(zipcode)
+        if city and state:
+            data = check_by_city(city, state)
+        if lat and lng: 
+            data = check_by_coordinates(lat, lng)
+
         state = data[0]
         user_lat = data[1]
         user_lng = data[2]
