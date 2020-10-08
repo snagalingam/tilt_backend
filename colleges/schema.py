@@ -4,6 +4,7 @@ import math
 import os
 from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
+from services.helpers.nearby_coordinates import check_distance, state_from_zipcode
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
 
@@ -13,6 +14,15 @@ class CollegeType(DjangoObjectType):
         model = College
         fields = "__all__"
 
+class ScorecardType(DjangoObjectType):
+    class Meta:
+        model = Scorecard
+        fields = "__all__"
+
+class FieldOfStudyType(DjangoObjectType):
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
 
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
@@ -34,6 +44,8 @@ class CollegePaginationType(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
+    scorecards = graphene.List(ScorecardType, limit=graphene.Int())
+    field_of_studies = graphene.List(FieldOfStudyType, limit=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
@@ -43,6 +55,8 @@ class Query(graphene.ObjectType):
         CollegeType, ope_id=graphene.String())
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
+    nearby_colleges = graphene.List(
+        CollegeType, zipcode=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
         name=graphene.String(),
@@ -50,8 +64,7 @@ class Query(graphene.ObjectType):
         per_page=graphene.Int(),
         page=graphene.Int(),
         sort_by=graphene.String(),
-        sort_order=graphene.String()
-    )
+        sort_order=graphene.String())
 
     def resolve_filter_colleges(
             self,
@@ -83,6 +96,12 @@ class Query(graphene.ObjectType):
     def resolve_colleges(self, info, limit=None):
         return College.objects.all()[0:limit]
 
+    def resolve_scorecards(self, info, limit=None):
+        return College.objects.all()[0:limit]
+
+    def resolve_field_of_studies(self, info, limit=None):
+        return College.objects.all()[0:limit]
+
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
 
@@ -97,6 +116,34 @@ class Query(graphene.ObjectType):
 
     def resolve_college_by_name(root, info, name):
         return College.objects.filter(name=name)
+
+    def resolve_nearby_colleges(root, info, zipcode):
+        data = state_from_zipcode(zipcode)
+        state = data[0]
+        user_lat = data[1]
+        user_lng = data[2]
+        degree = "Predominantly bachelor's-degree granting"
+        
+        # filter by state and degree 
+        qs = College.objects.filter(
+            address__contains=state, 
+            scorecard__predominant_degree_awarded=degree)
+        nearby_colleges = []
+
+        # filter by coordinates within radius of 50 miles
+        for college in qs:
+            college_lat = college.lat
+            college_lng = college.lng
+            distance = check_distance(
+                college_lat, college_lng, user_lat, user_lng)
+
+            # 50 miles radius
+            if distance <= 50:
+                college.distance = round(distance, 5)
+                nearby_colleges.append(college)
+
+        sort_nearest = sorted(nearby_colleges, key=lambda x: x.distance)
+        return sort_nearest
 
 
 class CreateCollege(graphene.Mutation):
