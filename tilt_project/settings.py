@@ -13,8 +13,8 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = int(os.environ.get('DEBUG', default=0))
-DEBUG = 1
+DEBUG = int(os.environ.get('DEBUG', default=0))
+# DEBUG = 1
 
 # Application definition
 
