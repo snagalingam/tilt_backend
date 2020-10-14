@@ -14,16 +14,6 @@ class CollegeType(DjangoObjectType):
         model = College
         fields = "__all__"
 
-class ScorecardType(DjangoObjectType):
-    class Meta:
-        model = Scorecard
-        fields = "__all__"
-
-class FieldOfStudyType(DjangoObjectType):
-    class Meta:
-        model = FieldOfStudy
-        fields = "__all__"
-
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
