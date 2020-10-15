@@ -45,7 +45,7 @@ class College(models.Model):
 
 class Scorecard(models.Model):
     # college model
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    college = models.OneToOneField(College, on_delete=models.CASCADE)
 
     # school info fields
     unit_id = models.IntegerField(blank=True, null=True)

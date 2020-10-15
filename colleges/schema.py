@@ -14,16 +14,6 @@ class CollegeType(DjangoObjectType):
         model = College
         fields = "__all__"
 
-class ScorecardType(DjangoObjectType):
-    class Meta:
-        model = Scorecard
-        fields = "__all__"
-
-class FieldOfStudyType(DjangoObjectType):
-    class Meta:
-        model = FieldOfStudy
-        fields = "__all__"
-
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
@@ -45,7 +35,8 @@ class CollegePaginationType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
-    field_of_studies = graphene.List(FieldOfStudyType, limit=graphene.Int())
+    field_of_studies = graphene.List(
+        FieldOfStudyType, college_id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     college_by_id = graphene.Field(
         CollegeType, id=graphene.Int())
@@ -102,10 +93,11 @@ class Query(graphene.ObjectType):
         return College.objects.all()[0:limit]
 
     def resolve_scorecards(self, info, limit=None):
-        return College.objects.all()[0:limit]
+        return Scorecard.objects.all()[0:limit]
 
-    def resolve_field_of_studies(self, info, limit=None):
-        return College.objects.all()[0:limit]
+    def resolve_field_of_studies(self, info, college_id):
+        return FieldOfStudy.objects.filter(college=college_id,
+            num_students_ipeds_awards2__isnull=False)
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
