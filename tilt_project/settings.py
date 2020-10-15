@@ -230,12 +230,6 @@ DATABASES['default'].update(db_from_env)
 SESSION_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ORIGIN_WHITELIST = [
-#     "https://tiltaccess.com",
-#     "https://www.tiltaccess.com",
-#     "https://tilt-staging.vercel.app"
-# ]
-
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
