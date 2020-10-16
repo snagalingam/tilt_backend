@@ -241,23 +241,25 @@ class OnboardUser(graphene.Mutation):
 
 
 class DeleteUser(graphene.Mutation):
-    account_deleted: graphene.Boolean()
+    user = graphene.Field(UserType)
+    is_deleted = graphene.Boolean()
 
     def mutate(self, info):
         user = info.context.user
 
         if user.is_authenticated and user.is_active: 
             user.delete()
-            return DeleteUser(account_deleted=True)
+            return DeleteUser(is_deleted=True)
         else: 
-            raise Exception("User account not deleted")
+            raise Exception("User account was not deleted")
 
 class LogoutUser(graphene.Mutation):
     user = graphene.Field(UserType)
-    is_logged_out: graphene.Boolean()
+    is_logged_out = graphene.Boolean()
 
     def mutate(self, info):
         logout(info.context)
+        return LogoutUser(is_logged_out=True)
 
 class SendVerificationEmail(graphene.Mutation):
     user = graphene.Field(UserType)
