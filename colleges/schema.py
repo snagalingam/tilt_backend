@@ -153,8 +153,8 @@ class Query(graphene.ObjectType):
             distance = check_distance(
                 college_lat, college_lng, user_lat, user_lng)
 
-            # 50 miles radius
-            if distance <= 50:
+            # 100 miles radius
+            if distance <= 100:
                 college.distance = round(distance, 5)
                 nearby_colleges.append(college)
 
