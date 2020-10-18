@@ -14,6 +14,7 @@ class CollegeType(DjangoObjectType):
         model = College
         fields = "__all__"
 
+
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
@@ -47,12 +48,14 @@ class Query(graphene.ObjectType):
     college_by_name = graphene.List(
         CollegeType, name=graphene.String())
     nearby_colleges = graphene.List(
-        CollegeType, 
+        CollegeType,
         lat=graphene.Float(),
         lng=graphene.Float(),
         zipcode=graphene.Int(),
         city=graphene.String(),
-        state=graphene.String())
+        state=graphene.String(),
+        limit=graphene.Int()
+    )
     filter_colleges = graphene.Field(
         CollegePaginationType,
         name=graphene.String(),
@@ -70,7 +73,7 @@ class Query(graphene.ObjectType):
             per_page=12,
             page=1,
             sort_by='name',
-            sort_order='asc'
+            sort_order='asc',
     ):
         qs = College.objects.all()
         if name:
@@ -97,7 +100,7 @@ class Query(graphene.ObjectType):
 
     def resolve_field_of_studies(self, info, college_id):
         return FieldOfStudy.objects.filter(college=college_id,
-            num_students_ipeds_awards2__isnull=False)
+                                           num_students_ipeds_awards2__isnull=False)
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
@@ -115,30 +118,32 @@ class Query(graphene.ObjectType):
         return College.objects.filter(name=name)
 
     def resolve_nearby_colleges(
-        root, 
-        info, 
-        lat=None, 
-        lng=None, 
-        zipcode=None,
-        city=None, 
-        state=None):
-        
+            root,
+            info,
+            lat=None,
+            lng=None,
+            zipcode=None,
+            city=None,
+            state=None,
+            limit=None
+    ):
+
         if zipcode:
             data = check_by_zipcode(zipcode)
         if city and state:
             data = check_by_city(city, state)
-        if lat and lng: 
+        if lat and lng:
             data = check_by_coordinates(lat, lng)
 
         state = data[0]
         user_lat = data[1]
         user_lng = data[2]
         degree = "Predominantly bachelor's-degree granting"
-        
-        # filter by state and degree 
+
+        # filter by state and degree
         qs = College.objects.filter(
-            address__contains=state, 
-            scorecard__predominant_degree_awarded=degree)
+            address__contains=state,
+            scorecard__predominant_degree_awarded=degree)[0:limit]
         nearby_colleges = []
 
         # filter by coordinates within radius of 50 miles
