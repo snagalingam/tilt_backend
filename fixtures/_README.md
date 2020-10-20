@@ -43,8 +43,7 @@
 2. Dump (extract) current data
     `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
 
-3. colleges.college (extract current data)
-    `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
+3. Make edits on dumped file 
 
-4. colleges.college (extract current data)
-    `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
+4. Load (seed) edited file
+    `python manage.py loaddata fixtures/colleges.json`
