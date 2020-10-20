@@ -63,7 +63,20 @@ class Query(graphene.ObjectType):
         per_page=graphene.Int(),
         page=graphene.Int(),
         sort_by=graphene.String(),
-        sort_order=graphene.String())
+        sort_order=graphene.String(),
+        city=graphene.String(),
+        state=graphene.String()
+    )
+    cities = graphene.List(ScorecardType, city=graphene.String())
+    states = graphene.List(ScorecardType)
+
+    def resolve_cities(self, info, city=""):
+        qs = Scorecard.objects.filter(city__icontains=city).distinct("city")
+        return qs
+
+    def resolve_states(self, info):
+        qs = Scorecard.objects.all().distinct("state")
+        return qs
 
     def resolve_filter_colleges(
             self,
@@ -74,12 +87,18 @@ class Query(graphene.ObjectType):
             page=1,
             sort_by='name',
             sort_order='asc',
+            city=None,
+            state=None
     ):
         qs = College.objects.all()
         if name:
             qs = qs.filter(name__icontains=name)
         if address:
             qs = qs.filter(address__icontains=address)
+        if city:
+            qs = qs.filter(scorecard__city__icontains=city)
+        if state:
+            qs = qs.filter(scorecard__state__icontains=state)
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
