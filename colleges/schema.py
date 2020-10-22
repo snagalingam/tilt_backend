@@ -7,6 +7,8 @@ from services.google_api.google_places import GooglePlacesAPI, extract_photo_url
 from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
+from django.db.models import Q
+from itertools import chain
 
 
 class CollegeType(DjangoObjectType):
@@ -63,7 +65,30 @@ class Query(graphene.ObjectType):
         per_page=graphene.Int(),
         page=graphene.Int(),
         sort_by=graphene.String(),
-        sort_order=graphene.String())
+        sort_order=graphene.String(),
+        city=graphene.String(),
+        state=graphene.String(),
+        state_fips=graphene.String(),
+        predominant_degree_awarded=graphene.String(),
+        ownership=graphene.String()
+    )
+    state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
+    states = graphene.List(ScorecardType, state=graphene.String())
+    cities = graphene.List(ScorecardType, city=graphene.String())
+
+    def resolve_state_fips(self, info, state_fip=""):
+        qs = Scorecard.objects.filter(
+            state_fips__icontains=state_fip).distinct("state_fips")
+        return qs
+
+    def resolve_states(self, info, state=""):
+        qs = Scorecard.objects.filter(
+            state__icontains=state).distinct('state')
+        return qs
+
+    def resolve_cities(self, info, city=""):
+        qs = Scorecard.objects.filter(city__icontains=city)
+        return qs
 
     def resolve_filter_colleges(
             self,
@@ -74,12 +99,32 @@ class Query(graphene.ObjectType):
             page=1,
             sort_by='name',
             sort_order='asc',
+            city=None,
+            state=None,
+            state_fips=None,
+            predominant_degree_awarded=None,
+            ownership=None
     ):
         qs = College.objects.all()
         if name:
             qs = qs.filter(name__icontains=name)
         if address:
             qs = qs.filter(address__icontains=address)
+        if city:
+            city_state = city.split(", ")
+            c = city_state[0]
+            s = city_state[1]
+            qs = qs.filter(scorecard__city__icontains=c).filter(
+                scorecard__state__icontains=s)
+        if state:
+            qs = qs.filter(scorecard__state__icontains=state)
+        if state_fips:
+            qs = qs.filter(scorecard__state_fips__icontains=state_fips)
+        if predominant_degree_awarded:
+            qs = qs.filter(
+                scorecard__predominant_degree_awarded__icontains=predominant_degree_awarded)
+        if ownership:
+            qs = qs.filter(scorecard__ownership__icontains=ownership)
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
