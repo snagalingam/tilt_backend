@@ -158,7 +158,6 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-
         user = get_user_model().objects.get(pk=id)
 
         if place_id is not None or place_name is not None:
@@ -370,6 +369,132 @@ class AddSubscriber(graphene.Mutation):
         return AddSubscriber(success=True)
 
 
+class UpdateUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    organization = graphene.Field(OrganizationType_)
+
+    class Arguments:
+        id = graphene.ID()
+        first_name = graphene.String()
+        last_name = graphene.String()
+        preferred_name = graphene.String()
+        gpa = graphene.Float()
+        act_score = graphene.Int()
+        sat_score = graphene.Int()
+        efc = graphene.Int()
+        pronouns = graphene.String()
+        ethnicity = graphene.List(graphene.String)
+        user_type = graphene.String()
+        place_id = graphene.String()
+        place_name = graphene.String()
+        high_school_grad_year = graphene.Int()
+        income_quintile = graphene.String()
+        phone_number = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        id,
+        first_name=None,
+        last_name=None,
+        preferred_name=None,
+        gpa=None,
+        act_score=None,
+        sat_score=None,
+        efc=None,
+        pronouns=None,
+        ethnicity=None,
+        user_type=None,
+        place_id=None,
+        place_name=None,
+        high_school_grad_year=None,
+        income_quintile=None,
+        phone_number=None,
+    ):
+
+        print(f'id here ==>: {id}')
+        user = get_user_model().objects.get(pk=id)
+
+        if place_id is not None or place_name is not None:
+            try:
+                organization = Organization.objects.get(place_id=place_id)
+            except:
+                organization = None
+
+            if place_name is not None:
+                try:
+                    organization = Organization.objects.get(name=place_name)
+                except:
+                    organization = None
+
+            if organization is None:
+
+                if place_id is not None:
+                    data = search_details(place_id)
+                    results = data.get("result")
+                    lat = results.get("geometry")["location"]["lat"]
+                    lng = results.get("geometry")["location"]["lng"]
+                    place_name = results.get("name")
+                    business_status = results.get("business_status", None)
+                    icon = results.get("icon", None)
+                    address = results.get("formatted_address", None)
+                    phone_number = results.get("formatted_phone_number", None)
+                    url = results.get("url", None)
+                    website = results.get("website", None)
+                    types = results.get("types", [])
+
+                # else:
+                #     results = {}
+                #     place_id = None
+                #     lat = None
+                #     lng = None
+                #     business_status = None
+                #     icon = None
+                #     address = None
+                #     phone_number = None
+                #     url = None
+                #     website = None
+                #     types = []
+
+                organization = Organization(
+                    place_id=place_id,
+                    business_status=business_status,
+                    icon=icon,
+                    name=place_name,
+                    lat=lat,
+                    lng=lng,
+                    address=address,
+                    phone_number=phone_number,
+                    url=url,
+                    website=website,
+                    types=types,
+                )
+                organization.save()
+                user.organization.add(organization)
+
+            print(f'place_id ==>: {place_id}')
+            print(f'place_name ==>: {place_name}')
+
+        if user is not None:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.preferred_name = preferred_name
+            user.gpa = gpa
+            user.act_score = act_score
+            user.sat_score = sat_score
+            user.efc = efc
+            user.pronouns = pronouns
+            user.ethnicity = ethnicity
+            user.user_type = user_type
+            user.high_school_grad_year = high_school_grad_year
+            user.income_quintile = income_quintile
+            user.phone_number=phone_number
+            user.save()
+            return UpdateUser(user=user)
+        else:
+            raise Exception("User is not logged in")
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
@@ -382,3 +507,4 @@ class Mutation(graphene.ObjectType):
     social_auth = graphql_social_auth.SocialAuth.Field()
     send_subscription_verification = SendSubscriptionVerification.Field()
     add_subscriber = AddSubscriber.Field()
+    update_user = UpdateUser.Field()
