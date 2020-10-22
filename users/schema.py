@@ -65,7 +65,7 @@ class LoginUser(graphene.Mutation):
         user = authenticate(username=email, password=password)
 
         if user is not None:
-            if (user.is_verified):
+            if user.is_verified:
                 login(info.context, user,
                       backend="django.contrib.auth.backends.ModelBackend")
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
@@ -217,8 +217,8 @@ class OnboardUser(graphene.Mutation):
                 organization.save()
                 user.organization.add(organization)
 
-            print(f'place_id ==>: {place_id}')
-            print(f'place_name ==>: {place_name}')
+            # print(f'place_id ==>: {place_id}')
+            # print(f'place_name ==>: {place_name}')
 
         if user is not None:
             user.preferred_name = preferred_name
@@ -239,13 +239,26 @@ class OnboardUser(graphene.Mutation):
             raise Exception("User is not logged in")
 
 
+class DeleteUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_deleted = graphene.Boolean()
+
+    def mutate(self, info):
+        user = info.context.user
+
+        if user.is_authenticated and user.is_active: 
+            user.delete()
+            return DeleteUser(is_deleted=True)
+        else: 
+            raise Exception("User account was not deleted")
+
 class LogoutUser(graphene.Mutation):
     user = graphene.Field(UserType)
-    is_logged_out: graphene.Boolean()
+    is_logged_out = graphene.Boolean()
 
     def mutate(self, info):
         logout(info.context)
-
+        return LogoutUser(is_logged_out=True)
 
 class SendVerificationEmail(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -263,6 +276,7 @@ class SendVerificationEmail(graphene.Mutation):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
         user = get_user_model().objects.get(email=email)
+
         if user is not None:
             send_verification(user.email, user.first_name)
             return SendVerificationEmail(success=True)
@@ -498,6 +512,7 @@ class UpdateUser(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
+    delete_user = DeleteUser.Field()
     onboard_user = OnboardUser.Field()
     logout_user = LogoutUser.Field()
     verify_email = VerifyEmail.Field()

@@ -18,13 +18,13 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score',)}),
         (_('College Information'), {
-            'fields': ('name', 'address', 'phone_number', 'website',)
+            'fields': ('name', 'address', 'phone_number', 'website', 'business_status')
         }),
         (_('Scorcard Information'), {
             'fields': ('unit_id', 'ope_id',)
         }),
         (_('Google Places Information'), {
-            'fields': ('place_id', 'lat', 'lng', 'url',)
+            'fields': ('place_id', 'lat', 'lng', 'url', 'favicon')
         }),
         (_('Other Information'), {
             'fields': ('types', 'main_photo', 'photos',)
