@@ -7,7 +7,7 @@ from services.google_api.google_places import GooglePlacesAPI, extract_photo_url
 from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
-from django.db.models import Q
+from django.db.models import Q, Max, Min
 from itertools import chain
 
 
@@ -33,6 +33,11 @@ class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(CollegeType)
+
+
+class NetPriceRangeType(graphene.ObjectType):
+    min = graphene.Int()
+    max = graphene.Int()
 
 
 class Query(graphene.ObjectType):
@@ -70,11 +75,23 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         state_fips=graphene.String(),
         predominant_degree_awarded=graphene.String(),
-        ownership=graphene.String()
+        ownership=graphene.String(),
+        admissions_rate=graphene.List(graphene.Float),
+        program_type=graphene.String(),
+        gender=graphene.String(),
+        ethnicity=graphene.String(),
+        religious_affiliation=graphene.String()
     )
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
+    net_price_range = graphene.Field(NetPriceRangeType)
+    religious_affiliation = graphene.List(ScorecardType)
+
+    def resolve_religious_affiliation(self, info):
+        qs = Scorecard.objects.filter(
+            religious_affiliation__isnull=False).distinct("religious_affiliation")
+        return qs
 
     def resolve_state_fips(self, info, state_fip=""):
         qs = Scorecard.objects.filter(
@@ -90,6 +107,11 @@ class Query(graphene.ObjectType):
         qs = Scorecard.objects.filter(city__icontains=city)
         return qs
 
+    def resolve_net_price_range(self, info):
+        min = Scorecard.objects.aggregate(Min("avg_net_price"))
+        max = Scorecard.objects.aggregate(Max("avg_net_price"))
+        return NetPriceRangeType(min=min["avg_net_price__min"], max=max["avg_net_price__max"])
+
     def resolve_filter_colleges(
             self,
             info,
@@ -103,7 +125,12 @@ class Query(graphene.ObjectType):
             state=None,
             state_fips=None,
             predominant_degree_awarded=None,
-            ownership=None
+            ownership=None,
+            admissions_rate=None,
+            program_type=None,
+            gender=None,
+            ethnicity=None,
+            religious_affiliation=None
     ):
         qs = College.objects.all()
         if name:
@@ -125,6 +152,25 @@ class Query(graphene.ObjectType):
                 scorecard__predominant_degree_awarded__icontains=predominant_degree_awarded)
         if ownership:
             qs = qs.filter(scorecard__ownership__icontains=ownership)
+        if admissions_rate:
+            if (admissions_rate[1]) == 1:
+                qs = qs.filter(Q(scorecard__admissions_rate__isnull=True) | Q(scorecard__admissions_rate__range=(
+                    admissions_rate[0], admissions_rate[1])))
+            else:
+                qs = qs.filter(scorecard__admissions_rate__range=(
+                    admissions_rate[0], admissions_rate[1]))
+        if program_type:
+            filter_type = f'scorecard__{program_type}__gte'
+            qs = qs.filter(**{filter_type: 0.00001})
+        if gender:
+            filter_type = f'scorecard__{gender}'
+            qs = qs.filter(**{filter_type: True})
+        if ethnicity:
+            filter_type = f'scorecard__{ethnicity}'
+            qs = qs.filter(**{filter_type: True})
+        if religious_affiliation:
+            qs = qs.filter(
+                scorecard__religious_affiliation__icontains=religious_affiliation)
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
