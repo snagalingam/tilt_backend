@@ -20,6 +20,8 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
                     'is_active', 'is_verified', 'is_onboarded']
     list_editable = ['is_staff', 'is_superuser',
                      'is_active', 'is_verified', 'is_onboarded']
+    filter_horizontal = ('organization',) 
+    
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
         (_('Personal Information'), {
