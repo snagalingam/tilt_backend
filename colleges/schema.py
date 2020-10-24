@@ -7,6 +7,8 @@ from services.google_api.google_places import GooglePlacesAPI, extract_photo_url
 from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
+from django.db.models import Q, Max, Min
+from itertools import chain
 
 
 class CollegeType(DjangoObjectType):
@@ -31,6 +33,11 @@ class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(CollegeType)
+
+
+class NetPriceRangeType(graphene.ObjectType):
+    min = graphene.Int()
+    max = graphene.Int()
 
 
 class Query(graphene.ObjectType):
@@ -63,7 +70,63 @@ class Query(graphene.ObjectType):
         per_page=graphene.Int(),
         page=graphene.Int(),
         sort_by=graphene.String(),
-        sort_order=graphene.String())
+        sort_order=graphene.String(),
+        city=graphene.String(),
+        state=graphene.String(),
+        state_fips=graphene.String(),
+        predominant_degree_awarded=graphene.String(),
+        ownership=graphene.String(),
+        admissions_rate=graphene.List(graphene.Float),
+        program_type=graphene.String(),
+        gender=graphene.String(),
+        ethnicity=graphene.String(),
+        religious_affiliation=graphene.String(),
+        net_price=graphene.List(graphene.Float),
+        income_quintile=graphene.String()
+    )
+    state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
+    states = graphene.List(ScorecardType, state=graphene.String())
+    cities = graphene.List(ScorecardType, city=graphene.String())
+    net_price_range = graphene.Field(
+        NetPriceRangeType, income_quintile=graphene.String())
+    religious_affiliation = graphene.List(ScorecardType)
+
+    def resolve_religious_affiliation(self, info):
+        qs = Scorecard.objects.filter(
+            religious_affiliation__isnull=False).distinct("religious_affiliation")
+        return qs
+
+    def resolve_state_fips(self, info, state_fip=""):
+        qs = Scorecard.objects.filter(
+            state_fips__icontains=state_fip).distinct("state_fips")
+        return qs
+
+    def resolve_states(self, info, state=""):
+        qs = Scorecard.objects.filter(
+            state__icontains=state).distinct('state')
+        return qs
+
+    def resolve_cities(self, info, city=""):
+        qs = Scorecard.objects.filter(city__icontains=city)
+        return qs
+
+    def resolve_net_price_range(self, info, income_quintile=None):
+        avg_net_price_min = Scorecard.objects.aggregate(Min("avg_net_price"))
+        avg_net_price_max = Scorecard.objects.aggregate(Max("avg_net_price"))
+        min = avg_net_price_min["avg_net_price__min"]
+        max = avg_net_price_max["avg_net_price__max"]
+
+        if income_quintile:
+            income_min = Scorecard.objects.aggregate(
+                Min(f"avg_net_price_{income_quintile}"))
+            income_max = Scorecard.objects.aggregate(
+                Max(f"avg_net_price_{income_quintile}"))
+            if min > income_min[f"avg_net_price_{income_quintile}__min"]:
+                min = income_min[f"avg_net_price_{income_quintile}__min"]
+            if max < income_max[f"avg_net_price_{income_quintile}__max"]:
+                max = income_max[f"avg_net_price_{income_quintile}__max"]
+
+        return NetPriceRangeType(min=min, max=max)
 
     def resolve_filter_colleges(
             self,
@@ -74,12 +137,66 @@ class Query(graphene.ObjectType):
             page=1,
             sort_by='name',
             sort_order='asc',
+            city=None,
+            state=None,
+            state_fips=None,
+            predominant_degree_awarded=None,
+            ownership=None,
+            admissions_rate=None,
+            program_type=None,
+            gender=None,
+            ethnicity=None,
+            religious_affiliation=None,
+            net_price=None,
+            income_quintile=None
     ):
         qs = College.objects.all()
         if name:
             qs = qs.filter(name__icontains=name)
         if address:
             qs = qs.filter(address__icontains=address)
+        if city:
+            city_state = city.split(", ")
+            c = city_state[0]
+            s = city_state[1]
+            qs = qs.filter(scorecard__city__icontains=c).filter(
+                scorecard__state__icontains=s)
+        if state:
+            qs = qs.filter(scorecard__state__icontains=state)
+        if state_fips:
+            qs = qs.filter(scorecard__state_fips__icontains=state_fips)
+        if predominant_degree_awarded:
+            qs = qs.filter(
+                scorecard__predominant_degree_awarded__icontains=predominant_degree_awarded)
+        if ownership:
+            qs = qs.filter(scorecard__ownership__icontains=ownership)
+        if admissions_rate:
+            if (admissions_rate[1]) == 1:
+                qs = qs.filter(Q(scorecard__admissions_rate__isnull=True) | Q(scorecard__admissions_rate__range=(
+                    admissions_rate[0], admissions_rate[1])))
+            else:
+                qs = qs.filter(scorecard__admissions_rate__range=(
+                    admissions_rate[0], admissions_rate[1]))
+        if program_type:
+            filter_type = f'scorecard__{program_type}__gte'
+            qs = qs.filter(**{filter_type: 0.00001})
+        if gender:
+            filter_type = f'scorecard__{gender}'
+            qs = qs.filter(**{filter_type: True})
+        if ethnicity:
+            filter_type = f'scorecard__{ethnicity}'
+            qs = qs.filter(**{filter_type: True})
+        if religious_affiliation:
+            qs = qs.filter(
+                scorecard__religious_affiliation__icontains=religious_affiliation)
+        if net_price:
+            if (income_quintile):
+                income_filter_type = f'scorecard__avg_net_price_{income_quintile}__range'
+                qs = qs.filter(Q(scorecard__avg_net_price__range=(net_price[0], net_price[1])) |
+                               Q(**{income_filter_type: (net_price[0], net_price[1])}))
+            else:
+                qs = qs.filter(scorecard__avg_net_price__range=(
+                    net_price[0], net_price[1]))
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
