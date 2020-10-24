@@ -80,7 +80,9 @@ class Query(graphene.ObjectType):
         program_type=graphene.String(),
         gender=graphene.String(),
         ethnicity=graphene.String(),
-        religious_affiliation=graphene.String()
+        religious_affiliation=graphene.String(),
+        net_price=graphene.List(graphene.Float),
+        income_quintile=graphene.String()
     )
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
@@ -130,7 +132,9 @@ class Query(graphene.ObjectType):
             program_type=None,
             gender=None,
             ethnicity=None,
-            religious_affiliation=None
+            religious_affiliation=None,
+            net_price=None,
+            income_quintile=None
     ):
         qs = College.objects.all()
         if name:
@@ -171,6 +175,14 @@ class Query(graphene.ObjectType):
         if religious_affiliation:
             qs = qs.filter(
                 scorecard__religious_affiliation__icontains=religious_affiliation)
+        if net_price:
+            if (income_quintile):
+                income_filter_type = f'scorecard__avg_net_price_{income_quintile}__range'
+                qs = qs.filter(Q(scorecard__avg_net_price__range=(net_price[0], net_price[1])) |
+                               Q(**{income_filter_type: (net_price[0], net_price[1])}))
+            else:
+                qs = qs.filter(scorecard__avg_net_price__range=(
+                    net_price[0], net_price[1]))
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
