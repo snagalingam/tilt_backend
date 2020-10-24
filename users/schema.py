@@ -44,6 +44,9 @@ class Query(graphene.ObjectType):
 
         if user.is_authenticated:
             if user.social_auth.exists():
+                if not user.is_verified:
+                    user.is_verified = True
+                    user.save()
                 return user
             if user.is_verified:
                 return user
@@ -158,10 +161,10 @@ class OnboardUser(graphene.Mutation):
         found_from=None
     ):
 
-
         user = get_user_model().objects.get(pk=id)
 
         if place_id is not None or place_name is not None:
+
             try:
                 organization = Organization.objects.get(place_id=place_id)
             except:
@@ -216,7 +219,9 @@ class OnboardUser(graphene.Mutation):
                     types=types,
                 )
                 organization.save()
-                user.organization.add(organization)
+
+            # add organization to user after user is onboarded
+            user.organization.add(organization)
 
             # print(f'place_id ==>: {place_id}')
             # print(f'place_name ==>: {place_name}')
