@@ -87,7 +87,8 @@ class Query(graphene.ObjectType):
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
-    net_price_range = graphene.Field(NetPriceRangeType)
+    net_price_range = graphene.Field(
+        NetPriceRangeType, income_quintile=graphene.String())
     religious_affiliation = graphene.List(ScorecardType)
 
     def resolve_religious_affiliation(self, info):
@@ -109,10 +110,23 @@ class Query(graphene.ObjectType):
         qs = Scorecard.objects.filter(city__icontains=city)
         return qs
 
-    def resolve_net_price_range(self, info):
-        min = Scorecard.objects.aggregate(Min("avg_net_price"))
-        max = Scorecard.objects.aggregate(Max("avg_net_price"))
-        return NetPriceRangeType(min=min["avg_net_price__min"], max=max["avg_net_price__max"])
+    def resolve_net_price_range(self, info, income_quintile=None):
+        avg_net_price_min = Scorecard.objects.aggregate(Min("avg_net_price"))
+        avg_net_price_max = Scorecard.objects.aggregate(Max("avg_net_price"))
+        min = avg_net_price_min["avg_net_price__min"]
+        max = avg_net_price_max["avg_net_price__max"]
+
+        if income_quintile:
+            income_min = Scorecard.objects.aggregate(
+                Min(f"avg_net_price_{income_quintile}"))
+            income_max = Scorecard.objects.aggregate(
+                Max(f"avg_net_price_{income_quintile}"))
+            if min > income_min[f"avg_net_price_{income_quintile}__min"]:
+                min = income_min[f"avg_net_price_{income_quintile}__min"]
+            if max < income_max[f"avg_net_price_{income_quintile}__max"]:
+                max = income_max[f"avg_net_price_{income_quintile}__max"]
+
+        return NetPriceRangeType(min=min, max=max)
 
     def resolve_filter_colleges(
             self,
