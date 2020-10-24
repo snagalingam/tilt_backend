@@ -403,7 +403,6 @@ class UpdateUser(graphene.Mutation):
         place_name = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
-        phone_number = graphene.String()
 
     def mutate(
         self,
@@ -423,10 +422,8 @@ class UpdateUser(graphene.Mutation):
         place_name=None,
         high_school_grad_year=None,
         income_quintile=None,
-        phone_number=None,
     ):
 
-        print(f'id here ==>: {id}')
         user = get_user_model().objects.get(pk=id)
 
         if place_id is not None or place_name is not None:
@@ -457,18 +454,18 @@ class UpdateUser(graphene.Mutation):
                     website = results.get("website", None)
                     types = results.get("types", [])
 
-                # else:
-                #     results = {}
-                #     place_id = None
-                #     lat = None
-                #     lng = None
-                #     business_status = None
-                #     icon = None
-                #     address = None
-                #     phone_number = None
-                #     url = None
-                #     website = None
-                #     types = []
+                else:
+                    results = {}
+                    place_id = None
+                    lat = None
+                    lng = None
+                    business_status = None
+                    icon = None
+                    address = None
+                    phone_number = None
+                    url = None
+                    website = None
+                    types = []
 
                 organization = Organization(
                     place_id=place_id,
@@ -485,9 +482,9 @@ class UpdateUser(graphene.Mutation):
                 )
                 organization.save()
                 user.organization.add(organization)
-
-            print(f'place_id ==>: {place_id}')
-            print(f'place_name ==>: {place_name}')
+            else:
+                user.organization.clear()
+                user.organization.add(organization)
 
         if user is not None:
             user.first_name = first_name
@@ -502,7 +499,6 @@ class UpdateUser(graphene.Mutation):
             user.user_type = user_type
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
-            user.phone_number=phone_number
             user.save()
             return UpdateUser(user=user)
         else:
