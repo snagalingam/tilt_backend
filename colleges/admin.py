@@ -31,7 +31,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    search_fields = ('name', 'unit_id', 'ope_id',)
+    search_fields = ('name', 'unit_id', 'ope_id', 'website', 'popularity_score', 'description', 'favicon', 'types',)
     ordering = ('name',)
     model = College
 
