@@ -160,3 +160,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return str(self.email)
+
+
+class DeletedAccount(models.Model):
+
+    date = models.CharField(max_length=255)
+    accounts = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.date)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
