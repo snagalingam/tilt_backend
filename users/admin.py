@@ -6,8 +6,24 @@ from django.utils.translation import gettext_lazy as _
 from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+from users.models import DeletedAccount
 
 CustomUser = get_user_model()
+
+class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+    }
+    list_display = ['date', 'accounts',]
+
+    fieldsets = (
+        (None, {'fields': ('date', 'accounts',)}),
+    )
+
+    search_fields = ('date', 'accounts',)
+    ordering = ('date',)
+
+    model = DeletedAccount
 
 
 class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
@@ -20,6 +36,8 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
                     'is_active', 'is_verified', 'is_onboarded']
     list_editable = ['is_staff', 'is_superuser',
                      'is_active', 'is_verified', 'is_onboarded']
+    filter_horizontal = ('organization',) 
+    
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
         (_('Personal Information'), {
@@ -57,3 +75,4 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(DeletedAccount, DeletedAccountAdmin)
