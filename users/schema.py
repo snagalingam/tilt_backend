@@ -2,6 +2,7 @@ import graphene
 import graphql_social_auth
 import jwt
 import os
+import datetime
 
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
@@ -12,7 +13,7 @@ from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
-
+from users.models import DeletedAccount
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -249,6 +250,30 @@ class DeleteUser(graphene.Mutation):
 
         if user.is_authenticated and user.is_active: 
             user.delete()
+
+            # get and format today's date (mm/dd/yyyy)
+            d = f'{datetime.datetime.now()}'
+            old_format = f'%Y-%m-%d'
+            new_format = f'%m/%d/%Y'
+            date = datetime.datetime.strptime(d[0:10], old_format).strftime(new_format)
+
+            # search for date
+            try:
+                get_count = DeletedAccount.objects.get(date=date)
+            except: 
+                get_count = None
+
+            # iternate get_count or create new_count 
+            if get_count is not None:
+                get_count.accounts += 1 
+            else:
+                get_count = DeletedAccount(
+                    date=date,
+                    accounts=1
+                )
+            # save DeletedAccount object
+            get_count.save()
+
             return DeleteUser(is_deleted=True)
         else: 
             raise Exception("User account was not deleted")
