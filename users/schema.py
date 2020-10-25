@@ -403,6 +403,7 @@ class UpdateUser(graphene.Mutation):
         place_name = graphene.String()
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
+        email = graphene.String()
 
     def mutate(
         self,
@@ -422,10 +423,10 @@ class UpdateUser(graphene.Mutation):
         place_name=None,
         high_school_grad_year=None,
         income_quintile=None,
+        email=None,
     ):
 
         user = get_user_model().objects.get(pk=id)
-
         if place_id is not None or place_name is not None:
             try:
                 organization = Organization.objects.get(place_id=place_id)
@@ -481,6 +482,7 @@ class UpdateUser(graphene.Mutation):
                     types=types,
                 )
                 organization.save()
+                user.organization.clear()
                 user.organization.add(organization)
             else:
                 user.organization.clear()
@@ -499,11 +501,40 @@ class UpdateUser(graphene.Mutation):
             user.user_type = user_type
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
+            user.email = email
             user.save()
             return UpdateUser(user=user)
         else:
             raise Exception("User is not logged in")
 
+class UpdatePassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        new_password = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        email,
+        password,
+        new_password
+    ):
+        user = authenticate(username=email, password=password)
+
+        if user is not None:
+            # password validation
+            try:
+                password_validation.validate_password(new_password, user=user)
+            except ValidationError as e:
+                return e
+            user.set_password(new_password)
+            user.save()
+            return UpdatePassword(user=user)
+        else:
+            raise Exception("Incorrect credentials")
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
@@ -519,3 +550,4 @@ class Mutation(graphene.ObjectType):
     send_subscription_verification = SendSubscriptionVerification.Field()
     add_subscriber = AddSubscriber.Field()
     update_user = UpdateUser.Field()
+    update_password = UpdatePassword.Field()
