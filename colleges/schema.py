@@ -74,8 +74,8 @@ class Query(graphene.ObjectType):
         city=graphene.String(),
         state=graphene.String(),
         state_fips=graphene.String(),
-        predominant_degree_awarded=graphene.String(),
-        ownership=graphene.String(),
+        predominant_degree_awarded=graphene.List(graphene.String),
+        ownership=graphene.List(graphene.String),
         admissions_rate=graphene.List(graphene.Float),
         program_type=graphene.String(),
         gender=graphene.String(),
@@ -152,7 +152,8 @@ class Query(graphene.ObjectType):
     ):
         qs = College.objects.all()
         if name:
-            qs = qs.filter(name__icontains=name)
+            qs = qs.filter(Q(scorecard__name__icontains=name) |
+                           Q(scorecard__alias__icontains=name))
         if address:
             qs = qs.filter(address__icontains=address)
         if city:
@@ -167,9 +168,9 @@ class Query(graphene.ObjectType):
             qs = qs.filter(scorecard__state_fips__icontains=state_fips)
         if predominant_degree_awarded:
             qs = qs.filter(
-                scorecard__predominant_degree_awarded__icontains=predominant_degree_awarded)
+                scorecard__predominant_degree_awarded__in=predominant_degree_awarded)
         if ownership:
-            qs = qs.filter(scorecard__ownership__icontains=ownership)
+            qs = qs.filter(scorecard__ownership__in=ownership)
         if admissions_rate:
             if (admissions_rate[1]) == 1:
                 qs = qs.filter(Q(scorecard__admissions_rate__isnull=True) | Q(scorecard__admissions_rate__range=(
