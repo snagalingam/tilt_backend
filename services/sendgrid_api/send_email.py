@@ -112,5 +112,3 @@ def send_changed_password_confirm(email, first_name):
         print(response.headers)
     except Exception as e:
         print(e)
-
-send_changed_password_confirm("dansteryoo@gmail.com", "danny")
