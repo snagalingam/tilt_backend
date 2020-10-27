@@ -540,6 +540,7 @@ class UpdateUser(graphene.Mutation):
 
 class UpdatePassword(graphene.Mutation):
     user = graphene.Field(UserType)
+    success = graphene.Boolean()
 
     class Arguments:
         email = graphene.String()
@@ -563,8 +564,9 @@ class UpdatePassword(graphene.Mutation):
                 return e
             user.set_password(new_password)
             user.save()
+            success = True
             send_changed_password_confirm(email)
-            return UpdatePassword(user=user)
+            return UpdatePassword(success=success)
         else:
             raise Exception("Incorrect credentials")
 
