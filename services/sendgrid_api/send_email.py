@@ -88,19 +88,10 @@ def send_changed_password_confirm(email, first_name):
     message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
 
-    token = jwt.encode({'email': email,
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=900)},
-                       os.environ.get('SECRET_KEY'),
-                       algorithm='HS256',
-                       headers={'domain': domain}).decode('utf-8')
-
-    url = f"{domain}/forgot-password/{token}"
-
     message.template_id = 'd-44fdc9534a574732a7fca8b07238db04'
     message.dynamic_template_data = {
         "first_name": first_name,
-        "email": email,
-        "forgot_password_url": url
+        "email": email
     }
 
     print(message)
