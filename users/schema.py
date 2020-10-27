@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
-from services.sendgrid_api.send_email import send_verification, send_reset_password
+from services.sendgrid_api.send_email import send_verification, send_reset_password, send_changed_password_confirm
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
 from users.models import DeletedAccount
