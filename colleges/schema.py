@@ -223,20 +223,20 @@ class Query(graphene.ObjectType):
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
 
-    def resolve_college_by_id(root, info, id):
+    def resolve_college_by_id(self, info, id):
         return College.objects.get(pk=id)
 
-    def resolve_college_by_unit_id(root, info, unit_id):
+    def resolve_college_by_unit_id(self, info, unit_id):
         return College.objects.get(unit_id=unit_id)
 
-    def resolve_college_by_ope_id(root, info, ope_id):
+    def resolve_college_by_ope_id(self, info, ope_id):
         return College.objects.get(ope_id=ope_id)
 
-    def resolve_college_by_name(root, info, name):
+    def resolve_college_by_name(self, info, name):
         return College.objects.filter(name=name)
 
     def resolve_nearby_colleges(
-            root,
+            self,
             info,
             lat=None,
             lng=None,
@@ -245,7 +245,7 @@ class Query(graphene.ObjectType):
             state=None,
             limit=None
     ):
-
+        data = []
         if zipcode:
             data = check_by_zipcode(zipcode)
         if city and state:
@@ -261,7 +261,7 @@ class Query(graphene.ObjectType):
         # filter by state and degree
         qs = College.objects.filter(
             address__contains=state,
-            scorecard__predominant_degree_awarded=degree)[0:limit]
+            scorecard__predominant_degree_awarded=degree)
         nearby_colleges = []
 
         # filter by coordinates within radius of 50 miles
@@ -277,7 +277,7 @@ class Query(graphene.ObjectType):
                 nearby_colleges.append(college)
 
         sort_nearest = sorted(nearby_colleges, key=lambda x: x.distance)
-        return sort_nearest
+        return sort_nearest[0:limit]
 
 
 class CreateCollege(graphene.Mutation):
