@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
-from services.sendgrid_api.send_email import send_verification, send_reset_password
+from services.sendgrid_api.send_email import send_verification, send_reset_password, send_changed_password_confirm
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
 from users.models import DeletedAccount
@@ -540,6 +540,7 @@ class UpdateUser(graphene.Mutation):
 
 class UpdatePassword(graphene.Mutation):
     user = graphene.Field(UserType)
+    success = graphene.Boolean()
 
     class Arguments:
         email = graphene.String()
@@ -563,7 +564,9 @@ class UpdatePassword(graphene.Mutation):
                 return e
             user.set_password(new_password)
             user.save()
-            return UpdatePassword(user=user)
+            success = True
+            send_changed_password_confirm(email)
+            return UpdatePassword(success=success)
         else:
             raise Exception("Incorrect credentials")
 
