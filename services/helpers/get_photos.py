@@ -7,7 +7,6 @@ def get_photo_url(file_name):
     colleges = json.load(open(f'{file_name}.json'))
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit537.36(KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-    urls = []
 
     for college in colleges[0:]:
         pk = college.get('pk')
@@ -34,12 +33,11 @@ def get_photo_url(file_name):
                 photo_urls.append(res.url)
 
         data = {
-            "place_id": place_id,
-            "name": name,
-            "main_photo": main_photo_url,
-            "photos": photo_urls,
+            'place_id': place_id,
+            'name': name,
+            'main_photo': main_photo_url,
+            'photos': photo_urls,
         }
-        urls.append(data)
 
         print(f'  ==> pk: {pk} / name: {name}')
         with open(f'photo_urls.json', 'a+') as f:
@@ -48,4 +46,31 @@ def get_photo_url(file_name):
 
     return print(f'  ==> FINISHED: {file_name}')
 
-# get_photo_url('colleges_seeds')
+
+def replace_photos(file_1, file_2):
+    colleges = json.load(open(f'{file_1}.json'))
+    photo_urls = json.load(open(f'{file_2}.json'))
+
+    for p in photo_urls:
+        p_place_id = p.get('place_id')
+        p_main = p.get('main_photo')
+        p_photos = p.get('photos')
+
+        for c in colleges: 
+            pk = c.get('pk')
+            f = c.get('fields')
+            c_place_id = f.get('place_id')
+            c_main = f.get('main_photo')
+            c_photos = f.get('photos')
+
+            if p_place_id == c_place_id:
+                print(f"  {pk} ===> name: {c['fields']['name']}")
+                c['fields']['main_photo'] = p_main
+                c['fields']['photos'] = p_photos
+
+                with open(f'new_colleges.json', 'a+') as f:
+                    data = json.dumps(c, indent=2, ensure_ascii=False)
+                    f.write(data + ',')
+                break
+        
+    return print(f'  ==> FINISHED: {file_1} + {file_2}')
