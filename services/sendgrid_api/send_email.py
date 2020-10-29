@@ -83,7 +83,7 @@ def send_reset_password(email, first_name):
         print(e)
 
 
-def send_changed_password_confirm(email, first_name):
+def send_password_changed(email, first_name):
 
     message = Mail(from_email=(from_email, sender_name),
                    to_emails=email)
@@ -92,6 +92,29 @@ def send_changed_password_confirm(email, first_name):
     message.dynamic_template_data = {
         "first_name": first_name,
         "email": email
+    }
+
+    print(message)
+
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.headers)
+    except Exception as e:
+        print(e)
+
+
+def send_email_changed(old_email, new_email, first_name):
+
+    message = Mail(from_email=(from_email, sender_name),
+                   to_emails=old_email)
+
+    message.template_id = 'd-4d2c08403ebc4a8cbd582233aaff3da6'
+    message.dynamic_template_data = {
+        "first_name": first_name,
+        "old_email": old_email,
+        "new_email": new_email
     }
 
     print(message)
