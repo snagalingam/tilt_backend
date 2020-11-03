@@ -127,7 +127,10 @@ class Query(graphene.ObjectType):
             if max < income_max[f"avg_net_price_{income_quintile}__max"]:
                 max = income_max[f"avg_net_price_{income_quintile}__max"]
 
-        return NetPriceRangeType(min=min, max=max)
+        if min is not None and max is not None:
+            return NetPriceRangeType(min=min, max=max)
+        else:
+            return NetPriceRangeType(min=0, max=0)
 
     def resolve_filter_colleges(
             self,
