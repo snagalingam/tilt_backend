@@ -129,7 +129,6 @@ class Query(graphene.ObjectType):
                     max = income_max[f"avg_net_price_{income_quintile}__max"]
 
             return NetPriceRangeType(min=min, max=max)
-
         else:
             return NetPriceRangeType(min=0, max=0)
 
