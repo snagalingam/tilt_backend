@@ -7,8 +7,9 @@ from services.google_api.google_places import GooglePlacesAPI, extract_photo_url
 from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
 from .models import College, FieldOfStudy, Scorecard
-from django.db.models import Q, Max, Min
+from django.db.models import Q, Max, Min, F
 from itertools import chain
+from django.db.models.functions import Greatest, Least
 
 
 class CollegeType(DjangoObjectType):
@@ -126,7 +127,10 @@ class Query(graphene.ObjectType):
             if max < income_max[f"avg_net_price_{income_quintile}__max"]:
                 max = income_max[f"avg_net_price_{income_quintile}__max"]
 
-        return NetPriceRangeType(min=min, max=max)
+        if min is not None and max is not None:
+            return NetPriceRangeType(min=min, max=max)
+        else:
+            return NetPriceRangeType(min=0, max=0)
 
     def resolve_filter_colleges(
             self,
@@ -152,8 +156,8 @@ class Query(graphene.ObjectType):
     ):
         qs = College.objects.all()
         if name:
-            qs = qs.filter(Q(scorecard__name__icontains=name) |
-                           Q(scorecard__alias__icontains=name))
+            qs = qs.filter(Q(scorecard__name__icontains=name) | Q(
+                scorecard__alias__icontains=name) | Q(name__icontains=name))
         if address:
             qs = qs.filter(address__icontains=address)
         if city:
@@ -201,6 +205,40 @@ class Query(graphene.ObjectType):
 
         if sort_by == "name":
             qs = qs.order_by(sort_by if sort_order == "asc" else f'-{sort_by}')
+        if sort_by == "popularity_score":
+            qs = qs.order_by('popularity_score' if sort_order ==
+                             "asc" else '-popularity_score')
+        if sort_by == "net_price":
+            if (income_quintile is None):
+                if sort_order == 'asc':
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
+                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').asc(nulls_last=True))
+                else:
+                    qs = qs.annotate(real_net_price=Greatest('collegestatus__net_price',
+                                                             'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').desc(nulls_last=True))
+            else:
+                if sort_order == 'asc':
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
+                                                          'scorecard__avg_net_price')).order_by(F('real_net_price').asc(nulls_last=True))
+                else:
+                    qs = qs.annotate(real_net_price=Greatest('collegestatus__net_price',
+                                                             'scorecard__avg_net_price')).order_by(F('real_net_price').desc(nulls_last=True))
+
+        if sort_by == "admissions_rate":
+            if sort_order == 'asc':
+                qs = qs.order_by(
+                    F("scorecard__admissions_rate").asc(nulls_last=True))
+            else:
+                qs = qs.order_by('-scorecard__admissions_rate')
+        if sort_by == "city":
+            qs = qs.order_by('scorecard__city' if sort_order ==
+                             'asc' else '-scorecard__city')
+        if sort_by == "state":
+            qs = qs.order_by('scorecard__state_fips' if sort_order ==
+                             'asc' else '-scorecard__state_fips')
+        if sort_by == "ownership":
+            qs = qs.order_by('scorecard__ownership' if sort_order ==
+                             'asc' else '-scorecard__ownership')
 
         count = qs.count()
         pages = math.ceil(count / per_page)
