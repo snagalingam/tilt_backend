@@ -117,18 +117,19 @@ class Query(graphene.ObjectType):
         min = avg_net_price_min["avg_net_price__min"]
         max = avg_net_price_max["avg_net_price__max"]
 
-        if income_quintile:
-            income_min = Scorecard.objects.aggregate(
-                Min(f"avg_net_price_{income_quintile}"))
-            income_max = Scorecard.objects.aggregate(
-                Max(f"avg_net_price_{income_quintile}"))
-            if min > income_min[f"avg_net_price_{income_quintile}__min"]:
-                min = income_min[f"avg_net_price_{income_quintile}__min"]
-            if max < income_max[f"avg_net_price_{income_quintile}__max"]:
-                max = income_max[f"avg_net_price_{income_quintile}__max"]
-
         if min is not None and max is not None:
+            if income_quintile:
+                income_min = Scorecard.objects.aggregate(
+                    Min(f"avg_net_price_{income_quintile}"))
+                income_max = Scorecard.objects.aggregate(
+                    Max(f"avg_net_price_{income_quintile}"))
+                if min > income_min[f"avg_net_price_{income_quintile}__min"]:
+                    min = income_min[f"avg_net_price_{income_quintile}__min"]
+                if max < income_max[f"avg_net_price_{income_quintile}__max"]:
+                    max = income_max[f"avg_net_price_{income_quintile}__max"]
+
             return NetPriceRangeType(min=min, max=max)
+
         else:
             return NetPriceRangeType(min=0, max=0)
 
