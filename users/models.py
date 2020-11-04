@@ -75,6 +75,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(
         _("last name"), max_length=255, null=True, blank=True)
 
+    phone_number = models.BigIntegerField(
+        _("phone number"), null=True, blank=True)
+
     preferred_name = models.CharField(
         _("preferred name"), max_length=255, null=True, blank=True)
 
@@ -173,7 +176,7 @@ class DeletedAccount(models.Model):
 class Action(models.Model):
     """
     Create New Action
-    
+
         Action(user=user, 
             action='Logged In', (add description)
             timestamp=datetime.datetime.now())
