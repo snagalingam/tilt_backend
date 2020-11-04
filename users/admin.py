@@ -47,7 +47,7 @@ class ActionInline(admin.TabularInline):
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
     extra = 0
-    
+
 class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -61,7 +61,7 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     filter_horizontal = ('organization',) 
     
     fieldsets = (
-        (None, {'fields': ('email', 'password',)}),
+        (None, {'fields': ('email', 'password', 'phone_number')}),
         (_('Personal Information'), {
             'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
         }),
