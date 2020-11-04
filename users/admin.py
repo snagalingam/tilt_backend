@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-from users.models import DeletedAccount
+from users.models import DeletedAccount, Action
 
 CustomUser = get_user_model()
 
@@ -26,6 +26,28 @@ class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
     model = DeletedAccount
 
 
+class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+    }
+    list_display = ['user', 'action', 'timestamp']
+
+    fieldsets = (
+        (None, {'fields': ('user', 'action', 'timestamp',)}),
+    )
+
+    search_fields = ('action', 'timestamp',)
+    ordering = ('user',)
+
+    model = Action
+
+class ActionInline(admin.TabularInline):
+    model = Action
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+    }
+    extra = 0
+    
 class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -60,7 +82,8 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
-
+    
+    inlines = [ActionInline]
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -76,3 +99,4 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(DeletedAccount, DeletedAccountAdmin)
+admin.site.register(Action, ActionAdmin)

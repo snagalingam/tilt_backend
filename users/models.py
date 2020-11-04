@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from organizations.models import Organization
-
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     """
@@ -170,6 +170,21 @@ class DeletedAccount(models.Model):
     def __str__(self):
         return str(self.date)
 
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+class Action(models.Model):
+    """
+    Create New Action
+    
+        Action(user=user, 
+            action='Logged In', (add description)
+            timestamp=datetime.datetime.now())
+    """
+
+    user = models.ForeignKey(
+        CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+    action = models.CharField(
+        max_length=255, default=None, null=True, blank=True)
+
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.action)
