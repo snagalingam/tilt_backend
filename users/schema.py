@@ -48,14 +48,20 @@ class Query(graphene.ObjectType):
                 if not user.is_verified:
                     user.is_verified = True
                     user.save()
-                return user
-            if user.is_verified:
+                # track social user logins
                 action = Action(
                     user=user, 
                     action='Logged In', 
                     timestamp=datetime.datetime.now())
                 action.save()
-                # breakpoint()
+                return user
+            if user.is_verified:
+                # track non-social user logins
+                action = Action(
+                    user=user, 
+                    action='Logged In', 
+                    timestamp=datetime.datetime.now())
+                action.save()
                 return user
             else:
                 raise Exception("User is not verified")
