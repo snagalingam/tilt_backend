@@ -13,7 +13,7 @@ from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
-from users.models import DeletedAccount
+from users.models import DeletedAccount, Action
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -48,8 +48,20 @@ class Query(graphene.ObjectType):
                 if not user.is_verified:
                     user.is_verified = True
                     user.save()
+                # track social user logins
+                action = Action(
+                    user=user, 
+                    action='Logged In', 
+                    timestamp=datetime.datetime.now())
+                action.save()
                 return user
             if user.is_verified:
+                # track non-social user logins
+                action = Action(
+                    user=user, 
+                    action='Logged In', 
+                    timestamp=datetime.datetime.now())
+                action.save()
                 return user
             else:
                 raise Exception("User is not verified")
