@@ -591,7 +591,6 @@ class UpdatePassword(graphene.Mutation):
             raise Exception("Incorrect credentials")
 
 class CreateAction(graphene.Mutation):
-    action = graphene.Field(ActionType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -601,8 +600,9 @@ class CreateAction(graphene.Mutation):
         user = info.context.user
         if user.is_authenticated:
             create_action(user, description)
-
-        return CreateAction(success=True)
+            return CreateAction(success=True)
+        else: 
+            return CreateAction(success=False)
 
 
 class Mutation(graphene.ObjectType):
