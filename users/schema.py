@@ -7,13 +7,15 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
+from django.contrib.sessions.models import Session
 
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
-from users.models import DeletedAccount, Action
+from services.helpers.actions import create_action, create_timestamp, create_date
+from users.models import DeletedAccount
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -39,7 +41,6 @@ class Query(graphene.ObjectType):
 
     def resolve_me(self, info):
         user = info.context.user
-
         if user.is_anonymous:
             raise Exception('Not logged in!')
 
@@ -48,20 +49,12 @@ class Query(graphene.ObjectType):
                 if not user.is_verified:
                     user.is_verified = True
                     user.save()
-                # track social user logins
-                action = Action(
-                    user=user, 
-                    action='Logged In', 
-                    timestamp=datetime.datetime.now())
-                action.save()
+                # track GET_ME query
+                create_action(user, 'Social GET_ME query')
                 return user
             if user.is_verified:
-                # track non-social user logins
-                action = Action(
-                    user=user, 
-                    action='Logged In', 
-                    timestamp=datetime.datetime.now())
-                action.save()
+                # track GET_ME query
+                create_action(user, 'Non-social GET_ME query')
                 return user
             else:
                 raise Exception("User is not verified")
@@ -84,11 +77,25 @@ class LoginUser(graphene.Mutation):
             if user.is_verified:
                 login(info.context, user,
                       backend="django.contrib.auth.backends.ModelBackend")
+                # track user login
+                create_action(user, 'Logged in')
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
         else:
             raise Exception("Incorrect credentials")
+
+
+class LogoutUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_logged_out = graphene.Boolean()
+
+    def mutate(self, info):
+        user = info.context.user
+        # track user logout
+        create_action(user, 'Logged out')
+        logout(info.context)
+        return LogoutUser(is_logged_out=True)
 
 
 class CreateUser(graphene.Mutation):
@@ -269,10 +276,7 @@ class DeleteUser(graphene.Mutation):
             user.delete()
 
             # get and format today's date (mm/dd/yyyy)
-            d = f'{datetime.datetime.now()}'
-            old_format = f'%Y-%m-%d'
-            new_format = f'%m/%d/%Y'
-            date = datetime.datetime.strptime(d[0:10], old_format).strftime(new_format)
+            date = create_date()
 
             # search for date
             try:
@@ -295,13 +299,6 @@ class DeleteUser(graphene.Mutation):
         else: 
             raise Exception("User account was not deleted")
 
-class LogoutUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    is_logged_out = graphene.Boolean()
-
-    def mutate(self, info):
-        logout(info.context)
-        return LogoutUser(is_logged_out=True)
 
 class SendVerificationEmail(graphene.Mutation):
     user = graphene.Field(UserType)

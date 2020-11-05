@@ -13,26 +13,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='deletedaccount',
-            name='created',
-        ),
-        migrations.RemoveField(
-            model_name='deletedaccount',
-            name='updated',
-        ),
         migrations.AddField(
             model_name='customuser',
             name='phone_number',
             field=models.BigIntegerField(blank=True, null=True, verbose_name='phone number'),
-        ),
-        migrations.CreateModel(
-            name='Action',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('action', models.CharField(blank=True, default=None, max_length=255, null=True)),
-                ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
         ),
     ]
