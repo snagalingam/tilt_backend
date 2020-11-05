@@ -7,7 +7,6 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
-from django.contrib.sessions.models import Session
 
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
