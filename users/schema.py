@@ -15,12 +15,16 @@ from services.sendgrid_api.send_email import send_verification, send_reset_passw
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from users.models import DeletedAccount
+from users.models import DeletedAccount, Action
 
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
 
+class ActionType(DjangoObjectType):
+    class Meta:
+        model = Action
+        fields = "__all__"
 
 class OrganizationType_(DjangoObjectType):
     class Meta:
@@ -587,6 +591,21 @@ class UpdatePassword(graphene.Mutation):
         else:
             raise Exception("Incorrect credentials")
 
+class CreateAction(graphene.Mutation):
+    action = graphene.Field(ActionType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        description = graphene.String()
+
+    def mutate(self, info, description):
+        user = info.context.user
+        if user.is_authenticated:
+            create_action(user, description)
+
+        return CreateAction(success=True)
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
@@ -602,3 +621,4 @@ class Mutation(graphene.ObjectType):
     add_subscriber = AddSubscriber.Field()
     update_user = UpdateUser.Field()
     update_password = UpdatePassword.Field()
+    create_action = CreateAction.Field()
