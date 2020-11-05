@@ -184,10 +184,10 @@ class Action(models.Model):
 
     user = models.ForeignKey(
         CustomUser, null=True, blank=True, on_delete=models.CASCADE)
-    action = models.CharField(
+    description = models.CharField(
         max_length=255, default=None, null=True, blank=True)
 
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.action)
+        return str(self.description)
