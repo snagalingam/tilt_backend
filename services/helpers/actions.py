@@ -23,6 +23,6 @@ def create_action(user, description):
         Action.objects.get(timestamp=timestamp)
     except:
         action = Action(user=user, 
-                action=description, 
+                description=description, 
                 timestamp=timestamp)
         return action.save()
