@@ -566,13 +566,15 @@ class UpdatePassword(graphene.Mutation):
         email = graphene.String()
         password = graphene.String()
         new_password = graphene.String()
+        first_name = graphene.String()
 
     def mutate(
         self,
         info,
         email,
         password,
-        new_password
+        new_password,
+        first_name
     ):
         user = authenticate(username=email, password=password)
 
@@ -585,7 +587,7 @@ class UpdatePassword(graphene.Mutation):
             user.set_password(new_password)
             user.save()
             success = True
-            send_password_changed(email)
+            send_password_changed(email, first_name)
             return UpdatePassword(success=success)
         else:
             raise Exception("Incorrect credentials")
