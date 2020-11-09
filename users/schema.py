@@ -533,6 +533,8 @@ class UpdateUser(graphene.Mutation):
             else:
                 user.organization.clear()
                 user.organization.add(organization)
+        else:
+            user.organization.clear()
 
         if user is not None:
             user.first_name = first_name
