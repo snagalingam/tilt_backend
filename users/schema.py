@@ -447,6 +447,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
         email = graphene.String()
+        delete_school = graphene.Boolean()
 
     def mutate(
         self,
@@ -467,6 +468,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year=None,
         income_quintile=None,
         email=None,
+        delete_school=None,
     ):
 
         user = get_user_model().objects.get(pk=id)
@@ -533,7 +535,7 @@ class UpdateUser(graphene.Mutation):
             else:
                 user.organization.clear()
                 user.organization.add(organization)
-        else:
+        elif delete_school:
             user.organization.clear()
 
         if user is not None:
