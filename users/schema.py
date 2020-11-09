@@ -447,6 +447,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
         email = graphene.String()
+        delete_school = graphene.Boolean()
 
     def mutate(
         self,
@@ -467,6 +468,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year=None,
         income_quintile=None,
         email=None,
+        delete_school=None,
     ):
 
         user = get_user_model().objects.get(pk=id)
@@ -533,6 +535,8 @@ class UpdateUser(graphene.Mutation):
             else:
                 user.organization.clear()
                 user.organization.add(organization)
+        elif delete_school:
+            user.organization.clear()
 
         if user is not None:
             user.first_name = first_name
@@ -566,13 +570,15 @@ class UpdatePassword(graphene.Mutation):
         email = graphene.String()
         password = graphene.String()
         new_password = graphene.String()
+        first_name = graphene.String()
 
     def mutate(
         self,
         info,
         email,
         password,
-        new_password
+        new_password,
+        first_name
     ):
         user = authenticate(username=email, password=password)
 
@@ -585,7 +591,7 @@ class UpdatePassword(graphene.Mutation):
             user.set_password(new_password)
             user.save()
             success = True
-            send_password_changed(email)
+            send_password_changed(email, first_name)
             return UpdatePassword(success=success)
         else:
             raise Exception("Incorrect credentials")
