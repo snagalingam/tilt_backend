@@ -187,7 +187,7 @@ class Action(models.Model):
     description = models.CharField(
         max_length=255, default=None, null=True, blank=True)
 
-    timestamp = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField()
 
     def __str__(self):
         return str(self.description)
