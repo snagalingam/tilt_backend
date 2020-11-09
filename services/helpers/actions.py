@@ -20,7 +20,9 @@ def create_action(user, description):
     timestamp = create_timestamp()
 
     try:
-        Action.objects.get(timestamp=timestamp)
+        Action.objects.get(user=user, 
+                description=description, 
+                timestamp=timestamp)
     except:
         action = Action(user=user, 
                 description=description, 
