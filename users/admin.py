@@ -30,13 +30,13 @@ class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    list_display = ['user', 'description', 'timestamp']
+    list_display = ['user', 'description', 'date']
 
     fieldsets = (
-        (None, {'fields': ('user', 'description', 'timestamp',)}),
+        (None, {'fields': ('user', 'description', 'date',)}),
     )
 
-    search_fields = ('description', 'timestamp',)
+    search_fields = ('description', 'date',)
     ordering = ('user',)
 
     model = Action

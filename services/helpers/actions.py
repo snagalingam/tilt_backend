@@ -14,7 +14,8 @@ def create_date():
     old_format = f'%Y-%m-%d'
     new_format = f'%m/%d/%Y'
     date = datetime.datetime.strptime(d[0:10], old_format).strftime(new_format)
-    return date
+    new_date = datetime.datetime.strptime(date, new_format)
+    return new_date
 
 def create_action(user, description):
     timestamp = create_timestamp()
