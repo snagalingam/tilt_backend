@@ -167,7 +167,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class DeletedAccount(models.Model):
 
-    date = models.CharField(max_length=255)
+    date = models.DateTimeField()
     accounts = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -187,7 +187,7 @@ class Action(models.Model):
     description = models.CharField(
         max_length=255, default=None, null=True, blank=True)
 
-    date = models.DateTimeField()
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.description)
