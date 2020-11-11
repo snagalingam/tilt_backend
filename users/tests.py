@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 class CustomUserTests(TestCase):
-
+    
+    User = get_user_model()
     def test_create_user_required_fields(self):
-        User = get_user_model()
         user = User.objects.create_user(
             email = 'kevin@email.com',
             first_name = 'kevin',
@@ -32,7 +32,6 @@ class CustomUserTests(TestCase):
         self.assertIsNotNone(user.password)
 
     def test_create_superuser_required_fields(self):
-        User = get_user_model()
         admin_user = User.objects.create_superuser(
             email = 'superadmin@email.com',
             first_name = 'superadmin',
@@ -60,7 +59,6 @@ class CustomUserTests(TestCase):
         self.assertIsNotNone(admin_user.password)
 
     def test_create_specify_all_fields(self):
-        User = get_user_model()
         user = User.objects.create_user(
             email = 'lisa@email.com',
             first_name = 'lisa',
@@ -101,7 +99,6 @@ class CustomUserTests(TestCase):
         self.assertIsNotNone(user.password)
 
     def test_create_superuser_specify_all_fields(self):
-        User = get_user_model()
         admin_user = User.objects.create_superuser(
             email = 'superparent@example.com',
             first_name = 'superparent',
