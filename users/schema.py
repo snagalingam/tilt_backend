@@ -13,12 +13,17 @@ from organizations.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
+from services.helpers.actions import create_action, create_timestamp, create_date
 from users.models import DeletedAccount, Action
 
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
 
+class ActionType(DjangoObjectType):
+    class Meta:
+        model = Action
+        fields = "__all__"
 
 class OrganizationType_(DjangoObjectType):
     class Meta:
@@ -39,7 +44,6 @@ class Query(graphene.ObjectType):
 
     def resolve_me(self, info):
         user = info.context.user
-
         if user.is_anonymous:
             raise Exception('Not logged in!')
 
@@ -48,20 +52,12 @@ class Query(graphene.ObjectType):
                 if not user.is_verified:
                     user.is_verified = True
                     user.save()
-                # track social user logins
-                action = Action(
-                    user=user, 
-                    action='Logged In', 
-                    timestamp=datetime.datetime.now())
-                action.save()
+                # track GET_ME query
+                create_action(user, 'Social GET_ME query')
                 return user
             if user.is_verified:
-                # track non-social user logins
-                action = Action(
-                    user=user, 
-                    action='Logged In', 
-                    timestamp=datetime.datetime.now())
-                action.save()
+                # track GET_ME query
+                create_action(user, 'Non-social GET_ME query')
                 return user
             else:
                 raise Exception("User is not verified")
@@ -84,11 +80,25 @@ class LoginUser(graphene.Mutation):
             if user.is_verified:
                 login(info.context, user,
                       backend="django.contrib.auth.backends.ModelBackend")
+                # track user login
+                create_action(user, 'Logged in')
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
             else:
                 raise Exception("User is not verified")
         else:
             raise Exception("Incorrect credentials")
+
+
+class LogoutUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_logged_out = graphene.Boolean()
+
+    def mutate(self, info):
+        user = info.context.user
+        # track user logout
+        create_action(user, 'Logged out')
+        logout(info.context)
+        return LogoutUser(is_logged_out=True)
 
 
 class CreateUser(graphene.Mutation):
@@ -269,10 +279,7 @@ class DeleteUser(graphene.Mutation):
             user.delete()
 
             # get and format today's date (mm/dd/yyyy)
-            d = f'{datetime.datetime.now()}'
-            old_format = f'%Y-%m-%d'
-            new_format = f'%m/%d/%Y'
-            date = datetime.datetime.strptime(d[0:10], old_format).strftime(new_format)
+            date = create_date()
 
             # search for date
             try:
@@ -295,13 +302,6 @@ class DeleteUser(graphene.Mutation):
         else: 
             raise Exception("User account was not deleted")
 
-class LogoutUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    is_logged_out = graphene.Boolean()
-
-    def mutate(self, info):
-        logout(info.context)
-        return LogoutUser(is_logged_out=True)
 
 class SendVerificationEmail(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -447,6 +447,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year = graphene.Int()
         income_quintile = graphene.String()
         email = graphene.String()
+        delete_school = graphene.Boolean()
 
     def mutate(
         self,
@@ -467,6 +468,7 @@ class UpdateUser(graphene.Mutation):
         high_school_grad_year=None,
         income_quintile=None,
         email=None,
+        delete_school=None,
     ):
 
         user = get_user_model().objects.get(pk=id)
@@ -533,6 +535,8 @@ class UpdateUser(graphene.Mutation):
             else:
                 user.organization.clear()
                 user.organization.add(organization)
+        elif delete_school:
+            user.organization.clear()
 
         if user is not None:
             user.first_name = first_name
@@ -566,13 +570,15 @@ class UpdatePassword(graphene.Mutation):
         email = graphene.String()
         password = graphene.String()
         new_password = graphene.String()
+        first_name = graphene.String()
 
     def mutate(
         self,
         info,
         email,
         password,
-        new_password
+        new_password,
+        first_name
     ):
         user = authenticate(username=email, password=password)
 
@@ -585,10 +591,25 @@ class UpdatePassword(graphene.Mutation):
             user.set_password(new_password)
             user.save()
             success = True
-            send_password_changed(email)
+            send_password_changed(email, first_name)
             return UpdatePassword(success=success)
         else:
             raise Exception("Incorrect credentials")
+
+class CreateAction(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        description = graphene.String()
+
+    def mutate(self, info, description):
+        user = info.context.user
+        if user.is_authenticated:
+            create_action(user, description)
+            return CreateAction(success=True)
+        else: 
+            return CreateAction(success=False)
+
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
@@ -605,3 +626,4 @@ class Mutation(graphene.ObjectType):
     add_subscriber = AddSubscriber.Field()
     update_user = UpdateUser.Field()
     update_password = UpdatePassword.Field()
+    create_action = CreateAction.Field()
