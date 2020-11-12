@@ -3,22 +3,66 @@ from django.test import TestCase, Client
 from organizations.models import Organization
 from users.models import DeletedAccount, Action
 from services.helpers.actions import create_action, create_timestamp, create_date
+User = get_user_model()
 
 class CustomUserTests(TestCase):
-    
-    def test_create_superuser(self):
-        User = get_user_model()
-        superuser = User.objects.create_superuser(
+
+    def setUp(self):
+        # create superuser
+        User.objects.create_superuser(
             email="admin@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Admin",
             last_name="Testuser"
         )
+        # create user
+        User.objects.create_user(
+            email="demouser@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo",
+            last_name="Testuser"
+        )
+        User.objects.create_user(
+            email="demouser1@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo1",
+            last_name="Testuser"
+        )
+        User.objects.create_user(
+            email="demouser2@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo2",
+            last_name="Testuser"
+        )
+        User.objects.create_user(
+            email="demouser3@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo3",
+            last_name="Testuser"
+        )
+        # create organization
+        Organization.objects.create(
+            place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
+            business_status="OPERATIONAL",
+            icon=None,
+            name="Alabama A&M University",
+            lat=34.7827196,
+            lng=-86.568614,
+            address="Huntsville, AL 35811, USA",
+            phone_number="(256) 372-5000",
+            url="https://maps.google.com/?cid=18245956559700032436",
+            website="http://www.aamu.edu/",
+            types=["school", "point_of_interest", "establishment"],
+            tilt_partnership=False,
+        )
+
+    def test_create_superuser(self):
+        superuser = User.objects.get(email="admin@tiltaccess.com")
         
         self.assertEqual(superuser.email, "admin@tiltaccess.com")
         self.assertEqual(superuser.first_name, "Admin")
         self.assertEqual(superuser.last_name, "Testuser")
-        self.assertEquals(superuser.check_password("gWzupKiX5c"), True)
+        self.assertTrue(superuser.check_password("gWzupKiX5c"))
         self.assertTrue(superuser.is_staff)
         self.assertTrue(superuser.is_superuser)
         self.assertFalse(superuser.is_verified)
@@ -27,18 +71,12 @@ class CustomUserTests(TestCase):
         self.assertIsNotNone(superuser.date_joined)
 
     def test_create_user(self):
-        User = get_user_model()
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
+        user = User.objects.get(email="demouser@tiltaccess.com")
 
         self.assertEqual(user.email, "demouser@tiltaccess.com")
         self.assertEqual(user.first_name, "Demo")
         self.assertEqual(user.last_name, "Testuser")
-        self.assertEqual(user.check_password("gWzupKiX5c"), True)
+        self.assertTrue(user.check_password("gWzupKiX5c"))
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
         self.assertFalse(user.is_verified)
@@ -48,19 +86,9 @@ class CustomUserTests(TestCase):
 
     def test_login_users(self):
         c = Client()
-        User = get_user_model()
-        superuser = User.objects.create_superuser(
-            email="admin@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Admin",
-            last_name="Testuser"
-        )
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
+        superuser = User.objects.get(email="admin@tiltaccess.com")
+        user = User.objects.get(email="demouser@tiltaccess.com")
+        
         login_superuser = c.login(
             username="admin@tiltaccess.com", 
             password="gWzupKiX5c")
@@ -73,19 +101,9 @@ class CustomUserTests(TestCase):
 
     def test_logout_users(self):
         c = Client()
-        User = get_user_model()
-        superuser = User.objects.create_superuser(
-            email="admin@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Admin",
-            last_name="Testuser"
-        )
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
+        superuser = User.objects.get(email="admin@tiltaccess.com")
+        user = User.objects.get(email="demouser@tiltaccess.com")
+
         login_superuser = c.login(
             username="admin@tiltaccess.com", 
             password="gWzupKiX5c")
@@ -104,27 +122,7 @@ class CustomUserTests(TestCase):
         self.assertTrue(logout_superuser)
 
     def test_onboard_user(self):
-        User = get_user_model()
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
-        organization = Organization.objects.create(
-            place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
-            business_status="OPERATIONAL",
-            icon=None,
-            name="Alabama A&M University",
-            lat=34.7827196,
-            lng=-86.568614,
-            address="Huntsville, AL 35811, USA",
-            phone_number="(256) 372-5000",
-            url="https://maps.google.com/?cid=18245956559700032436",
-            website="http://www.aamu.edu/",
-            types=["school", "point_of_interest", "establishment"],
-            tilt_partnership=False,
-        )
+        organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
         onboard_user = User.objects.get(email="demouser@tiltaccess.com")
 
         onboard_user.preferred_name = "Preferred"
@@ -157,40 +155,9 @@ class CustomUserTests(TestCase):
         self.assertTrue(onboard_user.is_onboarded)
 
     def test_deleted_accounts(self):
-        User = get_user_model()
-        user_1 = User.objects.create_user(
-            email="demouser1@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo1",
-            last_name="Testuser"
-        )
-        user_2 = User.objects.create_user(
-            email="demouser2@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo2",
-            last_name="Testuser"
-        )
-        user_3 = User.objects.create_user(
-            email="demouser3@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo3",
-            last_name="Testuser"
-        )
-        organization = Organization.objects.create(
-            place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
-            business_status="OPERATIONAL",
-            icon=None,
-            name="Alabama A&M University",
-            lat=34.7827196,
-            lng=-86.568614,
-            address="Huntsville, AL 35811, USA",
-            phone_number="(256) 372-5000",
-            url="https://maps.google.com/?cid=18245956559700032436",
-            website="http://www.aamu.edu/",
-            types=["school", "point_of_interest", "establishment"],
-            tilt_partnership=False,
-        )
-
+        organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+        superuser = User.objects.get(email="admin@tiltaccess.com")
+        user = User.objects.get(email="demouser@tiltaccess.com")
         onboard_user1 = User.objects.get(email="demouser1@tiltaccess.com")
         onboard_user2 = User.objects.get(email="demouser2@tiltaccess.com")
         onboard_user3 = User.objects.get(email="demouser3@tiltaccess.com")
@@ -245,34 +212,33 @@ class CustomUserTests(TestCase):
         onboard_user3.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 3)
-        self.assertEqual(User.objects.all().count(), 3)
 
-        onboard_user1.delete()
+        superuser.delete()
         date = create_date()
         get_count = DeletedAccount.objects.create(
             date=date,
             accounts=1
         )
         self.assertEqual(get_count.accounts, 1)
-        self.assertEqual(User.objects.all().count(), 2)
+        self.assertEqual(User.objects.all().count(), 4)
 
+        user.delete()
+        get_count.accounts += 1
+        onboard_user1.delete()
+        get_count.accounts += 1
         onboard_user2.delete()
+        get_count.accounts += 1
         onboard_user3.delete()
-        get_count.accounts += 2
+        get_count.accounts += 1
 
-        self.assertEqual(get_count.accounts, 3)
+        self.assertEqual(get_count.accounts, 5)
         self.assertEqual(User.objects.all().count(), 0)
 
 
     def test_create_action(self):
-        User = get_user_model()
         timestamp = create_timestamp()
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
+        user = User.objects.get(email="demouser@tiltaccess.com")
+
         action = Action.objects.create(
             user=user, 
             description="Testing Actions", 

@@ -179,7 +179,7 @@ class Action(models.Model):
 
         Action(user=user, 
             action='Logged In', (add description)
-            timestamp=datetime.datetime.now())
+            timestamp=(check helpers folder for create_timestamp)
     """
 
     user = models.ForeignKey(
