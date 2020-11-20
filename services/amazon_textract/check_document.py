@@ -152,9 +152,6 @@ def start_bucket_check(bucket, limit=None, start=0):
     for document in file_list[start:end]:
         words_id = start_words_extraction(document)
         tables_id = start_tables_extraction(document)
-        print(f"====> Document: \033[94m{document}\033[0m")
-        print(f"====> Words Job ID: \033[93m{words_id}\033[0m")
-        print(f"====> Tables Job ID: \033[93m{tables_id}\033[0m")
 
         job_dict[document] = {
             "words_id": words_id,
@@ -179,12 +176,6 @@ def get_bucket_check(bucket, jobs_dict):
             passed.append(key)
         else: 
             failed.append(key)
-
-    print(f"====> \033[94mTOTAL:\033[0m {len(passed) + len(failed)}")
-    print(f"====> \033[92mPASSED:\033[0m {len(passed)}")
-    print(f"====> \033[92mPassed List:\033[0m {passed}")
-    print(f"====> \033[91mFAILED:\033[0m {len(failed)}")
-    print(f"====> \033[91mFailed List:\033[0m {failed}")
 
     results = {
         "Total": len(passed) + len(failed),
