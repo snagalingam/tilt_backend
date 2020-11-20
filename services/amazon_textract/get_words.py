@@ -15,21 +15,15 @@ textract = boto3.client(
     aws_secret_access_key=secret_key)
 
 def start_job(file_name):
-    try:
-        response = textract.start_document_text_detection(
-            DocumentLocation={
-                "S3Object": {
-                    "Bucket": bucket_name,
-                    "Name": file_name
-                }
-        })
 
-    except Exception as e:
-        error = e.response["Error"]["Message"]
-        print(f"""ERROR: ===========> WORDS JOB ID
-{json.dumps(e.response, indent=4)}""")
-        return (f"{error}")
-   
+    response = textract.start_document_text_detection(
+        DocumentLocation={
+            "S3Object": {
+                "Bucket": bucket_name,
+                "Name": file_name
+        }}
+    )
+
     return response["JobId"]
 
 def get_result(job_id):
@@ -76,4 +70,4 @@ def get_words_data(job_id):
         return words
 
     elif status == "IN_PROGRESS":
-        raise Exception(f"\033[91mWords in progress:\033[0m \033[93m{job_id}\033[0m")
+        raise Exception(f"Analysis still in progress")

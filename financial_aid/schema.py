@@ -125,6 +125,7 @@ class CheckDocuments(graphene.Mutation):
                     check = document_check(words, tables)
 
                     if check:
+                        doc.pass_fail = True
                         checked_list.append(
                             CheckedResultType(
                                 name=doc.name, 
@@ -133,6 +134,7 @@ class CheckDocuments(graphene.Mutation):
                                 pass_fail="Passed", 
                                 processed=True))
                     else: 
+                        doc.pass_fail = False
                         checked_list.append(
                             CheckedResultType(
                                 name=doc.name, 
@@ -197,12 +199,6 @@ class StartBucketCheck(graphene.Mutation):
     ):
         try:
             job_dict = start_bucket_check(bucket, limit)
-            # check if all values are valid 
-            for each in job_dict.values():
-                if each['words_id'] == 'Open jobs exceed maximum concurrent job limit':
-                    raise Exception('Open jobs exceed maximum concurrent job limit')
-                if each['tables_id'] == 'Open jobs exceed maximum concurrent job limit':
-                    raise Exception('Open jobs exceed maximum concurrent job limit')
         except Exception as e:
             raise Exception(f'{e}')
         
@@ -249,7 +245,7 @@ class GetBucketResult(graphene.Mutation):
         return GetBucketResult(bucket_result=results)
 
 class Mutation(graphene.ObjectType):
-    post_documents = AnalyzeDocuments.Field()
+    analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
     get_bucket = GetBucket.Field()
     start_bucket_check = StartBucketCheck.Field()

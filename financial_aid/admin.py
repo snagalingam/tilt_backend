@@ -10,7 +10,8 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
     }
-    list_display = ['name', 'pass_fail', 'expired', 'start_date']
+    list_display = ['name', 'pass_fail', 'processed', 'expired', 'start_date']
+    list_editable = ['expired',]
     fieldsets = (
         (None, {'fields': ('pass_fail',)}),
         (_('Results'), {

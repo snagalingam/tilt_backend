@@ -16,21 +16,15 @@ textract = boto3.client(
     aws_secret_access_key=secret_key)
 
 def start_job(file_name):
-    try:
-        response = textract.start_document_analysis(
-            DocumentLocation={
-                "S3Object": {
-                    "Bucket": bucket_name,
-                    "Name": file_name
-                }}, 
-            FeatureTypes=["TABLES"],
-        )
 
-    except Exception as e:
-        error = e.response["Error"]["Message"]
-        print(f"""ERROR: ===========> TABLES JOB ID
-{json.dumps(e.response, indent=4)}""")
-        return (f"{error}")
+    response = textract.start_document_analysis(
+        DocumentLocation={
+            "S3Object": {
+                "Bucket": bucket_name,
+                "Name": file_name
+            }}, 
+        FeatureTypes=["TABLES"],
+    )
 
     return response["JobId"]
 
@@ -83,4 +77,4 @@ def get_table_data(job_id):
         return csv
 
     elif status == "IN_PROGRESS":
-        raise Exception(f"\033[91mTables in progress:\033[0m \033[93m{job_id}\033[0m")
+        raise Exception(f"Analysis still in progress")

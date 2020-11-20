@@ -11,7 +11,7 @@ class DocumentResult(models.Model):
     tables_id = models.CharField(max_length=255, null=True, blank=True)
     sent = models.BooleanField(default=False)
     processed = models.BooleanField(default=False)
-    pass_fail = models.CharField(max_length=255, null=True, blank=True)
+    pass_fail = models.BooleanField(null=True, blank=True)
     expired = models.BooleanField(default=False)
     start_date = models.DateTimeField(default=timezone.now)
 
@@ -39,10 +39,10 @@ class DocumentData(models.Model):
         return str(self.name)
         
 class BucketCheck(models.Model):
-    bucket = models.CharField(max_length=255, null=True, blank=True)
+    bucket = models.CharField(max_length=255, null=True, blank=True, unique=True)
     job_dict = models.TextField(blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
-    
+
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
@@ -51,7 +51,7 @@ class BucketCheck(models.Model):
         return str(self.bucket)
 
 class BucketResult(models.Model):
-    bucket = models.CharField(max_length=255, null=True, blank=True)
+    bucket = models.CharField(max_length=255, null=True, blank=True, unique=True)
     total_documents = models.IntegerField(blank=True, null=True)
     passed_count = models.IntegerField(blank=True, null=True)
     passed_list = ArrayField(
