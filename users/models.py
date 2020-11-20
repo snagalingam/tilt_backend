@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from organizations.models import Organization
 from datetime import datetime
 
+
 class UserManager(BaseUserManager):
     """
     User manager for Custom User that allows users to be created

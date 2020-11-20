@@ -9,7 +9,6 @@ class CollegeStatusAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['status', 'college', 'user', ]
     fieldsets = (
