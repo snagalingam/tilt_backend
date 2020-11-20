@@ -198,15 +198,19 @@ class StartBucketCheck(graphene.Mutation):
         limit=None,
     ):
         try:
-            job_dict = start_bucket_check(bucket, limit)
-        except Exception as e:
-            raise Exception(f'{e}')
-        
-        data = json.dumps(job_dict, indent=2)
-        check = BucketCheck(bucket=bucket, job_dict=data)
-        check.save()
+            BucketCheck.objects.get(bucket=bucket)
+            raise Exception('Bucket already exists')
+        except:
+            try:
+                job_dict = start_bucket_check(bucket, limit)
+            except Exception as e:
+                raise Exception(f'{e}')
+            
+            data = json.dumps(job_dict, indent=2)
+            check = BucketCheck(bucket=bucket, job_dict=data)
+            check.save()
 
-        return StartBucketCheck(pending=True)
+            return StartBucketCheck(pending=True)
 
 class GetBucketResult(graphene.Mutation):
     bucket_result = graphene.Field(BucketResultType)

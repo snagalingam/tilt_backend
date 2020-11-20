@@ -51,7 +51,7 @@ class BucketCheck(models.Model):
         return str(self.bucket)
 
 class BucketResult(models.Model):
-    bucket = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    bucket = models.CharField(max_length=255, null=True, blank=True)
     total_documents = models.IntegerField(blank=True, null=True)
     passed_count = models.IntegerField(blank=True, null=True)
     passed_list = ArrayField(
