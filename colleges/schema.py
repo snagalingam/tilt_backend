@@ -239,6 +239,9 @@ class Query(graphene.ObjectType):
         if sort_by == "ownership":
             qs = qs.order_by('scorecard__ownership' if sort_order ==
                              'asc' else '-scorecard__ownership')
+        if sort_by == "predominant_degree_awarded":
+            qs = qs.order_by(
+                'scorecard__predominant_degree_awarded') if sort_order == 'asc' else '-scorecard__predominant_degree_awarded'
 
         count = qs.count()
         pages = math.ceil(count / per_page)
