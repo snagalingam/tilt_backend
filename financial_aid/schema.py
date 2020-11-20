@@ -197,20 +197,17 @@ class StartBucketCheck(graphene.Mutation):
         bucket=None,
         limit=None,
     ):
-        try:
-            BucketCheck.objects.get(bucket=bucket)
+        qs = BucketCheck.objects.filter(bucket=bucket)
+
+        if len(qs) > 0:
             raise Exception('Bucket already exists')
-        except:
-            try:
-                job_dict = start_bucket_check(bucket, limit)
-            except Exception as e:
-                raise Exception(f'{e}')
-            
+        else:
+            job_dict = start_bucket_check(bucket, limit) 
             data = json.dumps(job_dict, indent=2)
             check = BucketCheck(bucket=bucket, job_dict=data)
             check.save()
 
-            return StartBucketCheck(pending=True)
+        return StartBucketCheck(pending=True)
 
 class GetBucketResult(graphene.Mutation):
     bucket_result = graphene.Field(BucketResultType)
@@ -228,7 +225,7 @@ class GetBucketResult(graphene.Mutation):
             job_dict =  json.loads(data.job_dict)
             get_bucket = get_bucket_check(bucket, job_dict)
         except Exception as e:
-            raise Exception(f'{e}')
+            raise e
             
         total = get_bucket.get('Total')
         passed_count = get_bucket.get('Passed Count')

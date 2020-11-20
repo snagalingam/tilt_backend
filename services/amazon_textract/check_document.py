@@ -4,6 +4,8 @@ import time
 import json
 import csv
 import re
+import datetime
+from dateutil.relativedelta import relativedelta
 import asyncio
 from .get_tables import start_tables_extraction, get_table_data
 from .get_words import start_words_extraction, get_words_data
@@ -13,15 +15,28 @@ secret_key = os.environ.get("AWS_SECRET")
 region = os.environ.get("REGION")
 bucket_name = os.environ.get("BUCKET")
 
-s3 = boto3.resource(
+resource = boto3.resource(
     's3',     
     region_name=region,
     aws_access_key_id=access_key, 
     aws_secret_access_key=secret_key)
 
+client = boto3.client(
+    's3',     
+    region_name=region,
+    aws_access_key_id=access_key, 
+    aws_secret_access_key=secret_key)
+
+def delete_document(bucket_name, document):
+    client.delete_object(
+        Bucket=bucket_name,
+        Key=document,
+    )
+    print(f"DELETED: {document}")
+
 def get_documents(bucket_name, limit=None):
     try:
-        bucket = s3.Bucket(bucket_name)
+        bucket = resource.Bucket(bucket_name)
 
     except Exception as e:
         print(f"""
@@ -31,11 +46,22 @@ def get_documents(bucket_name, limit=None):
         return e
 
     file_list = []
-
     for obj in bucket.objects.limit(limit):
-        file_list.append(obj.key)
+        # add month to object date
+        date = obj.last_modified + relativedelta(days=30) 
+        current = datetime.datetime.now()
+        # if object date is eariler than current date
+        expired = date.date() < current.date()
 
-    return file_list
+        if (expired):
+            delete_document(bucket_name, obj.key)
+        else:
+            file_list.append(obj.key)
+            
+    if (len(file_list) < 1):
+        raise Exception('Bucket is empty')
+    else:
+        return file_list
 
 def strip_money_string(word):
     digits = {
@@ -147,7 +173,7 @@ def start_bucket_check(bucket, limit=None, start=0):
         end = len(file_list)
 
     if end > len(file_list):
-        raise Exception("\033[91mRange out of bounds\033[0m")
+        raise Exception("Range out of bounds")
 
     for document in file_list[start:end]:
         words_id = start_words_extraction(document)

@@ -66,7 +66,8 @@ def get_words_data(job_id):
             for item in resultPage["Blocks"]:
                 if item["BlockType"] == "LINE":
                     words.append(item["Text"])
-    
+        print(words)
+        breakpoint()
         return words
 
     elif status == "IN_PROGRESS":
