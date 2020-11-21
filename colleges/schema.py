@@ -223,13 +223,13 @@ class Query(graphene.ObjectType):
                 else:
                     qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price')).order_by(F('real_net_price').desc(nulls_last=True))
-
         if sort_by == "admissions_rate":
             if sort_order == 'asc':
                 qs = qs.order_by(
                     F("scorecard__admissions_rate").asc(nulls_last=True))
             else:
-                qs = qs.order_by('-scorecard__admissions_rate')
+                qs = qs.order_by(
+                    F("scorecard__admissions_rate").desc(nulls_last=True))
         if sort_by == "city":
             qs = qs.order_by('scorecard__city' if sort_order ==
                              'asc' else '-scorecard__city')
