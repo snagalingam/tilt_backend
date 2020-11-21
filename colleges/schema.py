@@ -209,20 +209,20 @@ class Query(graphene.ObjectType):
             qs = qs.order_by('popularity_score' if sort_order ==
                              "asc" else '-popularity_score')
         if sort_by == "net_price":
-            if (income_quintile is None):
+            if (income_quintile is not None):
                 if sort_order == 'asc':
                     qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').asc(nulls_last=True))
                 else:
-                    qs = qs.annotate(real_net_price=Greatest('collegestatus__net_price',
-                                                             'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').desc(nulls_last=True))
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
+                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').desc(nulls_last=True))
             else:
                 if sort_order == 'asc':
                     qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price')).order_by(F('real_net_price').asc(nulls_last=True))
                 else:
-                    qs = qs.annotate(real_net_price=Greatest('collegestatus__net_price',
-                                                             'scorecard__avg_net_price')).order_by(F('real_net_price').desc(nulls_last=True))
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
+                                                          'scorecard__avg_net_price')).order_by(F('real_net_price').desc(nulls_last=True))
 
         if sort_by == "admissions_rate":
             if sort_order == 'asc':
