@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'tilt_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-#database for evelopment
+#database for development
 if ENVIRONMENT == 'development':
     DATABASES = {
         'default': {
