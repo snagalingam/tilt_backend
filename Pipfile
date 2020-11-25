@@ -29,6 +29,7 @@ django-samesite-none = "*"
 django-better-admin-arrayfield = "*"
 uszipcode = "*"
 boto3 = "*"
+selenium = "*"
 
 [requires]
 python_version = "3.8"
