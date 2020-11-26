@@ -5,7 +5,7 @@ from django.utils import timezone
 from colleges.models import College
 
 class Organization(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    contact_name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)

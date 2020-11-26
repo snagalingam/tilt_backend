@@ -36,18 +36,18 @@ class OrganizationAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'email', 'state', ]
+    list_display = ['contact_name', 'email', 'state', ]
     fieldsets = (
         (None, {
-            'fields': ('name', 'email', )
+            'fields': ('contact_name', 'email', )
         }),
         (_('Details'), {
             'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
         }),
     )
 
-    search_fields = ('name', 'email', 'state',)
-    ordering = ('name',)
+    search_fields = ('contact_name', 'email', 'state',)
+    ordering = ('contact_name',)
     model = Organization
 
 admin.site.register(Scholarship, ScholarshipAdmin)
