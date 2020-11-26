@@ -66,8 +66,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     is_verified = models.BooleanField(default=False)
-
     is_onboarded = models.BooleanField(default=False)
+    is_test_account = models.BooleanField(default=False)
+
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_(
+            "Designates whether the user can log into this admin site."),
+    )
+
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
 
     first_name = models.CharField(
         _("first name"), max_length=255, null=True, blank=True)
@@ -87,8 +103,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     act_score = models.PositiveSmallIntegerField(
         _("ACT score"), null=True, blank=True)
 
-    sat_score = models.PositiveSmallIntegerField(
-        _("SAT score"), null=True, blank=True)
+    sat_math = models.PositiveSmallIntegerField(
+        _("SAT math"), null=True, blank=True)
+
+    sat_verbal = models.PositiveSmallIntegerField(
+        _("SAT verbal"), null=True, blank=True)
 
     efc = models.IntegerField(
         _("Expected Family Contribution"), null=True, blank=True)
@@ -116,22 +135,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
         null=True, blank=True,
-    )
-
-    is_staff = models.BooleanField(
-        _("staff status"),
-        default=False,
-        help_text=_(
-            "Designates whether the user can log into this admin site."),
-    )
-
-    is_active = models.BooleanField(
-        _("active"),
-        default=True,
-        help_text=_(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
-        ),
     )
 
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
