@@ -32,9 +32,16 @@ def get_common_ds(college_names):
             "plugins.always_open_pdf_externally": True
             }
         )
+
+        # invisibility option for browser (however, files with the same name will be replaced: use window resizing instead)
+        # options.add_argument("--headless")
+
         # https://www.selenium.dev/documentation/en/webdriver/driver_requirements/
         chromedriver = "<path to webdriver>"
         driver = webdriver.Chrome(executable_path=chromedriver, options=options)
+        # resize browser window (width, height)
+        driver.set_window_size(100, 100)
+        driver.set_window_position(0, 0)
         driver.get(f'https://www.google.com/search?q=filetype:pdf+common+data+set+2019-2020+{name}&start=0')
 
         try:
@@ -49,12 +56,12 @@ def get_common_ds(college_names):
                     result.click()
                     skip = True
                     # slows script down otherwise ip flagged for unusual behavior
-                    time.sleep(10)
+                    time.sleep(5)
 
             # if no match then link click skipped
             if not skip:
                 # slows script down otherwise ip flagged for unusual behavior
-                time.sleep(5) 
+                time.sleep(3) 
                 skip = False
         except:
             pass
