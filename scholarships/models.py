@@ -24,6 +24,7 @@ class Scholarship(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     contact = models.ForeignKey(
         Contact, on_delete=models.CASCADE)
+    organization = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
