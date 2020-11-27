@@ -2,27 +2,27 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from users.schema import UserType
-from .models import Scholarship, Organization
+from .models import Scholarship, Contact
 
-class ScholarshipOrgType(DjangoObjectType):
+class ContactType(DjangoObjectType):
     class Meta:
-        model = Organization
+        model = Contact
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
 class Query(graphene.ObjectType):
-    scholarship_orgs = graphene.List(ScholarshipOrgType)
-    scholarship_orgs_by_name = graphene.Field(ScholarshipOrgType, name=graphene.String())
+    contacts = graphene.List(ContactType)
+    contact_by_name = graphene.Field(ContactType, name=graphene.String())
     scholarships = graphene.List(ScholarshipType)
     scholarship_by_name = graphene.Field(ScholarshipType, name=graphene.String())
 
-    def resolve_scholarship_orgs(self, info):
-        return Organization.objects.all()
+    def resolve_contacts(self, info):
+        return ContactType.objects.all()
 
-    def resolve_scholarship_orgs_by_name(self, info, name=None):
-        qs = Organization.objects.get(name=name)
+    def resolve_contact_by_name(self, info, name=None):
+        qs = ContactType.objects.get(name=name)
         return qs
 
     def resolve_scholarships(self, info):
@@ -32,8 +32,8 @@ class Query(graphene.ObjectType):
         qs = Scholarship.objects.get(name=name)
         return qs
 
-class CreateScholarshipOrg(graphene.Mutation):
-    scholarship_org = graphene.Field(ScholarshipOrgType)
+class CreateContact(graphene.Mutation):
+    contact = graphene.Field(ContactType)
 
     class Arguments:
         name = graphene.String()
@@ -58,7 +58,7 @@ class CreateScholarshipOrg(graphene.Mutation):
         phone_number_ext=None,
     ):
 
-        org = Organization(
+        contact = Contact(
             name=name,
             address=address,
             city=city,
@@ -68,9 +68,9 @@ class CreateScholarshipOrg(graphene.Mutation):
             phone_number=phone_number,
             phone_number_ext=phone_number_ext,
         )
-        org.save()
+        contact.save()
 
-        return CreateScholarshipOrg(scholarship_org=org)
+        return CreateContact(contact=contact)
 
 
 class CreateScholarship(graphene.Mutation):
@@ -139,11 +139,11 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        org = Organization.objects.get(name=name)
+        contact = Contact.objects.get(name=name)
 
         scholarship = Scholarship(
             name=name,
-            organization=org,
+            contact=contact,
             description=description,
             website=website,
             deadline=deadline,
@@ -177,5 +177,5 @@ class CreateScholarship(graphene.Mutation):
         return CreateScholarship(scholarship=scholarship)
 
 class Mutation(graphene.ObjectType):
-    create_scholarship_org = CreateScholarshipOrg.Field()
+    create_contact = CreateContact.Field()
     create_scholarship = CreateScholarship.Field()

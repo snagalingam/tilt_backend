@@ -2,10 +2,9 @@ from django.conf import settings
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from colleges.models import College
 
-class Organization(models.Model):
-    contact_name = models.CharField(max_length=255, null=True, blank=True, unique=True)
+class Contact(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
@@ -23,8 +22,8 @@ class Organization(models.Model):
 
 class Scholarship(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
-    organization = models.ForeignKey(
-        Organization, on_delete=models.CASCADE)
+    contact = models.ForeignKey(
+        Contact, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
