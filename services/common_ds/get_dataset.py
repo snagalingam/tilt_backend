@@ -10,6 +10,26 @@ ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 def get_common_ds(college_names):
     count = 0
+    options = Options()
+    data_dir = "<path to store downloaded pdf>"
+
+    # invisibility option for browser (however, files with the same name will be replaced: use window resizing instead)
+    # options.add_argument("--headless")
+
+    # download automatically on cilck option
+    options.add_experimental_option('prefs',  {
+        "download.default_directory": data_dir,
+        "plugins.always_open_pdf_externally": True
+        }
+    )
+
+    # https://www.selenium.dev/documentation/en/webdriver/driver_requirements/
+    chromedriver = "<path to webdriver>"
+    driver = webdriver.Chrome(executable_path=chromedriver, options=options)
+    
+    # resize browser window (width, height)
+    driver.set_window_size(100, 100)
+    driver.set_window_position(0, 0)
 
     for c in college_names[count:]:
         name = c["name"]
@@ -24,24 +44,6 @@ def get_common_ds(college_names):
         # print(name)
         # print(website)
 
-        options = Options()
-        data_dir = "<path to store downloaded pdf>"
-        # download automatically on cilck option
-        options.add_experimental_option('prefs',  {
-            "download.default_directory": data_dir,
-            "plugins.always_open_pdf_externally": True
-            }
-        )
-
-        # invisibility option for browser (however, files with the same name will be replaced: use window resizing instead)
-        # options.add_argument("--headless")
-
-        # https://www.selenium.dev/documentation/en/webdriver/driver_requirements/
-        chromedriver = "<path to webdriver>"
-        driver = webdriver.Chrome(executable_path=chromedriver, options=options)
-        # resize browser window (width, height)
-        driver.set_window_size(100, 100)
-        driver.set_window_position(0, 0)
         driver.get(f'https://www.google.com/search?q=filetype:pdf+common+data+set+2019-2020+{name}&start=0')
 
         try:
@@ -68,8 +70,9 @@ def get_common_ds(college_names):
 
         print(f' ======> COUNT {count}')
         count += 1
-        # closes browser
-        driver.close()
+
+    # closes browser
+    driver.close()
 
 # college_names = json.load(open(f'college_names.json'))
 # get_common_ds(college_names)
