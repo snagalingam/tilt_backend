@@ -124,7 +124,6 @@ def get_scholarship_table(url_list):
 
                 # extract data from url 
                 # data = extract_data(root + href)
-
                 # create json file for each scholarship
                 # with open(f'scholarship_data.json', '+a') as f:
                 #     d = json.dumps(data, indent=2, ensure_ascii=False)
@@ -157,6 +156,7 @@ def get_scholarship_urls():
         scholarship_urls[name] = root + href
 
     return get_scholarship_table(scholarship_urls)
+
 
 def make_csvs(json_file):
     json_data = json.load(open(f'{json_file}.json'))
@@ -232,6 +232,3 @@ def make_csvs(json_file):
                     csv_writer.writerow(each_line)
                 print(f' COUNT ===> : {count}')
                 count += 1
-                
-# get_scholarship_urls()
-# make_csvs('scholarship_data')
