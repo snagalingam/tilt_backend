@@ -14,8 +14,9 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'contact', 'deadline', 'max_amount',]
     fieldsets = (
+        (None, {'fields': ('organization', 'contact', )}),
         (_('Information'), {
-            'fields': ('name', 'contact', 'description', 'max_amount', 'website', 'number_awards', 'renewable',)
+            'fields': ('name', 'description', 'max_amount', 'website', 'number_awards', 'renewable',)
         }),
         (_('Dates'), {
             'fields': ('deadline', 'date_added',)
@@ -38,9 +39,7 @@ class ContactAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'email', 'state', ]
     fieldsets = (
-        (None, {
-            'fields': ('name', 'email', )
-        }),
+        (None, {'fields': ('name', 'email', )}),
         (_('Details'), {
             'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
         }),
