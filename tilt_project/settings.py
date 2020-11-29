@@ -84,36 +84,34 @@ WSGI_APPLICATION = 'tilt_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-#database for development
-if ENVIRONMENT == 'development':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DATABASE_NAME'),
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'HOST': os.environ.get('DATABASE_HOST'),
-            'PORT': 5432
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': 5432
     }
+}
 # database for production with SSL
-if ENVIRONMENT == 'production':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DATABASE_NAME'),
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'HOST': os.environ.get('DATABASE_HOST'),
-            'PORT': 5432,
-            'OPTIONS':{
-                'sslmode':'verify-ca',
-                'sslrootcert': os.path.join(APP_DIR, ".postgresql/", "root.crt"),
-                'sslcert': os.path.join(APP_DIR, ".postgresql/", "postgresql.crt"),
-                'sslkey': os.path.join(APP_DIR, ".postgresql/", "postgresql.key")
-            }
-        }
-    }
+# if ENVIRONMENT == 'production':
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.environ.get('DATABASE_NAME'),
+#             'USER': os.environ.get('DATABASE_USER'),
+#             'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+#             'HOST': os.environ.get('DATABASE_HOST'),
+#             'PORT': 5432,
+#             'OPTIONS':{
+#                 'sslmode':'verify-ca',
+#                 'sslrootcert': os.path.join(APP_DIR, ".postgresql/", "root.crt"),
+#                 'sslcert': os.path.join(APP_DIR, ".postgresql/", "postgresql.crt"),
+#                 'sslkey': os.path.join(APP_DIR, ".postgresql/", "postgresql.key")
+#             }
+#         }
+#     }
 
 
 # Password validation
