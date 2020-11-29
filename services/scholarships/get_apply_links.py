@@ -15,7 +15,6 @@ data = json.load(open(f"{FOLDER_PATH}/csvs/scholarship_data.json"))
 
 def get_apply_link(scholarships, data):
     count = 0
-    url_count = 0
     options = Options()
 
     # invisibility option for browser 
@@ -74,8 +73,6 @@ def get_apply_link(scholarships, data):
                 breakpoint()
             
             count += 1
-            url_count += 1
 
-        url_count = 0
     # closer browser when done
     driver.close()
