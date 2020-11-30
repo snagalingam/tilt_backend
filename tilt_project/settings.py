@@ -6,6 +6,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+DATABASE_ENVIRONMENT = os.environ.get('DATABASE_ENVIRONMENT', default='')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -84,35 +85,36 @@ WSGI_APPLICATION = 'tilt_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': 5432,
+# database for development without SSL
+if ENVIRONMENT == 'development':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
+            'PORT': 5432,
+        }
     }
-}
 # database for production with SSL
-# if ENVIRONMENT == 'production':
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': os.environ.get('DATABASE_NAME'),
-#             'USER': os.environ.get('DATABASE_USER'),
-#             'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-#             'HOST': os.environ.get('DATABASE_HOST'),
-#             'PORT': 5432,
-#             'OPTIONS':{
-#                 'sslmode':'verify-ca',
-#                 'sslrootcert': os.path.join(APP_DIR, ".postgresql/", "root.crt"),
-#                 'sslcert': os.path.join(APP_DIR, ".postgresql/", "postgresql.crt"),
-#                 'sslkey': os.path.join(APP_DIR, ".postgresql/", "postgresql.key")
-#             }
-#         }
-#     }
-
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
+            'PORT': 5432,
+            'OPTIONS':{
+                'sslmode':'verify-ca',
+                'sslrootcert': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "ca-cert.pem"),
+                'sslcert': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "client-cert.pem"),
+                'sslkey': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "client-key.pem"),
+            }
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
