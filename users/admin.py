@@ -55,9 +55,9 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['email', 'is_staff', 'is_superuser',
-                    'is_active', 'is_verified', 'is_onboarded']
+                    'is_active', 'is_verified', 'is_onboarded', 'is_test_account']
     list_editable = ['is_staff', 'is_superuser',
-                     'is_active', 'is_verified', 'is_onboarded']
+                     'is_active', 'is_verified', 'is_onboarded', 'is_test_account']
     filter_horizontal = ('organization',) 
     
     fieldsets = (
@@ -66,7 +66,7 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
             'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
         }),
         (_('Account Status'), {
-            'fields': ('is_staff', 'is_superuser', 'is_active', 'is_verified', 'is_onboarded', 'user_type')
+            'fields': ('is_staff', 'is_superuser', 'is_active', 'is_verified', 'is_onboarded', 'is_test_account', 'user_type')
         }),
         (_('Background Information'), {
             'fields': ('ethnicity', 'found_from'),
@@ -75,7 +75,7 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
             'fields': ('organization',),
         }),
         (_('Academic Information'), {
-            'fields': ('gpa', 'act_score', 'sat_score', 'high_school_grad_year')
+            'fields': ('gpa', 'act_score', 'sat_math', 'sat_verbal', 'high_school_grad_year')
         }),
         (_('Financial Information'), {
             'fields': ('efc', 'income_quintile',)
