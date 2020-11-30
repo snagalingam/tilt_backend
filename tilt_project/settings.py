@@ -242,7 +242,7 @@ GRAPHENE = {
 
 # database
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=500)
+DATABASES['default'] = dj_database_url.config(conn_max_age=500, ssl_require=True)
 
 # security
 SESSION_COOKIE_SAMESITE = None
