@@ -96,7 +96,7 @@ if ENVIRONMENT == 'development':
             'PORT': 5432,
         }
     }
-# database for production with SSL
+# database for staging and production with SSL
 if ENVIRONMENT == 'production':
     DATABASES = {
         'default': {
