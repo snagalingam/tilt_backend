@@ -92,6 +92,10 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': 5432,
+        'OPTIONS': {
+            'sslmode': 'verify-ca',
+            'sslrootcert': os.path.join(APP_DIR, ".rds/", "root.pem"),
+        }
     }
 }
 # database for production with SSL
@@ -240,11 +244,11 @@ GRAPHENE = {
 
 # database
 db_from_env = dj_database_url.config(conn_max_age=500,
-                                     default='postgresql://{username}:{password}@{host}:5432/{database}'.format(
+                                     default="postgresql://{username}:{password}@{host}:5432/{database}"".format(
                                         username=os.environ.get('DATABASE_USER'),
                                         password=os.environ.get('DATABASE_PASSWORD'),
-                                        host=os.environ.get('DATABASE_HOST'),
-                                        database=os.environ.get('DATABASE_NAME')
+                                        host=os.environ.get('DATABASE_HOST,
+                                        database=DATABASE_NAME
                                      ))
 DATABASES['default'].update(db_from_env)
 
