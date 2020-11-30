@@ -243,13 +243,7 @@ GRAPHENE = {
 }
 
 # database
-db_from_env = dj_database_url.config(conn_max_age=500,
-                                     default="postgresql://{username}:{password}@{host}:5432/{database}"".format(
-                                        username=os.environ.get('DATABASE_USER'),
-                                        password=os.environ.get('DATABASE_PASSWORD'),
-                                        host=os.environ.get('DATABASE_HOST,
-                                        database=DATABASE_NAME
-                                     ))
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
 # security
