@@ -92,10 +92,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': 5432,
-        'OPTIONS': {
-            'sslmode': 'verify-ca',
-            'sslrootcert': os.path.join(APP_DIR, ".rds/", "root.pem"),
-        }
     }
 }
 # database for production with SSL
@@ -243,8 +239,8 @@ GRAPHENE = {
 }
 
 # database
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=500)
 
 # security
 SESSION_COOKIE_SAMESITE = None
