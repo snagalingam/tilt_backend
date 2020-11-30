@@ -13,8 +13,13 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['name', 'contact', 'deadline', 'max_amount',]
+    filter_horizontal = ('college',) 
+
     fieldsets = (
         (None, {'fields': ('organization', 'contact', )}),
+        (_('College'), {
+            'fields': ('college',),
+        }),
         (_('Information'), {
             'fields': ('name', 'description', 'max_amount', 'website', 'number_awards', 'renewable',)
         }),
@@ -22,7 +27,7 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('deadline', 'date_added',)
         }),
         (_('Requirements'), {
-            'fields': ('education_level', 'education_requirements', 'area_of_study', 'area_of_study_description', 'association_requirement', 'citizenship',)
+            'fields': ('interest_description', 'education_level', 'education_requirements', 'area_of_study', 'area_of_study_description', 'association_requirement', 'citizenship',)
         }),
         (_('Other Requirements'), {
             'fields': ('writing_competition', 'location', 'state', 'disability', 'military', 'ethnicity', 'gender', 'min_gpa', 'max_gpa', 'min_act', 'min_sat', 'first_generation', 'financial_need',)
