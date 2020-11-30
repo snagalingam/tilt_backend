@@ -6,7 +6,6 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
-DATABASE_ENVIRONMENT = os.environ.get('DATABASE_ENVIRONMENT', default='')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -109,9 +108,6 @@ if ENVIRONMENT == 'production':
             'PORT': 5432,
             'OPTIONS':{
                 'sslmode':'verify-ca',
-                'sslrootcert': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "ca-cert.pem"),
-                'sslcert': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "client-cert.pem"),
-                'sslkey': os.path.join(APP_DIR, ".postgresql/{folder}/".format(folder=DATABASE_ENVIRONMENT), "client-key.pem"),
             }
         }
     }
