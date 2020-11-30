@@ -92,6 +92,10 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': 5432,
+        'OPTIONS': {
+            'sslmode': 'verify-ca',
+            'sslrootcert': os.path.join(APP_DIR, ".rds/", "root.pem"),
+        }
     }
 }
 # database for production with SSL
