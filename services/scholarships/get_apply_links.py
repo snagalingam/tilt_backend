@@ -47,32 +47,24 @@ def get_apply_link(scholarships, data):
             try:
                 driver.get(url)
                 apply = driver.find_element_by_id("apply-now-button")
-                apply.click()
-
-                # switch to popup window         
-                driver.switch_to.window(driver.window_handles[-1])
-                driver.set_window_size(100, 100)
-                driver.set_window_position(0, 0)
-                scholarship_url = driver.current_url
-                title = driver.title
+                href = apply.get_attribute("href")
+                start = href.index("http")
+                end = href.index("',")
+                scholarship_url = href[start:end]
 
                 # add scholarship_url to data 
                 data[count]["scholarship_url"] = scholarship_url
-                data[count]["organization"] = title
 
                 with open(f'new_data.json', '+a') as f:
                     d = json.dumps(data[count], indent=2, ensure_ascii=False)
                     f.write(d + ',')
 
-                print(f" ======> COUNT {count} : {title}")
-                            # close popup
-                time.sleep(3)
-                driver.close()
-                driver.switch_to.window(driver.window_handles[0])
+                print(f" ======> COUNT {count} : {scholarship_url}")
+
             except:
-                breakpoint()
+                pass
             
             count += 1
 
     # closer browser when done
-    driver.close()
+    return driver.close()

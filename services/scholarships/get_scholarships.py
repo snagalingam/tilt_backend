@@ -157,7 +157,6 @@ def get_scholarship_urls():
 
     return get_scholarship_table(scholarship_urls)
 
-
 def make_csvs(json_file):
     json_data = json.load(open(f'{json_file}.json'))
     count = 1
@@ -178,6 +177,7 @@ def make_csvs(json_file):
     for month in months:
         with open(f'{month}.csv', 'w') as f:
             headers = [
+                "Url",
                 "Name",
                 "Amount",
                 "Deadline",
@@ -190,41 +190,46 @@ def make_csvs(json_file):
                 "Zipcode",
                 "Email",
                 "Phone",
-                "Ext"]
+                "Ext",
+                "Website"]
             csv_writer = csv.writer(f)
             csv_writer.writerow(headers)
             
         for data in json_data:
             if month in data["Deadline"]:
 
-                name = data["Name"],
-                amount = data["Amount"],
-                deadline = data["Deadline"],
-                available = data["Available"],
-                description = data["Description"],
-                contact_name = data["Contact"],
-                contact_address = data["Address"],
-                contact_city = data["City"],
-                contact_state = data["State"],
-                contact_zipcode = data["Zipcode"],
-                contact_email = data["Email"],
-                contact_phone = data["Phone"],
-                contact_ext = data["Ext"],
+                url = data["Url"]
+                name = data["Name"]
+                amount = data["Amount"]
+                deadline = data["Deadline"]
+                available = data["Available"]
+                description = data["Description"]
+                contact_name = data["Contact"]
+                contact_address = data["Address"]
+                contact_city = data["City"]
+                contact_state = data["State"]
+                contact_zipcode = data["Zipcode"]
+                contact_email = data["Email"]
+                contact_phone = data["Phone"]
+                contact_ext = data["Ext"]
+                website = data["Website"]
 
                 each_line = (
-                    name[0],
-                    amount[0],
-                    deadline[0],
-                    available[0],
-                    description[0],
-                    contact_name[0],
-                    contact_address[0],
-                    contact_city[0],
-                    contact_state[0],
-                    contact_zipcode[0],
-                    contact_email[0],
-                    contact_phone[0],
-                    contact_ext[0],
+                    url,
+                    name,
+                    amount,
+                    deadline,
+                    available,
+                    description,
+                    contact_name,
+                    contact_address,
+                    contact_city,
+                    contact_state,
+                    contact_zipcode,
+                    contact_email,
+                    contact_phone,
+                    contact_ext,
+                    website
                     )
 
                 with open(f'{month}.csv', 'a') as f:
