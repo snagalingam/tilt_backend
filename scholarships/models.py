@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
+from colleges.models import College
 
 class Contact(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
@@ -43,7 +44,8 @@ class Scholarship(models.Model):
     )
     area_of_study_description = models.TextField(null=True, blank=True)
     writing_competition = models.BooleanField(null=True, blank=True)
-    # interest = 
+    interest_description = models.CharField(max_length=255, null=True, blank=True)
+    college = models.ManyToManyField(College)
     association_requirement = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
