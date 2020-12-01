@@ -443,10 +443,13 @@ class UpdateUser(graphene.Mutation):
         id = graphene.ID()
         first_name = graphene.String()
         last_name = graphene.String()
+        phone_number = graphene.Int()
+        preferred_contact_method = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
-        sat_score = graphene.Int()
+        sat_math = graphene.Int()
+        sat_verbal = graphene.Int()
         efc = graphene.Int()
         pronouns = graphene.String()
         ethnicity = graphene.List(graphene.String)
@@ -464,10 +467,13 @@ class UpdateUser(graphene.Mutation):
         id,
         first_name=None,
         last_name=None,
+        phone_number=None,
+        preferred_contact_method=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
-        sat_score=None,
+        sat_math=None,
+        sat_verbal=None,
         efc=None,
         pronouns=None,
         ethnicity=None,
@@ -550,10 +556,13 @@ class UpdateUser(graphene.Mutation):
         if user is not None:
             user.first_name = first_name
             user.last_name = last_name
+            user.phone_number = phone_number,
+            user.preferred_contact_method=preferred_contact_method,
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
-            user.sat_score = sat_score
+            user.sat_math=sat_math,
+            user.sat_verbal=sat_verbal,
             user.efc = efc
             user.pronouns = pronouns
             user.ethnicity = ethnicity
