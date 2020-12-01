@@ -125,10 +125,13 @@ class CustomUserTests(TestCase):
         organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
         onboard_user = User.objects.get(email="demouser@tiltaccess.com")
 
+        onboard_user.phone_number= 718_555_1234
+        onboard_user.preferred_contact_method= "email"
         onboard_user.preferred_name = "Preferred"
         onboard_user.gpa = 4.0
         onboard_user.act_score = 35
-        onboard_user.sat_score = 1600
+        onboard_user.sat_math = 800
+        onboard_user.sat_verbal = 800
         onboard_user.efc = 1
         onboard_user.pronouns = "He/his"
         onboard_user.ethnicity = ["asian"]
@@ -140,10 +143,13 @@ class CustomUserTests(TestCase):
         onboard_user.organization.add(organization)
         onboard_user.save()
 
+        self.assertEqual(onboard_user.phone_number, 718_555_1234)
+        self.assertEqual(onboard_user.preferred_contact_method, "email")
         self.assertEqual(onboard_user.preferred_name, "Preferred")
         self.assertEqual(onboard_user.gpa, 4.0)
         self.assertEqual(onboard_user.act_score, 35)
-        self.assertEqual(onboard_user.sat_score, 1600)
+        self.assertEqual(onboard_user.sat_math, 800)
+        self.assertEqual(onboard_user.sat_verbal, 800)
         self.assertEqual(onboard_user.efc, 1)
         self.assertEqual(onboard_user.pronouns, "He/his")
         self.assertEqual(onboard_user.ethnicity, ["asian"])
@@ -161,11 +167,14 @@ class CustomUserTests(TestCase):
         onboard_user1 = User.objects.get(email="demouser1@tiltaccess.com")
         onboard_user2 = User.objects.get(email="demouser2@tiltaccess.com")
         onboard_user3 = User.objects.get(email="demouser3@tiltaccess.com")
-
+       
+        onboard_user1.phone_number= 718_555_1234
+        onboard_user1.preferred_contact_method= "email"
         onboard_user1.preferred_name = "Preferred"
         onboard_user1.gpa = 4.0
         onboard_user1.act_score = 35
-        onboard_user1.sat_score = 1600
+        onboard_user1.sat_math = 800
+        onboard_user1.sat_verbal = 800
         onboard_user1.efc = 1
         onboard_user1.pronouns = "He/his"
         onboard_user1.ethnicity = ["asian"]
@@ -179,10 +188,13 @@ class CustomUserTests(TestCase):
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 1)
 
+        onboard_user2.phone_number= 718_555_6543
+        onboard_user2.preferred_contact_method= "text"
         onboard_user2.preferred_name = "Preferred"
         onboard_user2.gpa = 4.0
         onboard_user2.act_score = 35
-        onboard_user2.sat_score = 1600
+        onboard_user2.sat_math = 800
+        onboard_user2.sat_verbal = 800
         onboard_user2.efc = 1
         onboard_user2.pronouns = "He/his"
         onboard_user2.ethnicity = ["asian"]
@@ -195,11 +207,14 @@ class CustomUserTests(TestCase):
         onboard_user2.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 2)
-  
+        
+        onboard_user3.phone_number= 718_555_9876
+        onboard_user3.preferred_contact_method= "email"
         onboard_user3.preferred_name = "Preferred"
         onboard_user3.gpa = 4.0
         onboard_user3.act_score = 35
-        onboard_user3.sat_score = 1600
+        onboard_user3.sat_math = 800
+        onboard_user3.sat_verbal = 800
         onboard_user3.efc = 1
         onboard_user3.pronouns = "He/his"
         onboard_user3.ethnicity = ["asian"]
