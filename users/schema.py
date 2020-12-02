@@ -261,8 +261,8 @@ class OnboardUser(graphene.Mutation):
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
-            user.sat_math=sat_math,
-            user.sat_verbal=sat_verbal,
+            user.sat_math=sat_math
+            user.sat_verbal=sat_verbal
             user.efc = efc
             user.pronouns = pronouns
             user.ethnicity = ethnicity
@@ -556,13 +556,13 @@ class UpdateUser(graphene.Mutation):
         if user is not None:
             user.first_name = first_name
             user.last_name = last_name
-            user.phone_number = phone_number,
-            user.preferred_contact_method=preferred_contact_method,
+            user.phone_number = phone_number
+            user.preferred_contact_method=preferred_contact_method
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
-            user.sat_math=sat_math,
-            user.sat_verbal=sat_verbal,
+            user.sat_math=sat_math
+            user.sat_verbal=sat_verbal
             user.efc = efc
             user.pronouns = pronouns
             user.ethnicity = ethnicity
