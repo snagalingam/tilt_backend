@@ -16,14 +16,17 @@ from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
 from users.models import DeletedAccount, Action
 
+
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
+
 
 class ActionType(DjangoObjectType):
     class Meta:
         model = Action
         fields = "__all__"
+
 
 class OrganizationType_(DjangoObjectType):
     class Meta:
@@ -216,7 +219,8 @@ class OnboardUser(graphene.Mutation):
                     business_status = results.get("business_status", None)
                     icon = results.get("icon", None)
                     address = results.get("formatted_address", None)
-                    phone_number = results.get("formatted_phone_number", None)
+                    place_phone_number = results.get(
+                        "formatted_phone_number", None)
                     url = results.get("url", None)
                     website = results.get("website", None)
                     types = results.get("types", [])
@@ -229,7 +233,7 @@ class OnboardUser(graphene.Mutation):
                     business_status = None
                     icon = None
                     address = None
-                    phone_number = None
+                    place_phone_number = None
                     url = None
                     website = None
                     types = []
@@ -242,7 +246,7 @@ class OnboardUser(graphene.Mutation):
                     lat=lat,
                     lng=lng,
                     address=address,
-                    phone_number=phone_number,
+                    phone_number=place_phone_number,
                     url=url,
                     website=website,
                     types=types,
@@ -256,13 +260,13 @@ class OnboardUser(graphene.Mutation):
             # print(f'place_name ==>: {place_name}')
 
         if user is not None:
-            user.phone_number = phone_number,
-            user.preferred_contact_method=preferred_contact_method,
+            user.phone_number = phone_number
+            user.preferred_contact_method = preferred_contact_method
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
-            user.sat_math=sat_math
-            user.sat_verbal=sat_verbal
+            user.sat_math = sat_math
+            user.sat_verbal = sat_verbal
             user.efc = efc
             user.pronouns = pronouns
             user.ethnicity = ethnicity
@@ -284,7 +288,7 @@ class DeleteUser(graphene.Mutation):
     def mutate(self, info):
         user = info.context.user
 
-        if user.is_authenticated and user.is_active: 
+        if user.is_authenticated and user.is_active:
             user.delete()
 
             # get and format today's date (mm/dd/yyyy)
@@ -293,12 +297,12 @@ class DeleteUser(graphene.Mutation):
             # search for date
             try:
                 get_count = DeletedAccount.objects.get(date=date)
-            except: 
+            except:
                 get_count = None
 
-            # iternate get_count or create new_count 
+            # iternate get_count or create new_count
             if get_count is not None:
-                get_count.accounts += 1 
+                get_count.accounts += 1
             else:
                 get_count = DeletedAccount(
                     date=date,
@@ -308,7 +312,7 @@ class DeleteUser(graphene.Mutation):
             get_count.save()
 
             return DeleteUser(is_deleted=True)
-        else: 
+        else:
             raise Exception("User account was not deleted")
 
 
@@ -513,7 +517,8 @@ class UpdateUser(graphene.Mutation):
                     business_status = results.get("business_status", None)
                     icon = results.get("icon", None)
                     address = results.get("formatted_address", None)
-                    phone_number = results.get("formatted_phone_number", None)
+                    place_phone_number = results.get(
+                        "formatted_phone_number", None)
                     url = results.get("url", None)
                     website = results.get("website", None)
                     types = results.get("types", [])
@@ -526,7 +531,7 @@ class UpdateUser(graphene.Mutation):
                     business_status = None
                     icon = None
                     address = None
-                    phone_number = None
+                    place_phone_number = None
                     url = None
                     website = None
                     types = []
@@ -539,7 +544,7 @@ class UpdateUser(graphene.Mutation):
                     lat=lat,
                     lng=lng,
                     address=address,
-                    phone_number=phone_number,
+                    phone_number=place_phone_number,
                     url=url,
                     website=website,
                     types=types,
@@ -557,19 +562,19 @@ class UpdateUser(graphene.Mutation):
             user.first_name = first_name
             user.last_name = last_name
             user.phone_number = phone_number
-            user.preferred_contact_method=preferred_contact_method
+            user.preferred_contact_method = preferred_contact_method
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
-            user.sat_math=sat_math
-            user.sat_verbal=sat_verbal
+            user.sat_math = sat_math
+            user.sat_verbal = sat_verbal
             user.efc = efc
             user.pronouns = pronouns
             user.ethnicity = ethnicity
             user.user_type = user_type
             user.high_school_grad_year = high_school_grad_year
             user.income_quintile = income_quintile
-            
+
             # if email changed send email changed confirmation
             if email != old_email:
                 user.email = email
@@ -579,6 +584,7 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(user=user)
         else:
             raise Exception("User is not logged in")
+
 
 class UpdatePassword(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -614,6 +620,7 @@ class UpdatePassword(graphene.Mutation):
         else:
             raise Exception("Incorrect credentials")
 
+
 class CreateAction(graphene.Mutation):
     success = graphene.Boolean()
 
@@ -625,7 +632,7 @@ class CreateAction(graphene.Mutation):
         if user.is_authenticated:
             create_action(user, description)
             return CreateAction(success=True)
-        else: 
+        else:
             return CreateAction(success=False)
 
 
