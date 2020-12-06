@@ -22,7 +22,7 @@ def get_photo_url(file_name):
                 main_photo_url = response.url
             except Exception as e:
                 print(e)
-                breakpoint()
+                
         else:
             main_photo_url = main_photo
 

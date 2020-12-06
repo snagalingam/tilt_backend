@@ -55,7 +55,6 @@ def add_blank_description(file):
 
     for college in source:
         description = college['fields'].get('description', '')
-        # breakpoint()
         count += 1
         print(f' count ===> : {count}')
         college['pk'] = count
@@ -94,7 +93,6 @@ def compare_descriptions(source, target):
                 college['fields']['description'] = target_description
 
         collection.append(college)
-        # breakpoint()
 
     with open('collection2.json', 'w') as f:
         json.dump(collection, f, indent=2, ensure_ascii=False)

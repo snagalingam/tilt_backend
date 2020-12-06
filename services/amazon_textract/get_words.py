@@ -30,11 +30,7 @@ def get_result(job_id):
     pages = []
     response = textract.get_document_text_detection(JobId=job_id)
     pages.append(response)
-    nextToken = None
-
-    error = response.get('Error', None)
-    if error is not None:
-        breakpoint()    
+    nextToken = None  
         
     if('NextToken' in response):
         nextToken = response['NextToken']
@@ -66,8 +62,7 @@ def get_words_data(job_id):
             for item in resultPage["Blocks"]:
                 if item["BlockType"] == "LINE":
                     words.append(item["Text"])
-        print(words)
-        breakpoint()
+
         return words
 
     elif status == "IN_PROGRESS":
