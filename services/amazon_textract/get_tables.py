@@ -73,7 +73,6 @@ def get_table_data(job_id):
         for index, table in enumerate(table_blocks):
             csv += generate_table_csv(table, blocks_map, index +1)
             csv += '\n\n'
-        print(csv)
 
         return csv
 
