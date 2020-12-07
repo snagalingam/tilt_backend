@@ -70,3 +70,40 @@ class BucketResult(models.Model):
 
     def __str__(self):
         return str(self.bucket)
+
+class AidCategory(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+
+    # cost, aid, net_price
+    main_category = models.CharField(max_length=255, null=True, blank=True)
+
+    # direct, indirect, unknown, grant, work_study, loan, scholarship
+    sub_category = models.CharField(max_length=255, null=True, blank=True)
+
+    # total, federal, state, other
+    sub_sub_category = models.CharField(max_length=255, null=True, blank=True)
+    year = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+    
+    class Meta:
+        verbose_name_plural = 'aid categories'
+
+    def __str__(self):
+        return str(self.name)
+
+class AidData(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    amount = models.IntegerField(blank=True, null=True)
+    table_number = models.IntegerField(blank=True, null=True)
+    row_number = models.IntegerField(blank=True, null=True)
+    row_text = models.TextField(null=True, blank=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
