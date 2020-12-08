@@ -22,4 +22,4 @@ class CollegeStatus(models.Model):
         verbose_name_plural = 'college statuses'
 
     def __str__(self):
-        return str(self.college_id)
+        return str(self.pk)

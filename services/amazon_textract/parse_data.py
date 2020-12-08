@@ -3,8 +3,21 @@ import json
 import time
 import math
 
-def format_money(word):
 
+def print_variables(**kwargs):
+    key = kwargs.get("key")
+    row_title = kwargs.get("row_title")
+    seen = kwargs.get("seen")
+    tracker = kwargs.get("tracker")
+
+    print(f"""
+    key:      ===> {key}
+    title:    ===> {row_title}
+    seen:     ===> {seen}
+    tracker:  ===> {tracker}""")
+
+
+def format_money(word):
     digits = {
         "0": True,
         "1": True,
@@ -53,55 +66,99 @@ def format_money(word):
 
     # final check
     if "," == money[-3:-2] or money.count(",") > 1:
-        cut = money.rindex(",")
-        money = money[0:cut]
+        end = money.rindex(",")
+        money = money[0:end]
 
     return money
+
 
 def dict_builder(arr):
     words = {}
 
     if len(arr) < 2:
+        print(arr)
+        breakpoint()
         return words
     
     first = 1
-    last = len(arr)-1
+    last = len(arr) - 1
 
     if len(arr) > 2:
         for idx in range(first, last):
-            money = format_money(arr[idx])
-            words[idx] = money
+            stripped = arr[idx].replace('"', "")
+            money = format_money(stripped)
+            words[f'Col-{idx}'] = money
 
     return words
 
+
 def parse_tables(source):
-    count = 0
     table_dict = {}
+    arr = source.split("\n\n")
+    row = 0
+    header = None
 
-    with open(f'{source}.csv', 'r') as f:
-        csv_reader = csv.reader(f)
-        row = 0
-        header = None
+    for line in arr:
+        if len(line) < 1:
+            continue
 
-        for line in csv_reader:
-            if len(line) == 1:
-                row = 0
+        if line[0:13] == "Table: Table_":
+            print(f' -----> {line}')
+            row = 0
 
-            if len(line) > 0: 
-                if row == 0:
-                    header = line[0]
-                    table_dict[header] = {}
-                else:
-                    title = line[0]
-                    table_dict[header][title] = dict_builder(line)
+        if len(line) > 0: 
+            if row == 0:
+                header = line
+                table_dict[header] = {}
+            else:
+                table_arr = line.split(",\n")
+
+                for each_row in table_arr:
+                    row_arr = each_row.split('","')
+                    title = row_arr[0].replace('"', "")
+
+                    table_dict[header][title] = dict_builder(row_arr)
             # keeps track of row num
-            row += 1
-    
-    with open(f'{source}.json', 'w') as new_file:
-        data = json.dumps(table_dict, indent=2)
-        new_file.write(data)
+        row += 1
 
     return table_dict
+
+
+def money_check(word):
+    if len(word) < 1:
+        return False
+    elif word[0] == "$":
+        return True
+
+    return False
+
+def clean_money(col_data):
+    amount = None
+
+    if len(col_data) == 1:
+        first = col_data['Col-1']
+
+        if "$" in first:
+            amount = first 
+
+    elif len(col_data) > 1:
+        check = {}
+            
+        # check for max value money
+        for key in col_data:
+            temp = col_data[key]
+
+            if len(temp) > 0 and temp[0] == "$":
+                integers = temp[1:].replace(',', "")
+                check[int(integers)] = temp
+
+            if len(check) > 0:
+                max_int = max(check.keys())
+                amount = check[max_int]
+
+    # if money return integers else return None
+    return amount
+
 
 def format_data(table_dict, doc=None):
     keywords = [
@@ -150,53 +207,93 @@ def format_data(table_dict, doc=None):
 
     formatted = {}
     seen = []
+    table_list = list(table_dict.keys())
 
-    for table in table_dict.keys():
+    for table in table_list:
         table_data = table_dict[table]
 
         for row_title in table_data:
+            row_list = list(table_data.keys())
+            col_data = table_data[row_title]
+
             for key in keywords: 
-                # if keywords match row_title and not dup
-                if key in row_title.lower() and row_title not in seen:
-                    seen.append(row_title)
+                if key in row_title.lower():
+                    # check for dup keys
+                    if row_title not in seen:
+                        seen.append(row_title)
+                        amount = clean_money(col_data)
+                        if amount is not None:
+                            formatted[row_title] = amount 
+                    else:
+                        for value in col_data.values():
+                            if money_check(value):
+                                amount = clean_money(col_data)
+                                current_amt = int(amount[1:].replace(',', ""))
+                                existing_amt = int(formatted[row_title][1:].replace(',', ""))
 
-    #                 print(f"""
-    # key:   ===> {key}
-    # title: ===> {row_title}
-    # seen:  ===> {seen}
-    #                 """)
+                                # if row_title is dup apply greatest dollar amount
+                                if current_amt > existing_amt:
+                                    formatted[row_title] = amount                            
 
-                    col_data = table_data[row_title]
-                    data = None
-
-                    # For 2 column tables
-                    if len(col_data) == 1:
-                        first = col_data[1]
-                        if "$" in first:
-                            data = first
-
-                    # Greater than 2 column tables
-                    elif len(col_data) > 1:
-                        check = {}
-                        # check for max value money
-                        for i in col_data:
-                            temp = col_data[i]
-
-                            if len(temp) > 0 and temp[0] == "$":
-                                ints = temp[1:].replace(',', "")
-                                check[int(ints)] = temp
-
-                            if len(check) > 0:
-                                key = max(check.keys())
-                                data = check[key]
-
-                    if data is not None:
-                        formatted[row_title] = data 
-    
     if len(formatted) > 0:
         return formatted
     else:
-        return{ "Document Error": doc }
+        return { "Document Error": doc }
 
-# parse_tables: takes csv table and formats a dict/json to rows and cols
-# format_data: takes parsed data dict/json and filters for row_titles/dollars
+
+def track_position(formatted_data, parsed_table):
+    seen = []
+    tracker = {}
+    table_list = list(parsed_table.keys())
+
+    for table in table_list:
+        table_data = parsed_table[table]
+        table_num = table_list.index(table) + 1
+        tracker[f'Table_{table_num}'] = []
+
+        for row_title in table_data:
+            row_list = list(table_data.keys())
+            row_values = list(table_data[row_title].values())
+
+            for key in formatted_data: 
+                if key == row_title and row_title not in seen:
+                    seen.append(row_title)
+                    row_num = row_list.index(row_title)
+                    amount = formatted_data[key]
+                    col_num = row_values.index(amount) + 1
+                    integer = amount[1:].replace(',', "")
+                    row_data = [key,]
+
+                    for each in table_data[key].values():
+                        row_data.append(each)
+
+                    data = {
+                        "Name": key,
+                        "Amount": int(integer),
+                        "Row Index": row_num,
+                        "Col Index": col_num,
+                        f"Row Data": row_data
+                    }
+
+                    tracker[f'Table_{table_num}'].append(data)
+
+    return tracker
+
+def get_aid_data(csv_data):
+    parsed = parse_tables(csv_data)
+    formatted = format_data(parsed)
+    error = formatted.get("Document Error", None)
+
+    if error is None:
+        pos = track_position(formatted, parsed)
+        print(json.dumps(pos, indent=4))
+    else:
+        pos = None
+        print(f'Email Error Report ===> {error}')
+
+    return pos
+
+
+def find_aid_category(name):
+
+    return "fees"

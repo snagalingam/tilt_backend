@@ -101,11 +101,15 @@ class AidData(models.Model):
     table_number = models.IntegerField(blank=True, null=True)
     row_index = models.IntegerField(blank=True, null=True)
     col_index = models.IntegerField(blank=True, null=True)
-    row_data = models.TextField(null=True, blank=True)
+    row_data = ArrayField(
+        models.TextField(null=True, blank=True),
+        null=True, blank=True, default=None
+    )
 
     college_status = models.ForeignKey(
         CollegeStatus, on_delete=models.CASCADE)
-    aid_category = models.ManyToManyField(AidCategory)
+    aid_category =models.ForeignKey(
+        AidCategory, on_delete=models.CASCADE)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
