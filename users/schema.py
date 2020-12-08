@@ -154,7 +154,7 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
-        phone_number = graphene.Int()
+        phone_number = graphene.String()
         preferred_contact_method = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
@@ -447,7 +447,7 @@ class UpdateUser(graphene.Mutation):
         id = graphene.ID()
         first_name = graphene.String()
         last_name = graphene.String()
-        phone_number = graphene.Int()
+        phone_number = graphene.String()
         preferred_contact_method = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
