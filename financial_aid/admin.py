@@ -27,8 +27,6 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = DocumentResult
 
-admin.site.register(DocumentResult, DocumentResultAdmin)
-
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
@@ -44,8 +42,6 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = DocumentData
 
-admin.site.register(DocumentData, DocumentDataAdmin)
-
 class BucketCheckAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 50, 'cols': 100})},
@@ -60,8 +56,6 @@ class BucketCheckAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('bucket', 'date')
     ordering = ('bucket', 'date')
     model = BucketCheck
-
-admin.site.register(BucketCheck, BucketCheckAdmin)
 
 class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
@@ -80,4 +74,7 @@ class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('bucket',)
     model = BucketResult
 
+admin.site.register(DocumentResult, DocumentResultAdmin)
+admin.site.register(DocumentData, DocumentDataAdmin)
+admin.site.register(BucketCheck, BucketCheckAdmin)
 admin.site.register(BucketResult, BucketResultAdmin)
