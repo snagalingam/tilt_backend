@@ -94,8 +94,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(
         _("last name"), max_length=255, null=True, blank=True)
 
-    phone_number = models.BigIntegerField(
-        _("phone number"), null=True, blank=True)
+    phone_number = models.CharField(
+        _("phone number"), max_length=255, null=True, blank=True)
 
     preferred_name = models.CharField(
         _("preferred name"), max_length=255, null=True, blank=True)
