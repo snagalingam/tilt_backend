@@ -76,8 +76,6 @@ def dict_builder(arr):
     words = {}
 
     if len(arr) < 2:
-        print(arr)
-        breakpoint()
         return words
     
     first = 1
