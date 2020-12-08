@@ -99,8 +99,9 @@ class AidData(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
-    row_number = models.IntegerField(blank=True, null=True)
-    row_text = models.TextField(null=True, blank=True)
+    row_index = models.IntegerField(blank=True, null=True)
+    col_index = models.IntegerField(blank=True, null=True)
+    row_data = models.TextField(null=True, blank=True)
 
     college_status = models.ForeignKey(
         CollegeStatus, on_delete=models.CASCADE)
