@@ -309,8 +309,8 @@ class CheckDocuments(graphene.Mutation):
             number_of_missing = check.get("number_of_missing")
             missing_amounts = check.get("missing_amounts")
             doc.pass_fail = pass_fail
-            doc.pass_fail = number_of_missing
-            doc.pass_fail = missing_amounts
+            doc.number_of_missing = number_of_missing
+            doc.missing_amounts = missing_amounts
             doc.save()
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
