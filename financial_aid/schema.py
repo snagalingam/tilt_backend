@@ -11,6 +11,25 @@ from services.amazon_textract.get_tables import start_tables_extraction, get_tab
 from services.amazon_textract.check_document import document_check, start_bucket_check, get_bucket_check, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category
 
+class DocumentResultType(DjangoObjectType):
+    class Meta:
+        model = DocumentResult
+        fields = "__all__"
+
+class DocumentDataType(DjangoObjectType):
+    class Meta:
+        model = DocumentData
+        fields = "__all__"
+
+class BucketCheckType(DjangoObjectType):
+    class Meta:
+        model = BucketCheck
+        fields = "__all__"
+
+class BucketResultType(DjangoObjectType):
+    class Meta:
+        model = BucketResult
+        fields = "__all__"
 class AidCategoryType(DjangoObjectType):
     class Meta:
         model = AidCategory
@@ -20,17 +39,6 @@ class AidDataType(DjangoObjectType):
     class Meta:
         model = AidData
         fields = "__all__"
-
-class DocumentDataType(DjangoObjectType):
-    class Meta:
-        model = DocumentData
-        fields = "__all__"
-
-class BucketResultType(DjangoObjectType):
-    class Meta:
-        model = BucketResult
-        fields = "__all__"
-
 class AnalyzedResultType(graphene.ObjectType):
     name = graphene.String()       
     sent = graphene.String()
@@ -43,14 +51,83 @@ class CheckedResultType(graphene.ObjectType):
     tables = graphene.String()
 
 class Query(graphene.ObjectType):
-    documents = graphene.List(DocumentDataType, limit=graphene.Int())
-    document_by_name = graphene.Field(DocumentDataType, name=graphene.String())
+    document_results = graphene.List(DocumentResultType, limit=graphene.Int())
+    document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
+    bucket_checks = graphene.List(BucketCheckType, limit=graphene.Int())
+    bucket_results = graphene.List(BucketResultType, limit=graphene.Int())
+    aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
+    aid_datas = graphene.List(AidDataType, limit=graphene.Int())
 
-    def resolve_documents(self, info, limit=None):
+    # document_result
+    document_results_by_fields = graphene.List(
+        DocumentResultType, 
+        name=graphene.String(),
+        sent=graphene.Boolean(),
+        processed=graphene.Boolean(),
+        pass_fail=graphene.Boolean(),
+        expired=graphene.Boolean(),
+        start_date=graphene.Boolean())
+
+    # document_datas
+    document_datas_by_fields = graphene.List(
+        DocumentDataType, 
+        name=graphene.String())
+
+    # aid_categories
+    aid_categories_by_fields = graphene.List(
+        AidCategoryType, 
+        name=graphene.String(),
+        main_category=graphene.String(),
+        sub_category=graphene.String(),
+        sub_sub_category=graphene.String(),
+        year=graphene.Int())
+
+    # aid_datas
+    aid_datas_by_fields = graphene.List(
+        AidDataType, 
+        name=graphene.String(),
+        amount=graphene.Int(),
+        table_number=graphene.Int(),
+        row_index=graphene.Int(),
+        col_index=graphene.Int(),
+        college_status=graphene.ID(),
+        aid_category=graphene.ID())
+
+    # get_all()
+    def resolve_document_results(self, info, limit=None):
+        return DocumentResult.objects.all()[0:limit]
+
+    def resolve_document_datas(self, info, limit=None):
         return DocumentData.objects.all()[0:limit]
 
-    def resolve_document_by_name(self, info, name=None):
-        return DocumentData.objects.get(name=name)
+    def resolve_bucket_checks(self, info, limit=None):
+        return BucketCheck.objects.all()[0:limit]
+
+    def resolve_bucket_results(self, info, limit=None):
+        return BucketResult.objects.all()[0:limit]
+
+    def resolve_aid_categories(self, info, limit=None):
+        return AidCategory.objects.all()[0:limit]
+
+    def resolve_aid_datas(self, info, limit=None):
+        return AidData.objects.all()[0:limit]
+
+    # get_by_fields()
+    def resolve_document_results_by_fields(self, info, **fields):
+        qs = DocumentResult.objects.filter(**fields)
+        return qs
+
+    def resolve_document_datas_by_fields(self, info, **fields):
+        qs = DocumentData.objects.filter(**fields)
+        return qs
+
+    def resolve_aid_categories_by_fields(self, info, **fields):
+        qs = AidCategory.objects.filter(**fields)
+        return qs
+
+    def resolve_aid_datas_by_fields(self, info, **fields):
+        qs = AidData.objects.filter(**fields)
+        return qs
 
 class AnalyzeDocuments(graphene.Mutation):
     sent_list = graphene.List(AnalyzedResultType)
