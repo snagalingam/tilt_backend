@@ -12,9 +12,12 @@ class DocumentResult(models.Model):
     tables_id = models.CharField(max_length=255, null=True, blank=True)
     sent = models.BooleanField(default=False)
     processed = models.BooleanField(default=False)
-    pass_fail = models.BooleanField(null=True, blank=True)
-    expired = models.BooleanField(default=False)
-    start_date = models.DateTimeField(default=timezone.now)
+    pass_fail = models.CharField(max_length=255, null=True, blank=True)
+    number_of_missing = models.IntegerField(blank=True, null=True)
+    missing_amounts = ArrayField(
+        models.CharField(max_length=255, null=True, blank=True),
+        null=True, blank=True,
+    )
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -64,6 +67,7 @@ class BucketResult(models.Model):
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
     )
+    missing = models.TextField(null=True, blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)

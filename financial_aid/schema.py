@@ -95,22 +95,28 @@ class Query(graphene.ObjectType):
 
     # get_all()
     def resolve_document_results(self, info, limit=None):
-        return DocumentResult.objects.all()[0:limit]
+        qs = DocumentResult.objects.all()[0:limit]
+        return qs
 
     def resolve_document_datas(self, info, limit=None):
-        return DocumentData.objects.all()[0:limit]
+        qs = DocumentData.objects.all()[0:limit]
+        return qs
 
     def resolve_bucket_checks(self, info, limit=None):
-        return BucketCheck.objects.all()[0:limit]
+        qs = BucketCheck.objects.all()[0:limit]
+        return qs
 
     def resolve_bucket_results(self, info, limit=None):
-        return BucketResult.objects.all()[0:limit]
+        qs = BucketResult.objects.all()[0:limit]
+        return qs
 
     def resolve_aid_categories(self, info, limit=None):
-        return AidCategory.objects.all()[0:limit]
+        qs = AidCategory.objects.all()[0:limit]
+        return qs
 
     def resolve_aid_datas(self, info, limit=None):
-        return AidData.objects.all()[0:limit]
+        qs = AidData.objects.all()[0:limit]
+        return qs
 
     # get_by_fields()
     def resolve_document_results_by_fields(self, info, **fields):
@@ -156,43 +162,6 @@ class AnalyzeDocuments(graphene.Mutation):
             sent_list.append(AnalyzedResultType(name=document, sent=True))
         
         return AnalyzeDocuments(sent_list=sent_list)
-
-class CreateAidCategory(graphene.Mutation):
-    aid_category = graphene.Field(AidCategoryType)
-    success = graphene.Boolean()
-
-    class Arguments:
-        name = graphene.String()
-        main_category = graphene.String()
-        sub_category = graphene.String()
-        sub_sub_category = graphene.String()
-        year = graphene.Int()
-
-    def mutate(
-        self,
-        info,
-        name=None,
-        main_category=None,
-        sub_category=None,
-        sub_sub_category=None,
-        year=None,
-    ):
-        try:
-            aid_category = AidCategory.objects.get(name=name)
-        except:
-            aid_category = None
-
-        if aid_category is None:
-            aid_category = AidCategory(
-                name=name, 
-                main_category=main_category,
-                sub_category=sub_category,
-                sub_sub_category=sub_sub_category,
-                year=year)
-            aid_category.save()
-            return CreateAidCategory(aid_category=aid_category, success=True)
-        else:
-            raise Exception ('Aid category already exists')
 
 class CheckDocuments(graphene.Mutation):
     checked_list = graphene.List(CheckedResultType)
@@ -249,10 +218,9 @@ class CheckDocuments(graphene.Mutation):
                 # if document has words and tables
                 elif not words_failed and not tables_failed:
                     doc.processed = True 
-                    passed = document_check(words, tables)
+                    check = document_check(words, tables)
 
-                    if not passed:
-                        doc.pass_fail = False
+                    if check["pass_fail"] == "Failed":
                         checked_list.append(
                             CheckedResultType(
                                 name=doc.name, 
@@ -261,7 +229,6 @@ class CheckDocuments(graphene.Mutation):
                                 pass_fail="Failed", 
                                 processed=True))
                     else: 
-                        doc.pass_fail = True
                         checked_list.append(
                             CheckedResultType(
                                 name=doc.name, 
@@ -337,7 +304,13 @@ class CheckDocuments(graphene.Mutation):
                         )
                         data.save()
 
-            # save document_result after each iteration 
+            # save check_document results after each iteration 
+            pass_fail = check.get("pass_fail")
+            number_of_missing = check.get("number_of_missing")
+            missing_amounts = check.get("missing_amounts")
+            doc.pass_fail = pass_fail
+            doc.pass_fail = number_of_missing
+            doc.pass_fail = missing_amounts
             doc.save()
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
@@ -411,6 +384,8 @@ class GetBucketResult(graphene.Mutation):
         passed_list = get_bucket.get('Passed List')
         failed_count = get_bucket.get('Failed Count')
         failed_list = get_bucket.get('Failed List')
+        missing = get_bucket.get('Missing Amounts')
+        missing_amounts = json.dumps(missing, indent=2)
 
         results = BucketResult(
             bucket=bucket,
@@ -419,10 +394,48 @@ class GetBucketResult(graphene.Mutation):
             passed_list=passed_list,
             failed_count=failed_count,
             failed_list=failed_list,
+            missing=missing_amounts
         )
         results.save()
 
         return GetBucketResult(bucket_result=results)
+
+class CreateAidCategory(graphene.Mutation):
+    aid_category = graphene.Field(AidCategoryType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        name = graphene.String()
+        main_category = graphene.String()
+        sub_category = graphene.String()
+        sub_sub_category = graphene.String()
+        year = graphene.Int()
+
+    def mutate(
+        self,
+        info,
+        name=None,
+        main_category=None,
+        sub_category=None,
+        sub_sub_category=None,
+        year=None,
+    ):
+        try:
+            aid_category = AidCategory.objects.get(name=name)
+        except:
+            aid_category = None
+
+        if aid_category is None:
+            aid_category = AidCategory(
+                name=name, 
+                main_category=main_category,
+                sub_category=sub_category,
+                sub_sub_category=sub_sub_category,
+                year=year)
+            aid_category.save()
+            return CreateAidCategory(aid_category=aid_category, success=True)
+        else:
+            raise Exception ('Aid category already exists')
 
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()

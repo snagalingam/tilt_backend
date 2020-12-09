@@ -8,23 +8,25 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '75'})},
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'pass_fail', 'processed', 'expired', 'start_date']
-    list_editable = ['expired',]
+    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'created']
+
     fieldsets = (
-        (None, {'fields': ('pass_fail',)}),
-        (_('Results'), {
-            'fields': ('sent', 'processed', 'expired')
+        (None, {
+            'fields':('sent', 'processed', 'pass_fail',)
         }),
-        (_('Details'), {'fields': ('name', 'words_id', 'tables_id')}),
-        (_('Dates'), {
-            'fields': ('start_date',)
+        (_('Details'), {
+            'fields': ('name', 'words_id', 'tables_id')
+        }),
+        (_('Missing'), {
+            'fields': ('number_of_missing', 'missing_amounts',)
         }),
     )
 
-    search_fields = ('name', 'pass_fail', 'expired', 'start_date',)
-    ordering = ('name',)
+    search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
+    ordering = ('name', 'number_of_missing','created',)
     model = DocumentResult
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -61,12 +63,16 @@ class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
     }
     list_display = ['bucket', 'total_documents', 'passed_count', 'failed_count']
     fieldsets = (
         (_('Information'), {'fields': ('bucket', 'total_documents')}),
         (_('Results'), {
             'fields': ('passed_count', 'passed_list', 'failed_count', 'failed_list')
+        }),
+        (_('Missing'), {
+            'fields': ('missing',)
         }),
     )
 
