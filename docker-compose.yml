@@ -6,6 +6,7 @@ services:
     build: .
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
+      - REGION=us-east-2
       - ENVIRONMENT=development
       - DATABASE_HOST=db
       - DATABASE_NAME=postgres
