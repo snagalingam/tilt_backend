@@ -101,7 +101,6 @@ def parse_tables(source):
             continue
 
         if line[0:13] == "Table: Table_":
-            print(f' -----> {line}')
             row = 0
 
         if len(line) > 0: 
@@ -284,7 +283,6 @@ def get_aid_data(csv_data):
 
     if error is None:
         pos = track_position(formatted, parsed)
-        print(json.dumps(pos, indent=4))
     else:
         pos = None
         print(f'Email Error Report ===> {error}')
