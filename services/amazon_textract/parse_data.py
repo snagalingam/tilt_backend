@@ -2,22 +2,10 @@ import csv
 import json
 import time
 import math
-
-
-def print_variables(**kwargs):
-    key = kwargs.get("key")
-    row_title = kwargs.get("row_title")
-    seen = kwargs.get("seen")
-    tracker = kwargs.get("tracker")
-
-    print(f"""
-    key:      ===> {key}
-    title:    ===> {row_title}
-    seen:     ===> {seen}
-    tracker:  ===> {tracker}""")
-
+from .get_tables import get_table_data
 
 def format_money(word):
+
     digits = {
         "0": True,
         "1": True,
@@ -71,24 +59,20 @@ def format_money(word):
 
     return money
 
-
 def dict_builder(arr):
     words = {}
+    first = 1
+    last = len(arr)
 
     if len(arr) < 2:
         return words
-    
-    first = 1
-    last = len(arr) - 1
-
-    if len(arr) > 2:
+    else:
         for idx in range(first, last):
             stripped = arr[idx].replace('"', "")
             money = format_money(stripped)
             words[f'Col-{idx}'] = money
 
     return words
-
 
 def parse_tables(source):
     table_dict = {}
@@ -119,7 +103,6 @@ def parse_tables(source):
         row += 1
 
     return table_dict
-
 
 def money_check(word):
     if len(word) < 1:
@@ -155,7 +138,6 @@ def clean_money(col_data):
 
     # if money return integers else return None
     return amount
-
 
 def format_data(table_dict, doc=None):
     keywords = [
@@ -230,7 +212,9 @@ def format_data(table_dict, doc=None):
 
                                 # if row_title is dup apply greatest dollar amount
                                 if current_amt > existing_amt:
-                                    formatted[row_title] = amount                            
+                                    formatted[row_title] = amount
+
+                    # print_variables(key=key, row_title=row_title, seen=seen, tracker=None)                                
 
     if len(formatted) > 0:
         return formatted
@@ -275,21 +259,109 @@ def track_position(formatted_data, parsed_table):
                     tracker[f'Table_{table_num}'].append(data)
 
     return tracker
-
-def get_aid_data(csv_data):
+    
+def get_aid_data(csv_data, name=None):
     parsed = parse_tables(csv_data)
-    formatted = format_data(parsed)
+    formatted = format_data(parsed, name)
     error = formatted.get("Document Error", None)
 
     if error is None:
         pos = track_position(formatted, parsed)
     else:
-        pos = None
-        print(f'Email Error Report ===> {error}')
+        pos = formatted
 
     return pos
 
-
 def find_aid_category(name):
+    single = {
+        "tuition": "tuition",
+        "fees": "fees",
+        "room": "room",
+        "meals": "meals",
+        "books": "books",
+        "pell": "pell",
+        "seog": "seog",
+        "plus": "plus",
+        "unsub": "unsubsidized",
+        "unsubsidized": "unsubsidized",
+        "sub": "subsidized",
+        "subsidized": "subsidized",
+    }
 
+    multi = {
+        "il": "il map",
+        "map": "il map",
+        "cost": "total direct cost",
+        "costs": "total direct cost",
+        "personal": "personal expenses",
+        "expense": "personal expenses",
+        "expenses": "personal expenses",
+        "health": "health insurance",
+        "insurance": "health insurance",
+        "off": "off campus housing",
+        "on": "on campus housing",
+        "housing": "housing",
+        "stafford": "stafford loan fees",
+        "grant": "grant",
+        "scholarship": "grant",
+        "work": "work study",
+        "loan": "other loan",
+    }
+
+    total = {
+        "indirect": "total indirect cost",
+        "defined by school": "total cost defined by school",
+        "total": "total cost defined by school",
+        "grants": "total grants", 
+        "loans": "total loans",
+        "aid": "total aid",
+    }
+
+    net_price = {       
+        "defined by school": "net price defined by school",
+        "after grants": "net price after grants",
+        "after grants and loans": "net price after grants and loans",
+    }
+
+    try: 
+        index = name.index(" ")
+    except:
+        index = None 
+
+    possibility = []
+
+    if type(index) is int:
+        name_split = name.split(" ")
+
+        for n in name_split:
+            each = n.lower()
+
+            if each in single:
+                possibility.append(single[each])
+            elif each in multi:
+                possibility.append(multi[each])
+            elif each in total:
+                possibility.append(total[each])
+            elif each in net_price:
+                possibility.append(net_price[each])
+    else:
+        each = name.lower()
+
+        if each in single:
+            possibility.append(single[each])
+        elif each in multi:
+            possibility.append(multi[each])
+        elif each in total:
+            possibility.append(total[each])
+        elif each in net_price:
+            possibility.append(net_price[each])
+
+    if len(possibility) < 1:
+        possibility = ["uncategorized"]
+
+    data = {
+        "name": name,
+        "category": possibility
+    }
+    
     return "fees"

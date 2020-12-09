@@ -228,6 +228,7 @@ class CheckDocuments(graphene.Mutation):
                                 tables="Passed", 
                                 pass_fail="Failed", 
                                 processed=True))
+
                     else: 
                         checked_list.append(
                             CheckedResultType(
@@ -238,9 +239,13 @@ class CheckDocuments(graphene.Mutation):
                                 processed=True))
 
                         # aid_data from 'parse_data.py' scripts
-                        pos = get_aid_data(tables)
+                        pos = get_aid_data(tables, doc.name)
+                        pos_error = pos.get("Document Error", None)
 
-                        if pos: 
+                        if pos_error:
+                            print(f" ---> AidData Error/Document Name: {pos_error}")
+
+                        else:
                             for key in pos.keys():
                                 table_number = int(key[6:])
 
