@@ -139,7 +139,7 @@ def clean_money(col_data):
     # if money return integers else return None
     return amount
 
-def format_data(table_dict, doc=None):
+def format_data(table_dict):
     keywords = [
         "pell grant",
         "scholarship",
@@ -219,7 +219,7 @@ def format_data(table_dict, doc=None):
     if len(formatted) > 0:
         return formatted
     else:
-        return { "Document Error": doc }
+        return False
 
 
 def track_position(formatted_data, parsed_table):
@@ -260,15 +260,14 @@ def track_position(formatted_data, parsed_table):
 
     return tracker
     
-def get_aid_data(csv_data, name=None):
+def get_aid_data(csv_data, name):
     parsed = parse_tables(csv_data)
-    formatted = format_data(parsed, name)
-    error = formatted.get("Document Error", None)
+    formatted = format_data(parsed)
 
-    if error is None:
+    if formatted:
         pos = track_position(formatted, parsed)
     else:
-        pos = formatted
+        pos = { "Document Error": name }
 
     return pos
 
