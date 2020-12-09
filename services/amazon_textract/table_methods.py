@@ -43,7 +43,7 @@ def generate_table_csv(table_result, blocks_map, table_index):
     for row_index, cols in rows.items():
         
         for col_index, text in cols.items():
-            csv += '{}'.format(text) + ","
+            csv += f'"{text.strip()}"' + ","
         csv += '\n'
         
     csv += '\n\n\n'

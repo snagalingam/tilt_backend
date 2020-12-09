@@ -56,11 +56,12 @@ def start_tables_extraction(document):
 def get_table_data(job_id):
     response = get_result(job_id)
     status =  response[0]["JobStatus"]
-    blocks = response[0]['Blocks']
-    blocks_map = {}
-    table_blocks = []
 
     if status == "SUCCEEDED":
+        blocks = response[0]['Blocks']
+        blocks_map = {}
+        table_blocks = []
+
         for block in blocks:
             blocks_map[block['Id']] = block
             if block['BlockType'] == "TABLE":
