@@ -274,7 +274,7 @@ class CheckDocuments(graphene.Mutation):
                                         aid_data_list.append(aid_data)
                                     except:
                                         aid_data = None
-    
+
                                     if aid_data is None:
                                         aid_data = AidData(
                                             name=name,
