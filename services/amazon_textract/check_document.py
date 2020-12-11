@@ -23,13 +23,25 @@ client = boto3.client(
     aws_access_key_id=access_key, 
     aws_secret_access_key=secret_key)
 
+NUMBERS = {
+  "0": True,
+  "1": True,
+  "2": True,
+  "3": True,
+  "4": True,
+  "5": True,
+  "6": True,
+  "7": True,
+  "8": True,
+  "9": True,
+}
+
 def delete_document(bucket_name, document):
     client.delete_object(
         Bucket=bucket_name,
         Key=document,
     )
     print(f"DELETED: {document}")
-
 
 def get_documents(bucket_name, limit=None):
     try:
@@ -62,59 +74,40 @@ def get_documents(bucket_name, limit=None):
         return file_list
 
 def strip_money_string(word):
-
-    digits = {
-                "0": True,
-                "1": True,
-                "2": True,
-                "3": True,
-                "4": True,
-                "5": True,
-                "6": True,
-                "7": True,
-                "8": True,
-                "9": True,
-            }
     start_index = word.index("$")
-    stripped = word[start_index:]
+    stripped = word[start_index:].strip()
     last_char = stripped[-1]
+    new_word = None
+    end_index = None
 
-    if last_char in digits.keys():
+    # NUMBERS on line 26
+    if last_char in NUMBERS:
         new_word = stripped
     else:
-        try:
+        if last_char == ",":
+            end_index = stripped.index(",")
+        elif " " in stripped:
             end_index = stripped.index(" ")
-            new_word = stripped[0:end_index]
-        except:
-            if "." in stripped:
-                end_index = stripped.rindex(".")
-                new_word = stripped[0:end_index]
+        elif "." in stripped:
+            end_index = stripped.index(".")
+        elif "*" in stripped:
+            end_index = stripped.index("*")
 
+        new_word = stripped[0:end_index]
+    
     return new_word
 
 def money_list(words):
     money_words = []
     dollar_signs = []
-    
-    digits = {
-            "0": True,
-            "1": True,
-            "2": True,
-            "3": True,
-            "4": True,
-            "5": True,
-            "6": True,
-            "7": True,
-            "8": True,
-            "9": True,
-            }
 
     for word in words:
         if "$" in word:
             dollar_signs.append(word)
 
     for check_word in dollar_signs:
-        if check_word[0] == "$" and check_word[-1] in digits.keys():
+        # NUMBERS on line 26
+        if check_word[0] == "$" and check_word[-1] in NUMBERS:
             money_words.append(check_word)
         else:
             new_word = strip_money_string(check_word)
