@@ -13,7 +13,7 @@
 3. colleges.fieldofstudy
 4. college_status.collegestatus
 5. organizations.organization
-
+6. financial_aid.aidcategory
 
 # How to dump (extract) data from database
 

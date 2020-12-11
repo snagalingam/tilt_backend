@@ -11,11 +11,12 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'created']
+    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'reviewed', 'created']
+    list_editable = ['reviewed',]
 
     fieldsets = (
         (None, {
-            'fields':('sent', 'processed', 'pass_fail',)
+            'fields':('sent', 'processed', 'pass_fail', 'reviewed')
         }),
         (_('Details'), {
             'fields': ('name', 'words_id', 'tables_id')
@@ -80,18 +81,31 @@ class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('bucket',)
     model = BucketResult
 
+class AidDataInline(admin.TabularInline):
+    model = AidData
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+    }
+    extra = 0
+
 class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+
+    def aid_data_count(self, obj):
+        return obj.aiddata_set.count()
+
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'year', 'main_category', 'sub_category',]
+    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
     fieldsets = (
         (None, {'fields': ('name',)}),
         (_('Information'), {
             'fields': ('year', 'main_category', 'sub_category', 'sub_sub_category')
         }),
     )
+
+    inlines = [AidDataInline]
 
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
@@ -110,8 +124,8 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    search_fields = ('name', 'amount', 'college_status', 'aid_category')
-    ordering = ('name', 'college_status', 'aid_category')
+    search_fields = ('name', 'college_status__pk', 'aid_category__name')
+    ordering = ('college_status', 'name', 'aid_category')
     model = AidData
 
 admin.site.register(DocumentResult, DocumentResultAdmin)

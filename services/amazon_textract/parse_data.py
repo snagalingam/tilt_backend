@@ -1,12 +1,91 @@
-import csv
 import json
 import time
 import math
-from .get_tables import get_table_data
+from get_tables import get_table_data
+
+def json_writer(file_name, data, _type="w"):
+    with open(f'{file_name}.json', f'{_type}') as new_file:
+        d = json.dumps(data, indent=2)
+        if _type == "+a":
+            new_file.write(d + "," + "\n")
+        else:
+            new_file.write(d)
+    # print(f'JSON: ===> {file_name} written')
+
+def print_variables(**kwargs):
+    key = kwargs.get("key")
+    row_title = kwargs.get("row_title")
+    seen = kwargs.get("seen")
+    tracker = kwargs.get("tracker")
+
+    print(f"""
+    key:      ===> {key}
+    title:    ===> {row_title}
+    seen:     ===> {seen}
+    tracker:  ===> {tracker}""")
+
+# -------------- Change Money to Integer
+
+def change_to_int(money):
+    if ".00" == money[-3:] or ",00" == money[-3:]:
+        money = money[1:-3]
+    if "." in money:
+        money = money.replace(".", "")
+    if "," in money:
+        money = money.replace(",", "")
+    if money == "0":
+        money = "$" + money
+    money = int(money[1:].replace(",", ""))
+    return money
+
+# -------------- Tests For Clean Money
+
+def test_money(money):
+    if len(money) > 1 and money[0] == "$":
+        if type(change_to_int(money)) is int:
+            return True
+    return False
+
+# -------------- Returns Max Amount From String With Dup Money
+
+def get_max_amount(**kwargs):
+    word = kwargs.get("word", None)
+    col_data = kwargs.get("col_data", None)
+    max_check = {}
+
+    if word:
+        # check for space 
+        try:
+            split = word.index(" ")
+            arr = word.split(" ")
+        # if no space split on second dollar sign 
+        except:
+            split = word.rindex("$")
+            arr = [word[0:split], word[split:]]
+
+        for ele in arr:
+            if test_money(ele):
+                max_check[change_to_int(ele)] = ele
+                
+    elif col_data:
+        for key in col_data:
+            value = col_data[key]
+            if test_money(value):
+                max_check[change_to_int(value)] = value
+
+    if len(max_check) > 0:
+        index = max(max_check)
+        return max_check[index]
+    else:
+        return ""
+
+# -------------- Formats Money or Or Returns Non-money words 
 
 def format_money(word):
+    if len(word) < 3 or len(word) > 50 or "$" not in word:
+        return word
 
-    digits = {
+    numbers = {
         "0": True,
         "1": True,
         "2": True,
@@ -16,32 +95,53 @@ def format_money(word):
         "6": True,
         "7": True,
         "8": True,
-        "9": True,
-        "$": True }
+        "9": True }
 
-    # base case for non-money words
-    if len(word) < 1 or "/" in word or "-" in word:
-        return word 
-    elif word[0] not in digits.keys():
+    symbols = {
+        "/": True,
+        "-": True,
+        "+": True,
+        "=": True,
+        "*": True,
+        "/": True,
+    }
+
+    money = None
+
+    # base case for non-numeric words
+    for num in numbers:
+        if num in word:
+            money = word
+            break
+
+    # gauranteed to be money past this point
+    if money is None:
         return word
 
-    money = word
-    if word[-1] == ",": 
-        money = word[0:-1]
-    if money[0] != "$":
-        money = "$" + money
+    # check and remove symbols
+    for symbol in symbols:
+        if symbol in money:
+            start = money.index("$")
+            money = money[start:]
+            break
 
-    # check if last two digits are cents
+    # check for dups money in one string
+    if word.count("$") > 1:
+        money = get_max_amount(word=word)
+
+    # check for periods
     if ".00" == money[-3:] or ",00" == money[-3:]:
         money = money[0:-3]
-
-    arr = money.split(" ")
-    # check for period in money string
     if "." in money:
         money = money.replace(".", ",")
-    # check if money has alpha chars
-    elif len(arr) > 1:
-        money = arr[0]
+
+    # check for spaces within money
+    if " " in money:
+        arr = money.split(" ")
+        for each in arr:
+            if "$" in each:
+                money = each
+                break
 
     # check for comma separating money string
     if "," not in money:
@@ -57,22 +157,50 @@ def format_money(word):
         end = money.rindex(",")
         money = money[0:end]
 
-    return money
+    if money[-1] == ",": 
+        money = money[0:-1]
+
+    if money[0] != "$":
+        money = "$" + money
+
+    # test money 
+    if test_money(money):
+        return money
+    return word
+
+# -------------- Formats Amounts To Verify Highest Amount Within Row
+
+def clean_money(col_data):
+    amount = None
+
+    if len(col_data) == 1:
+        first = col_data['Col-1']
+        if "$" in first:
+            amount = first
+
+    elif len(col_data) > 1:
+        amount = get_max_amount(col_data=col_data)
+
+    # if money return integers else return None
+    return amount
+
+# -------------- Creates Dictionary for Col-Index Values
 
 def dict_builder(arr):
+    if len(arr) < 2:
+        return {}
+
     words = {}
     first = 1
     last = len(arr)
 
-    if len(arr) < 2:
-        return words
-    else:
-        for idx in range(first, last):
-            stripped = arr[idx].replace('"', "")
-            money = format_money(stripped)
-            words[f'Col-{idx}'] = money
+    for idx in range(first, last):
+        word = arr[idx].replace('"', "")
+        words[f'Col-{idx}'] = format_money(word)
 
     return words
+
+# -------------- Parse Original CSV Tables Into A Table Dictionary
 
 def parse_tables(source):
     table_dict = {}
@@ -98,46 +226,21 @@ def parse_tables(source):
                     row_arr = each_row.split('","')
                     title = row_arr[0].replace('"', "")
 
-                    table_dict[header][title] = dict_builder(row_arr)
-            # keeps track of row num
+                    # filter titles longer than 50 characters
+                    if len(title) > 50 and len(row_arr) > 1:
+                        title = row_arr[1]
+                        row_arr = row_arr[1:]
+
+                    values = dict_builder(row_arr)
+                    if values:
+                        table_dict[header][title] = values
+
+        # keeps track of row num
         row += 1
 
     return table_dict
 
-def money_check(word):
-    if len(word) < 1:
-        return False
-    elif word[0] == "$":
-        return True
-
-    return False
-
-def clean_money(col_data):
-    amount = None
-
-    if len(col_data) == 1:
-        first = col_data['Col-1']
-
-        if "$" in first:
-            amount = first 
-
-    elif len(col_data) > 1:
-        check = {}
-            
-        # check for max value money
-        for key in col_data:
-            temp = col_data[key]
-
-            if len(temp) > 0 and temp[0] == "$":
-                integers = temp[1:].replace(',', "")
-                check[int(integers)] = temp
-
-            if len(check) > 0:
-                max_int = max(check.keys())
-                amount = check[max_int]
-
-    # if money return integers else return None
-    return amount
+# -------------- Format Table Dictionary For Titles And Highest Amounts 
 
 def format_data(table_dict):
     keywords = [
@@ -181,10 +284,10 @@ def format_data(table_dict):
         "non-resident",
         "resident",
         "award",
-        "financial"
+        "financial",
         ]
 
-    formatted = {}
+    formatted_data = {}
     seen = []
     table_list = list(table_dict.keys())
 
@@ -194,33 +297,33 @@ def format_data(table_dict):
         for row_title in table_data:
             row_list = list(table_data.keys())
             col_data = table_data[row_title]
-
+            
             for key in keywords: 
                 if key in row_title.lower():
                     # check for dup keys
                     if row_title not in seen:
                         seen.append(row_title)
                         amount = clean_money(col_data)
+
                         if amount is not None:
-                            formatted[row_title] = amount 
+                            formatted_data[row_title] = amount 
                     else:
                         for value in col_data.values():
-                            if money_check(value):
+                            if test_money(value):
                                 amount = clean_money(col_data)
-                                current_amt = int(amount[1:].replace(',', ""))
-                                existing_amt = int(formatted[row_title][1:].replace(',', ""))
+                                current_amt = change_to_int(amount)
+                                existing_amt = change_to_int(formatted_data[row_title])
 
                                 # if row_title is dup apply greatest dollar amount
                                 if current_amt > existing_amt:
-                                    formatted[row_title] = amount
+                                    formatted_data[row_title] = amount                            
 
-                    # print_variables(key=key, row_title=row_title, seen=seen, tracker=None)                                
-
-    if len(formatted) > 0:
-        return formatted
+    if len(formatted_data) > 0:
+        return formatted_data
     else:
-        return False
+        return False 
 
+# -------------- Track Rows And Cols For Final Object For Database 
 
 def track_position(formatted_data, parsed_table):
     seen = []
@@ -240,43 +343,54 @@ def track_position(formatted_data, parsed_table):
                 if key == row_title and row_title not in seen:
                     seen.append(row_title)
                     row_num = row_list.index(row_title)
-                    amount = formatted_data[key]
-                    col_num = row_values.index(amount) + 1
-                    integer = amount[1:].replace(',', "")
-                    row_data = [key,]
+                    row_data = [key]
+
+                    if len(formatted_data[key]) > 0:
+                        amount = change_to_int(formatted_data[key])
+                    else:
+                        amount = formatted_data[key]
+
+                    # check if amount is in row_values
+                    if amount in row_values:
+                        col_num = row_values.index(amount) + 1
+                    else:
+                        col_num = None
 
                     for each in table_data[key].values():
                         row_data.append(each)
 
                     data = {
-                        "Name": key,
-                        "Amount": int(integer),
-                        "Row Index": row_num,
-                        "Col Index": col_num,
-                        f"Row Data": row_data
+                            "Name": key,
+                            "Amount": amount,
+                            "Row Index": row_num,
+                            "Col Index": col_num,
+                            f"Row Data": row_data
                     }
 
                     tracker[f'Table_{table_num}'].append(data)
-
     return tracker
-    
-def get_aid_data(csv_data, name):
-    parsed = parse_tables(csv_data)
-    formatted = format_data(parsed)
 
-    if formatted:
-        pos = track_position(formatted, parsed)
+# -------------- Method To Start Operations
+
+def get_aid_data(csv_data, name):
+    table_dict = parse_tables(csv_data)
+    formatted_data = format_data(table_dict)
+
+    if formatted_data:
+        pos = track_position(formatted_data, table_dict)
     else:
         pos = { "Document Error": name }
 
     return pos
 
-def find_aid_category(name):
-    single = {
+# -------------- Method To Filter Possibilties Of Aid Categories Match
+
+def find_aid_category(name, doc_name):
+    categories = {
         "tuition": "tuition",
         "fees": "fees",
         "room": "room",
-        "meals": "meals",
+        "meal": "meals",
         "books": "books",
         "pell": "pell",
         "seog": "seog",
@@ -285,41 +399,29 @@ def find_aid_category(name):
         "unsubsidized": "unsubsidized",
         "sub": "subsidized",
         "subsidized": "subsidized",
-    }
-
-    multi = {
         "il": "il map",
         "map": "il map",
         "cost": "total direct cost",
-        "costs": "total direct cost",
         "personal": "personal expenses",
         "expense": "personal expenses",
-        "expenses": "personal expenses",
         "health": "health insurance",
         "insurance": "health insurance",
         "off": "off campus housing",
-        "on": "on campus housing",
-        "housing": "housing",
+        "campus": "off campus housing",
+        "housing": "off campus housing",
         "stafford": "stafford loan fees",
-        "grant": "grant",
-        "scholarship": "grant",
-        "work": "work study",
-        "loan": "other loan",
-    }
-
-    total = {
-        "indirect": "total indirect cost",
-        "defined by school": "total cost defined by school",
-        "total": "total cost defined by school",
         "grants": "total grants", 
         "loans": "total loans",
+        "grant": "other grant",
+        "loan": "other loan",
+        "scholarship": "other grant",
         "aid": "total aid",
-    }
-
-    net_price = {       
-        "defined by school": "net price defined by school",
-        "after grants": "net price after grants",
-        "after grants and loans": "net price after grants and loans",
+        "work": "work study",
+        "tuition": "tuition",
+        "indirect": "total indirect cost",
+        "estimate": "total cost defined by school",
+        "total": "totals",
+        "award": "other grant",
     }
 
     try: 
@@ -329,38 +431,61 @@ def find_aid_category(name):
 
     possibility = []
 
+    # split string with spaces
     if type(index) is int:
         name_split = name.split(" ")
 
         for n in name_split:
             each = n.lower()
 
-            if each in single:
-                possibility.append(single[each])
-            elif each in multi:
-                possibility.append(multi[each])
-            elif each in total:
-                possibility.append(total[each])
-            elif each in net_price:
-                possibility.append(net_price[each])
+            if each in categories:
+                possibility.append(categories[each])
+
+    # single words
     else:
         each = name.lower()
 
-        if each in single:
-            possibility.append(single[each])
-        elif each in multi:
-            possibility.append(multi[each])
-        elif each in total:
-            possibility.append(total[each])
-        elif each in net_price:
-            possibility.append(net_price[each])
+        if each in categories:
+            possibility.append(categories[each])
 
+    # double check 
+    if len(possibility) < 1:
+        for double_check in categories:
+            if double_check in name.lower():
+                possibility.append(categories[double_check])
+    
+    # set uncategorized as default
     if len(possibility) < 1:
         possibility = ["uncategorized"]
 
-    data = {
+    possibilities = {
+        "document": doc_name,
         "name": name,
         "category": possibility
     }
-    
-    return "fees"
+
+    return possibilities
+
+# -------------- Method To Format Data To Match Database Aid Categories 
+
+def filter_possibilities(possibilities):
+    name = possibilities.get("name")
+    category = possibilities.get("category")
+
+    if len(possibilities) < 2:
+        return category[0]
+    else:
+        if "tuition" in category and "other grant" in category:
+            return "other grant"
+        elif "totals" in category:
+            if "work" in name.lower():
+                return "work study"
+            elif "grant" in name.lower():
+                return "total grants"     
+            elif "loan" in name.lower():
+                return "total loans"
+            elif "aid" in name.lower():
+                return "total aid"
+            return "total cost"
+        else:
+            return category[0]

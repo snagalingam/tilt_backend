@@ -36,8 +36,8 @@ class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
         (None, {'fields': ('user', 'description', 'timestamp',)}),
     )
 
-    search_fields = ('description', 'timestamp',)
-    ordering = ('user',)
+    search_fields = ('user__email', 'description', 'timestamp',)
+    ordering = ('timestamp',)
 
     model = Action
 

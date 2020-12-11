@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
-
 class College(models.Model):
 
     # popularity_score

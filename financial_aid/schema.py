@@ -9,7 +9,7 @@ from college_status.models import CollegeStatus
 from services.amazon_textract.get_words import start_words_extraction, get_words_data
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
 from services.amazon_textract.check_document import document_check, start_bucket_check, get_bucket_check, get_documents
-from services.amazon_textract.parse_data import get_aid_data, find_aid_category
+from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 
 class DocumentResultType(DjangoObjectType):
     class Meta:
@@ -238,68 +238,76 @@ class CheckDocuments(graphene.Mutation):
                                 pass_fail="Passed", 
                                 processed=True))
 
-                        # aid_data from 'parse_data.py' scripts
-                        pos = get_aid_data(tables, doc.name)
-                        pos_error = pos.get("Document Error", None)
+                    # aid_data from 'parse_data.py' scripts
+                    pos = get_aid_data(tables, doc.name)
+                    pos_error = pos.get("Document Error", None)
 
-                        if pos_error:
-                            print(f" ---> AidData Error/Document Name: {pos_error}")
+                    if pos_error:
+                        print(f" ---> AidData Error/Document Name: {pos_error}")
 
-                        else:
-                            for key in pos.keys():
-                                table_number = int(key[6:])
+                    else:
+                        # auto reviewed=True if check passed and pos_error=False 
+                        if check["pass_fail"] == "Passed":
+                            doc.reviewed = True
 
-                                for each in pos[key]:
-                                    name = each.get("Name")
-                                    amount =  each.get("Amount")
-                                    row_index = each.get("Row Index")
-                                    col_index = each.get("Col Index")
-                                    row_data = each.get("Row Data")
+                        for key in pos.keys():
+                            table_number = int(key[6:])
 
-                                    # get college_status_id from document
-                                    cs_id = 1
-                                    college_status = CollegeStatus.objects.get(pk=cs_id)
+                            for each in pos[key]:
+                                name = each.get("Name")
+                                amount =  each.get("Amount")
+                                row_index = each.get("Row Index")
+                                col_index = each.get("Col Index")
+                                row_data = each.get("Row Data")
 
-                                    # filter/match for category 
-                                    category = find_aid_category(name)
-                                    aid_category = AidCategory.objects.get(name=category)
+                                # get college_status_id from document
+                                end_index = document.index("_file")
+                                college_status_id = int(document[3:end_index])
+                                college_status = CollegeStatus.objects.get(pk=college_status_id)
 
-                                    # check for dups
-                                    try:
-                                        aid_data = AidData.objects.get(
-                                            name=name, 
-                                            amount=amount,
-                                            table_number=table_number,
-                                            row_index=row_index,
-                                            col_index=col_index,
-                                            row_data=row_data,
-                                            college_status=college_status,
-                                            aid_category=aid_category
-                                        )
-                                        aid_data_list.append(aid_data)
-                                    except:
-                                        aid_data = None
+                                # filter/match for category 
+                                possibilities = find_aid_category(name, document)
+                                category = filter_possibilities(possibilities)
+                                aid_category = AidCategory.objects.get(name=category)
+                                breakpoint()
+                                # check for dups
+                                try:
+                                    aid_data = AidData.objects.get(
+                                        name=name, 
+                                        amount=amount,
+                                        table_number=table_number,
+                                        row_index=row_index,
+                                        col_index=col_index,
+                                        row_data=row_data,
+                                        college_status=college_status,
+                                        aid_category=aid_category
+                                    )
+                                    aid_data_list.append(aid_data)
+                                except:
+                                    aid_data = None
 
-                                    if aid_data is None:
-                                        aid_data = AidData(
-                                            name=name,
-                                            amount=amount,
-                                            table_number=table_number,
-                                            row_index=row_index,
-                                            col_index=col_index,
-                                            row_data=row_data,
-                                            college_status=college_status,
-                                            aid_category=aid_category
-                                        )
-                                        aid_data.save()
-                                        aid_data_list.append(aid_data)
+                                # create AidDate if no dups
+                                if aid_data is None:
+                                    aid_data = AidData(
+                                        name=name,
+                                        amount=amount,
+                                        table_number=table_number,
+                                        row_index=row_index,
+                                        col_index=col_index,
+                                        row_data=row_data,
+                                        college_status=college_status,
+                                        aid_category=aid_category
+                                    )
+                                    aid_data.save()
+                                    aid_data_list.append(aid_data)
 
-                    # save document_data if it doesn't already exist
+                    # save to existing document_data if it exists
                     try:
                         data = DocumentData.objects.get(name=doc.name)
                     except:
                         data = None
 
+                    # else create new document_data
                     if data is None:
                         # save data
                         data = DocumentData(
@@ -309,13 +317,13 @@ class CheckDocuments(graphene.Mutation):
                         )
                         data.save()
 
-            # save check_document results after each iteration 
-            pass_fail = check.get("pass_fail")
-            number_of_missing = check.get("number_of_missing")
-            missing_amounts = check.get("missing_amounts")
-            doc.pass_fail = pass_fail
-            doc.number_of_missing = number_of_missing
-            doc.missing_amounts = missing_amounts
+                # update and save document_data results on each document 
+                pass_fail = check.get("pass_fail")
+                number_of_missing = check.get("number_of_missing")
+                missing_amounts = check.get("missing_amounts")
+                doc.pass_fail = pass_fail
+                doc.number_of_missing = number_of_missing
+                doc.missing_amounts = missing_amounts
             doc.save()
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)

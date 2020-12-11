@@ -56,7 +56,7 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['cip_title', 'college', 'credential_level', ]
 
-    search_fields = ('cip_title', 'college', 'credential_level',)
+    search_fields = ('cip_title', 'college__name', 'credential_level',)
     ordering = ('college', 'credential_level',)
     model = FieldOfStudy
 
