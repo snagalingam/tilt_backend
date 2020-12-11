@@ -269,7 +269,7 @@ class CheckDocuments(graphene.Mutation):
                                 possibilities = find_aid_category(name, document)
                                 category = filter_possibilities(possibilities)
                                 aid_category = AidCategory.objects.get(name=category)
-                                breakpoint()
+
                                 # check for dups
                                 try:
                                     aid_data = AidData.objects.get(
