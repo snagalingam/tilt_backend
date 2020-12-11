@@ -1,7 +1,7 @@
 import json
 import time
 import math
-from get_tables import get_table_data
+from .get_tables import get_table_data
 
 def json_writer(file_name, data, _type="w"):
     with open(f'{file_name}.json', f'{_type}') as new_file:
