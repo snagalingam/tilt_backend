@@ -241,7 +241,7 @@ class CheckDocuments(graphene.Mutation):
                     # aid_data from 'parse_data.py' scripts
                     pos = get_aid_data(tables, doc.name)
                     pos_error = pos.get("Document Error", None)
-
+                    print(f' pos ---------> {pos}')
                     if pos_error:
                         print(f" ---> AidData Error/Document Name: {pos_error}")
 

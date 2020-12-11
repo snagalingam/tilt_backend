@@ -77,7 +77,7 @@ def get_max_amount(**kwargs):
         index = max(max_check)
         return max_check[index]
     else:
-        return ""
+        return "0"
 
 # -------------- Formats Money or Or Returns Non-money words 
 
