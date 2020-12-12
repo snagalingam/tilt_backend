@@ -389,7 +389,7 @@ class CheckDocuments(graphene.Mutation):
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
-                # send_report(college_status_id, collection)
+                send_report(college_status_id, collection)
                 collection = []
                 aid_data_report = []
                 errors = []
