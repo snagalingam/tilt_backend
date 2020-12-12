@@ -10,7 +10,7 @@ from services.amazon_textract.get_words import start_words_extraction, get_words
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
 from services.amazon_textract.check_document import document_check, start_bucket_check, get_bucket_check, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
-
+from services.sendgrid_api.send_email import send_report
 class DocumentResultType(DjangoObjectType):
     class Meta:
         model = DocumentResult
@@ -175,14 +175,28 @@ class CheckDocuments(graphene.Mutation):
         info,
         documents=None,
     ):
-        checked_list = []
-        aid_data_list = []
+        errors = []
+        collection = []
+        aid_data_report = []
         words_failed = None
         tables_failed = None
+        pos_error = None 
+        next_college_status_id = None
+        last_index = len(documents) - 1
+        checked_list = []
+        aid_data_list = []
 
         # interate through list 
-        for document in documents:
+        for idx, document in enumerate(documents):
             doc = DocumentResult.objects.get(name=document)
+            end_index = document.index("_file")
+            college_status_id = int(document[3:end_index])
+
+            # keep track of college_status_id positions
+            if idx < last_index:
+                next_college_status_id = int(documents[idx + 1][3:end_index])
+            elif idx == last_index:
+                next_college_status_id = -1
 
             # check if words are processed
             try:
@@ -190,101 +204,96 @@ class CheckDocuments(graphene.Mutation):
             except:
                 doc.processed = False
                 words_failed = True 
+            
+            # check if tables are processed
+            try:
+                tables = get_table_data(doc.tables_id)
+            except:
+                doc.processed = False
+                tables_failed = True
 
             if words_failed:
                 checked_list.append(
-                    CheckedResultType(name=doc.name, 
-                                words="Failed", 
-                                tables=None, 
-                                pass_fail=None, 
-                                processed=False))
-            else:
-                # check if tables are processed
-                try:
-                    tables = get_table_data(doc.tables_id)
-                except:
-                    doc.processed = False
-                    tables_failed = True
-                
-                if tables_failed:
+                    CheckedResultType(
+                        name=doc.name, 
+                        words="Failed", 
+                        tables=None, 
+                        pass_fail=None, 
+                        processed=False))
+            elif tables_failed:
+                checked_list.append(
+                    CheckedResultType(
+                        name=doc.name, 
+                        words=None, 
+                        tables="Failed", 
+                        pass_fail=None, 
+                        processed=False))
+
+            # if document has words and tables
+            elif not words_failed and not tables_failed:
+                doc.processed = True 
+                check = document_check(words, tables)
+
+                if check["pass_fail"] == "Failed":
                     checked_list.append(
                         CheckedResultType(
                             name=doc.name, 
-                                words=None, 
-                                tables="Failed", 
-                                pass_fail=None, 
-                                processed=False))
+                            words="Passed", 
+                            tables="Passed", 
+                            pass_fail="Failed", 
+                            processed=True))
+                else: 
+                    checked_list.append(
+                        CheckedResultType(
+                            name=doc.name, 
+                            words="Passed", 
+                            tables="Passed", 
+                            pass_fail="Passed", 
+                            processed=True))
 
-                # if document has words and tables
-                elif not words_failed and not tables_failed:
-                    doc.processed = True 
-                    check = document_check(words, tables)
+                # aid_data from 'parse_data.py' scripts
+                pos = get_aid_data(tables, doc.name)
+                pos_error = pos.get("Document Error", None)
 
-                    if check["pass_fail"] == "Failed":
-                        checked_list.append(
-                            CheckedResultType(
-                                name=doc.name, 
-                                words="Passed", 
-                                tables="Passed", 
-                                pass_fail="Failed", 
-                                processed=True))
+                if not pos_error:
+                    # auto reviewed=True if check passed and pos_error=False 
+                    if check["pass_fail"] == "Passed":
+                        doc.reviewed = True
 
-                    else: 
-                        checked_list.append(
-                            CheckedResultType(
-                                name=doc.name, 
-                                words="Passed", 
-                                tables="Passed", 
-                                pass_fail="Passed", 
-                                processed=True))
+                    for key in pos.keys():
+                        table_number = int(key[6:])
 
-                    # aid_data from 'parse_data.py' scripts
-                    pos = get_aid_data(tables, doc.name)
-                    pos_error = pos.get("Document Error", None)
-                    print(f' pos ---------> {pos}')
-                    if pos_error:
-                        print(f" ---> AidData Error/Document Name: {pos_error}")
+                        for each in pos[key]:
+                            name = each.get("Name")
+                            amount =  each.get("Amount")
+                            row_index = each.get("Row Index")
+                            col_index = each.get("Col Index")
+                            row_data = each.get("Row Data")
 
-                    else:
-                        # auto reviewed=True if check passed and pos_error=False 
-                        if check["pass_fail"] == "Passed":
-                            doc.reviewed = True
+                            # get college_status_id from document
+                            college_status = CollegeStatus.objects.get(pk=college_status_id)
 
-                        for key in pos.keys():
-                            table_number = int(key[6:])
+                            # filter/match for category 
+                            possibilities = find_aid_category(name, document)
+                            category = filter_possibilities(possibilities)
+                            aid_category = AidCategory.objects.get(name=category)
 
-                            for each in pos[key]:
-                                name = each.get("Name")
-                                amount =  each.get("Amount")
-                                row_index = each.get("Row Index")
-                                col_index = each.get("Col Index")
-                                row_data = each.get("Row Data")
+                            # check for dups
+                            try:
+                                aid_data = AidData.objects.get(
+                                    name=name, 
+                                    amount=amount,
+                                    table_number=table_number,
+                                    row_index=row_index,
+                                    col_index=col_index,
+                                    row_data=row_data,
+                                    college_status=college_status,
+                                    aid_category=aid_category
+                                )
+                                aid_data_list.append(aid_data)
 
-                                # get college_status_id from document
-                                end_index = document.index("_file")
-                                college_status_id = int(document[3:end_index])
-                                college_status = CollegeStatus.objects.get(pk=college_status_id)
-
-                                # filter/match for category 
-                                possibilities = find_aid_category(name, document)
-                                category = filter_possibilities(possibilities)
-                                aid_category = AidCategory.objects.get(name=category)
-
-                                # check for dups
-                                try:
-                                    aid_data = AidData.objects.get(
-                                        name=name, 
-                                        amount=amount,
-                                        table_number=table_number,
-                                        row_index=row_index,
-                                        col_index=col_index,
-                                        row_data=row_data,
-                                        college_status=college_status,
-                                        aid_category=aid_category
-                                    )
-                                    aid_data_list.append(aid_data)
-                                except:
-                                    aid_data = None
+                            except:
+                                aid_data = None
 
                                 # create AidDate if no dups
                                 if aid_data is None:
@@ -301,30 +310,89 @@ class CheckDocuments(graphene.Mutation):
                                     aid_data.save()
                                     aid_data_list.append(aid_data)
 
-                    # save to existing document_data if it exists
-                    try:
-                        data = DocumentData.objects.get(name=doc.name)
-                    except:
-                        data = None
+                                    # add aid data for report
+                                    aid_data_report.append({
+                                        "college_status": college_status_id,
+                                        "aid_category": aid_category.name,
+                                        "name": name,
+                                        "amount": amount,
+                                        "table_number": table_number,
+                                        "row_index": row_index,
+                                        "col_index": col_index,
+                                        "row_data": row_data,
+                                    })
+                
+                # check if document_data exists
+                try:
+                    document_data = DocumentData.objects.get(name=doc.name)
+                except:
+                    document_data = None
 
-                    # else create new document_data
-                    if data is None:
-                        # save data
-                        data = DocumentData(
-                            name=doc.name, 
-                            words=words,
-                            tables=tables
-                        )
-                        data.save()
+                # else create new document_data
+                if document_data is None:
+                    document_data = DocumentData(
+                        name=doc.name, 
+                        words=words,
+                        tables=tables
+                    )
+                    document_data.save()
 
-                # update and save document_data results on each document 
-                pass_fail = check.get("pass_fail")
-                number_of_missing = check.get("number_of_missing")
-                missing_amounts = check.get("missing_amounts")
-                doc.pass_fail = pass_fail
-                doc.number_of_missing = number_of_missing
-                doc.missing_amounts = missing_amounts
+            # update and save document_data results on each document 
+            pass_fail = check.get("pass_fail", None)
+            number_of_missing = check.get("number_of_missing", None)
+            missing_amounts = check.get("missing_amounts", None)
+            doc.pass_fail = pass_fail
+            doc.number_of_missing = number_of_missing
+            doc.missing_amounts = missing_amounts
             doc.save()
+
+            # handle errors
+            if pos_error:
+                errors.append({
+                    "type": "Aid Data Processing Error",
+                    "message": "Aid data has not been processed.",
+                })
+
+            if words_failed:
+                errors.append({
+                    "type": "Textract Error",
+                    "message": "Words analysis stll in progress."
+                })
+
+            if tables_failed:
+                errors.append({
+                    "type": "Textract Error",
+                    "message": "Tables analysis stll in progress."
+                })
+
+            if check["pass_fail"] == "Failed":
+                errors.append({
+                    "type": "Document Check Failed",
+                    "message": "There are missing words in tables.",
+                    "number_of_missing": number_of_missing,
+                    "missing_amounts": missing_amounts,
+                })           
+
+            report_data = {
+                "document_name": document,
+                "document_check": pass_fail,
+                "reviewed": doc.reviewed,
+                "errors": errors,
+                "aid_data": aid_data_report,
+            }
+
+            # catch all multiples of the same document
+            if college_status_id == next_college_status_id:
+                collection.append(report_data)
+                aid_data_report = []
+                errors = []
+            else:
+                # send report and reset for next different document
+                collection.append(report_data)
+                send_report(college_status_id, collection)
+                collection = []
+                aid_data_report = []
+                errors = []
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
