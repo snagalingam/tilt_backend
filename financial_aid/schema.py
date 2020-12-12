@@ -181,7 +181,6 @@ class CheckDocuments(graphene.Mutation):
         words_failed = None
         tables_failed = None
         pos_error = None 
-        prev_college_status_id = None 
         next_college_status_id = None
         last_index = len(documents) - 1
         checked_list = []
@@ -194,8 +193,6 @@ class CheckDocuments(graphene.Mutation):
             college_status_id = int(document[3:end_index])
 
             # keep track of college_status_id positions
-            if idx != 0:
-                prev_college_status_id = int(documents[idx - 1][3:end_index])
             if idx < last_index:
                 next_college_status_id = int(documents[idx + 1][3:end_index])
             elif idx == last_index:
@@ -389,7 +386,6 @@ class CheckDocuments(graphene.Mutation):
                 collection.append(report_data)
                 aid_data_report = []
                 errors = []
-                print('college_status_id == next_college_status_id:')
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
