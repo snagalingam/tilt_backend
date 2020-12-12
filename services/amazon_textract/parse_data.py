@@ -342,19 +342,20 @@ def track_position(formatted_data, parsed_table):
             for key in formatted_data: 
                 if key == row_title and row_title not in seen:
                     seen.append(row_title)
-                    row_num = row_list.index(row_title)
+                    row_index = row_list.index(row_title)
                     row_data = [key]
+                    row_val = formatted_data[key]
 
-                    if len(formatted_data[key]) > 0:
-                        amount = change_to_int(formatted_data[key])
+                    if len(row_val) > 0:
+                        amount = change_to_int(row_val)
                     else:
-                        amount = formatted_data[key]
+                        amount = row_val
 
                     # check if amount is in row_values
-                    if amount in row_values:
-                        col_num = row_values.index(amount) + 1
+                    if row_val in row_values:
+                        col_index = row_values.index(row_val) + 1
                     else:
-                        col_num = None
+                        col_index = None
 
                     for each in table_data[key].values():
                         row_data.append(each)
@@ -362,8 +363,8 @@ def track_position(formatted_data, parsed_table):
                     data = {
                             "Name": key,
                             "Amount": amount,
-                            "Row Index": row_num,
-                            "Col Index": col_num,
+                            "Row Index": row_index,
+                            "Col Index": col_index,
                             f"Row Data": row_data
                     }
 
