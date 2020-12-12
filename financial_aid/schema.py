@@ -175,6 +175,9 @@ class CheckDocuments(graphene.Mutation):
         info,
         documents=None,
     ):
+    
+        check = None
+        pos_error = None
         errors = []
         collection = []
         aid_data_report = []
@@ -336,6 +339,7 @@ class CheckDocuments(graphene.Mutation):
                         tables=tables
                     )
                     document_data.save()
+
 
             # update and save document_data results on each document 
             pass_fail = check.get("pass_fail", None)
