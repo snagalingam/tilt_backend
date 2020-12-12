@@ -178,18 +178,28 @@ class CheckDocuments(graphene.Mutation):
         errors = []
         collection = []
         aid_data_report = []
-        checked_list = []
-        aid_data_list = []
         words_failed = None
         tables_failed = None
         pos_error = None 
         prev_college_status_id = None 
+        next_college_status_id = None
+        last_index = len(documents) - 1
+        checked_list = []
+        aid_data_list = []
 
         # interate through list 
-        for document in documents:
+        for idx, document in enumerate(documents):
             doc = DocumentResult.objects.get(name=document)
             end_index = document.index("_file")
             college_status_id = int(document[3:end_index])
+
+            # keep track of college_status_id positions
+            if idx != 0:
+                prev_college_status_id = int(documents[idx - 1][3:end_index])
+            if idx < last_index:
+                next_college_status_id = int(documents[idx + 1][3:end_index])
+            elif idx == last_index:
+                next_college_status_id = -1
 
             # check if words are processed
             try:
@@ -374,26 +384,21 @@ class CheckDocuments(graphene.Mutation):
                 "aid_data": aid_data_report,
             }
 
-            # check if current college status id matches previous college status id
-            if prev_college_status_id == college_status_id:
+            # catch all multiples of the same document
+            if college_status_id == next_college_status_id:
                 collection.append(report_data)
                 aid_data_report = []
                 errors = []
-                continue
+                print('college_status_id == next_college_status_id:')
             else:
-                # for single document for one college_status_id
+                # send report and reset for next different document
                 collection.append(report_data)
-                send_report(college_status_id, collection)
-            
-            # reset for next document
-            prev_college_status_id = college_status_id
-            collection = []
-            aid_data_report = []
-            errors = []
-
-        # for mulitple files of the same college_status_id 
-        if len(collection) > 1:
-            send_report(college_status_id, collection)
+                # send_report(college_status_id, collection)
+                print(collection)
+                breakpoint()
+                collection = []
+                aid_data_report = []
+                errors = []
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
