@@ -390,8 +390,6 @@ class CheckDocuments(graphene.Mutation):
                 # send report and reset for next different document
                 collection.append(report_data)
                 # send_report(college_status_id, collection)
-                print(collection)
-                breakpoint()
                 collection = []
                 aid_data_report = []
                 errors = []
