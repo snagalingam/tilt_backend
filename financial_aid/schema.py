@@ -148,11 +148,13 @@ class AnalyzeDocuments(graphene.Mutation):
     ):
         sent_list = []
         user = info.context.user
-        
+
         for document in documents:
+            # send document for analysis
             words_id = start_words_extraction(document)
             tables_id = start_tables_extraction(document)
 
+            # save job_ids to database
             document_result = DocumentResult(
                 user=user,
                 name=document,
@@ -162,7 +164,14 @@ class AnalyzeDocuments(graphene.Mutation):
             )
             document_result.save()
             sent_list.append(AnalyzedResultType(name=document, sent=True))
-        
+
+            # find college_status and update award_uploaded=True
+            end_index = document.index("_file")
+            college_status_id = int(document[3:end_index])
+            college_status = CollegeStatus.objects.get(pk=college_status_id)
+            college_status.award_uploaded = True 
+            college_status.save()
+
         return AnalyzeDocuments(sent_list=sent_list)
 
 class CheckDocuments(graphene.Mutation):
@@ -273,10 +282,6 @@ class CheckDocuments(graphene.Mutation):
                 pos_error = pos.get("Document Error", None)
 
                 if not pos_error:
-                    # auto reviewed=True if check passed and pos_error=False 
-                    if check["pass_fail"] == "Passed":
-                        doc.reviewed = True
-
                     for key in pos.keys():
                         table_number = int(key[6:])
 
@@ -289,6 +294,11 @@ class CheckDocuments(graphene.Mutation):
 
                             # get college_status_id from document
                             college_status = CollegeStatus.objects.get(pk=college_status_id)
+
+                            # auto reviewed=True if check passed and pos_error=False 
+                            if check["pass_fail"] == "Passed":
+                                college_status.reviewed = True
+                                college_status.save()
 
                             # filter/match for category 
                             possibilities = find_aid_category(name, document)

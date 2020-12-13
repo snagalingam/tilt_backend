@@ -7,8 +7,9 @@ from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+TILT_APP = os.environ.get('TILT_APP', None)
 
-if ENVIRONMENT == 'development':
+if ENVIRONMENT == 'development' or TILT_APP == 'staging':
     urlpatterns = [
         path("teamtilt", admin.site.urls),
         path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),

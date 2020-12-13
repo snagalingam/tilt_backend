@@ -11,50 +11,36 @@ from django.db.models import Q, Max, Min, F
 from itertools import chain
 from django.db.models.functions import Greatest, Least
 
-
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
         fields = "__all__"
-
 
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
         fields = "__all__"
 
-
 class ScorecardType(DjangoObjectType):
     class Meta:
         model = Scorecard
         fields = "__all__"
-
 
 class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(CollegeType)
 
-
 class NetPriceRangeType(graphene.ObjectType):
     min = graphene.Int()
     max = graphene.Int()
-
 
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
     field_of_studies = graphene.List(
         FieldOfStudyType, college_id=graphene.Int())
-    colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
-    college_by_id = graphene.Field(
-        CollegeType, id=graphene.Int())
-    college_by_unit_id = graphene.Field(
-        CollegeType, unit_id=graphene.String())
-    college_by_ope_id = graphene.Field(
-        CollegeType, ope_id=graphene.String())
-    college_by_name = graphene.List(
-        CollegeType, name=graphene.String())
+
     nearby_colleges = graphene.List(
         CollegeType,
         lat=graphene.Float(),
@@ -64,6 +50,7 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         limit=graphene.Int()
     )
+
     filter_colleges = graphene.Field(
         CollegePaginationType,
         name=graphene.String(),
@@ -85,6 +72,7 @@ class Query(graphene.ObjectType):
         net_price=graphene.List(graphene.Float),
         income_quintile=graphene.String()
     )
+    
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
@@ -260,21 +248,6 @@ class Query(graphene.ObjectType):
     def resolve_field_of_studies(self, info, college_id):
         return FieldOfStudy.objects.filter(college=college_id,
                                            num_students_ipeds_awards2__isnull=False)
-
-    def resolve_colleges_by_popularity(self, info, limit=None):
-        return College.objects.order_by('-popularity_score')[0:limit]
-
-    def resolve_college_by_id(self, info, id):
-        return College.objects.get(pk=id)
-
-    def resolve_college_by_unit_id(self, info, unit_id):
-        return College.objects.get(unit_id=unit_id)
-
-    def resolve_college_by_ope_id(self, info, ope_id):
-        return College.objects.get(ope_id=ope_id)
-
-    def resolve_college_by_name(self, info, name):
-        return College.objects.filter(name=name)
 
     def resolve_nearby_colleges(
             self,
