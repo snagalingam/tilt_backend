@@ -40,6 +40,9 @@ class Query(graphene.ObjectType):
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
     field_of_studies = graphene.List(
         FieldOfStudyType, college_id=graphene.Int())
+    colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
+    college_by_id = graphene.Field(
+        CollegeType, id=graphene.Int())
 
     nearby_colleges = graphene.List(
         CollegeType,
@@ -50,7 +53,6 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         limit=graphene.Int()
     )
-
     filter_colleges = graphene.Field(
         CollegePaginationType,
         name=graphene.String(),
@@ -72,7 +74,6 @@ class Query(graphene.ObjectType):
         net_price=graphene.List(graphene.Float),
         income_quintile=graphene.String()
     )
-    
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
@@ -248,6 +249,12 @@ class Query(graphene.ObjectType):
     def resolve_field_of_studies(self, info, college_id):
         return FieldOfStudy.objects.filter(college=college_id,
                                            num_students_ipeds_awards2__isnull=False)
+
+    def resolve_colleges_by_popularity(self, info, limit=None):
+        return College.objects.order_by('-popularity_score')[0:limit]
+
+    def resolve_college_by_id(self, info, id):
+        return College.objects.get(pk=id)
 
     def resolve_nearby_colleges(
             self,
