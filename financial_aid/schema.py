@@ -8,9 +8,9 @@ from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, Aid
 from college_status.models import CollegeStatus
 from services.amazon_textract.get_words import start_words_extraction, get_words_data
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
-from services.amazon_textract.check_document import document_check, start_bucket_check, get_bucket_check, get_documents
+from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
-from services.sendgrid_api.send_email import send_report
+from services.sendgrid_api.send_email import send_report_email, send_notification_email
 class DocumentResultType(DjangoObjectType):
     class Meta:
         model = DocumentResult
@@ -147,12 +147,14 @@ class AnalyzeDocuments(graphene.Mutation):
         documents=None,
     ):
         sent_list = []
-
+        user = info.context.user
+        
         for document in documents:
             words_id = start_words_extraction(document)
             tables_id = start_tables_extraction(document)
 
             document_result = DocumentResult(
+                user=user,
                 name=document,
                 words_id=words_id,
                 tables_id=tables_id,
@@ -178,6 +180,7 @@ class CheckDocuments(graphene.Mutation):
     
         check = None
         pos_error = None
+        pass_fail = None
         errors = []
         collection = []
         aid_data_report = []
@@ -194,10 +197,12 @@ class CheckDocuments(graphene.Mutation):
             doc = DocumentResult.objects.get(name=document)
             end_index = document.index("_file")
             college_status_id = int(document[3:end_index])
+            college_status_id = 1
 
             # keep track of college_status_id positions
             if idx < last_index:
-                next_college_status_id = int(documents[idx + 1][3:end_index])
+                # next_college_status_id = int(documents[idx + 1][3:end_index])
+                next_college_status_id = college_status_id + 1
             elif idx == last_index:
                 next_college_status_id = -1
 
@@ -215,7 +220,16 @@ class CheckDocuments(graphene.Mutation):
                 doc.processed = False
                 tables_failed = True
 
-            if words_failed:
+            # if textract analysis fails
+            if words_failed and tables_failed:
+                checked_list.append(
+                    CheckedResultType(
+                        name=doc.name, 
+                        words="Failed", 
+                        tables="Failed", 
+                        pass_fail=None, 
+                        processed=False))
+            elif words_failed and not tables_failed:
                 checked_list.append(
                     CheckedResultType(
                         name=doc.name, 
@@ -223,7 +237,7 @@ class CheckDocuments(graphene.Mutation):
                         tables=None, 
                         pass_fail=None, 
                         processed=False))
-            elif tables_failed:
+            elif tables_failed and not words_failed:
                 checked_list.append(
                     CheckedResultType(
                         name=doc.name, 
@@ -235,7 +249,7 @@ class CheckDocuments(graphene.Mutation):
             # if document has words and tables
             elif not words_failed and not tables_failed:
                 doc.processed = True 
-                check = document_check(words, tables)
+                check = start_document_check(words, tables)
 
                 if check["pass_fail"] == "Failed":
                     checked_list.append(
@@ -295,6 +309,17 @@ class CheckDocuments(graphene.Mutation):
                                 )
                                 aid_data_list.append(aid_data)
 
+                                # add aid data for report
+                                aid_data_report.append({
+                                    "college_status": college_status_id,
+                                    "aid_category": aid_category.name,
+                                    "name": name,
+                                    "amount": amount,
+                                    "table_number": table_number,
+                                    "row_index": row_index,
+                                    "col_index": col_index,
+                                    "row_data": row_data,
+                                })
                             except:
                                 aid_data = None
 
@@ -340,14 +365,14 @@ class CheckDocuments(graphene.Mutation):
                     )
                     document_data.save()
 
-
-            # update and save document_data results on each document 
-            pass_fail = check.get("pass_fail", None)
-            number_of_missing = check.get("number_of_missing", None)
-            missing_amounts = check.get("missing_amounts", None)
-            doc.pass_fail = pass_fail
-            doc.number_of_missing = number_of_missing
-            doc.missing_amounts = missing_amounts
+            if check is not None:
+                # update and save document_data results on each document 
+                pass_fail = check.get("pass_fail", None)
+                number_of_missing = check.get("number_of_missing", None)
+                missing_amounts = check.get("missing_amounts", None)
+                doc.pass_fail = pass_fail
+                doc.number_of_missing = number_of_missing
+                doc.missing_amounts = missing_amounts
             doc.save()
 
             # handle errors
@@ -369,7 +394,7 @@ class CheckDocuments(graphene.Mutation):
                     "message": "Tables analysis stll in progress."
                 })
 
-            if check["pass_fail"] == "Failed":
+            if check is not None and check["pass_fail"] == "Failed":
                 errors.append({
                     "type": "Document Check Failed",
                     "message": "There are missing words in tables.",
@@ -377,6 +402,7 @@ class CheckDocuments(graphene.Mutation):
                     "missing_amounts": missing_amounts,
                 })           
 
+            # create report_data for sendgrid
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
@@ -393,7 +419,7 @@ class CheckDocuments(graphene.Mutation):
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
-                send_report(college_status_id, collection)
+                send_report_email(college_status_id, collection)
                 collection = []
                 aid_data_report = []
                 errors = []
@@ -460,7 +486,7 @@ class GetBucketResult(graphene.Mutation):
         try:
             data = BucketCheck.objects.get(bucket=bucket)
             job_dict =  json.loads(data.job_dict)
-            get_bucket = get_bucket_check(bucket, job_dict)
+            get_bucket = get_bucket_results(bucket, job_dict)
         except Exception as e:
             raise e
             

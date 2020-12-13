@@ -61,7 +61,7 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     filter_horizontal = ('organization',) 
     
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'phone_number')}),
+        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method')}),
         (_('Personal Information'), {
             'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
         }),

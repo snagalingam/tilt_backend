@@ -252,9 +252,6 @@ class OnboardUser(graphene.Mutation):
             # add organization to user after user is onboarded
             user.organization.add(organization)
 
-            # print(f'place_id ==>: {place_id}')
-            # print(f'place_name ==>: {place_name}')
-
         if user is not None:
             user.phone_number = phone_number
             user.preferred_contact_method = preferred_contact_method

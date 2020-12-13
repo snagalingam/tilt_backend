@@ -85,6 +85,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
+
+    # text or email
     preferred_contact_method = models.CharField(
         _("preferred contact method"), max_length=255, null=True, blank=True)
         

@@ -1,7 +1,6 @@
 import os
 import boto3
 import datetime
-import json
 from dateutil.relativedelta import relativedelta
 from .get_tables import start_tables_extraction, get_table_data
 from .get_words import start_words_extraction, get_words_data
@@ -36,12 +35,16 @@ NUMBERS = {
   "9": True,
 }
 
+# -------------- Delete Document From Bucket
+
 def delete_document(bucket_name, document):
     client.delete_object(
         Bucket=bucket_name,
         Key=document,
     )
     print(f"DELETED: {document}")
+
+# -------------- Get Bucket Documents For Bucket Check
 
 def get_documents(bucket_name, limit=None):
     try:
@@ -73,45 +76,64 @@ def get_documents(bucket_name, limit=None):
     else:
         return file_list
 
+# -------------- Format Word To Valid Money Amount
+
 def strip_money_string(word):
+    if word.count("$") > 1 and word[1] != "$":
+        return word
+
     start_index = word.index("$")
     stripped = word[start_index:].strip()
-    last_char = stripped[-1]
-    new_word = None
-    end_index = None
 
-    # NUMBERS on line 26
-    if last_char in NUMBERS:
-        new_word = stripped
-    else:
-        if last_char == ",":
-            end_index = stripped.index(",")
-        elif " " in stripped:
-            end_index = stripped.index(" ")
-        elif "." in stripped:
-            end_index = stripped.index(".")
-        elif "*" in stripped:
-            end_index = stripped.index("*")
+    if "*" in stripped:
+        stripped = stripped.replace("*", "")
 
-        new_word = stripped[0:end_index]
-    
-    return new_word
+    if "=" in stripped:
+        stripped = stripped.replace("=", "")
 
-def money_list(words):
-    money_words = []
-    dollar_signs = []
+    if "+" in stripped:
+        stripped = stripped.replace("+", "")
 
-    for word in words:
-        if "$" in word:
-            dollar_signs.append(word)
+    if "-" in stripped:
+        stripped = stripped.replace("-", "")
 
-    for check_word in dollar_signs:
-        # NUMBERS on line 26
-        if check_word[0] == "$" and check_word[-1] in NUMBERS:
-            money_words.append(check_word)
+    if " " in stripped:
+        idx = stripped.index(" ")
+        if stripped[idx + 1] in NUMBERS:
+            stripped.replace(" ", "")
         else:
-            new_word = strip_money_string(check_word)
-            money_words.append(new_word)
+          stripped = stripped[0:idx]
+    
+    if "/" in stripped:
+        idx = stripped.index("/")
+        stripped = stripped[0:idx]
+
+    if stripped[-1] == ",":
+        stripped = stripped[0:-1]
+    
+    if stripped[-1] == ".":
+        stripped = stripped[0:-1]
+
+    if stripped[-3:-2] == ".":
+        stripped = stripped[0:-3]
+
+    if stripped[-3:-2] == ",":
+        stripped = stripped[0:-3]
+
+    if "." in stripped:
+        stripped = stripped.replace(".", ",")
+
+    return stripped
+
+# -------------- Create A List Of All Money In Document
+
+def document_money_list(all_document_words):
+    money_words = []
+
+    for word in all_document_words:
+        if "$" in word:
+            money = strip_money_string(word)
+            money_words.append(money)
 
     return money_words
 
@@ -133,33 +155,37 @@ def table_list(source):
 
     return table_list
 
-def check_tables(tables, words):
-    money = money_list(words)
+# -------------- Check If All Words In Documents Are In Tables 
 
-    for table_word in tables:
-        for amount in money:
-            if amount in table_word:
-                money.remove(amount)
-                break
+def check_tables(tables_words, all_document_words):
+    money_list = document_money_list(all_document_words)
 
-    if len(money) > 0:
+    for word in tables_words:
+        if "$" in word:
+            for amount in money_list:
+                if amount in word:
+                    money_list.remove(amount)
+
+    if len(money_list) > 0:
         data = {
-            "number_of_missing": len(money),
-            "missing_amounts" : money,
+            "number_of_missing": len(money_list),
+            "missing_amounts" : money_list,
             "pass_fail": "Failed" 
         }
     else:
         data = {
-            "number_of_missing": len(money),
-            "missing_amounts" : money,
+            "number_of_missing": len(money_list),
+            "missing_amounts" : money_list,
             "pass_fail": "Passed" 
         }
 
     return data
 
-def document_check(words, tables):
-    tables_words = table_list(tables)
-    check = check_tables(tables_words, words)
+# -------------- Start Document Check
+
+def start_document_check(all_document_words, csv_table):
+    tables_words = table_list(csv_table)
+    check = check_tables(tables_words, all_document_words)
 
     if check["pass_fail"] == "Passed": 
         # Green True
@@ -169,6 +195,8 @@ def document_check(words, tables):
         print(f"=====> CHECK: \033[91m{check}\033[0m")
 
     return check
+
+# -------------- Start Bucket Check
 
 def start_bucket_check(bucket, limit=None, start=0):
     file_list = get_documents(bucket)
@@ -196,7 +224,9 @@ def start_bucket_check(bucket, limit=None, start=0):
 
     return job_dict
 
-def get_bucket_check(bucket, jobs_dict):
+# -------------- Get Bucket Results
+
+def get_bucket_results(bucket, jobs_dict):
     file_list = get_documents(bucket)
     passed = []
     failed = []
@@ -205,9 +235,9 @@ def get_bucket_check(bucket, jobs_dict):
     for key in file_list:
         words_id = jobs_dict[key].get('words_id')
         tables_id = jobs_dict[key].get('tables_id')
-        w = get_words_data(words_id)
-        t = get_table_data(tables_id)
-        check = document_check(w, t)
+        all_document_words = get_words_data(words_id)
+        csv_table = get_table_data(tables_id)
+        check = start_document_check(all_document_words, csv_table)
 
         if check["pass_fail"] == "Passed": 
             passed.append(key)

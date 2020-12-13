@@ -5,10 +5,10 @@ import json
 import re
 from io import StringIO
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
 def extract_data(url):
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=HEADERS)
     page = BeautifulSoup(response.text, 'html.parser')
     # use selineum to click link 
     name = page.find('h1').text
@@ -93,7 +93,7 @@ def extract_data(url):
         "Phone": contact_phone, 
         "Ext": contact_ext, 
     }
-    # print(data)
+
     return data
 
 def get_scholarship_table(url_list):
@@ -104,7 +104,7 @@ def get_scholarship_table(url_list):
         month += 1
         # sort by earliest deadline
         if month >= 5:
-            response = requests.get(url + "?sortOrder=duedate&sortDirection=asc", headers=headers)
+            response = requests.get(url + "?sortOrder=duedate&sortDirection=asc", headers=HEADERS)
             page = BeautifulSoup(response.text, 'html.parser')
             table = page.find_all(
                 "table", {"class": "scholarshiplistdirectory"})
@@ -142,7 +142,7 @@ def get_scholarship_table(url_list):
 
 def get_scholarship_urls():
     url = f"https://www.scholarships.com/financial-aid/college-scholarships/scholarship-directory/deadline"
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=HEADERS)
     page = BeautifulSoup(response.text, 'html.parser')
     links = page.find_all(
         "ul", {"id": "ullist"})
@@ -232,8 +232,10 @@ def make_csvs(json_file):
                     website
                     )
 
-                with open(f'{month}.csv', 'a') as f:
-                    csv_writer = csv.writer(f)
-                    csv_writer.writerow(each_line)
-                print(f' COUNT ===> : {count}')
+                # with open(f'{month}.csv', '+a') as f:
+                #     csv_writer = csv.writer(f)
+                #     csv_writer.writerow(each_line)
+                # print(f' COUNT ===> : {count}')
                 count += 1
+
+                return print(f'{json_file}.json converted to csv file.')

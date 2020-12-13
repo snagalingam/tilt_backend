@@ -861,9 +861,9 @@ def find_missing_colleges(file_name):
     
         data = scorecard_api(college, count)
 
-        with open(f'scorecard_updates.json', 'a+') as f:
-            scorecard_data = json.dumps(data[0], indent=2, ensure_ascii=False)
-            f.write(scorecard_data + ',')
+        # with open(f'scorecard_updates.json', 'a+') as f:
+        #     scorecard_data = json.dumps(data[0], indent=2, ensure_ascii=False)
+        #     f.write(scorecard_data + ',')
         print(f'  ==> COUNT: {count}')
 
 # find_missing_colleges('missing')
@@ -947,13 +947,13 @@ def get_scorecard_data(file_name):
                 print(f'  ==> COUNT: {pk}')
                 # field_studies = field_study_api(programs['cip_4_digit'], pk)
                 # append seed data
-                with open(f'scorecard_updates.json', 'a+') as f:
-                    scorecard_data = json.dumps(scorecard, indent=2, ensure_ascii=False)
-                    f.write(scorecard_data + ',')
+                # with open(f'scorecard_updates.json', 'a+') as f:
+                #     scorecard_data = json.dumps(scorecard, indent=2, ensure_ascii=False)
+                #     f.write(scorecard_data + ',')
                 # append college data
-                with open(f'colleges_updates.json', 'a+') as f:
-                    college_data = json.dumps(college, indent=2, ensure_ascii=False)
-                    f.write(college_data + ',')
+                # with open(f'colleges_updates.json', 'a+') as f:
+                #     college_data = json.dumps(college, indent=2, ensure_ascii=False)
+                #     f.write(college_data + ',')
                 # append field of study data
                 # with open(f'field_study.json', 'a+') as f:
                 #     field_study_data = json.dumps(field_studies, indent=2, ensure_ascii=False)
@@ -979,9 +979,9 @@ def renumber_field_study_pk(file_name):
         field_study_list.append(field_study)
         count += 1
 
-    with open(f'field_study_seeds.json', 'a+') as f:
-        data = json.dumps(field_study_list, indent=2, ensure_ascii=False)
-        f.write(data)
+    # with open(f'field_study_seeds.json', 'a+') as f:
+    #     data = json.dumps(field_study_list, indent=2, ensure_ascii=False)
+    #     f.write(data)
 
     return print(f'   ==> RENUMBERING ALL DONE')
 
@@ -1072,9 +1072,9 @@ def update_scorecards(file_name):
         print(f'  COUNT ===> : {count}')
         count += 1
 
-    with open(f'scorecard_new.json', 'w') as f:
-        data = json.dumps(scorecard_list, indent=2, ensure_ascii=False)
-        f.write(data)
+    # with open(f'scorecard_new.json', 'w') as f:
+    #     data = json.dumps(scorecard_list, indent=2, ensure_ascii=False)
+    #     f.write(data)
 
     return print(f'   ==> RENUMBERING ALL DONE')
 
@@ -1095,16 +1095,16 @@ def add_dates(file_name):
         each['fields']['created'] = d_aware
         each['fields']['updated'] = d_aware
 
-        with open(f'scorecard_seeds.json', 'a+') as f:
-            data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
-            f.write(data + ',')
+        # with open(f'scorecard_seeds.json', 'a+') as f:
+        #     data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
+        #     f.write(data + ',')
 
         print(f'  COUNT ===> : {count}')
         count += 1
 
     return print(f'   ==> DATES ADDED TO ALL DONE')
 
-add_dates('seeds/scorecard_seeds')
+# add_dates('seeds/scorecard_seeds')
 
 def find(file_name):
     collection = json.load(open(f'{file_name}.json'))
@@ -1114,9 +1114,9 @@ def find(file_name):
         unit_id = each['fields']['unit_id']
         each['fields']['unit_id'] = int(unit_id)
 
-        with open(f'colleges_seedsINT.json', 'a+') as f:
-            data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
-            f.write(data + ',')
+        # with open(f'colleges_seedsINT.json', 'a+') as f:
+        #     data = json.dumps(each, indent=2, ensure_ascii=False, cls=DateTimeEncoder)
+        #     f.write(data + ',')
 
         print(f'  COUNT ===> : {count}')
         count += 1

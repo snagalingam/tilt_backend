@@ -1,42 +1,15 @@
-import json
-import time
-import math
 from .get_tables import get_table_data
-
-def json_writer(file_name, data, _type="w"):
-    with open(f'{file_name}.json', f'{_type}') as new_file:
-        d = json.dumps(data, indent=2)
-        if _type == "+a":
-            new_file.write(d + "," + "\n")
-        else:
-            new_file.write(d)
-    # print(f'JSON: ===> {file_name} written')
-
-def print_variables(**kwargs):
-    key = kwargs.get("key")
-    row_title = kwargs.get("row_title")
-    seen = kwargs.get("seen")
-    tracker = kwargs.get("tracker")
-
-    print(f"""
-    key:      ===> {key}
-    title:    ===> {row_title}
-    seen:     ===> {seen}
-    tracker:  ===> {tracker}""")
+from .check_document import start_document_check, strip_money_string
 
 # -------------- Change Money to Integer
 
-def change_to_int(money):
-    if ".00" == money[-3:] or ",00" == money[-3:]:
-        money = money[1:-3]
-    if "." in money:
-        money = money.replace(".", "")
-    if "," in money:
-        money = money.replace(",", "")
-    if money == "0":
-        money = "$" + money
-    money = int(money[1:].replace(",", ""))
-    return money
+def change_to_int(word):
+    if len(word) > 3:
+        money = strip_money_string(word)
+        money = int(money[1:].replace(",", ""))
+        return money
+    else:
+      return word
 
 # -------------- Tests For Clean Money
 
@@ -97,15 +70,6 @@ def format_money(word):
         "8": True,
         "9": True }
 
-    symbols = {
-        "/": True,
-        "-": True,
-        "+": True,
-        "=": True,
-        "*": True,
-        "/": True,
-    }
-
     money = None
 
     # base case for non-numeric words
@@ -117,56 +81,19 @@ def format_money(word):
     # gauranteed to be money past this point
     if money is None:
         return word
-
-    # check and remove symbols
-    for symbol in symbols:
-        if symbol in money:
-            start = money.index("$")
-            money = money[start:]
-            break
-
+    
     # check for dups money in one string
     if word.count("$") > 1:
         money = get_max_amount(word=word)
 
-    # check for periods
-    if ".00" == money[-3:] or ",00" == money[-3:]:
-        money = money[0:-3]
-    if "." in money:
-        money = money.replace(".", ",")
+    # from check_document.py 
+    money = strip_money_string(money)
 
-    # check for spaces within money
-    if " " in money:
-        arr = money.split(" ")
-        for each in arr:
-            if "$" in each:
-                money = each
-                break
+    # for money with only dollar sign
+    if len(money) == 1:
+        money = money + "0"
 
-    # check for comma separating money string
-    if "," not in money:
-        length = len(money[1:])
-        if length > 3:
-            times = math.floor(length / 3)
-            for num in range(times):
-                idx = (num + 1) * -3
-                money = money[0:idx] + "," + money[idx:]
-
-    # final check
-    if "," == money[-3:-2] or money.count(",") > 1:
-        end = money.rindex(",")
-        money = money[0:end]
-
-    if money[-1] == ",": 
-        money = money[0:-1]
-
-    if money[0] != "$":
-        money = "$" + money
-
-    # test money 
-    if test_money(money):
-        return money
-    return word
+    return money
 
 # -------------- Formats Amounts To Verify Highest Amount Within Row
 
@@ -196,7 +123,16 @@ def dict_builder(arr):
 
     for idx in range(first, last):
         word = arr[idx].replace('"', "")
-        words[f'Col-{idx}'] = format_money(word)
+
+        # check for blank words
+        if len(word) < 1:
+           words[f'Col-{idx}'] = word
+        else:
+            # remove comma on last char
+            if word[-1] == ",":
+              word = word[0:-1]
+
+            words[f'Col-{idx}'] = format_money(word)
 
     return words
 
@@ -204,40 +140,38 @@ def dict_builder(arr):
 
 def parse_tables(source):
     table_dict = {}
-    arr = source.split("\n\n")
+    arr = source.split("\n")
     row = 0
     header = None
 
     for line in arr:
+        # skip empty rows
         if len(line) < 1:
             continue
-
-        if line[0:13] == "Table: Table_":
+        # reset row index at new table
+        elif line[0:13] == "Table: Table_":
             row = 0
 
-        if len(line) > 0: 
+        # if data exist in row iterate
+        if len(line) > 0:
             if row == 0:
                 header = line
                 table_dict[header] = {}
             else:
-                table_arr = line.split(",\n")
+                row_arr = line.split('","')
+                title = row_arr[0].replace('"', "")
 
-                for each_row in table_arr:
-                    row_arr = each_row.split('","')
-                    title = row_arr[0].replace('"', "")
+                if len(row_arr) > 1:
+                    title = row_arr[0]
+                    row_arr = row_arr[1:]
 
-                    # filter titles longer than 50 characters
-                    if len(title) > 50 and len(row_arr) > 1:
-                        title = row_arr[1]
-                        row_arr = row_arr[1:]
-
-                    values = dict_builder(row_arr)
-                    if values:
-                        table_dict[header][title] = values
+                values = dict_builder(row_arr)
+                if values:
+                    table_dict[header][title] = values
 
         # keeps track of row num
         row += 1
-
+        
     return table_dict
 
 # -------------- Format Table Dictionary For Titles And Highest Amounts 
@@ -317,7 +251,7 @@ def format_data(table_dict):
                                 # if row_title is dup apply greatest dollar amount
                                 if current_amt > existing_amt:
                                     formatted_data[row_title] = amount                            
-
+    
     if len(formatted_data) > 0:
         return formatted_data
     else:
@@ -490,3 +424,4 @@ def filter_possibilities(possibilities):
             return "total cost"
         else:
             return category[0]
+
