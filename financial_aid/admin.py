@@ -11,12 +11,11 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'reviewed', 'created']
-    list_editable = ['reviewed',]
+    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'created']
 
     fieldsets = (
         (None, {
-            'fields':('sent', 'processed', 'pass_fail', 'reviewed')
+            'fields':('sent', 'processed', 'pass_fail',)
         }),
         (_('Details'), {
             'fields': ('name', 'words_id', 'tables_id')

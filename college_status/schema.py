@@ -1,11 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
-import json
-import os
 from django.contrib.auth import get_user_model
 from .models import CollegeStatus
 from .models import College
-from django.db.models import Count
 
 
 class CollegeStatusType(DjangoObjectType):

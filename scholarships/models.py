@@ -5,7 +5,8 @@ from django.utils import timezone
 from colleges.models import College
 
 class Provider(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    organization = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    reference = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
@@ -19,13 +20,12 @@ class Provider(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.name)
+        return str(self.organization)
 
 class Scholarship(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     provider = models.ForeignKey(
         Provider, on_delete=models.CASCADE)
-    organization = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
@@ -76,3 +76,14 @@ class Scholarship(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+class ScholarshipStatus(models.Model):
+    user = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    scholarship = models.ManyToManyField(Scholarship)
+    status = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'scholarship statuses'
+
+    def __str__(self):
+        return str(self.status)

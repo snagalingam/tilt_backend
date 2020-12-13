@@ -15,6 +15,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'website', 'popularity_score', 'description']
     list_editable = ['description',]
+    
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score',)}),
         (_('College Information'), {

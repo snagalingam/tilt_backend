@@ -1,10 +1,26 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Scholarship, Provider
+from .models import Provider, Scholarship, ScholarshipStatus
 
 from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+
+class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['organization', 'reference', 'email', 'state', ]
+    fieldsets = (
+        (None, {'fields': ('organization', 'reference', 'email', )}),
+        (_('Details'), {
+            'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
+        }),
+    )
+
+    search_fields = ('organization', 'reference', 'email', 'state',)
+    ordering = ('organization', 'reference',)
+    model = Provider
 
 class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
@@ -16,7 +32,7 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     filter_horizontal = ('college',) 
 
     fieldsets = (
-        (None, {'fields': ('organization', 'provider', )}),
+        (None, {'fields': ('provider', )}),
         (_('College'), {
             'fields': ('college',),
         }),
@@ -38,21 +54,21 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name', 'provider',)
     model = Scholarship
 
-class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'email', 'state', ]
+    list_display = ['status',]
+    filter_horizontal = ('user', 'scholarship',) 
+
     fieldsets = (
-        (None, {'fields': ('name', 'email', )}),
-        (_('Details'), {
-            'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
-        }),
+        (None, {'fields': ('user', 'scholarship', 'status', )}),
     )
 
-    search_fields = ('name', 'email', 'state',)
-    ordering = ('name',)
-    model = Provider
+    search_fields = ('user', 'scholarship', 'status',)
+    ordering = ('user', 'scholarship',)
+    model = ScholarshipStatus
 
-admin.site.register(Scholarship, ScholarshipAdmin)
 admin.site.register(Provider, ProviderAdmin)
+admin.site.register(Scholarship, ScholarshipAdmin)
+admin.site.register(ScholarshipStatus, ScholarshipStatusAdmin)

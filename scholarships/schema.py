@@ -1,8 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
-
-from users.schema import UserType
-from .models import Scholarship, Provider
+from django.contrib.auth import get_user_model
+from .models import Provider, Scholarship, ScholarshipStatus
+from colleges.models import College
 
 class ProviderType(DjangoObjectType):
     class Meta:
@@ -12,50 +12,112 @@ class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
+class ScholarshipStatusType(DjangoObjectType):
+    class Meta:
+        model = ScholarshipStatus
+
 class Query(graphene.ObjectType):
-    providers = graphene.List(ProviderType)
-    dproviders_results_by_fields = graphene.List(
+    providers = graphene.List(ProviderType, limit=graphene.Int())
+    scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
+    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+
+    # providers
+    providers_by_fields = graphene.List(
         ProviderType, 
-        name=graphene.String(),
-        sent=graphene.Boolean(),
-        processed=graphene.Boolean(),
-        pass_fail=graphene.Boolean(),
-        expired=graphene.Boolean(),
-        start_date=graphene.Boolean())
-    scholarships = graphene.List(ScholarshipType)
-    scholarship_by_name = graphene.Field(ScholarshipType, name=graphene.String())
+        organization=graphene.String(),
+        reference=graphene.String(),
+        address=graphene.String(),
+        city=graphene.String(),
+        state=graphene.String(),
+        zipcode=graphene.String(),
+        email=graphene.String(),
+        phone_number=graphene.String(),
+        phone_number_ext=graphene.String())
 
-    def resolve_providers(self, info):
-        return ProviderType.objects.all()
+    # scholarships
+    scholarships_by_fields = graphene.Field(
+        ScholarshipType, 
+            name=graphene.String(),
+            provider_id=graphene.Int(),
+            description=graphene.String(),
+            website=graphene.String(),
+            max_amount=graphene.Int(),
+            renewable=graphene.Boolean(),
+            number_awards=graphene.Int(),
+            education_level=graphene.List(graphene.String),
+            education_requirements=graphene.String(),
+            area_of_study=graphene.List(graphene.String),
+            area_of_study_description=graphene.String(),
+            writing_competition=graphene.Boolean(),
+            interest_description=graphene.String(),
+            college_id=graphene.Int(),
+            association_requirement=graphene.List(graphene.String),
+            location=graphene.String(),
+            state=graphene.String(),
+            ethnicity=graphene.List(graphene.String),
+            gender=graphene.String(),
+            min_gpa=graphene.Float(),
+            max_gpa=graphene.Float(),
+            min_act=graphene.Int(),
+            min_sat=graphene.Int(),
+            disability=graphene.String(),
+            military=graphene.String(),
+            citizenship=graphene.List(graphene.String),
+            first_generation=graphene.Boolean(),
+            financial_need=graphene.Boolean())
 
-    def resolve_provider_by_field(self, info, name=None):
-        qs = ProviderType.objects.get(name=name)
+    # scholarship_statuses
+    scholarship_statuses_by_fields = graphene.List(
+        ScholarshipStatusType, 
+        user_id=graphene.Int(),
+        scholarship_id=graphene.Int(),
+        status=graphene.String())
+
+    # get_all()
+    def resolve_providers(self, info, limit=None):
+        qs = Provider.objects.all()[0:limit]
         return qs
 
-    def resolve_scholarships(self, info):
-        return Scholarship.objects.all()
+    def resolve_scholarships(self, info, limit=None):
+        qs = Scholarship.objects.all()[0:limit]
+        return qs
 
-    def resolve_scholarship_by_name(self, info, name=None):
-        qs = Scholarship.objects.get(name=name)
+    def resolve_scholarship_statuses(self, info, limit=None):
+        qs = ScholarshipStatus.objects.all()[0:limit]
+        return qs
+
+    # get_by_fields()
+    def resolve_providers_by_fields(self, info, **fields):
+        qs = Provider.objects.filter(**fields)
+        return qs
+
+    def resolve_scholarships_by_fields(self, info, **fields):
+        qs = Scholarship.objects.filter(**fields)
+        return qs
+
+    def resolve_scholarship_statuses_by_fields(self, info, **fields):
+        qs = ScholarshipStatus.objects.filter(**fields)
         return qs
 
 class CreateProvider(graphene.Mutation):
-    contact = graphene.Field(ProviderType)
+    provider = graphene.Field(ProviderType)
 
     class Arguments:
-        name = graphene.String()
-        address = graphene.String()
-        city = graphene.String()
-        state = graphene.String()
-        zipcode = graphene.String()
-        email = graphene.String()
-        phone_number = graphene.String()
-        phone_number_ext = graphene.String()
+        organization=graphene.String()
+        reference=graphene.String()
+        address=graphene.String()
+        city=graphene.String()
+        state=graphene.String()
+        zipcode=graphene.String()
+        email=graphene.String()
+        phone_number=graphene.String()
+        phone_number_ext=graphene.String()
 
     def mutate(
         self,
         info,
-        name=None,
+        organization=None,
+        reference=None,
         address=None,
         city=None,
         state=None,
@@ -65,8 +127,9 @@ class CreateProvider(graphene.Mutation):
         phone_number_ext=None,
     ):
 
-        contact = Provider(
-            name=name,
+        provider = Provider(
+            organization=organization,
+            reference=reference,
             address=address,
             city=city,
             state=state,
@@ -75,9 +138,9 @@ class CreateProvider(graphene.Mutation):
             phone_number=phone_number,
             phone_number_ext=phone_number_ext,
         )
-        contact.save()
+        provider.save()
 
-        return CreateProvider(contact=contact)
+        return CreateProvider(provider=provider)
 
 
 class CreateScholarship(graphene.Mutation):
@@ -85,10 +148,9 @@ class CreateScholarship(graphene.Mutation):
 
     class Arguments:
         name = graphene.String()
+        provider_id = graphene.Int()
         description = graphene.String()
         website = graphene.String()
-        deadline = graphene.Date()
-        date_added = graphene.DateTime()
         max_amount = graphene.Int()
         renewable = graphene.Boolean()
         number_awards = graphene.Int()
@@ -97,7 +159,8 @@ class CreateScholarship(graphene.Mutation):
         area_of_study = graphene.List(graphene.String)
         area_of_study_description = graphene.String()
         writing_competition = graphene.Boolean()
-        # interest = graphene.String()
+        interest_description = graphene.String()
+        college_id = graphene.Int()
         association_requirement = graphene.List(graphene.String)
         location = graphene.String()
         state = graphene.String()
@@ -117,10 +180,9 @@ class CreateScholarship(graphene.Mutation):
         self,
         info,
         name=None,
+        provider_id=None,
         description=None,
         website=None,
-        deadline=None,
-        date_added=None,
         max_amount=None,
         renewable=None,
         number_awards=None,
@@ -129,7 +191,8 @@ class CreateScholarship(graphene.Mutation):
         area_of_study=None,
         area_of_study_description=None,
         writing_competition=None,
-        # interest=None,
+        interest_description=None,
+        college_id=None,
         association_requirement=None,
         location=None,
         state=None,
@@ -146,15 +209,14 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        contact = Provider.objects.get(name=name)
+        provider = Provider.objects.get(pk=provider_id)
+        college = College.objects.get(pk=college_id)
 
         scholarship = Scholarship(
             name=name,
-            contact=contact,
+            provider=provider,
             description=description,
             website=website,
-            deadline=deadline,
-            date_added=date_added,
             max_amount=max_amount,
             renewable=renewable,
             number_awards=number_awards,
@@ -163,7 +225,8 @@ class CreateScholarship(graphene.Mutation):
             area_of_study=area_of_study,
             area_of_study_description=area_of_study_description,
             writing_competition=writing_competition,
-            # interest=None,
+            interest_description=interest_description,
+            college=college,
             association_requirement=association_requirement,
             location=location,
             state=state,
@@ -177,12 +240,41 @@ class CreateScholarship(graphene.Mutation):
             military=military,
             citizenship=citizenship,
             first_generation=first_generation,
-            financial_need=financial_need,
+            financial_need=financial_need
         )
         scholarship.save()
 
         return CreateScholarship(scholarship=scholarship)
 
+class CreateScholarshipStatus(graphene.Mutation):
+    scholarship_status = graphene.Field(ScholarshipStatusType)
+
+    class Arguments:
+        user_id = graphene.Int()
+        scholarship_id = graphene.Int()
+        status = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        user_id=None,
+        scholarship_id=None,
+        status=None
+    ):
+        
+        user = get_user_model().objects.get(pk=user_id)
+        scholarship = Scholarship.objects.get(pk=scholarship_id)
+
+        scholarship_status = Provider(
+            user=user,
+            scholarship=scholarship,
+            status=status,
+        )
+        scholarship_status.save()
+
+        return CreateScholarshipStatus(scholarship_status=scholarship_status)
+
 class Mutation(graphene.ObjectType):
-    create_contact = CreateProvider.Field()
+    create_provider = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()
+    create_scholarship_status = CreateScholarshipStatus.Field()

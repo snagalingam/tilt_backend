@@ -14,6 +14,7 @@ class OrganizationAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'tilt_partnership', 'address', ]
     list_editable = ['tilt_partnership', ]
+    
     fieldsets = (
         (_('Partnership'), {'fields': ('tilt_partnership',)}),
         (_('Contact Information'), {
