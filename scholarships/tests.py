@@ -1,14 +1,14 @@
 from django.test import TestCase
 from django.utils import timezone
 import datetime
-from .models import Scholarship, Contact
+from .models import Scholarship, Provider
 from colleges.models import College
 
 class ScholarshipTests(TestCase):
 
     def setUp(self):
         # create contact
-        Contact.objects.create(
+        Provider.objects.create(
             name="Tilt Scholarship Committee",
             address= "65 Pine Ave Suite 103", 
             city= "Long Beach", 
@@ -19,7 +19,7 @@ class ScholarshipTests(TestCase):
             phone_number_ext= 'x1004', 
             
         )
-        Contact.objects.create(
+        Provider.objects.create(
             name="Strouthion Scholarship Committee",
             address= "172 Madison Ave", 
             city= "New York", 
@@ -60,8 +60,8 @@ class ScholarshipTests(TestCase):
         )
 
     def test_create_scholarship(self):
-        tilt = Contact.objects.get(email="scholarships@tiltaccess.com")
-        strouthion = Contact.objects.get(email="scholarships@strouthion.com")
+        tilt = Provider.objects.get(email="scholarships@tiltaccess.com")
+        strouthion = Provider.objects.get(email="scholarships@strouthion.com")
         college = College.objects.get(name="Alabama A&M University")
 
         t_scholarship = Scholarship.objects.create(

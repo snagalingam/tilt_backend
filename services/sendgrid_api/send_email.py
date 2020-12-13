@@ -125,7 +125,7 @@ def send_report_email(college_status_id, collection):
     return send_email(message)
 
 
-# -------------- To Contact User About Aid Letter
+# -------------- To Notify User About Aid Letter
 # Template ID: 
 
 def send_notification_email(email, first_name):

@@ -42,7 +42,7 @@ def extract_data(url):
 
     for each in body:
         if each != '\n':
-            if each.text.strip() == "Contact":
+            if each.text.strip() == "Provider":
                 start_contact = True
                 continue
 
@@ -84,7 +84,7 @@ def extract_data(url):
         "Deadline": deadline, 
         "Available": available, 
         "Description": description, 
-        "Contact": contact_name, 
+        "Provider": contact_name, 
         "Address": contact_address, 
         "City": contact_city, 
         "State": contact_state, 
@@ -183,7 +183,7 @@ def make_csvs(json_file):
                 "Deadline",
                 "Available",
                 "Description",
-                "Contact",
+                "Provider",
                 "Address",
                 "City",
                 "State",
@@ -204,7 +204,7 @@ def make_csvs(json_file):
                 deadline = data["Deadline"]
                 available = data["Available"]
                 description = data["Description"]
-                contact_name = data["Contact"]
+                contact_name = data["Provider"]
                 contact_address = data["Address"]
                 contact_city = data["City"]
                 contact_state = data["State"]

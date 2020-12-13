@@ -4,7 +4,7 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
 from colleges.models import College
 
-class Contact(models.Model):
+class Provider(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
@@ -23,8 +23,8 @@ class Contact(models.Model):
 
 class Scholarship(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
-    contact = models.ForeignKey(
-        Contact, on_delete=models.CASCADE)
+    provider = models.ForeignKey(
+        Provider, on_delete=models.CASCADE)
     organization = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)

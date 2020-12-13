@@ -2,27 +2,34 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from users.schema import UserType
-from .models import Scholarship, Contact
+from .models import Scholarship, Provider
 
-class ContactType(DjangoObjectType):
+class ProviderType(DjangoObjectType):
     class Meta:
-        model = Contact
+        model = Provider
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
 class Query(graphene.ObjectType):
-    contacts = graphene.List(ContactType)
-    contact_by_name = graphene.Field(ContactType, name=graphene.String())
+    providers = graphene.List(ProviderType)
+    dproviders_results_by_fields = graphene.List(
+        ProviderType, 
+        name=graphene.String(),
+        sent=graphene.Boolean(),
+        processed=graphene.Boolean(),
+        pass_fail=graphene.Boolean(),
+        expired=graphene.Boolean(),
+        start_date=graphene.Boolean())
     scholarships = graphene.List(ScholarshipType)
     scholarship_by_name = graphene.Field(ScholarshipType, name=graphene.String())
 
-    def resolve_contacts(self, info):
-        return ContactType.objects.all()
+    def resolve_providers(self, info):
+        return ProviderType.objects.all()
 
-    def resolve_contact_by_name(self, info, name=None):
-        qs = ContactType.objects.get(name=name)
+    def resolve_provider_by_field(self, info, name=None):
+        qs = ProviderType.objects.get(name=name)
         return qs
 
     def resolve_scholarships(self, info):
@@ -32,8 +39,8 @@ class Query(graphene.ObjectType):
         qs = Scholarship.objects.get(name=name)
         return qs
 
-class CreateContact(graphene.Mutation):
-    contact = graphene.Field(ContactType)
+class CreateProvider(graphene.Mutation):
+    contact = graphene.Field(ProviderType)
 
     class Arguments:
         name = graphene.String()
@@ -58,7 +65,7 @@ class CreateContact(graphene.Mutation):
         phone_number_ext=None,
     ):
 
-        contact = Contact(
+        contact = Provider(
             name=name,
             address=address,
             city=city,
@@ -70,7 +77,7 @@ class CreateContact(graphene.Mutation):
         )
         contact.save()
 
-        return CreateContact(contact=contact)
+        return CreateProvider(contact=contact)
 
 
 class CreateScholarship(graphene.Mutation):
@@ -139,7 +146,7 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        contact = Contact.objects.get(name=name)
+        contact = Provider.objects.get(name=name)
 
         scholarship = Scholarship(
             name=name,
@@ -177,5 +184,5 @@ class CreateScholarship(graphene.Mutation):
         return CreateScholarship(scholarship=scholarship)
 
 class Mutation(graphene.ObjectType):
-    create_contact = CreateContact.Field()
+    create_contact = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Scholarship, Contact
+from .models import Scholarship, Provider
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -12,11 +12,11 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'contact', 'deadline', 'max_amount',]
+    list_display = ['name', 'provider', 'deadline', 'max_amount',]
     filter_horizontal = ('college',) 
 
     fieldsets = (
-        (None, {'fields': ('organization', 'contact', )}),
+        (None, {'fields': ('organization', 'provider', )}),
         (_('College'), {
             'fields': ('college',),
         }),
@@ -34,11 +34,11 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    search_fields = ('name', 'contact', 'deadline', 'max_amount',)
-    ordering = ('name', 'contact',)
+    search_fields = ('name', 'provider', 'deadline', 'max_amount',)
+    ordering = ('name', 'provider',)
     model = Scholarship
 
-class ContactAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
@@ -52,7 +52,7 @@ class ContactAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     search_fields = ('name', 'email', 'state',)
     ordering = ('name',)
-    model = Contact
+    model = Provider
 
 admin.site.register(Scholarship, ScholarshipAdmin)
-admin.site.register(Contact, ContactAdmin)
+admin.site.register(Provider, ProviderAdmin)
