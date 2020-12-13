@@ -85,9 +85,13 @@ def format_money(word):
     # check for dups money in one string
     if word.count("$") > 1:
         money = get_max_amount(word=word)
-    
+
     # from check_document.py 
     money = strip_money_string(money)
+
+    # for money with only dollar sign
+    if len(money) == 1:
+        money = money + "0"
 
     return money
 
@@ -149,8 +153,7 @@ def parse_tables(source):
                     row_arr = each_row.split('","')
                     title = row_arr[0].replace('"', "")
 
-                    # filter titles longer than 50 characters
-                    if len(title) > 50 and len(row_arr) > 1:
+                    if len(row_arr) > 1:
                         title = row_arr[1]
                         row_arr = row_arr[1:]
 

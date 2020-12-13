@@ -79,6 +79,9 @@ def get_documents(bucket_name, limit=None):
 # -------------- Format Word To Valid Money Amount
 
 def strip_money_string(word):
+    if word.count("$") > 1 and word[1] != "$":
+        return word
+
     start_index = word.index("$")
     stripped = word[start_index:].strip()
 
@@ -95,25 +98,31 @@ def strip_money_string(word):
         stripped = stripped.replace("-", "")
 
     if " " in stripped:
-        end_index = stripped.index(" ")
-        stripped = stripped[0:end_index]
+        idx = stripped.index(" ")
+        if stripped[idx + 1] in NUMBERS:
+            stripped.replace(" ", "")
+        else:
+          stripped = stripped[0:idx]
     
     if "/" in stripped:
-        end_index = stripped.index("/")
-        stripped = stripped[0:end_index]
-
-    if ".00" in stripped:
-        end_index = stripped.index(".00")
-        stripped = stripped[0:end_index]
+        idx = stripped.index("/")
+        stripped = stripped[0:idx]
 
     if stripped[-1] == ",":
-        end_index = stripped.index(",")
-        stripped = stripped[0:end_index]
+        stripped = stripped[0:-1]
+    
+    if stripped[-1] == ".":
+        stripped = stripped[0:-1]
+
+    if stripped[-3:-2] == ".":
+        stripped = stripped[0:-3]
+
+    if stripped[-3:-2] == ",":
+        stripped = stripped[0:-3]
 
     if "." in stripped:
-        end_index = stripped.index(".")
-        stripped = stripped[0:end_index]
-        
+        stripped = stripped.replace(".", ",")
+
     return stripped
 
 # -------------- Create A List Of All Money In Document
@@ -228,7 +237,7 @@ def get_bucket_results(bucket, jobs_dict):
         tables_id = jobs_dict[key].get('tables_id')
         all_document_words = get_words_data(words_id)
         csv_table = get_table_data(tables_id)
-        check = document_check(all_document_words, csv_table)
+        check = start_document_check(all_document_words, csv_table)
 
         if check["pass_fail"] == "Passed": 
             passed.append(key)
