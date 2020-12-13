@@ -4,9 +4,12 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
 from college_status.models import CollegeStatus
-
+from services.sendgrid_api.send_email import send_notification_email
 class DocumentResult(models.Model):
     # Name of document (s3 file name)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     words_id = models.CharField(max_length=255, null=True, blank=True)
     tables_id = models.CharField(max_length=255, null=True, blank=True)
@@ -19,9 +22,22 @@ class DocumentResult(models.Model):
         null=True, blank=True,
     )
     reviewed = models.BooleanField(default=False)
+    
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
+
+    def save(self, *args, **kwargs):
+        method = self.user.preferred_contact_method
+
+        # send user notification about financial aid letter if reviewed=True
+        if self.reviewed is True and method is not None:
+            if method == "email":
+                send_notification_email(self.user.email, self.user.first_name)
+            if method == "text":
+                print('--------------> text user with twilio (not yet integrated')
+        
+        return super(DocumentResult, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.name)

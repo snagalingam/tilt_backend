@@ -18,7 +18,7 @@ sender_name = os.environ.get('SENDER_NAME')
 
 def send_email(message):
     try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        sg = SendGridAPIClient(os.environ.get('sendgrid_KEY'))
         response = sg.send(message)
         print(response.status_code)
         print(response.headers)
@@ -113,7 +113,7 @@ def send_email_changed(old_email, new_email, first_name):
 
 def send_report_email(college_status_id, collection):
     message = Mail(from_email=(from_email, sender_name),
-                   to_emails=from_email)
+                   to_emails="dansteryoo@gmail.com")
 
     message.template_id = 'd-bf7d5f2ce9244a07bcfde29d24531133'
     message.dynamic_template_data = {
