@@ -1,5 +1,5 @@
 from .get_tables import get_table_data
-from .check_document import document_check, strip_money_string
+from .check_document import start_document_check, strip_money_string
 
 # -------------- Change Money to Integer
 
@@ -123,7 +123,16 @@ def dict_builder(arr):
 
     for idx in range(first, last):
         word = arr[idx].replace('"', "")
-        words[f'Col-{idx}'] = format_money(word)
+
+        # check for blank words
+        if len(word) < 1:
+           words[f'Col-{idx}'] = word
+        else:
+            # remove comma on last char
+            if word[-1] == ",":
+              word = word[0:-1]
+
+            words[f'Col-{idx}'] = format_money(word)
 
     return words
 
@@ -131,39 +140,38 @@ def dict_builder(arr):
 
 def parse_tables(source):
     table_dict = {}
-    arr = source.split("\n\n")
+    arr = source.split("\n")
     row = 0
     header = None
 
     for line in arr:
+        # skip empty rows
         if len(line) < 1:
             continue
-
-        if line[0:13] == "Table: Table_":
+        # reset row index at new table
+        elif line[0:13] == "Table: Table_":
             row = 0
 
-        if len(line) > 0: 
+        # if data exist in row iterate
+        if len(line) > 0:
             if row == 0:
                 header = line
                 table_dict[header] = {}
             else:
-                table_arr = line.split(",\n")
+                row_arr = line.split('","')
+                title = row_arr[0].replace('"', "")
 
-                for each_row in table_arr:
-                    row_arr = each_row.split('","')
-                    title = row_arr[0].replace('"', "")
+                if len(row_arr) > 1:
+                    title = row_arr[0]
+                    row_arr = row_arr[1:]
 
-                    if len(row_arr) > 1:
-                        title = row_arr[1]
-                        row_arr = row_arr[1:]
-
-                    values = dict_builder(row_arr)
-                    if values:
-                        table_dict[header][title] = values
+                values = dict_builder(row_arr)
+                if values:
+                    table_dict[header][title] = values
 
         # keeps track of row num
         row += 1
-
+        
     return table_dict
 
 # -------------- Format Table Dictionary For Titles And Highest Amounts 
@@ -243,7 +251,7 @@ def format_data(table_dict):
                                 # if row_title is dup apply greatest dollar amount
                                 if current_amt > existing_amt:
                                     formatted_data[row_title] = amount                            
-
+    
     if len(formatted_data) > 0:
         return formatted_data
     else:

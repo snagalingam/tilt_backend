@@ -111,7 +111,7 @@ def send_email_changed(old_email, new_email, first_name):
 # -------------- To Send Email Report Of Finanical Aid Processing
 # Template ID: d-bf7d5f2ce9244a07bcfde29d24531133
 
-def send_report(college_status_id, collection):
+def send_report_email(college_status_id, collection):
     message = Mail(from_email=(from_email, sender_name),
                    to_emails=from_email)
 
@@ -119,6 +119,23 @@ def send_report(college_status_id, collection):
     message.dynamic_template_data = {
         "college_status_id": college_status_id,
         "collection": collection
+    }
+
+    print(message)
+    return send_email(message)
+
+
+# -------------- To Contact User About Aid Letter
+# Template ID: 
+
+def send_notification_email(email, first_name):
+    message = Mail(from_email=(from_email, sender_name),
+                   to_emails=email)
+
+    message.template_id = ''
+    message.dynamic_template_data = {
+        "first_name": first_name,
+        "email": email,
     }
 
     print(message)

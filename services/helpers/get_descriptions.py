@@ -37,8 +37,8 @@ def get_description(file):
             collection.append(college)
             pass
 
-    with open('collection.json', 'w') as f:
-        json.dump(collection, f, indent=2, ensure_ascii=False)
+    # with open('collection.json', 'w') as f:
+    #     json.dump(collection, f, indent=2, ensure_ascii=False)
     print('collection done')
     print('done')
 
@@ -62,8 +62,8 @@ def add_blank_description(file):
         college['fields']['popularity_score'] = 0
         collection.append(college)
 
-    with open('collection1.json', 'w') as f:
-        json.dump(collection, f, indent=2, ensure_ascii=False)
+    # with open('collection1.json', 'w') as f:
+    #     json.dump(collection, f, indent=2, ensure_ascii=False)
     print('collection1 done')
     print('done')
 
@@ -94,8 +94,8 @@ def compare_descriptions(source, target):
 
         collection.append(college)
 
-    with open('collection2.json', 'w') as f:
-        json.dump(collection, f, indent=2, ensure_ascii=False)
+    # with open('collection2.json', 'w') as f:
+    #     json.dump(collection, f, indent=2, ensure_ascii=False)
     print('collection1 done')
     print('done')
 

@@ -55,11 +55,11 @@ def get_apply_link(scholarships, data):
                 # add scholarship_url to data 
                 data[count]["scholarship_url"] = scholarship_url
 
-                with open(f'new_data.json', '+a') as f:
-                    d = json.dumps(data[count], indent=2, ensure_ascii=False)
-                    f.write(d + ',')
+                # with open(f'new_data.json', '+a') as f:
+                #     d = json.dumps(data[count], indent=2, ensure_ascii=False)
+                #     f.write(d + ',')
 
-                print(f" ======> COUNT {count} : {scholarship_url}")
+                # print(f" ======> COUNT {count} : {scholarship_url}")
 
             except:
                 pass
