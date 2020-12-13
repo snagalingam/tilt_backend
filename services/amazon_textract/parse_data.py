@@ -1,42 +1,15 @@
-import json
-import time
-import math
 from .get_tables import get_table_data
-
-def json_writer(file_name, data, _type="w"):
-    with open(f'{file_name}.json', f'{_type}') as new_file:
-        d = json.dumps(data, indent=2)
-        if _type == "+a":
-            new_file.write(d + "," + "\n")
-        else:
-            new_file.write(d)
-    # print(f'JSON: ===> {file_name} written')
-
-def print_variables(**kwargs):
-    key = kwargs.get("key")
-    row_title = kwargs.get("row_title")
-    seen = kwargs.get("seen")
-    tracker = kwargs.get("tracker")
-
-    print(f"""
-    key:      ===> {key}
-    title:    ===> {row_title}
-    seen:     ===> {seen}
-    tracker:  ===> {tracker}""")
+from .check_document import document_check, strip_money_string
 
 # -------------- Change Money to Integer
 
-def change_to_int(money):
-    if ".00" == money[-3:] or ",00" == money[-3:]:
-        money = money[1:-3]
-    if "." in money:
-        money = money.replace(".", "")
-    if "," in money:
-        money = money.replace(",", "")
-    if money == "0":
-        money = "$" + money
-    money = int(money[1:].replace(",", ""))
-    return money
+def change_to_int(word):
+    if len(word) > 3:
+        money = strip_money_string(word)
+        money = int(money[1:].replace(",", ""))
+        return money
+    else:
+      return word
 
 # -------------- Tests For Clean Money
 
@@ -97,15 +70,6 @@ def format_money(word):
         "8": True,
         "9": True }
 
-    symbols = {
-        "/": True,
-        "-": True,
-        "+": True,
-        "=": True,
-        "*": True,
-        "/": True,
-    }
-
     money = None
 
     # base case for non-numeric words
@@ -117,56 +81,15 @@ def format_money(word):
     # gauranteed to be money past this point
     if money is None:
         return word
-
-    # check and remove symbols
-    for symbol in symbols:
-        if symbol in money:
-            start = money.index("$")
-            money = money[start:]
-            break
-
+    
     # check for dups money in one string
     if word.count("$") > 1:
         money = get_max_amount(word=word)
+    
+    # from check_document.py 
+    money = strip_money_string(money)
 
-    # check for periods
-    if ".00" == money[-3:] or ",00" == money[-3:]:
-        money = money[0:-3]
-    if "." in money:
-        money = money.replace(".", ",")
-
-    # check for spaces within money
-    if " " in money:
-        arr = money.split(" ")
-        for each in arr:
-            if "$" in each:
-                money = each
-                break
-
-    # check for comma separating money string
-    if "," not in money:
-        length = len(money[1:])
-        if length > 3:
-            times = math.floor(length / 3)
-            for num in range(times):
-                idx = (num + 1) * -3
-                money = money[0:idx] + "," + money[idx:]
-
-    # final check
-    if "," == money[-3:-2] or money.count(",") > 1:
-        end = money.rindex(",")
-        money = money[0:end]
-
-    if money[-1] == ",": 
-        money = money[0:-1]
-
-    if money[0] != "$":
-        money = "$" + money
-
-    # test money 
-    if test_money(money):
-        return money
-    return word
+    return money
 
 # -------------- Formats Amounts To Verify Highest Amount Within Row
 
@@ -490,3 +413,4 @@ def filter_possibilities(possibilities):
             return "total cost"
         else:
             return category[0]
+

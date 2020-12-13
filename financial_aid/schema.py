@@ -8,7 +8,7 @@ from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, Aid
 from college_status.models import CollegeStatus
 from services.amazon_textract.get_words import start_words_extraction, get_words_data
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
-from services.amazon_textract.check_document import document_check, start_bucket_check, get_bucket_check, get_documents
+from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report
 class DocumentResultType(DjangoObjectType):
@@ -235,7 +235,7 @@ class CheckDocuments(graphene.Mutation):
             # if document has words and tables
             elif not words_failed and not tables_failed:
                 doc.processed = True 
-                check = document_check(words, tables)
+                check = start_document_check(words, tables)
 
                 if check["pass_fail"] == "Failed":
                     checked_list.append(
@@ -460,7 +460,7 @@ class GetBucketResult(graphene.Mutation):
         try:
             data = BucketCheck.objects.get(bucket=bucket)
             job_dict =  json.loads(data.job_dict)
-            get_bucket = get_bucket_check(bucket, job_dict)
+            get_bucket = get_bucket_results(bucket, job_dict)
         except Exception as e:
             raise e
             
