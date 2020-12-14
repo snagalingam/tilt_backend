@@ -35,7 +35,7 @@ class Query(graphene.ObjectType):
         phone_number_ext=graphene.String())
 
     # scholarships
-    scholarships_by_fields = graphene.Field(
+    scholarships_by_fields = graphene.List(
         ScholarshipType, 
             name=graphene.String(),
             provider_id=graphene.Int(),
