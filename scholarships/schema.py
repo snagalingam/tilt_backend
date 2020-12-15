@@ -35,12 +35,13 @@ class Query(graphene.ObjectType):
         phone_number_ext=graphene.String())
 
     # scholarships
-    scholarships_by_fields = graphene.Field(
+    scholarships_by_fields = graphene.List(
         ScholarshipType, 
             name=graphene.String(),
             provider_id=graphene.Int(),
             description=graphene.String(),
             website=graphene.String(),
+            deadline=graphene.Date(),
             max_amount=graphene.Int(),
             renewable=graphene.Boolean(),
             number_awards=graphene.Int(),
@@ -151,6 +152,7 @@ class CreateScholarship(graphene.Mutation):
         provider_id = graphene.Int()
         description = graphene.String()
         website = graphene.String()
+        deadline=graphene.Date()
         max_amount = graphene.Int()
         renewable = graphene.Boolean()
         number_awards = graphene.Int()
@@ -183,6 +185,7 @@ class CreateScholarship(graphene.Mutation):
         provider_id=None,
         description=None,
         website=None,
+        deadline=None,
         max_amount=None,
         renewable=None,
         number_awards=None,
@@ -217,6 +220,7 @@ class CreateScholarship(graphene.Mutation):
             provider=provider,
             description=description,
             website=website,
+            deadline=deadline,
             max_amount=max_amount,
             renewable=renewable,
             number_awards=number_awards,

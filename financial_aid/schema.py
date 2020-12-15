@@ -295,9 +295,9 @@ class CheckDocuments(graphene.Mutation):
                             # get college_status_id from document
                             college_status = CollegeStatus.objects.get(pk=college_status_id)
 
-                            # auto reviewed=True if check passed and pos_error=False 
+                            # auto award_reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":
-                                college_status.reviewed = True
+                                college_status.award_reviewed = True
                                 college_status.save()
 
                             # filter/match for category 
@@ -416,7 +416,7 @@ class CheckDocuments(graphene.Mutation):
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "reviewed": doc.reviewed,
+                "reviewed": doc.award_reviewed,
                 "errors": errors,
                 "aid_data": aid_data_report,
             }

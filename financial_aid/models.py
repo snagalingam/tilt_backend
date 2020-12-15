@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from college_status.models import CollegeStatus
+from colleges.models import Status
 
 class DocumentResult(models.Model):
     # Name of document (s3 file name)
@@ -111,7 +111,7 @@ class AidData(models.Model):
     )
 
     college_status = models.ForeignKey(
-        CollegeStatus, on_delete=models.CASCADE)
+        Status, on_delete=models.CASCADE)
     aid_category =models.ForeignKey(
         AidCategory, on_delete=models.CASCADE)
 
@@ -121,3 +121,18 @@ class AidData(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+class Summary(models.Model):
+    college_status = models.ForeignKey(
+        Status, on_delete=models.CASCADE)
+
+    total_cost = models.IntegerField(blank=True, null=True)
+    total_aid = models.IntegerField(blank=True, null=True)
+    net_price = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)

@@ -1,26 +1,27 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import CollegeStatus
+from .models import Budget
 
 from django.forms import TextInput, Textarea
 from django.db import models
 
-class CollegeStatusAdmin(admin.ModelAdmin):
+class BudgetAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified']
-    list_editable = ['reviewed', ]
-    
+    list_display = ['college_status',]
+
     fieldsets = (
-        (_('College Status Information'), {
-            'fields': ('status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified')
+        (None, {
+            'fields': (
+                'college_status', 'work_study', 'job', 'savings', 'family', 
+                'other_scholarships', 'loan_subsideized', 'loan_unsubsideized', 
+                'loan_plus', 'loan_private', 'loan_school',)
         }),
     )
 
-    search_fields = ('status', 'college__name', 'user__email',)
-    ordering = ('status', 'college__name', 'user__email',)
-    model = CollegeStatus
+    search_fields = ('college_status__pk',)
+    ordering = ('college_status__pk',)
+    model = Budget
 
-admin.site.register(CollegeStatus, CollegeStatusAdmin)
+admin.site.register(Budget, BudgetAdmin)

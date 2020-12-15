@@ -3,10 +3,11 @@ import json
 import math
 import os
 from graphene_django import DjangoObjectType
+from django.contrib.auth import get_user_model
 from services.google_api.google_places import GooglePlacesAPI, extract_photo_urls
 from services.helpers.nearby_coordinates import check_distance, check_by_city, check_by_zipcode, check_by_coordinates
 from services.helpers.fav_finder import get_favicon
-from .models import College, FieldOfStudy, Scorecard
+from .models import College, FieldOfStudy, Scorecard, Status
 from django.db.models import Q, Max, Min, F
 from itertools import chain
 from django.db.models.functions import Greatest, Least
@@ -26,6 +27,11 @@ class ScorecardType(DjangoObjectType):
         model = Scorecard
         fields = "__all__"
 
+class StatusType(DjangoObjectType):
+    class Meta:
+        model = Status
+        fields = "__all__"
+
 class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
@@ -36,13 +42,15 @@ class NetPriceRangeType(graphene.ObjectType):
     max = graphene.Int()
 
 class Query(graphene.ObjectType):
-    colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
-    field_of_studies = graphene.List(
-        FieldOfStudyType, college_id=graphene.Int())
+    field_of_studies = graphene.List(FieldOfStudyType, college_id=graphene.Int())
+    statuses = graphene.List(StatusType)
+    college_status_by_college_id = graphene.Field(StatusType, college_id=graphene.Int())
+    college_status_by_user_id = graphene.Field(StatusType, user_id=graphene.Int())
+
+    colleges = graphene.List(CollegeType, limit=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
-    college_by_id = graphene.Field(
-        CollegeType, id=graphene.Int())
+    college_by_id = graphene.Field(CollegeType, id=graphene.Int())
 
     nearby_colleges = graphene.List(
         CollegeType,
@@ -249,6 +257,15 @@ class Query(graphene.ObjectType):
     def resolve_field_of_studies(self, info, college_id):
         return FieldOfStudy.objects.filter(college=college_id,
                                            num_students_ipeds_awards2__isnull=False)
+    
+    def resolve_statuses(self, info):
+        return Status.objects.all()
+
+    def resolve_status_by_college_id(root, info, college_id):
+        return Status.objects.get(college_id=college_id)
+
+    def resolve_status_by_user_id(root, info, user_id):
+        return Status.objects.get(user_id=user_id)
 
     def resolve_colleges_by_popularity(self, info, limit=None):
         return College.objects.order_by('-popularity_score')[0:limit]
@@ -431,7 +448,113 @@ class CollegeSearch(graphene.Mutation):
 
             return CollegeSearch(college=college)
 
+class CreateStatus(graphene.Mutation):
+    status = graphene.Field(StatusType)
+
+    class Arguments:
+        user_id = graphene.Int()
+        college_id = graphene.Int()
+        status = graphene.String()
+        net_price = graphene.Int()
+
+    def mutate(
+        self,
+        info,
+        user_id=None,
+        college_id=None,
+        status=None,
+        net_price=None,
+    ):
+
+        status_list = ("interested",
+                       "applied",
+                       "accepted",
+                       "waitlisted",
+                       "not accepted")
+
+        user = get_user_model().objects.get(pk=user_id)
+        college = College.objects.get(pk=college_id)
+
+        try:
+            status = Status.objects.get(
+                user_id=user_id, college_id=college_id)
+        except:
+            status = None
+            pass
+
+        if status is None:
+            if status in status_list:
+                college.popularity_score += 1
+                college.save()
+
+            status = Status(
+                user=user,
+                college=college,
+                status=status,
+                net_price=net_price,
+            )
+
+            status.save()
+            return CreateStatus(status=status)
+        else:
+            raise Exception('College status exists')
+
+
+class UpdateStatus(graphene.Mutation):
+    status = graphene.Field(StatusType)
+
+    class Arguments:
+        user_id = graphene.Int()
+        college_id = graphene.Int()
+        status = graphene.String()
+        net_price = graphene.Int()
+
+    def mutate(
+        self,
+        info,
+        user_id=None,
+        college_id=None,
+        status=None,
+        net_price=None,
+    ):
+
+        status_list = ("interested",
+                       "applied",
+                       "accepted",
+                       "waitlisted",
+                       "not accepted")
+
+        college = College.objects.get(pk=college_id)
+
+        try:
+            status = Status.objects.get(
+                user_id=user_id, college_id=college_id)
+        except:
+            raise Exception('College status does not exist')
+
+        # status change from 'not interested' ==> 'status_list'
+        if status.status == "not interested":
+            if status in status_list:
+                college.popularity_score += 1
+                college.save()
+
+        # status change from 'status_list' ==> 'not interested'
+        elif status.status in status_list:
+            if status == "not interested":
+                college.popularity_score -= 1
+                college.save()
+
+        if status is not None:
+            status.status = status
+
+        if net_price is not None:
+            status.net_price = net_price
+
+        status.save()
+        return UpdateStatus(status=status)
 
 class Mutation(graphene.ObjectType):
     create_college = CreateCollege.Field()
     college_search = CollegeSearch.Field()
+    create_status = CreateStatus.Field()
+    update_status = UpdateStatus.Field()
