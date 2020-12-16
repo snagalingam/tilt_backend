@@ -320,7 +320,7 @@ def get_data(csv_data, name):
 
 # -------------- Method To Filter Possibilties Of Aid Categories Match
 
-def find_aid_category(name, doc_name):
+def find_category(name, doc_name):
     categories = {
         "tuition": "tuition",
         "fees": "fees",

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, AidCategory, Data, Summary
+from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, Category, Data, Summary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -87,7 +87,7 @@ class DataInline(admin.TabularInline):
     }
     extra = 0
 
-class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     def data_count(self, obj):
         return obj.data_set.count()
@@ -108,23 +108,23 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
-    model = AidCategory
+    model = Category
 
 class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'amount', 'status', 'aid_category',]
+    list_display = ['name', 'amount', 'status', 'category',]
     fieldsets = (
-        (None, {'fields': ('name', 'status', 'aid_category')}),
+        (None, {'fields': ('name', 'status', 'category')}),
         (_('Table Details'), {
             'fields': ('table_number', 'row_index', 'col_index', 'row_data')
         }),
     )
 
-    search_fields = ('name', 'status__pk', 'aid_category__name')
-    ordering = ('status', 'name', 'aid_category')
+    search_fields = ('name', 'status__pk', 'category__name')
+    ordering = ('status', 'name', 'category')
     model = Data
 
 class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -144,6 +144,6 @@ admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(BucketCheck, BucketCheckAdmin)
 admin.site.register(BucketResult, BucketResultAdmin)
-admin.site.register(AidCategory, AidCategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Data, DataAdmin)
 admin.site.register(Summary, SummaryAdmin)

@@ -78,8 +78,8 @@ class Data(models.Model):
 
     status = models.ForeignKey(
         Status, on_delete=models.CASCADE)
-    aid_category =models.ForeignKey(
-        AidCategory, on_delete=models.CASCADE)
+    category =models.ForeignKey(
+        Category, on_delete=models.CASCADE)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)

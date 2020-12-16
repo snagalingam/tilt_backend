@@ -4,12 +4,12 @@ import json
 import os
 import time
 from django.contrib.auth import get_user_model
-from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, Data
+from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, Category, Data
 from colleges.models import Status
 from services.amazon_textract.get_words import start_words_extraction, get_words_data
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
 from services.amazon_textract.check_document import start_document_check
-from services.amazon_textract.parse_data import get_data, find_aid_category, filter_possibilities
+from services.amazon_textract.parse_data import get_data, find_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
 
 class DocumentResultType(DjangoObjectType):
@@ -31,16 +31,16 @@ class BucketResultType(DjangoObjectType):
     class Meta:
         model = BucketResult
         fields = "__all__"
-class AidCategoryType(DjangoObjectType):
+class CategoryType(DjangoObjectType):
     class Meta:
-        model = AidCategory
+        model = Category
         fields = "__all__"
 
 class DataType(DjangoObjectType):
     class Meta:
         model = Data
         fields = "__all__"
-        
+
 class AnalyzedResultType(graphene.ObjectType):
     name = graphene.String()       
     sent = graphene.String()
@@ -57,7 +57,7 @@ class Query(graphene.ObjectType):
     document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
     bucket_checks = graphene.List(BucketCheckType, limit=graphene.Int())
     bucket_results = graphene.List(BucketResultType, limit=graphene.Int())
-    categories = graphene.List(AidCategoryType, limit=graphene.Int())
+    categories = graphene.List(CategoryType, limit=graphene.Int())
     datas = graphene.List(DataType, limit=graphene.Int())
 
     # document_result
@@ -77,7 +77,7 @@ class Query(graphene.ObjectType):
 
     # categories
     categories_by_fields = graphene.List(
-        AidCategoryType, 
+        CategoryType, 
         name=graphene.String(),
         main_category=graphene.String(),
         sub_category=graphene.String(),
@@ -93,7 +93,7 @@ class Query(graphene.ObjectType):
         row_index=graphene.Int(),
         col_index=graphene.Int(),
         status=graphene.ID(),
-        aid_category=graphene.ID())
+        category=graphene.ID())
 
     # get_all()
     def resolve_document_results(self, info, limit=None):
@@ -113,7 +113,7 @@ class Query(graphene.ObjectType):
         return qs
 
     def resolve_categories(self, info, limit=None):
-        qs = AidCategory.objects.all()[0:limit]
+        qs = Category.objects.all()[0:limit]
         return qs
 
     def resolve_datas(self, info, limit=None):
@@ -130,7 +130,7 @@ class Query(graphene.ObjectType):
         return qs
 
     def resolve_categories_by_fields(self, info, **fields):
-        qs = AidCategory.objects.filter(**fields)
+        qs = Category.objects.filter(**fields)
         return qs
 
     def resolve_datas_by_fields(self, info, **fields):
@@ -303,9 +303,9 @@ class CheckDocuments(graphene.Mutation):
                                 status.save()
 
                             # filter/match for category 
-                            possibilities = find_aid_category(name, document)
+                            possibilities = find_category(name, document)
                             category = filter_possibilities(possibilities)
-                            aid_category = AidCategory.objects.get(name=category)
+                            category = Category.objects.get(name=category)
 
                             # check for dups
                             try:
@@ -317,14 +317,14 @@ class CheckDocuments(graphene.Mutation):
                                     col_index=col_index,
                                     row_data=row_data,
                                     status=status,
-                                    aid_category=aid_category
+                                    category=category
                                 )
                                 data_list.append(data)
 
                                 # add aid data for report
                                 data_report.append({
                                     "status": status_id,
-                                    "aid_category": aid_category.name,
+                                    "category": category.name,
                                     "name": name,
                                     "amount": amount,
                                     "table_number": table_number,
@@ -345,7 +345,7 @@ class CheckDocuments(graphene.Mutation):
                                         col_index=col_index,
                                         row_data=row_data,
                                         status=status,
-                                        aid_category=aid_category
+                                        category=category
                                     )
                                     data.save()
                                     data_list.append(data)
@@ -353,7 +353,7 @@ class CheckDocuments(graphene.Mutation):
                                     # add aid data for report
                                     data_report.append({
                                         "status": status_id,
-                                        "aid_category": aid_category.name,
+                                        "category": category.name,
                                         "name": name,
                                         "amount": amount,
                                         "table_number": table_number,
@@ -438,8 +438,8 @@ class CheckDocuments(graphene.Mutation):
 
         return CheckDocuments(checked_list=checked_list, data_list=data_list)
 
-class CreateAidCategory(graphene.Mutation):
-    aid_category = graphene.Field(AidCategoryType)
+class CreateCategory(graphene.Mutation):
+    category = graphene.Field(CategoryType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -459,19 +459,19 @@ class CreateAidCategory(graphene.Mutation):
         year=None,
     ):
         try:
-            aid_category = AidCategory.objects.get(name=name)
+            category = Category.objects.get(name=name)
         except:
-            aid_category = None
+            category = None
 
-        if aid_category is None:
-            aid_category = AidCategory(
+        if category is None:
+            category = Category(
                 name=name, 
                 main_category=main_category,
                 sub_category=sub_category,
                 sub_sub_category=sub_sub_category,
                 year=year)
-            aid_category.save()
-            return CreateAidCategory(aid_category=aid_category, success=True)
+            category.save()
+            return CreateCategory(category=category, success=True)
         else:
             raise Exception ('Aid category already exists')
 
