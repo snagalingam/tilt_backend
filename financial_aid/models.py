@@ -110,7 +110,7 @@ class AidData(models.Model):
         null=True, blank=True, default=None
     )
 
-    college_status = models.ForeignKey(
+    status = models.ForeignKey(
         Status, on_delete=models.CASCADE)
     aid_category =models.ForeignKey(
         AidCategory, on_delete=models.CASCADE)
@@ -123,7 +123,7 @@ class AidData(models.Model):
         return str(self.name)
 
 class Summary(models.Model):
-    college_status = models.ForeignKey(
+    status = models.ForeignKey(
         Status, on_delete=models.CASCADE)
 
     total_cost = models.IntegerField(blank=True, null=True)

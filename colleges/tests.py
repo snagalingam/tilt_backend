@@ -1,9 +1,19 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
-from colleges.models import College, Scorecard, FieldOfStudy
+from colleges.models import College, Scorecard, FieldOfStudy, Status, Budget
+User = get_user_model()
 
 class CollegeTests(TestCase):
 
     def setUp(self):
+        # create user
+        User.objects.create_user(
+            email="demouser@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo",
+            last_name="Testuser"
+        )
+
         # create college
         College.objects.create(
             popularity_score=1,
@@ -459,3 +469,33 @@ class CollegeTests(TestCase):
         self.assertEqual(field_of_study.num_students_ipeds_awards2, 33)
         self.assertIsNotNone(college.created)
         self.assertIsNotNone(college.updated)
+
+    def test_create_status(self):
+        user = User.objects.get(email="demouser@tiltaccess.com")
+        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+
+        status = Status.objects.create(
+            user=user,
+            college=college,
+            status="interested",
+            net_price=25000,
+        )
+        self.assertEqual(status.user, user)
+        self.assertEqual(status.college, college)
+        self.assertEqual(status.status, "interested")
+        self.assertEqual(status.net_price, 25000)
+        self.assertIsNotNone(status.created)
+        self.assertIsNotNone(status.updated)
+
+    def test_user_statuses(self):
+        user = User.objects.get(email="demouser@tiltaccess.com")
+        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+
+        status = Status.objects.create(
+            user=user,
+            college=college,
+            status="interested",
+            net_price=25000,
+        )
+
+        self.assertEqual(user.status_set.get_queryset()[0], status)

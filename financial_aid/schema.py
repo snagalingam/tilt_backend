@@ -5,7 +5,7 @@ import os
 import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
-from college_status.models import CollegeStatus
+from colleges.models import Status
 from services.amazon_textract.get_words import start_words_extraction, get_words_data
 from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
 from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
@@ -90,7 +90,7 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
         col_index=graphene.Int(),
-        college_status=graphene.ID(),
+        status=graphene.ID(),
         aid_category=graphene.ID())
 
     # get_all()
@@ -165,12 +165,12 @@ class AnalyzeDocuments(graphene.Mutation):
             document_result.save()
             sent_list.append(AnalyzedResultType(name=document, sent=True))
 
-            # find college_status and update award_uploaded=True
+            # find status and update award_uploaded=True
             end_index = document.index("_file")
-            college_status_id = int(document[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
-            college_status.award_uploaded = True 
-            college_status.save()
+            status_id = int(document[3:end_index])
+            status = Status.objects.get(pk=status_id)
+            status.award_uploaded = True 
+            status.save()
 
         return AnalyzeDocuments(sent_list=sent_list)
 
@@ -196,7 +196,7 @@ class CheckDocuments(graphene.Mutation):
         words_failed = None
         tables_failed = None
         pos_error = None 
-        next_college_status_id = None
+        next_status_id = None
         last_index = len(documents) - 1
         checked_list = []
         aid_data_list = []
@@ -205,15 +205,15 @@ class CheckDocuments(graphene.Mutation):
         for idx, document in enumerate(documents):
             doc = DocumentResult.objects.get(name=document)
             end_index = document.index("_file")
-            college_status_id = int(document[3:end_index])
-            college_status_id = 1
+            status_id = int(document[3:end_index])
+            status_id = 1
 
-            # keep track of college_status_id positions
+            # keep track of status_id positions
             if idx < last_index:
-                # next_college_status_id = int(documents[idx + 1][3:end_index])
-                next_college_status_id = college_status_id + 1
+                # next_status_id = int(documents[idx + 1][3:end_index])
+                next_status_id = status_id + 1
             elif idx == last_index:
-                next_college_status_id = -1
+                next_status_id = -1
 
             # check if words are processed
             try:
@@ -292,13 +292,13 @@ class CheckDocuments(graphene.Mutation):
                             col_index = each.get("Col Index")
                             row_data = each.get("Row Data")
 
-                            # get college_status_id from document
-                            college_status = CollegeStatus.objects.get(pk=college_status_id)
+                            # get status_id from document
+                            status = Status.objects.get(pk=status_id)
 
                             # auto award_reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":
-                                college_status.award_reviewed = True
-                                college_status.save()
+                                status.award_reviewed = True
+                                status.save()
 
                             # filter/match for category 
                             possibilities = find_aid_category(name, document)
@@ -314,14 +314,14 @@ class CheckDocuments(graphene.Mutation):
                                     row_index=row_index,
                                     col_index=col_index,
                                     row_data=row_data,
-                                    college_status=college_status,
+                                    status=status,
                                     aid_category=aid_category
                                 )
                                 aid_data_list.append(aid_data)
 
                                 # add aid data for report
                                 aid_data_report.append({
-                                    "college_status": college_status_id,
+                                    "status": status_id,
                                     "aid_category": aid_category.name,
                                     "name": name,
                                     "amount": amount,
@@ -342,7 +342,7 @@ class CheckDocuments(graphene.Mutation):
                                         row_index=row_index,
                                         col_index=col_index,
                                         row_data=row_data,
-                                        college_status=college_status,
+                                        status=status,
                                         aid_category=aid_category
                                     )
                                     aid_data.save()
@@ -350,7 +350,7 @@ class CheckDocuments(graphene.Mutation):
 
                                     # add aid data for report
                                     aid_data_report.append({
-                                        "college_status": college_status_id,
+                                        "status": status_id,
                                         "aid_category": aid_category.name,
                                         "name": name,
                                         "amount": amount,
@@ -422,14 +422,14 @@ class CheckDocuments(graphene.Mutation):
             }
 
             # catch all multiples of the same document
-            if college_status_id == next_college_status_id:
+            if status_id == next_status_id:
                 collection.append(report_data)
                 aid_data_report = []
                 errors = []
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
-                send_report_email(college_status_id, collection)
+                send_report_email(status_id, collection)
                 collection = []
                 aid_data_report = []
                 errors = []

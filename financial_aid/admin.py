@@ -115,29 +115,29 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'amount', 'college_status', 'aid_category',]
+    list_display = ['name', 'amount', 'status', 'aid_category',]
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'aid_category')}),
+        (None, {'fields': ('name', 'status', 'aid_category')}),
         (_('Table Details'), {
             'fields': ('table_number', 'row_index', 'col_index', 'row_data')
         }),
     )
 
-    search_fields = ('name', 'college_status__pk', 'aid_category__name')
-    ordering = ('college_status', 'name', 'aid_category')
+    search_fields = ('name', 'status__pk', 'aid_category__name')
+    ordering = ('status', 'name', 'aid_category')
     model = AidData
 
 class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
+    list_display = ['status', 'total_cost', 'total_aid', 'net_price',]
     fieldsets = (
-        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
+        (None, {'fields': ('status', 'total_cost', 'total_aid', 'net_price',)}),
     )
 
-    search_fields = ('college_status__pk', 'total_cost', 'total_aid', 'net_price',)
-    ordering = ('college_status__pk',)
+    search_fields = ('status__pk', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('status__pk',)
     model = Summary
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
