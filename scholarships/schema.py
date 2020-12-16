@@ -104,132 +104,132 @@ class Query(graphene.ObjectType):
         qs = ScholarshipStatus.objects.filter(**fields)
         return qs
 
-    def resolve_scholarships_by_user_criteria(self, info):
-        qs = Scholarship.objects.all()
-        user = info.context.user
+#     def resolve_scholarships_by_user_criteria(self, info):
+#         qs = Scholarship.objects.all()
+#         user = info.context.user
 
-#------ find education level 
-        current_date = datetime.datetime.today()
-        education_level = "college_student"
+# #------ find education level 
+#         current_date = datetime.datetime.today()
+#         education_level = "college_student"
 
-        # if highschool grad year is less than current year 
-        if current_date.year - user.high_school_grad_year < 0:
-            education_level = "highschool_senior"
+#         # if highschool grad year is less than current year 
+#         if current_date.year - user.high_school_grad_year < 0:
+#             education_level = "highschool_senior"
 
-        # if highschool grad year is current year but today is earlier than may
-        elif current_date.year - user.high_school_grad_year == 0:
-            if current_date.month < 6:
-                education_level = "highschool_senior"
+#         # if highschool grad year is current year but today is earlier than may
+#         elif current_date.year - user.high_school_grad_year == 0:
+#             if current_date.month < 6:
+#                 education_level = "highschool_senior"
 
-#------ find state from organization address
-        us_states = [
-            "AL",
-            "AK",
-            "AZ",
-            "AR",
-            "CA",
-            "CO",
-            "CT",
-            "DE",
-            "DC",
-            "FL",
-            "GA",
-            "HI",
-            "ID",
-            "IL",
-            "IN",
-            "IA",
-            "KS",
-            "KY",
-            "LA",
-            "ME",
-            "MD",
-            "MA",
-            "MI",
-            "MN",
-            "MS",
-            "MO",
-            "MT",
-            "NE",
-            "NV",
-            "NH",
-            "NJ",
-            "NM",
-            "NY",
-            "NC",
-            "ND",
-            "OH",
-            "OK",
-            "OR",
-            "PA",
-            "RI",
-            "SC",
-            "SD",
-            "TN",
-            "TX",
-            "UT",
-            "VT",
-            "VA",
-            "WA",
-            "WV",
-            "WI",
-            "WY"]
+# #------ find state from organization address
+#         us_states = [
+#             "AL",
+#             "AK",
+#             "AZ",
+#             "AR",
+#             "CA",
+#             "CO",
+#             "CT",
+#             "DE",
+#             "DC",
+#             "FL",
+#             "GA",
+#             "HI",
+#             "ID",
+#             "IL",
+#             "IN",
+#             "IA",
+#             "KS",
+#             "KY",
+#             "LA",
+#             "ME",
+#             "MD",
+#             "MA",
+#             "MI",
+#             "MN",
+#             "MS",
+#             "MO",
+#             "MT",
+#             "NE",
+#             "NV",
+#             "NH",
+#             "NJ",
+#             "NM",
+#             "NY",
+#             "NC",
+#             "ND",
+#             "OH",
+#             "OK",
+#             "OR",
+#             "PA",
+#             "RI",
+#             "SC",
+#             "SD",
+#             "TN",
+#             "TX",
+#             "UT",
+#             "VT",
+#             "VA",
+#             "WA",
+#             "WV",
+#             "WI",
+#             "WY"]
 
-        organization_address = user.organization.values()[0]["address"]
-        split_address = organization_address.split(" ")
+#         organization_address = user.organization.values()[0]["address"]
+#         split_address = organization_address.split(" ")
 
-        for each in split_address:
-            if "," in each:
-                each = each.replace(",", "")
-            if each in us_states:
-                state = each
+#         for each in split_address:
+#             if "," in each:
+#                 each = each.replace(",", "")
+#             if each in us_states:
+#                 state = each
 
-#------ find ethnicity   
-        ethnicities = [
-            "american indian and alaska native",
-            "asian",
-            "black and african",
-            "hispanic and latinx",
-            "native hawaiian and pacific islander",
-            "white",
-            "other",
-        ]
+# #------ find ethnicity   
+#         ethnicities = [
+#             "american indian and alaska native",
+#             "asian",
+#             "black and african",
+#             "hispanic and latinx",
+#             "native hawaiian and pacific islander",
+#             "white",
+#             "other",
+#         ]
 
-        ethnicity = user.ethnicity[0]
-        # multi_ethnic = []
+#         ethnicity = user.ethnicity[0]
+#         # multi_ethnic = []
 
-        # if len(user.ethnicity) > 1:
-        #     for i in range(len(user.ethnicity)):
+#         # if len(user.ethnicity) > 1:
+#         #     for i in range(len(user.ethnicity)):
 
-        #         ethnicity = user.ethnicity
+#         #         ethnicity = user.ethnicity
 
-#------ find gender   
-        genders = {
-            "He/his": "men",
-            "She/hers": "women",
-            "They/theirs": "other"
-        }
-        gender = genders[user.pronouns]
+# #------ find gender   
+#         genders = {
+#             "He/his": "men",
+#             "She/hers": "women",
+#             "They/theirs": "other"
+#         }
+#         gender = genders[user.pronouns]
 
-#------ find gpa and test scores  
-        user_gpa = user.gpa
-        user_sat = user.sat_math + user.sat_verbal
-        user_act = user.act_score
+# #------ find gpa and test scores  
+#         user_gpa = user.gpa
+#         user_sat = user.sat_math + user.sat_verbal
+#         user_act = user.act_score
 
-        if education_level == "highschool_senior":
-            pass
+#         if education_level == "highschool_senior":
+#             pass
 
-        if education_level == "college_student":
-            pass
+#         if education_level == "college_student":
+#             pass
 
-        qs = qs.filter()
-        # min_gpa =
-        # max_gpa =
-        # min_act = 
-        # min_sat = 
+#         qs = qs.filter()
+#         # min_gpa =
+#         # max_gpa =
+#         # min_act = 
+#         # min_sat = 
 
-        breakpoint()
-        return qs
+#         breakpoint()
+#         return qs
 
 
 class CreateProvider(graphene.Mutation):
