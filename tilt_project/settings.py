@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'scholarships.apps.ScholarshipsConfig',
     'organizations.apps.OrganizationsConfig',
     'colleges.apps.CollegesConfig',
+    'college_status.apps.CollegeStatusConfig',
     'financial_aid.apps.FinancialAidConfig',
 ]
 

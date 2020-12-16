@@ -307,7 +307,7 @@ def track_position(formatted_data, parsed_table):
 
 # -------------- Method To Start Operations
 
-def get_aid_data(csv_data, name):
+def get_data(csv_data, name):
     table_dict = parse_tables(csv_data)
     formatted_data = format_data(table_dict)
 

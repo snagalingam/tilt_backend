@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, AidCategory, AidData, Summary
+from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, AidCategory, Data, Summary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -80,8 +80,8 @@ class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('bucket',)
     model = BucketResult
 
-class AidDataInline(admin.TabularInline):
-    model = AidData
+class DataInline(admin.TabularInline):
+    model = Data
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
@@ -89,14 +89,14 @@ class AidDataInline(admin.TabularInline):
 
 class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
-    def aid_data_count(self, obj):
-        return obj.aiddata_set.count()
+    def data_count(self, obj):
+        return obj.data_set.count()
 
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
+    list_display = ['name', 'year', 'main_category', 'sub_category', 'data_count']
     fieldsets = (
         (None, {'fields': ('name',)}),
         (_('Information'), {
@@ -104,13 +104,13 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    inlines = [AidDataInline]
+    inlines = [DataInline]
 
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
     model = AidCategory
 
-class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
@@ -125,7 +125,7 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     search_fields = ('name', 'status__pk', 'aid_category__name')
     ordering = ('status', 'name', 'aid_category')
-    model = AidData
+    model = Data
 
 class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
@@ -145,5 +145,5 @@ admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(BucketCheck, BucketCheckAdmin)
 admin.site.register(BucketResult, BucketResultAdmin)
 admin.site.register(AidCategory, AidCategoryAdmin)
-admin.site.register(AidData, AidDataAdmin)
+admin.site.register(Data, DataAdmin)
 admin.site.register(Summary, SummaryAdmin)

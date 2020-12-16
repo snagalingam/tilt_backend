@@ -41,42 +41,8 @@ class DocumentData(models.Model):
 
     def __str__(self):
         return str(self.name)
-        
-class BucketCheck(models.Model):
-    bucket = models.CharField(max_length=255, null=True, blank=True, unique=True)
-    job_dict = models.TextField(blank=True, null=True)
-    date = models.DateTimeField(default=timezone.now)
 
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    def __str__(self):
-        return str(self.bucket)
-
-class BucketResult(models.Model):
-    bucket = models.CharField(max_length=255, null=True, blank=True)
-    total_documents = models.IntegerField(blank=True, null=True)
-    passed_count = models.IntegerField(blank=True, null=True)
-    passed_list = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
-    failed_count = models.IntegerField(blank=True, null=True)
-    failed_list = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
-    missing = models.TextField(null=True, blank=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    def __str__(self):
-        return str(self.bucket)
-
-class AidCategory(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     # cost, aid, net_price
@@ -99,7 +65,7 @@ class AidCategory(models.Model):
     def __str__(self):
         return str(self.name)
 
-class AidData(models.Model):
+class Data(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
