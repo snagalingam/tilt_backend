@@ -4,7 +4,7 @@ import json
 import os
 import time
 from django.contrib.auth import get_user_model
-from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, Category, Data
+from .models import DocumentResult, DocumentData, Category, Data
 from colleges.models import Status
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
@@ -23,15 +23,6 @@ class DocumentDataType(DjangoObjectType):
         model = DocumentData
         fields = "__all__"
 
-class BucketCheckType(DjangoObjectType):
-    class Meta:
-        model = BucketCheck
-        fields = "__all__"
-
-class BucketResultType(DjangoObjectType):
-    class Meta:
-        model = BucketResult
-        fields = "__all__"
 class CategoryType(DjangoObjectType):
     class Meta:
         model = Category
@@ -56,8 +47,6 @@ class CheckedResultType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
     document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
-    bucket_checks = graphene.List(BucketCheckType, limit=graphene.Int())
-    bucket_results = graphene.List(BucketResultType, limit=graphene.Int())
     categories = graphene.List(CategoryType, limit=graphene.Int())
     datas = graphene.List(DataType, limit=graphene.Int())
 
@@ -103,14 +92,6 @@ class Query(graphene.ObjectType):
 
     def resolve_document_datas(self, info, limit=None):
         qs = DocumentData.objects.all()[0:limit]
-        return qs
-
-    def resolve_bucket_checks(self, info, limit=None):
-        qs = BucketCheck.objects.all()[0:limit]
-        return qs
-
-    def resolve_bucket_results(self, info, limit=None):
-        qs = BucketResult.objects.all()[0:limit]
         return qs
 
     def resolve_categories(self, info, limit=None):

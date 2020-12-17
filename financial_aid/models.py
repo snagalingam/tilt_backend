@@ -60,12 +60,12 @@ class Category(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'aid categories'
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return str(self.name)
 
-class AidData(models.Model):
+class Data(models.Model):
     name = models.TextField(null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
@@ -99,6 +99,9 @@ class Summary(models.Model):
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Summaries'
 
     def __str__(self):
         return str(self.pk)

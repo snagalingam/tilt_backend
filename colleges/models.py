@@ -316,7 +316,10 @@ class FieldOfStudy(models.Model):
 
 class Status(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE,
+        related_name='user_college_status')
+
     college = models.ForeignKey(
         College, on_delete=models.CASCADE)
 
@@ -329,13 +332,12 @@ class Status(models.Model):
     residency = models.CharField(max_length=255, blank=True, null=True)
     in_state_tuition = models.CharField(max_length=255, blank=True, null=True)
 
-
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'statuses'
+        verbose_name_plural = 'College statuses'
     
     def save(self, *args, **kwargs):
         method = self.user.preferred_contact_method

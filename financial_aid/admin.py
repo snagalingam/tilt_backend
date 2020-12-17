@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, Category, Data, Summary
+from .models import DocumentResult, DocumentData, Category, Data, Summary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -11,7 +11,7 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'created']
+    list_display = ['name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created']
 
     fieldsets = (
         (None, {
@@ -26,7 +26,7 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     )
 
     search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
-    ordering = ('name', 'number_of_missing','created',)
+    ordering = ('name', 'sent', 'processed', 'number_of_missing', 'created',)
     model = DocumentResult
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -43,42 +43,6 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('name',)
     ordering = ('name',)
     model = DocumentData
-
-class BucketCheckAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 50, 'cols': 100})},
-    }
-    list_display = ['bucket', 'date']
-    fieldsets = (
-        (_('Result'), {'fields': ('job_dict',)}),
-        (_('Date'), {'fields': ('date',)}),
-
-    )
-
-    search_fields = ('bucket', 'date')
-    ordering = ('bucket', 'date')
-    model = BucketCheck
-
-class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '75'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
-    }
-    list_display = ['bucket', 'total_documents', 'passed_count', 'failed_count']
-    fieldsets = (
-        (_('Information'), {'fields': ('bucket', 'total_documents')}),
-        (_('Results'), {
-            'fields': ('passed_count', 'passed_list', 'failed_count', 'failed_list')
-        }),
-        (_('Missing'), {
-            'fields': ('missing',)
-        }),
-    )
-
-    search_fields = ('bucket',)
-    ordering = ('bucket',)
-    model = BucketResult
 
 class DataInline(admin.TabularInline):
     model = Data
@@ -142,8 +106,6 @@ class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
-admin.site.register(BucketCheck, BucketCheckAdmin)
-admin.site.register(BucketResult, BucketResultAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Data, DataAdmin)
 admin.site.register(Summary, SummaryAdmin)

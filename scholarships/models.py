@@ -78,10 +78,15 @@ class Scholarship(models.Model):
         return str(self.name)
 
 class Status(models.Model):
-    user = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    user = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, 
+        related_name='user_scholarship_status')
     scholarship = models.ForeignKey(
         Scholarship, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, null=True, blank=True)
+    
+    class Meta:
+        verbose_name_plural = 'Scholarship statuses'
 
     def __str__(self):
         return str(self.status)
