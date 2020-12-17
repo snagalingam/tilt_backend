@@ -34,7 +34,6 @@ class AidCategoryType(DjangoObjectType):
     class Meta:
         model = AidCategory
         fields = "__all__"
-
 class AidDataType(DjangoObjectType):
     class Meta:
         model = AidData
