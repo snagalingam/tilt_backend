@@ -100,7 +100,7 @@ class AidCategory(models.Model):
         return str(self.name)
 
 class AidData(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
+    name = models.TextField(null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
     row_index = models.IntegerField(blank=True, null=True)

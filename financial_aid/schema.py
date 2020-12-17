@@ -6,8 +6,9 @@ import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
 from college_status.models import CollegeStatus
-from services.amazon_textract.get_words import start_words_extraction, get_words_data
-from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
+from services.amazon_textract.lambda_handler import lambda_handler
+from services.amazon_textract.get_words import start_words_analysis, get_words_data
+from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
 from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
@@ -150,12 +151,11 @@ class AnalyzeDocuments(graphene.Mutation):
 
         for document in documents:
             # send document for analysis
-            words_id = start_words_extraction(document)
-            tables_id = start_tables_extraction(document)
+            words_id = start_words_analysis(document)
+            tables_id = start_tables_analysis(document)
 
             # save job_ids to database
             document_result = DocumentResult(
-                user=user,
                 name=document,
                 words_id=words_id,
                 tables_id=tables_id,
@@ -171,6 +171,8 @@ class AnalyzeDocuments(graphene.Mutation):
             college_status.award_uploaded = True 
             college_status.save()
 
+        # trigger lambda to checkDocuments after 5 minutes
+        lambda_handler(documents)
         return AnalyzeDocuments(sent_list=sent_list)
 
 class CheckDocuments(graphene.Mutation):
@@ -303,7 +305,7 @@ class CheckDocuments(graphene.Mutation):
                             possibilities = find_aid_category(name, document)
                             category = filter_possibilities(possibilities)
                             aid_category = AidCategory.objects.get(name=category)
-
+                            
                             # check for dups
                             try:
                                 aid_data = AidData.objects.get(
@@ -415,7 +417,7 @@ class CheckDocuments(graphene.Mutation):
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "reviewed": doc.reviewed,
+                "reviewed": college_status.reviewed,
                 "errors": errors,
                 "aid_data": aid_data_report,
             }
