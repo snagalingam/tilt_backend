@@ -6,6 +6,10 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS")
+AWS_SECRET_KEY = os.environ.get("AWS_SECRET")
+REGION = os.environ.get("REGION")
+BUCKET = os.environ.get("BUCKET")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -260,7 +264,8 @@ CSRF_TRUSTED_ORIGINS = [
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.amazonaws.com',]
+
 # security for production
 if ENVIRONMENT == 'production':
     CSRF_COOKIE_SECURE = True
@@ -275,7 +280,8 @@ if ENVIRONMENT == 'production':
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
     ALLOWED_HOSTS = ['api.tiltstaging.dev',
-                     'api.tiltaccess.com']
+                     'api.tiltaccess.com',
+                     '.amazonaws.com',]
 
 
 # static files

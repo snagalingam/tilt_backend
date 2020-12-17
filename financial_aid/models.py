@@ -65,8 +65,8 @@ class Category(models.Model):
     def __str__(self):
         return str(self.name)
 
-class Data(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
+class AidData(models.Model):
+    name = models.TextField(null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
     row_index = models.IntegerField(blank=True, null=True)

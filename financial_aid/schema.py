@@ -6,8 +6,9 @@ import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, Category, Data
 from colleges.models import Status
-from services.amazon_textract.get_words import start_words_extraction, get_words_data
-from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
+from services.amazon_textract.lambda_handler import lambda_handler
+from services.amazon_textract.get_words import start_words_analysis, get_words_data
+from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
 from services.amazon_textract.check_document import start_document_check
 from services.amazon_textract.parse_data import get_data, find_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
@@ -153,12 +154,11 @@ class AnalyzeDocuments(graphene.Mutation):
 
         for document in documents:
             # send document for analysis
-            words_id = start_words_extraction(document)
-            tables_id = start_tables_extraction(document)
+            words_id = start_words_analysis(document)
+            tables_id = start_tables_analysis(document)
 
             # save job_ids to database
             document_result = DocumentResult(
-                user=user,
                 name=document,
                 words_id=words_id,
                 tables_id=tables_id,
@@ -174,6 +174,8 @@ class AnalyzeDocuments(graphene.Mutation):
             status.award_uploaded = True 
             status.save()
 
+        # trigger lambda to checkDocuments after 5 minutes
+        lambda_handler(documents)
         return AnalyzeDocuments(sent_list=sent_list)
 
 class CheckDocuments(graphene.Mutation):
@@ -295,12 +297,12 @@ class CheckDocuments(graphene.Mutation):
                             row_data = each.get("Row Data")
 
                             # get status_id from document
-                            status = Status.objects.get(pk=status_id)
+                            college_status = Status.objects.get(pk=status_id)
 
                             # auto award_reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":
-                                status.award_reviewed = True
-                                status.save()
+                                college_status.award_reviewed = True
+                                college_status.save()
 
                             # filter/match for category 
                             possibilities = find_category(name, document)
@@ -316,7 +318,7 @@ class CheckDocuments(graphene.Mutation):
                                     row_index=row_index,
                                     col_index=col_index,
                                     row_data=row_data,
-                                    status=status,
+                                    status=college_status,
                                     category=category
                                 )
                                 data_list.append(data)
@@ -344,7 +346,7 @@ class CheckDocuments(graphene.Mutation):
                                         row_index=row_index,
                                         col_index=col_index,
                                         row_data=row_data,
-                                        status=status,
+                                        status=college_status,
                                         category=category
                                     )
                                     data.save()
@@ -418,7 +420,7 @@ class CheckDocuments(graphene.Mutation):
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "award_reviewed": doc.award_reviewed,
+                "award_reviewed": college_status.award_reviewed,
                 "errors": errors,
                 "data": data_report,
             }
@@ -478,6 +480,3 @@ class CreateCategory(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
-    get_bucket = GetBucket.Field()
-    start_bucket_check = StartBucketCheck.Field()
-    get_bucket_result = GetBucketResult.Field()

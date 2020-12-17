@@ -4,20 +4,18 @@ from .check_document import start_document_check, strip_money_string
 # -------------- Change Money to Integer
 
 def change_to_int(word):
-    if len(word) > 3:
-        money = strip_money_string(word)
-        money = int(money[1:].replace(",", ""))
-        return money
-    else:
-      return word
+    if len(word) < 4 or "$" not in word:
+        return word
+
+    money = strip_money_string(word)
+    money = money[1:].replace(",", "")
+    return int(money)
 
 # -------------- Tests For Clean Money
 
 def test_money(money):
     if len(money) > 1 and money[0] == "$":
-        if type(change_to_int(money)) is int:
-            return True
-    return False
+        return type(change_to_int(money)) is int
 
 # -------------- Returns Max Amount From String With Dup Money
 
@@ -46,16 +44,17 @@ def get_max_amount(**kwargs):
             if test_money(value):
                 max_check[change_to_int(value)] = value
 
-    if len(max_check) > 0:
-        index = max(max_check)
-        return max_check[index]
-    else:
+    # check for blanks
+    if len(max_check) < 1:
         return "0"
+    
+    index = max(max_check)
+    return max_check[index]
 
 # -------------- Formats Money or Or Returns Non-money words 
 
 def format_money(word):
-    if len(word) < 3 or len(word) > 50 or "$" not in word:
+    if "$" not in word or len(word) < 3:
         return word
 
     numbers = {
@@ -250,12 +249,13 @@ def format_data(table_dict):
 
                                 # if row_title is dup apply greatest dollar amount
                                 if current_amt > existing_amt:
-                                    formatted_data[row_title] = amount                            
-    
-    if len(formatted_data) > 0:
-        return formatted_data
-    else:
+                                    formatted_data[row_title] = amount  
+                                                              
+    # return Falase if no formatted_data
+    if len(formatted_data) < 1:
         return False 
+    
+    return formatted_data
 
 # -------------- Track Rows And Cols For Final Object For Database 
 
@@ -279,17 +279,16 @@ def track_position(formatted_data, parsed_table):
                     row_index = row_list.index(row_title)
                     row_data = [key]
                     row_val = formatted_data[key]
+                    amount = row_val
+                    col_index = None
 
+                    # check if row_val is not blank
                     if len(row_val) > 0:
                         amount = change_to_int(row_val)
-                    else:
-                        amount = row_val
 
                     # check if amount is in row_values
                     if row_val in row_values:
                         col_index = row_values.index(row_val) + 1
-                    else:
-                        col_index = None
 
                     for each in table_data[key].values():
                         row_data.append(each)
@@ -299,7 +298,7 @@ def track_position(formatted_data, parsed_table):
                             "Amount": amount,
                             "Row Index": row_index,
                             "Col Index": col_index,
-                            f"Row Data": row_data
+                            "Row Data": row_data
                     }
 
                     tracker[f'Table_{table_num}'].append(data)
@@ -310,11 +309,10 @@ def track_position(formatted_data, parsed_table):
 def get_data(csv_data, name):
     table_dict = parse_tables(csv_data)
     formatted_data = format_data(table_dict)
+    pos = { "Document Error": name }
 
     if formatted_data:
         pos = track_position(formatted_data, table_dict)
-    else:
-        pos = { "Document Error": name }
 
     return pos
 
@@ -368,18 +366,16 @@ def find_category(name, doc_name):
 
     # split string with spaces
     if type(index) is int:
-        name_split = name.split(" ")
+        name_list = name.split(" ")
 
-        for n in name_split:
-            each = n.lower()
-
+        for ele in name_list:
+            each = ele.lower()
             if each in categories:
                 possibility.append(categories[each])
 
     # single words
     else:
         each = name.lower()
-
         if each in categories:
             possibility.append(categories[each])
 
@@ -409,19 +405,19 @@ def filter_possibilities(possibilities):
 
     if len(possibilities) < 2:
         return category[0]
-    else:
-        if "tuition" in category and "other grant" in category:
-            return "other grant"
-        elif "totals" in category:
-            if "work" in name.lower():
-                return "work study"
-            elif "grant" in name.lower():
-                return "total grants"     
-            elif "loan" in name.lower():
-                return "total loans"
-            elif "aid" in name.lower():
-                return "total aid"
-            return "total cost"
-        else:
-            return category[0]
+    
+    if "tuition" in category and "other grant" in category:
+        return "other grant"
 
+    elif "totals" in category:
+        if "work" in name.lower():
+                return "work study"
+        elif "grant" in name.lower():
+                return "total grants"     
+        elif "loan" in name.lower():
+                return "total loans"
+        elif "aid" in name.lower():
+                return "total aid"
+        return "total cost"
+
+    return category[0]

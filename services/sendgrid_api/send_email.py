@@ -113,7 +113,7 @@ def send_email_changed(old_email, new_email, first_name):
 
 def send_report_email(status_id, collection):
     message = Mail(from_email=(from_email, sender_name),
-                   to_emails="dansteryoo@gmail.com")
+                   to_emails=from_email)
 
     message.template_id = 'd-bf7d5f2ce9244a07bcfde29d24531133'
     message.dynamic_template_data = {

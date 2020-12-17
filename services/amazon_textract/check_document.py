@@ -2,25 +2,21 @@ import os
 import boto3
 import datetime
 from dateutil.relativedelta import relativedelta
-from .get_tables import start_tables_extraction, get_table_data
-from .get_words import start_words_extraction, get_words_data
+from .get_tables import start_tables_analysis, get_table_data
+from .get_words import start_words_analysis, get_words_data
+from django.conf import settings
 
-access_key = os.environ.get("AWS_ACCESS")
-secret_key = os.environ.get("AWS_SECRET")
-region = os.environ.get("REGION")
-bucket_name = os.environ.get("BUCKET")
-#Get the document from S3
 resource = boto3.resource(
     's3',     
-    region_name=region,
-    aws_access_key_id=access_key, 
-    aws_secret_access_key=secret_key)
+    region_name=settings.REGION,
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 client = boto3.client(
     's3',     
-    region_name=region,
-    aws_access_key_id=access_key, 
-    aws_secret_access_key=secret_key)
+    region_name=settings.REGION,
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 NUMBERS = {
   "0": True,
