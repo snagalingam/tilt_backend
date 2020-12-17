@@ -6,8 +6,8 @@ import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
 from college_status.models import CollegeStatus
-from services.amazon_textract.get_words import start_words_extraction, get_words_data
-from services.amazon_textract.get_tables import start_tables_extraction, get_table_data
+from services.amazon_textract.get_words import start_words_analysis, get_words_data
+from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
 from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
@@ -151,12 +151,11 @@ class AnalyzeDocuments(graphene.Mutation):
 
         for document in documents:
             # send document for analysis
-            words_id = start_words_extraction(document)
-            tables_id = start_tables_extraction(document)
+            words_id = start_words_analysis(document)
+            tables_id = start_tables_analysis(document)
 
             # save job_ids to database
             document_result = DocumentResult(
-                user=user,
                 name=document,
                 words_id=words_id,
                 tables_id=tables_id,
@@ -171,7 +170,7 @@ class AnalyzeDocuments(graphene.Mutation):
             college_status = CollegeStatus.objects.get(pk=college_status_id)
             college_status.award_uploaded = True 
             college_status.save()
-
+            #trigger 
         return AnalyzeDocuments(sent_list=sent_list)
 
 class CheckDocuments(graphene.Mutation):
