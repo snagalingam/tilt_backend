@@ -15,7 +15,7 @@ def lambda_handler(documents):
     payload = {
         "documents": documents
     }
-    print(FUNCTION_NAME)
+
     #For InvocationType = "Event"
     aws_lambda.invoke(
         FunctionName=FUNCTION_NAME, 

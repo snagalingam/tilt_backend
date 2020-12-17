@@ -44,6 +44,7 @@ class CollegeTests(TestCase):
             types=["university", "point_of_interest", "establishment"],
         )
 
+
     def test_create_college(self):
         college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
         
@@ -474,28 +475,28 @@ class CollegeTests(TestCase):
         user = User.objects.get(email="demouser@tiltaccess.com")
         college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
 
-        status = Status.objects.create(
+        college_status = Status.objects.create(
             user=user,
             college=college,
             status="interested",
             net_price=25000,
         )
-        self.assertEqual(status.user, user)
-        self.assertEqual(status.college, college)
-        self.assertEqual(status.status, "interested")
-        self.assertEqual(status.net_price, 25000)
-        self.assertIsNotNone(status.created)
-        self.assertIsNotNone(status.updated)
+        self.assertEqual(college_status.user, user)
+        self.assertEqual(college_status.college, college)
+        self.assertEqual(college_status.status, "interested")
+        self.assertEqual(college_status.net_price, 25000)
+        self.assertIsNotNone(college_status.created)
+        self.assertIsNotNone(college_status.updated)
 
     def test_user_statuses(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
         college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
 
-        status = Status.objects.create(
+        college_status = Status.objects.create(
             user=user,
             college=college,
             status="interested",
             net_price=25000,
         )
 
-        self.assertEqual(user.status_set.get_queryset()[0], status)
+        self.assertEqual(user.user_college_status_set.get_queryset()[0], college_status)

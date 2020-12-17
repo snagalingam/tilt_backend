@@ -308,11 +308,10 @@ class FieldOfStudy(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'field of studies'
+        verbose_name_plural = 'Field of studies'
 
     def __str__(self):
         return str(self.cip_title)
-
 
 class Status(models.Model):
     user = models.ForeignKey(
