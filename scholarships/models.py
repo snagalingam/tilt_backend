@@ -77,9 +77,10 @@ class Scholarship(models.Model):
     def __str__(self):
         return str(self.name)
 
-class ScholarshipStatus(models.Model):
+class Status(models.Model):
     user = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    scholarship = models.ManyToManyField(Scholarship)
+    scholarship = models.ForeignKey(
+        Scholarship, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
