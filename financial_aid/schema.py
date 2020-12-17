@@ -6,6 +6,7 @@ import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
 from college_status.models import CollegeStatus
+from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
 from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
@@ -169,7 +170,9 @@ class AnalyzeDocuments(graphene.Mutation):
             college_status = CollegeStatus.objects.get(pk=college_status_id)
             college_status.award_uploaded = True 
             college_status.save()
-            #trigger 
+
+        # trigger lambda to checkDocuments after 5 minutes
+        lambda_handler(documents)
         return AnalyzeDocuments(sent_list=sent_list)
 
 class CheckDocuments(graphene.Mutation):
@@ -302,7 +305,7 @@ class CheckDocuments(graphene.Mutation):
                             possibilities = find_aid_category(name, document)
                             category = filter_possibilities(possibilities)
                             aid_category = AidCategory.objects.get(name=category)
-
+                            
                             # check for dups
                             try:
                                 aid_data = AidData.objects.get(
@@ -414,7 +417,7 @@ class CheckDocuments(graphene.Mutation):
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "reviewed": doc.reviewed,
+                "reviewed": college_status.reviewed,
                 "errors": errors,
                 "aid_data": aid_data_report,
             }

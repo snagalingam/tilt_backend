@@ -13,22 +13,13 @@ aws_lambda = boto3.client(
 
 def lambda_handler(documents):
     payload = {
-        "message": "From Tilt Access.",
         "documents": documents
     }
-
+    print(FUNCTION_NAME)
     #For InvocationType = "Event"
-    response = aws_lambda.invoke(
+    aws_lambda.invoke(
         FunctionName=FUNCTION_NAME, 
         InvocationType="Event", 
         Payload=json.dumps(payload))
-
-    #For InvocationType = "RequestResponse"
-    # resp = aws_lambda.invoke(
-    #     FunctionName=function_name, 
-    #     InvocationType="RequestResponse", 
-    #     Payload=json.dumps(payload))
-
-    print(response)
-    breakpoint()
-    return "Lambda Triggered"
+    
+    pass
