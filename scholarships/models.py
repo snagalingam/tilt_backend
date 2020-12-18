@@ -80,10 +80,14 @@ class Scholarship(models.Model):
 class Status(models.Model):
     user = models.ManyToManyField(
         settings.AUTH_USER_MODEL, 
-        related_name='user_scholarship_status')
+        related_name='scholarship_status')
     scholarship = models.ForeignKey(
         Scholarship, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, null=True, blank=True)
+    
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name_plural = 'Scholarship statuses'

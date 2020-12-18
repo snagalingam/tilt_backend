@@ -83,7 +83,7 @@ class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('name', 'status', 'category')}),
         (_('Table Details'), {
-            'fields': ('table_number', 'row_index', 'col_index', 'row_data')
+            'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')
         }),
     )
 

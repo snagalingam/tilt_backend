@@ -317,7 +317,7 @@ class Status(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
-        related_name='user_college_status')
+        related_name='college_status')
 
     college = models.ForeignKey(
         College, on_delete=models.CASCADE)
