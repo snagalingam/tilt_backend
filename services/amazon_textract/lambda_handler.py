@@ -4,6 +4,7 @@ import json
 from django.conf import settings
 
 FUNCTION_NAME = os.environ.get("FUNCTION_NAME")
+GRAPHQL_ENDPOINT = os.environ.get("GRAPHQL_ENDPOINT")
 
 aws_lambda = boto3.client(
     'lambda',     
@@ -13,6 +14,7 @@ aws_lambda = boto3.client(
 
 def lambda_handler(documents):
     payload = {
+        "graphql_endpoint": GRAPHQL_ENDPOINT,
         "documents": documents
     }
 
