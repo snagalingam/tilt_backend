@@ -306,7 +306,7 @@ def track_position(formatted_data, parsed_table):
 
 # -------------- Method To Start Operations
 
-def get_aid_data(csv_data, name):
+def get_data(csv_data, name):
     table_dict = parse_tables(csv_data)
     formatted_data = format_data(table_dict)
     pos = { "Document Error": name }
@@ -318,7 +318,7 @@ def get_aid_data(csv_data, name):
 
 # -------------- Method To Filter Possibilties Of Aid Categories Match
 
-def find_aid_category(name, doc_name):
+def find_category(name, doc_name):
     categories = {
         "tuition": "tuition",
         "fees": "fees",

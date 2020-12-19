@@ -1,7 +1,6 @@
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
-
 class Organization(models.Model):
 
     # google api inputted

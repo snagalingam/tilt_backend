@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, BucketResult, BucketCheck, AidCategory, AidData
+from .models import DocumentResult, DocumentData, Category, Data, Summary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -11,7 +11,7 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'processed', 'pass_fail', 'number_of_missing', 'created']
+    list_display = ['name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created']
 
     fieldsets = (
         (None, {
@@ -26,7 +26,7 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     )
 
     search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
-    ordering = ('name', 'number_of_missing','created',)
+    ordering = ('name', 'sent', 'processed', 'number_of_missing', 'created',)
     model = DocumentResult
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -44,59 +44,23 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = DocumentData
 
-class BucketCheckAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 50, 'cols': 100})},
-    }
-    list_display = ['bucket', 'date']
-    fieldsets = (
-        (_('Result'), {'fields': ('job_dict',)}),
-        (_('Date'), {'fields': ('date',)}),
-
-    )
-
-    search_fields = ('bucket', 'date')
-    ordering = ('bucket', 'date')
-    model = BucketCheck
-
-class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '75'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
-    }
-    list_display = ['bucket', 'total_documents', 'passed_count', 'failed_count']
-    fieldsets = (
-        (_('Information'), {'fields': ('bucket', 'total_documents')}),
-        (_('Results'), {
-            'fields': ('passed_count', 'passed_list', 'failed_count', 'failed_list')
-        }),
-        (_('Missing'), {
-            'fields': ('missing',)
-        }),
-    )
-
-    search_fields = ('bucket',)
-    ordering = ('bucket',)
-    model = BucketResult
-
-class AidDataInline(admin.TabularInline):
-    model = AidData
+class DataInline(admin.TabularInline):
+    model = Data
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
     extra = 0
 
-class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
-    def aid_data_count(self, obj):
-        return obj.aiddata_set.count()
+    def data_count(self, obj):
+        return obj.data_set.count()
 
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
+    list_display = ['name', 'year', 'main_category', 'sub_category', 'data_count']
     fieldsets = (
         (None, {'fields': ('name',)}),
         (_('Information'), {
@@ -104,32 +68,44 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    inlines = [AidDataInline]
+    inlines = [DataInline]
 
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
-    model = AidCategory
+    model = Category
 
-class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'amount', 'college_status', 'aid_category',]
+    list_display = ['name', 'amount', 'status', 'category',]
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'aid_category')}),
+        (None, {'fields': ('name', 'status', 'category')}),
         (_('Table Details'), {
-            'fields': ('table_number', 'row_index', 'col_index', 'row_data')
+            'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')
         }),
     )
 
-    search_fields = ('name', 'college_status__pk', 'aid_category__name')
-    ordering = ('college_status', 'name', 'aid_category')
-    model = AidData
+    search_fields = ('name', 'status__pk', 'category__name')
+    ordering = ('status', 'name', 'category')
+    model = Data
+
+class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['status', 'total_cost', 'total_aid', 'net_price',]
+    fieldsets = (
+        (None, {'fields': ('status', 'total_cost', 'total_aid', 'net_price',)}),
+    )
+
+    search_fields = ('status__pk', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('status__pk',)
+    model = Summary
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
-admin.site.register(BucketCheck, BucketCheckAdmin)
-admin.site.register(BucketResult, BucketResultAdmin)
-admin.site.register(AidCategory, AidCategoryAdmin)
-admin.site.register(AidData, AidDataAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Data, DataAdmin)
+admin.site.register(Summary, SummaryAdmin)

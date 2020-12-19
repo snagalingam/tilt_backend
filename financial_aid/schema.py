@@ -4,14 +4,15 @@ import json
 import os
 import time
 from django.contrib.auth import get_user_model
-from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
+from .models import DocumentResult, DocumentData, Category, Data
 from colleges.models import Status
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
-from services.amazon_textract.check_document import start_document_check, start_bucket_check, get_bucket_results, get_documents
-from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
+from services.amazon_textract.check_document import start_document_check
+from services.amazon_textract.parse_data import get_data, find_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
+
 class DocumentResultType(DjangoObjectType):
     class Meta:
         model = DocumentResult
@@ -22,23 +23,16 @@ class DocumentDataType(DjangoObjectType):
         model = DocumentData
         fields = "__all__"
 
-class BucketCheckType(DjangoObjectType):
+class CategoryType(DjangoObjectType):
     class Meta:
-        model = BucketCheck
+        model = Category
         fields = "__all__"
 
-class BucketResultType(DjangoObjectType):
+class DataType(DjangoObjectType):
     class Meta:
-        model = BucketResult
+        model = Data
         fields = "__all__"
-class AidCategoryType(DjangoObjectType):
-    class Meta:
-        model = AidCategory
-        fields = "__all__"
-class AidDataType(DjangoObjectType):
-    class Meta:
-        model = AidData
-        fields = "__all__"
+
 class AnalyzedResultType(graphene.ObjectType):
     name = graphene.String()       
     sent = graphene.String()
@@ -53,10 +47,8 @@ class CheckedResultType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
     document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
-    bucket_checks = graphene.List(BucketCheckType, limit=graphene.Int())
-    bucket_results = graphene.List(BucketResultType, limit=graphene.Int())
-    aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
-    aid_datas = graphene.List(AidDataType, limit=graphene.Int())
+    categories = graphene.List(CategoryType, limit=graphene.Int())
+    datas = graphene.List(DataType, limit=graphene.Int())
 
     # document_result
     document_results_by_fields = graphene.List(
@@ -73,25 +65,25 @@ class Query(graphene.ObjectType):
         DocumentDataType, 
         name=graphene.String())
 
-    # aid_categories
-    aid_categories_by_fields = graphene.List(
-        AidCategoryType, 
+    # categories
+    categories_by_fields = graphene.List(
+        CategoryType, 
         name=graphene.String(),
         main_category=graphene.String(),
         sub_category=graphene.String(),
         sub_sub_category=graphene.String(),
         year=graphene.Int())
 
-    # aid_datas
-    aid_datas_by_fields = graphene.List(
-        AidDataType, 
+    # datas
+    datas_by_fields = graphene.List(
+        DataType, 
         name=graphene.String(),
         amount=graphene.Int(),
         table_number=graphene.Int(),
         row_index=graphene.Int(),
         col_index=graphene.Int(),
-        college_status=graphene.ID(),
-        aid_category=graphene.ID())
+        status=graphene.ID(),
+        category=graphene.ID())
 
     # get_all()
     def resolve_document_results(self, info, limit=None):
@@ -102,20 +94,12 @@ class Query(graphene.ObjectType):
         qs = DocumentData.objects.all()[0:limit]
         return qs
 
-    def resolve_bucket_checks(self, info, limit=None):
-        qs = BucketCheck.objects.all()[0:limit]
+    def resolve_categories(self, info, limit=None):
+        qs = Category.objects.all()[0:limit]
         return qs
 
-    def resolve_bucket_results(self, info, limit=None):
-        qs = BucketResult.objects.all()[0:limit]
-        return qs
-
-    def resolve_aid_categories(self, info, limit=None):
-        qs = AidCategory.objects.all()[0:limit]
-        return qs
-
-    def resolve_aid_datas(self, info, limit=None):
-        qs = AidData.objects.all()[0:limit]
+    def resolve_datas(self, info, limit=None):
+        qs = Data.objects.all()[0:limit]
         return qs
 
     # get_by_fields()
@@ -127,12 +111,12 @@ class Query(graphene.ObjectType):
         qs = DocumentData.objects.filter(**fields)
         return qs
 
-    def resolve_aid_categories_by_fields(self, info, **fields):
-        qs = AidCategory.objects.filter(**fields)
+    def resolve_categories_by_fields(self, info, **fields):
+        qs = Category.objects.filter(**fields)
         return qs
 
-    def resolve_aid_datas_by_fields(self, info, **fields):
-        qs = AidData.objects.filter(**fields)
+    def resolve_datas_by_fields(self, info, **fields):
+        qs = Data.objects.filter(**fields)
         return qs
 
 class AnalyzeDocuments(graphene.Mutation):
@@ -164,12 +148,12 @@ class AnalyzeDocuments(graphene.Mutation):
             document_result.save()
             sent_list.append(AnalyzedResultType(name=document, sent=True))
 
-            # find college_status and update award_uploaded=True
+            # find status and update award_uploaded=True
             end_index = document.index("_file")
-            college_status_id = int(document[3:end_index])
-            college_status = Status.objects.get(pk=college_status_id)
-            college_status.award_uploaded = True 
-            college_status.save()
+            status_id = int(document[3:end_index])
+            status = Status.objects.get(pk=status_id)
+            status.award_uploaded = True 
+            status.save()
 
         # trigger lambda to checkDocuments after 5 minutes
         lambda_handler(documents)
@@ -177,7 +161,7 @@ class AnalyzeDocuments(graphene.Mutation):
 
 class CheckDocuments(graphene.Mutation):
     checked_list = graphene.List(CheckedResultType)
-    aid_data_list = graphene.List(AidDataType)
+    data_list = graphene.List(DataType)
     
     class Arguments:
         documents = graphene.List(graphene.String)
@@ -193,28 +177,28 @@ class CheckDocuments(graphene.Mutation):
         pass_fail = None
         errors = []
         collection = []
-        aid_data_report = []
+        data_report = []
         words_failed = None
         tables_failed = None
         pos_error = None 
-        next_college_status_id = None
+        next_status_id = None
         last_index = len(documents) - 1
         checked_list = []
-        aid_data_list = []
+        data_list = []
 
         # interate through list 
         for idx, document in enumerate(documents):
             doc = DocumentResult.objects.get(name=document)
             end_index = document.index("_file")
-            college_status_id = int(document[3:end_index])
-            college_status_id = 1
+            status_id = int(document[3:end_index])
+            status_id = 1
 
-            # keep track of college_status_id positions
+            # keep track of status_id positions
             if idx < last_index:
-                # next_college_status_id = int(documents[idx + 1][3:end_index])
-                next_college_status_id = college_status_id + 1
+                # next_status_id = int(documents[idx + 1][3:end_index])
+                next_status_id = status_id + 1
             elif idx == last_index:
-                next_college_status_id = -1
+                next_status_id = -1
 
             # check if words are processed
             try:
@@ -278,8 +262,8 @@ class CheckDocuments(graphene.Mutation):
                             pass_fail="Passed", 
                             processed=True))
 
-                # aid_data from 'parse_data.py' scripts
-                pos = get_aid_data(tables, doc.name)
+                # data from 'parse_data.py' scripts
+                pos = get_data(tables, doc.name)
                 pos_error = pos.get("Document Error", None)
 
                 if not pos_error:
@@ -293,37 +277,37 @@ class CheckDocuments(graphene.Mutation):
                             col_index = each.get("Col Index")
                             row_data = each.get("Row Data")
 
-                            # get college_status_id from document
-                            college_status = Status.objects.get(pk=college_status_id)
+                            # get status_id from document
+                            college_status = Status.objects.get(pk=status_id)
 
-                            # auto reviewed=True if check passed and pos_error=False 
+                            # auto award_reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":
-                                college_status.reviewed = True
+                                college_status.award_reviewed = True
                                 college_status.save()
 
                             # filter/match for category 
-                            possibilities = find_aid_category(name, document)
+                            possibilities = find_category(name, document)
                             category = filter_possibilities(possibilities)
-                            aid_category = AidCategory.objects.get(name=category)
-                            
+                            category = Category.objects.get(name=category)
+
                             # check for dups
                             try:
-                                aid_data = AidData.objects.get(
+                                data = Data.objects.get(
                                     name=name, 
                                     amount=amount,
                                     table_number=table_number,
                                     row_index=row_index,
                                     col_index=col_index,
                                     row_data=row_data,
-                                    college_status=college_status,
-                                    aid_category=aid_category
+                                    status=college_status,
+                                    category=category
                                 )
-                                aid_data_list.append(aid_data)
+                                data_list.append(data)
 
                                 # add aid data for report
-                                aid_data_report.append({
-                                    "college_status": college_status_id,
-                                    "aid_category": aid_category.name,
+                                data_report.append({
+                                    "status": status_id,
+                                    "category": category.name,
                                     "name": name,
                                     "amount": amount,
                                     "table_number": table_number,
@@ -332,27 +316,27 @@ class CheckDocuments(graphene.Mutation):
                                     "row_data": row_data,
                                 })
                             except:
-                                aid_data = None
+                                data = None
 
                                 # create AidDate if no dups
-                                if aid_data is None:
-                                    aid_data = AidData(
+                                if data is None:
+                                    data = Data(
                                         name=name,
                                         amount=amount,
                                         table_number=table_number,
                                         row_index=row_index,
                                         col_index=col_index,
                                         row_data=row_data,
-                                        college_status=college_status,
-                                        aid_category=aid_category
+                                        status=college_status,
+                                        category=category
                                     )
-                                    aid_data.save()
-                                    aid_data_list.append(aid_data)
+                                    data.save()
+                                    data_list.append(data)
 
                                     # add aid data for report
-                                    aid_data_report.append({
-                                        "college_status": college_status_id,
-                                        "aid_category": aid_category.name,
+                                    data_report.append({
+                                        "status": status_id,
+                                        "category": category.name,
                                         "name": name,
                                         "amount": amount,
                                         "table_number": table_number,
@@ -417,113 +401,28 @@ class CheckDocuments(graphene.Mutation):
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "reviewed": college_status.reviewed,
+                "award_reviewed": college_status.award_reviewed,
                 "errors": errors,
-                "aid_data": aid_data_report,
+                "data": data_report,
             }
 
             # catch all multiples of the same document
-            if college_status_id == next_college_status_id:
+            if status_id == next_status_id:
                 collection.append(report_data)
-                aid_data_report = []
+                data_report = []
                 errors = []
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
-                send_report_email(college_status_id, collection)
+                send_report_email(status_id, collection)
                 collection = []
-                aid_data_report = []
+                data_report = []
                 errors = []
 
-        return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
+        return CheckDocuments(checked_list=checked_list, data_list=data_list)
 
-class GetBucket(graphene.Mutation):
-    bucket_list = graphene.List(graphene.String)
-
-    class Arguments:
-        bucket = graphene.String()
-        limit = graphene.Int()
-
-    def mutate(
-        self,
-        info,
-        bucket=None,
-        limit=None,
-    ):
-        try:
-            bucket_list = get_documents(bucket, limit)
-        except Exception as e:
-            error = e.response["Error"]["Message"]
-            raise Exception(f'{error}')
-        
-        return GetBucket(bucket_list=bucket_list)
-
-class StartBucketCheck(graphene.Mutation):
-    pending = graphene.Boolean()
-
-    class Arguments:
-        bucket = graphene.String()
-        limit = graphene.Int()
-
-    def mutate(
-        self,
-        info,
-        bucket=None,
-        limit=None,
-    ):
-        qs = BucketCheck.objects.filter(bucket=bucket)
-
-        if len(qs) > 0:
-            raise Exception('Bucket already exists')
-        else:
-            job_dict = start_bucket_check(bucket, limit) 
-            data = json.dumps(job_dict, indent=2)
-            check = BucketCheck(bucket=bucket, job_dict=data)
-            check.save()
-
-        return StartBucketCheck(pending=True)
-
-class GetBucketResult(graphene.Mutation):
-    bucket_result = graphene.Field(BucketResultType)
-
-    class Arguments:
-        bucket = graphene.String()
-
-    def mutate(
-        self,
-        info,
-        bucket=None,
-    ):
-        try:
-            data = BucketCheck.objects.get(bucket=bucket)
-            job_dict =  json.loads(data.job_dict)
-            get_bucket = get_bucket_results(bucket, job_dict)
-        except Exception as e:
-            raise e
-            
-        total = get_bucket.get('Total')
-        passed_count = get_bucket.get('Passed Count')
-        passed_list = get_bucket.get('Passed List')
-        failed_count = get_bucket.get('Failed Count')
-        failed_list = get_bucket.get('Failed List')
-        missing = get_bucket.get('Missing Amounts')
-        missing_amounts = json.dumps(missing, indent=2)
-
-        results = BucketResult(
-            bucket=bucket,
-            total_documents=total,
-            passed_count=passed_count,
-            passed_list=passed_list,
-            failed_count=failed_count,
-            failed_list=failed_list,
-            missing=missing_amounts
-        )
-        results.save()
-
-        return GetBucketResult(bucket_result=results)
-
-class CreateAidCategory(graphene.Mutation):
-    aid_category = graphene.Field(AidCategoryType)
+class CreateCategory(graphene.Mutation):
+    category = graphene.Field(CategoryType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -543,25 +442,22 @@ class CreateAidCategory(graphene.Mutation):
         year=None,
     ):
         try:
-            aid_category = AidCategory.objects.get(name=name)
+            category = Category.objects.get(name=name)
         except:
-            aid_category = None
+            category = None
 
-        if aid_category is None:
-            aid_category = AidCategory(
+        if category is None:
+            category = Category(
                 name=name, 
                 main_category=main_category,
                 sub_category=sub_category,
                 sub_sub_category=sub_sub_category,
                 year=year)
-            aid_category.save()
-            return CreateAidCategory(aid_category=aid_category, success=True)
+            category.save()
+            return CreateCategory(category=category, success=True)
         else:
             raise Exception ('Aid category already exists')
 
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
-    get_bucket = GetBucket.Field()
-    start_bucket_check = StartBucketCheck.Field()
-    get_bucket_result = GetBucketResult.Field()
