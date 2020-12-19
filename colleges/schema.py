@@ -69,8 +69,8 @@ class Query(graphene.ObjectType):
         savings=graphene.Int(),
         family=graphene.Int(),
         other_scholarships=graphene.Int(),
-        loan_subsideized=graphene.Int(),
-        loan_unsubsideized=graphene.Int(),
+        loan_subsidized=graphene.Int(),
+        loan_unsubsidized=graphene.Int(),
         loan_plus=graphene.Int(),
         loan_private=graphene.Int(),
         loan_school=graphene.Int())
@@ -604,8 +604,8 @@ class CreateBudget(graphene.Mutation):
         savings=graphene.Int()
         family=graphene.Int()
         other_scholarships=graphene.Int()
-        loan_subsideized=graphene.Int()
-        loan_unsubsideized=graphene.Int()
+        loan_subsidized=graphene.Int()
+        loan_unsubsidized=graphene.Int()
         loan_plus=graphene.Int()
         loan_private=graphene.Int()
         loan_school=graphene.Int()
@@ -619,8 +619,8 @@ class CreateBudget(graphene.Mutation):
         savings=None,
         family=None,
         other_scholarships=None,
-        loan_subsideized=None,
-        loan_unsubsideized=None,
+        loan_subsidized=None,
+        loan_unsubsidized=None,
         loan_plus=None,
         loan_private=None,
         loan_school=None,
@@ -635,8 +635,8 @@ class CreateBudget(graphene.Mutation):
             savings=savings,
             family=family,
             other_scholarships=other_scholarships,
-            loan_subsideized=loan_subsideized,
-            loan_unsubsideized=loan_unsubsideized,
+            loan_subsidized=loan_subsidized,
+            loan_unsubsidized=loan_unsubsidized,
             loan_plus=loan_plus,
             loan_private=loan_private,
             loan_school=loan_school,
@@ -654,8 +654,8 @@ class UpdateBudget(graphene.Mutation):
         savings=graphene.Int()
         family=graphene.Int()
         other_scholarships=graphene.Int()
-        loan_subsideized=graphene.Int()
-        loan_unsubsideized=graphene.Int()
+        loan_subsidized=graphene.Int()
+        loan_unsubsidized=graphene.Int()
         loan_plus=graphene.Int()
         loan_private=graphene.Int()
         loan_school=graphene.Int()
@@ -669,8 +669,8 @@ class UpdateBudget(graphene.Mutation):
         savings=None,
         family=None,
         other_scholarships=None,
-        loan_subsideized=None,
-        loan_unsubsideized=None,
+        loan_subsidized=None,
+        loan_unsubsidized=None,
         loan_plus=None,
         loan_private=None,
         loan_school=None,
@@ -683,8 +683,8 @@ class UpdateBudget(graphene.Mutation):
         budget.savings = savings
         budget.family = family
         budget.other_scholarships = other_scholarships
-        budget.loan_subsideized = loan_subsideized
-        budget.loan_unsubsideized = loan_unsubsideized
+        budget.loan_subsidized = loan_subsidized
+        budget.loan_unsubsidized = loan_unsubsidized
         budget.loan_plus = loan_plus
         budget.loan_private = loan_private
         budget.loan_school = loan_school

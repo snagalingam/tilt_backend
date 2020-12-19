@@ -89,7 +89,7 @@ class BudgetAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'status', 'work_study', 'job', 'savings', 'family', 
-                'other_scholarships', 'loan_subsideized', 'loan_unsubsideized', 
+                'other_scholarships', 'loan_subsidized', 'loan_unsubsidized', 
                 'loan_plus', 'loan_private', 'loan_school',)
         }),
     )

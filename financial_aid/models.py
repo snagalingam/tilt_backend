@@ -16,8 +16,7 @@ class DocumentResult(models.Model):
     number_of_missing = models.IntegerField(blank=True, null=True)
     missing_amounts = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+    null=True, blank=True,)
     
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -31,8 +30,7 @@ class DocumentData(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     words = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+    null=True, blank=True)
     tables = models.TextField(null=True, blank=True)
 
     # automatically added
@@ -73,8 +71,7 @@ class Data(models.Model):
     col_index = models.IntegerField(blank=True, null=True)
     row_data = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+    null=True, blank=True, default=None)
 
     status = models.ForeignKey(
         Status, on_delete=models.CASCADE)

@@ -6,8 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-from users.models import DeletedAccount, Action
-
+from .models import DeletedAccount, Action, Pronoun, PronounUser, Source, SourceUser, Type, Income, Ethnicity, EthnicityUser
 CustomUser = get_user_model()
 
 class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -96,7 +95,139 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
 
     model = CustomUser
 
+# class PronounAdmin(admin.ModelAdmin, DynamicArrayMixin):
+
+#     # def pronoun_count(self, obj):
+        
+#     #     return obj.data_set.count()
+
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['pronoun',]
+
+#     fieldsets = (
+#         (None, {'fields': ('pronoun', )}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = Pronoun
+
+# class PronounUserAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = PronounUser
+
+# class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = Source
+
+# class SourceUserAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = SourceUser
+
+# class TypeAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = Type
+
+# class IncomeAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = Income
+
+# class EthnicityAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = Ethnicity
+
+# class EthnicityUserAdmin(admin.ModelAdmin, DynamicArrayMixin):
+#     formfield_overrides = {
+#         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+#     }
+#     list_display = ['date', 'accounts',]
+
+#     fieldsets = (
+#         (None, {'fields': ('date', 'accounts',)}),
+#     )
+
+#     search_fields = ('date', 'accounts',)
+#     ordering = ('date',)
+
+#     model = EthnicityUser
 
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(DeletedAccount, DeletedAccountAdmin)
 admin.site.register(Action, ActionAdmin)
+admin.site.register(DeletedAccount, DeletedAccountAdmin)
+# admin.site.register(Pronoun, PronounAdmin)
+# admin.site.register(PronounUser, PronounUserAdmin)
+# admin.site.register(Source, SourceAdmin)
+# admin.site.register(SourceUser, SourceUserAdmin)
+# admin.site.register(Type, TypeAdmin)
+# admin.site.register(Income, IncomeAdmin)
+# admin.site.register(Ethnicity, EthnicityAdmin)
+# admin.site.register(EthnicityUser, EthnicityUserAdmin)

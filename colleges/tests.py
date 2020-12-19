@@ -541,8 +541,8 @@ class CollegeTests(TestCase):
             savings=10000,
             family=10000,
             other_scholarships=10000,
-            loan_subsideized=10000,
-            loan_unsubsideized=10000,
+            loan_subsidized=10000,
+            loan_unsubsidized=10000,
             loan_plus=10000,
             loan_private=10000,
             loan_school=10000)
@@ -553,8 +553,8 @@ class CollegeTests(TestCase):
         self.assertEqual(college_budget.savings, 10000)
         self.assertEqual(college_budget.family, 10000)
         self.assertEqual(college_budget.other_scholarships, 10000)
-        self.assertEqual(college_budget.loan_subsideized, 10000)
-        self.assertEqual(college_budget.loan_unsubsideized, 10000)
+        self.assertEqual(college_budget.loan_subsidized, 10000)
+        self.assertEqual(college_budget.loan_unsubsidized, 10000)
         self.assertEqual(college_budget.loan_plus, 10000)
         self.assertEqual(college_budget.loan_private, 10000)
         self.assertEqual(college_budget.loan_school, 10000)

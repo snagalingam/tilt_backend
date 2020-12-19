@@ -27,12 +27,10 @@ class College(models.Model):
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+    null=True, blank=True, default=None)
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+    null=True, blank=True, default=None)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -364,8 +362,8 @@ class Budget(models.Model):
     savings = models.IntegerField(blank=True, null=True)
     family = models.IntegerField(blank=True, null=True)
     other_scholarships = models.IntegerField(blank=True, null=True)
-    loan_subsideized = models.IntegerField(blank=True, null=True)
-    loan_unsubsideized = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
     loan_plus = models.IntegerField(blank=True, null=True)
     loan_private = models.IntegerField(blank=True, null=True)
     loan_school = models.IntegerField(blank=True, null=True)
