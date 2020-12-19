@@ -1,5 +1,4 @@
 version: '3.7'
-
 services:
   backend:
     container_name: backend
@@ -20,7 +19,6 @@ services:
       - .:/app
     depends_on:
       - db
-
   db:
     container_name: db
     image: postgres:11
