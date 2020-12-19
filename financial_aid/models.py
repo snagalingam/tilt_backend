@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from college_status.models import CollegeStatus
+from colleges.models import Status
 
 class DocumentResult(models.Model):
     # Name of document (s3 file name)
@@ -111,7 +111,7 @@ class AidData(models.Model):
     )
 
     college_status = models.ForeignKey(
-        CollegeStatus, on_delete=models.CASCADE)
+        Status, on_delete=models.CASCADE)
     aid_category =models.ForeignKey(
         AidCategory, on_delete=models.CASCADE)
 

@@ -5,7 +5,7 @@ import os
 import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, BucketCheck, BucketResult, AidCategory, AidData
-from college_status.models import CollegeStatus
+from colleges.models import Status
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
@@ -167,7 +167,7 @@ class AnalyzeDocuments(graphene.Mutation):
             # find college_status and update award_uploaded=True
             end_index = document.index("_file")
             college_status_id = int(document[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
+            college_status = Status.objects.get(pk=college_status_id)
             college_status.award_uploaded = True 
             college_status.save()
 
@@ -294,7 +294,7 @@ class CheckDocuments(graphene.Mutation):
                             row_data = each.get("Row Data")
 
                             # get college_status_id from document
-                            college_status = CollegeStatus.objects.get(pk=college_status_id)
+                            college_status = Status.objects.get(pk=college_status_id)
 
                             # auto reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":

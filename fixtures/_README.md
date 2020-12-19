@@ -11,7 +11,7 @@
 1. colleges.college
 2. colleges.scorecard
 3. colleges.fieldofstudy
-4. college_status.collegestatus
+4. college_status.status
 5. organizations.organization
 6. financial_aid.aidcategory
 
