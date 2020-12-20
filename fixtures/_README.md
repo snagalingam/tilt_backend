@@ -16,6 +16,7 @@
 6. financial_aid.Category
 7. financial_aid.Data
 
+
 # How to dump (extract) data from database
 
 1. Dump entire database to file

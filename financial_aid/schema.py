@@ -5,6 +5,7 @@ import os
 import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, Category, Data
+
 from colleges.models import Status
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data

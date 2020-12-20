@@ -335,14 +335,14 @@ class Status(models.Model):
 
     class Meta:
         verbose_name_plural = 'College statuses'
-    
+
     def save(self, *args, **kwargs):
         method = self.user.preferred_contact_method
 
         # send user notification about financial aid letter if award_reviewed=True
         if self.award_reviewed is True and method is not None and self.user_notified is not True:
             self.user_notified = True
-            
+
             if method == "email":
                 send_notification_email(self.user.email, self.user.first_name)
             if method == "text":
