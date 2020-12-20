@@ -1,4 +1,5 @@
 import graphene
+import math
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
 from .models import Provider, Scholarship, ScholarshipStatus
@@ -20,6 +21,12 @@ class ScholarshipType(DjangoObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
+
+
+class ScholarshipPaginationType(graphene.ObjectType):
+    count = graphene.Int()
+    pages = graphene.Int()
+    search_results = graphene.List(ScholarshipType)
 
 
 class Query(graphene.ObjectType):
@@ -77,14 +84,15 @@ class Query(graphene.ObjectType):
         financial_need=graphene.Boolean())
 
     # scholarship_by_user_criteria
-    scholarships_by_user_criteria = graphene.List(
-        ScholarshipType,
+    scholarships_by_user_criteria = graphene.Field(
+        ScholarshipPaginationType,
         name=graphene.String(),
         start_deadline=graphene.Date(),
         end_deadline=graphene.Date(),
         status=graphene.String(),
-        limit=graphene.Int(),
-        max_amount=graphene.List(graphene.Float)
+        max_amount=graphene.List(graphene.Float),
+        per_page=graphene.Int(),
+        page=graphene.Int()
     )
 
     # scholarship_statuses
@@ -125,7 +133,17 @@ class Query(graphene.ObjectType):
         qs = ScholarshipStatus.objects.filter(**fields)
         return qs
 
-    def resolve_scholarships_by_user_criteria(self, info, name=None, start_deadline=None, end_deadline=None, status=None, limit=None, max_amount=None):
+    def resolve_scholarships_by_user_criteria(
+        self,
+        info,
+        name=None,
+        start_deadline=None,
+        end_deadline=None,
+        status=None,
+        max_amount=None,
+        per_page=None,
+        page=None
+    ):
         qs = Scholarship.objects.all()
         user = info.context.user
         income_quintile = user.income_quintile
@@ -145,7 +163,14 @@ class Query(graphene.ObjectType):
         if max_amount:
             qs = qs.filter(max_amount__range=(max_amount[0], max_amount[1]))
 
-        return qs.order_by('-date_added')[0:limit]
+        qs = qs.order_by('-date_added')
+        count = qs.count()
+        pages = math.ceil(count / per_page)
+        start = (page - 1) * per_page
+        end = start + per_page
+
+        search_results = qs[start:end]
+        return ScholarshipPaginationType(search_results=search_results, pages=pages, count=count)
 
 # #------ find education level
 #         current_date = datetime.datetime.today()
