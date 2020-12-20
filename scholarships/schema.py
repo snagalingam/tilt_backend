@@ -468,15 +468,18 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
 
         user = get_user_model().objects.get(pk=user_id)
         scholarship = Scholarship.objects.get(pk=scholarship_id)
-        scholarshipStatus = ScholarshipStatus.objects.get(user=user)
+        scholarshipStatus = ScholarshipStatus.objects.filter(
+            user=user, scholarship=scholarship)
 
-        if scholarshipStatus is not None:
+        if scholarshipStatus.count() > 0:
+            scholarshipStatus = scholarshipStatus.get(user=user)
             scholarshipStatus.status = status
             scholarshipStatus.save()
         else:
             scholarshipStatus = ScholarshipStatus.objects.create(status=status)
             scholarshipStatus.user.add(user)
             scholarshipStatus.scholarship.add(scholarship)
+            scholarshipStatus.save()
 
         return CreateOrUpdateScholarshipStatus(scholarship_status=scholarshipStatus)
 
