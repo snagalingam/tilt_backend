@@ -447,7 +447,7 @@ class CreateScholarship(graphene.Mutation):
         return CreateScholarship(scholarship=scholarship)
 
 
-class CreateScholarshipStatus(graphene.Mutation):
+class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     scholarship_status = graphene.Field(ScholarshipStatusType)
 
     class Arguments:
@@ -465,18 +465,20 @@ class CreateScholarshipStatus(graphene.Mutation):
 
         user = get_user_model().objects.get(pk=user_id)
         scholarship = Scholarship.objects.get(pk=scholarship_id)
+        scholarshipStatus = ScholarshipStatus.objects.get(user=user)
 
-        scholarship_status = Provider(
-            user=user,
-            scholarship=scholarship,
-            status=status,
-        )
-        scholarship_status.save()
+        if scholarshipStatus is not None:
+            scholarshipStatus.status = status
+            scholarshipStatus.save()
+        else:
+            scholarshipStatus = ScholarshipStatus.objects.create(status=status)
+            scholarshipStatus.user.add(user)
+            scholarshipStatus.scholarship.add(scholarship)
 
-        return CreateScholarshipStatus(scholarship_status=scholarship_status)
+        return CreateOrUpdateScholarshipStatus(scholarship_status=scholarshipStatus)
 
 
 class Mutation(graphene.ObjectType):
     create_provider = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()
-    create_scholarship_status = CreateScholarshipStatus.Field()
+    create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
