@@ -11,29 +11,35 @@ from django.db.models import Q, Max, Min, F
 from itertools import chain
 from django.db.models.functions import Greatest, Least
 
+
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
         fields = "__all__"
+
 
 class FieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
         fields = "__all__"
 
+
 class ScorecardType(DjangoObjectType):
     class Meta:
         model = Scorecard
         fields = "__all__"
+
 
 class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(CollegeType)
 
+
 class NetPriceRangeType(graphene.ObjectType):
     min = graphene.Int()
     max = graphene.Int()
+
 
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
@@ -72,7 +78,6 @@ class Query(graphene.ObjectType):
         ethnicity=graphene.String(),
         religious_affiliation=graphene.String(),
         net_price=graphene.List(graphene.Float),
-        income_quintile=graphene.String()
     )
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
@@ -141,9 +146,11 @@ class Query(graphene.ObjectType):
             ethnicity=None,
             religious_affiliation=None,
             net_price=None,
-            income_quintile=None
     ):
         qs = College.objects.all()
+        user = info.context.user
+        income_quintile = user.income_quintile
+
         if name:
             qs = qs.filter(Q(scorecard__name__icontains=name) | Q(
                 scorecard__alias__icontains=name) | Q(name__icontains=name))
