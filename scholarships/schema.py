@@ -158,7 +158,10 @@ class Query(graphene.ObjectType):
             qs = qs.filter(deadline=start_deadline)
 
         if status:
-            qs = qs.filter(scholarshipstatus__status__icontains=status)
+            if (status == "no status"):
+                qs = qs.filter(scholarshipstatus__status__isnull=True)
+            else:
+                qs = qs.filter(scholarshipstatus__status__icontains=status)
 
         if max_amount:
             qs = qs.filter(max_amount__range=(max_amount[0], max_amount[1]))
