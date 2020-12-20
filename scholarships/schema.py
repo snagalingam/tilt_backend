@@ -454,19 +454,16 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     scholarship_status = graphene.Field(ScholarshipStatusType)
 
     class Arguments:
-        user_id = graphene.Int()
         scholarship_id = graphene.Int()
         status = graphene.String()
 
     def mutate(
         self,
         info,
-        user_id=None,
         scholarship_id=None,
         status=None
     ):
-
-        user = get_user_model().objects.get(pk=user_id)
+        user = info.context.user
         scholarship = Scholarship.objects.get(pk=scholarship_id)
         scholarshipStatus = ScholarshipStatus.objects.filter(
             user=user, scholarship=scholarship)
