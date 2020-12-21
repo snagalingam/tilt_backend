@@ -161,7 +161,7 @@ class Query(graphene.ObjectType):
             if (status == "no status"):
                 qs = qs.filter(scholarshipstatus__status__isnull=True)
             else:
-                qs = qs.filter(scholarshipstatus__status__icontains=status)
+                qs = qs.filter(scholarshipstatus__status=status)
 
         if max_amount:
             qs = qs.filter(max_amount__range=(max_amount[0], max_amount[1]))
