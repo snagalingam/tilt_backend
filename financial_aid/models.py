@@ -41,7 +41,7 @@ class DocumentData(models.Model):
         return str(self.name)
 
 
-class Category(models.Model):
+class AidCategory(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     # cost, aid, net_price
@@ -59,12 +59,12 @@ class Category(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'Aid categories'
 
     def __str__(self):
         return str(self.name)
 
-class Data(models.Model):
+class AidData(models.Model):
     name = models.TextField(null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
     table_number = models.IntegerField(blank=True, null=True)
@@ -76,8 +76,8 @@ class Data(models.Model):
 
     college_status = models.ForeignKey(
         CollegeStatus, on_delete=models.CASCADE)
-    category =models.ForeignKey(
-        Category, on_delete=models.CASCADE)
+    aid_category =models.ForeignKey(
+        AidCategory, on_delete=models.CASCADE)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)

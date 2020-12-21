@@ -1,6 +1,6 @@
 [
   {
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 1,
   "fields": {
     "name": "tuition",
@@ -12,7 +12,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 2,
   "fields": {
     "name": "fees",
@@ -24,7 +24,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 3,
   "fields": {
     "name": "room",
@@ -36,7 +36,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 4,
   "fields": {
     "name": "total direct cost",
@@ -48,7 +48,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 5,
   "fields": {
     "name": "meals",
@@ -60,7 +60,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 6,
   "fields": {
     "name": "books",
@@ -72,7 +72,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 7,
   "fields": {
     "name": "personal expenses",
@@ -84,7 +84,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 8,
   "fields": {
     "name": "transportation",
@@ -96,7 +96,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 9,
   "fields": {
     "name": "health insurance",
@@ -108,7 +108,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 10,
   "fields": {
     "name": "off campus housing",
@@ -120,7 +120,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 11,
   "fields": {
     "name": "stafford loan fees",
@@ -132,7 +132,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 12,
   "fields": {
     "name": "total indirect cost",
@@ -144,7 +144,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 13,
   "fields": {
     "name": "total cost defined by school",
@@ -156,7 +156,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 14,
   "fields": {
     "name": "total cost",
@@ -168,7 +168,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 15,
   "fields": {
     "name": "pell",
@@ -180,7 +180,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 16,
   "fields": {
     "name": "seog",
@@ -192,7 +192,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 17,
   "fields": {
     "name": "il map",
@@ -204,7 +204,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 18,
   "fields": {
     "name": "other grant",
@@ -216,7 +216,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 19,
   "fields": {
     "name": "total grants",
@@ -228,7 +228,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 20,
   "fields": {
     "name": "work study",
@@ -240,7 +240,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 21,
   "fields": {
     "name": "unsubsidized",
@@ -252,7 +252,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 22,
   "fields": {
     "name": "subsidized",
@@ -264,7 +264,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 23,
   "fields": {
     "name": "plus",
@@ -276,7 +276,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 24,
   "fields": {
     "name": "other loan",
@@ -288,7 +288,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 25,
   "fields": {
     "name": "total loans",
@@ -300,7 +300,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 26,
   "fields": {
     "name": "total aid",
@@ -312,7 +312,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 27,
   "fields": {
     "name": "net price defined by school",
@@ -324,7 +324,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 28,
   "fields": {
     "name": "net price after grants",
@@ -336,7 +336,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 29,
   "fields": {
     "name": "net price after grants and loans",
@@ -349,7 +349,7 @@
   }
 },
 {
-  "model": "financial_aid.Category",
+  "model": "financial_aid.AidCategory",
   "pk": 30,
   "fields": {
     "name": "uncategorized",

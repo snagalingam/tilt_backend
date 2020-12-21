@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, Category, Data, Summary
+from .models import DocumentResult, DocumentData, AidCategory, AidData, Summary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -44,23 +44,23 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = DocumentData
 
-class DataInline(admin.TabularInline):
-    model = Data
+class AidDataInline(admin.TabularInline):
+    model = AidData
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
     extra = 0
 
-class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
-    def data_count(self, obj):
-        return obj.data_set.count()
+    def aid_data_set(self, obj):
+        return obj.aiddata_set.count()
 
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'data_count']
+    list_display = ['name', 'year', 'main_category', 'sub_category', 'aiddata_set']
     fieldsets = (
         (None, {'fields': ('name',)}),
         (_('Information'), {
@@ -68,27 +68,27 @@ class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
         }),
     )
 
-    inlines = [DataInline]
+    inlines = [AidDataInline]
 
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
-    model = Category
+    model = AidCategory
 
-class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'amount', 'category',]
+    list_display = ['name', 'amount', 'aid_category',]
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'category')}),
+        (None, {'fields': ('name', 'college_status', 'aid_category')}),
         (_('Table Details'), {
             'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')
         }),
     )
-    search_fields = ('name', 'amount', 'college_status', 'category',)
-    ordering = ('name', 'amount', 'college_status', 'category',)
-    model = Data
+    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
+    ordering = ('name', 'amount', 'college_status', 'aid_category',)
+    model = AidData
 
 class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
@@ -105,6 +105,6 @@ class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Data, DataAdmin)
+admin.site.register(AidCategory, AidCategoryAdmin)
+admin.site.register(AidData, AidDataAdmin)
 admin.site.register(Summary, SummaryAdmin) 

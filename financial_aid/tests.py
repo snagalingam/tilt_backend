@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from .models import DocumentResult, DocumentData, Category, Data, Summary
-from colleges.models import College, Status
+from .models import DocumentResult, DocumentData, AidCategory, AidData, Summary
+from colleges.models import College, CollegeStatus
 User = get_user_model()
 
 class ScholarshipTests(TestCase):
@@ -41,7 +41,7 @@ class ScholarshipTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
             types=["university", "point_of_interest", "establishment"])
 
-        status = Status.objects.create(
+        CollegeStatus.objects.create(
             user=user,
             college=college,
             status="interested",
@@ -52,7 +52,7 @@ class ScholarshipTests(TestCase):
             residency="NY",
             in_state_tuition="NY")
 
-        net_total = Category.objects.create(
+        AidCategory.objects.create(
             name="net price after grants and loans",
             main_category="net price",
             sub_category="scholarships",
@@ -182,21 +182,21 @@ Table: Table_2
         self.assertIsNotNone(document_data.updated)
 
     def test_create_category(self):
-        tuition = Category.objects.create(
+        tuition = AidCategory.objects.create(
             name="tuition",
             main_category= "cost",
             sub_category="direct",
             sub_sub_category=None,
             year= 2021)
 
-        pell = Category.objects.create(
+        pell = AidCategory.objects.create(
             name="pell",
             main_category="aid",
             sub_category="grant",
             sub_sub_category="federal",
             year= 2021)
 
-        net_total = Category.objects.create(
+        net_total = AidCategory.objects.create(
             name="net price after grants and loans",
             main_category="net price",
             sub_category="scholarships",
@@ -231,10 +231,10 @@ Table: Table_2
         self.assertIsNotNone(net_total.updated)
 
     def test_create_data(self):
-        college_status = Status.objects.get(status="interested")
-        net_total = Category.objects.get(name="net price after grants and loans")
+        college_status = CollegeStatus.objects.get(status="interested")
+        net_total = AidCategory.objects.get(name="net price after grants and loans")
 
-        data_1 = Data.objects.create(
+        aid_data_1 = AidData.objects.create(
             name="Direct Subsidized Staffrd Loan",
             amount=3500,
             table_number= 1,
@@ -244,22 +244,22 @@ Table: Table_2
             status=college_status,
             category=net_total)
 
-        self.assertEqual(data_1.name, "Direct Subsidized Staffrd Loan")
-        self.assertEqual(data_1.amount, 3500)
-        self.assertEqual(data_1.table_number, 1)
-        self.assertEqual(data_1.row_index, 3)
-        self.assertEqual(data_1.col_index, 2)
-        self.assertEqual(data_1.row_data,["Direct Subsidized Staffrd Loan", "$1,750", "$3,500", "STAF"])
-        self.assertEqual(data_1.status, college_status)
-        self.assertEqual(data_1.category, net_total)
-        self.assertIsNotNone(data_1.created)
-        self.assertIsNotNone(data_1.updated)
+        self.assertEqual(aid_data_1.name, "Direct Subsidized Staffrd Loan")
+        self.assertEqual(aid_data_1.amount, 3500)
+        self.assertEqual(aid_data_1.table_number, 1)
+        self.assertEqual(aid_data_1.row_index, 3)
+        self.assertEqual(aid_data_1.col_index, 2)
+        self.assertEqual(aid_data_1.row_data,["Direct Subsidized Staffrd Loan", "$1,750", "$3,500", "STAF"])
+        self.assertEqual(aid_data_1.status, college_status)
+        self.assertEqual(aid_data_1.category, net_total)
+        self.assertIsNotNone(aid_data_1.created)
+        self.assertIsNotNone(aid_data_1.updated)
 
         # test college_status data_set
         self.assertEqual(college_status.data_set.get_queryset()[0], data_1)
 
     def test_create_summary(self):
-        college_status = Status.objects.get(status="interested")
+        college_status = CollegeStatus.objects.get(status="interested")
 
         summary = Summary.objects.create(
             status=college_status,

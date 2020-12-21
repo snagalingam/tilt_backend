@@ -13,8 +13,8 @@
 3. colleges.FieldOfStudy
 4. colleges.CollegeStatus
 5. organizations.Organization
-6. financial_aid.Category
-7. financial_aid.Data
+6. financial_aid.AidCategory
+7. financial_aid.AidData
 
 # How to dump (extract) data from database
 
