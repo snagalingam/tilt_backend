@@ -53,14 +53,14 @@ class AidDataInline(admin.TabularInline):
 
 class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
-    def aid_data_set(self, obj):
+    def aid_data_count(self, obj):
         return obj.aiddata_set.count()
 
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'aiddata_set']
+    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
     fieldsets = (
         (None, {'fields': ('name',)}),
         (_('Information'), {
