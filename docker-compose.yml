@@ -28,7 +28,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     image: postgres:12
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - dev_postgres:/var/lib/postgresql/data/
 
 volumes:
-  postgres_data:
+  dev_postgres:
