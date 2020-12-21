@@ -32,7 +32,7 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: nginx
     depends_on:
       - backend
