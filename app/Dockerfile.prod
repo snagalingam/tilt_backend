@@ -9,6 +9,9 @@ ENV PYTHONUNBUFFERED 1
 ENV APP_HOME=/app
 WORKDIR $APP_HOME
 
+# Create the app user
+RUN addgroup --system app && adduser --system --group app
+
 # Install Python dependencies
 COPY Pipfile Pipfile.lock /app/
 RUN pip install pipenv && pipenv install --system
@@ -16,10 +19,16 @@ RUN pip install pipenv && pipenv install --system
 # Add the rest of the code
 COPY . /app/
 
+# Chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
 # SECRET_KEY is only included here to avoid raising an error when generating static files.
 # Be sure to add a real SECRET_KEY config variable in deployment.
 RUN SECRET_KEY=somethingsupersecret \
   python3 manage.py collectstatic --noinput
 
+# Change to the app user
+USER app
+
 # Run entrypoint.sh that verifies that Postgres is healthy before applying the migrations
-ENTRYPOINT ["/app/entrypoint.dev.sh"]
+ENTRYPOINT ["/app/entrypoint.prod.sh"]

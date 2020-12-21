@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./app
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     container_name: backend
     depends_on:
@@ -29,6 +29,18 @@ services:
     image: postgres:12
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    depends_on:
+      - backend
+      - db
+    image: nginx:mainline-alpine
+    ports:
+      - 4000:80
+    restart: always
 
 volumes:
   postgres_data:
