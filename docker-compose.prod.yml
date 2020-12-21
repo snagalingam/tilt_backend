@@ -21,7 +21,7 @@ services:
     expose:
       - 8000
     volumes:
-      - ./app:/app
+      - static_volume:/home/app/staticfiles
   db:
     container_name: db
     environment:
@@ -41,6 +41,9 @@ services:
     ports:
       - 4000:80
     restart: always
+    volumes:
+      - static_volume:/home/app/staticfiles
 
 volumes:
   postgres_data:
+  static_volume:
