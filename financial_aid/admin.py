@@ -79,7 +79,7 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'amount', 'aid_category',]
+    list_display = ['college_status', 'name', 'amount', 'aid_category',]
     fieldsets = (
         (None, {'fields': ('name', 'college_status', 'aid_category')}),
         (_('Table Details'), {

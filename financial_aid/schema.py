@@ -47,8 +47,8 @@ class CheckedResultType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
     document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
-    categories = graphene.List(AidCategoryType, limit=graphene.Int())
-    datas = graphene.List(AidDataType, limit=graphene.Int())
+    aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
+    aid_datas = graphene.List(AidDataType, limit=graphene.Int())
 
     # document_result
     document_results_by_fields = graphene.List(
@@ -65,8 +65,8 @@ class Query(graphene.ObjectType):
         DocumentDataType, 
         name=graphene.String())
 
-    # categories
-    categories_by_fields = graphene.List(
+    # aid_categories
+    aid_categories_by_fields = graphene.List(
         AidCategoryType, 
         name=graphene.String(),
         main_category=graphene.String(),
@@ -74,8 +74,8 @@ class Query(graphene.ObjectType):
         sub_sub_category=graphene.String(),
         year=graphene.Int())
 
-    # datas
-    datas_by_fields = graphene.List(
+    # aid_datas
+    aid_datas_by_fields = graphene.List(
         AidDataType, 
         name=graphene.String(),
         amount=graphene.Int(),
@@ -94,11 +94,11 @@ class Query(graphene.ObjectType):
         qs = DocumentData.objects.all()[0:limit]
         return qs
 
-    def resolve_categories(self, info, limit=None):
+    def resolve_aid_categories(self, info, limit=None):
         qs = AidCategory.objects.all()[0:limit]
         return qs
 
-    def resolve_datas(self, info, limit=None):
+    def resolve_aid_datas(self, info, limit=None):
         qs = AidData.objects.all()[0:limit]
         return qs
 
@@ -111,11 +111,11 @@ class Query(graphene.ObjectType):
         qs = DocumentData.objects.filter(**fields)
         return qs
 
-    def resolve_categories_by_fields(self, info, **fields):
+    def resolve_aid_categories_by_fields(self, info, **fields):
         qs = AidCategory.objects.filter(**fields)
         return qs
 
-    def resolve_datas_by_fields(self, info, **fields):
+    def resolve_aid_datas_by_fields(self, info, **fields):
         qs = AidData.objects.filter(**fields)
         return qs
 
@@ -262,7 +262,7 @@ class CheckDocuments(graphene.Mutation):
                             pass_fail="Passed", 
                             processed=True))
 
-                # data from 'parse_data.py' scripts
+                # aid_data from 'parse_data.py' scripts
                 pos = get_aid_data(tables, doc.name)
                 pos_error = pos.get("Document Error", None)
 
