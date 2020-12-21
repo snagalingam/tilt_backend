@@ -19,7 +19,9 @@ class Migration(migrations.Migration):
                 net_price,
                 award_uploaded,
                 award_reviewed,
-                user_notified
+                user_notified,
+                created,
+                updated
             )
             SELECT
                 id,
@@ -29,7 +31,9 @@ class Migration(migrations.Migration):
                 net_price,
                 award_uploaded,
                 reviewed,
-                user_notified
+                user_notified,
+                created,
+                updated
             FROM
                 college_status_collegestatus;
         """, reverse_sql="""
@@ -41,7 +45,9 @@ class Migration(migrations.Migration):
                 net_price,
                 award_uploaded,
                 reviewed,
-                user_notified
+                user_notified,
+                created,
+                updated
             )
             SELECT
                 id,
@@ -51,7 +57,9 @@ class Migration(migrations.Migration):
                 net_price,
                 award_uploaded,
                 award_reviewed,
-                user_notified
+                user_notified,
+                created,
+                updated
             FROM
                 colleges_status;
         """)
