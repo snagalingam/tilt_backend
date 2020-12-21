@@ -347,6 +347,9 @@ class CollegeStatus(models.Model):
                 print('--------------> text user with twilio (not yet integrated')
 
         return super(CollegeStatus, self).save(*args, **kwargs)
+        
+    def __str__(self):
+        return str(self.pk)
 
 class Budget(models.Model):
     college_status = models.ForeignKey(
