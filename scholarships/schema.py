@@ -22,14 +22,17 @@ class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
+
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
 
+
 class Query(graphene.ObjectType):
     providers = graphene.List(ProviderType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+    scholarship_statuses = graphene.List(
+        ScholarshipStatusType, limit=graphene.Int())
 
     # providers
     providers_by_fields = graphene.List(
@@ -122,6 +125,11 @@ class Query(graphene.ObjectType):
     def resolve_providers_by_fields(self, info, **fields):
         qs = Provider.objects.filter(**fields)
         return qs
+
+    def resolve_scholarship_max_amount(self, info):
+        get_max = Scholarship.objects.aggregate(Max("max_amount"))
+        max = get_max['max_amount__max']
+        return max
 
     def resolve_scholarships_by_fields(self, info, **fields):
         qs = Scholarship.objects.filter(**fields)
