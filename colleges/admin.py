@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import College, Scorecard, FieldOfStudy, Status, Budget
+from .models import College, Scorecard, FieldOfStudy, CollegeStatus, Budget
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -57,11 +57,11 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['cip_title', 'college', 'credential_level', ]
 
-    search_fields = ('cip_title', 'college__name', 'credential_level',)
+    search_fields = ('cip_title', 'college', 'credential_level',)
     ordering = ('college', 'credential_level',)
     model = FieldOfStudy
 
-class StatusAdmin(admin.ModelAdmin):
+class CollegeStatusAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
@@ -75,32 +75,32 @@ class StatusAdmin(admin.ModelAdmin):
         }),
     )
 
-    search_fields = ('status', 'college__name', 'user__email',)
-    ordering = ('status', 'college__name', 'user__email',)
-    model = Status
+    search_fields = ('status', 'college', 'user',)
+    ordering = ('status', 'college', 'user',)
+    model = CollegeStatus
 
 class BudgetAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status',]
+    list_display = ['college_status',]
 
     fieldsets = (
         (None, {
             'fields': (
-                'status', 'work_study', 'job', 'savings', 'family', 
+                'college_status', 'work_study', 'job', 'savings', 'family', 
                 'other_scholarships', 'loan_subsidized', 'loan_unsubsidized', 
                 'loan_plus', 'loan_private', 'loan_school',)
         }),
     )
 
-    search_fields = ('status__pk',)
-    ordering = ('status__pk',)
+    search_fields = ('college_status',)
+    ordering = ('college_status',)
     model = Budget
 
 
 admin.site.register(College, CollegeAdmin)
 admin.site.register(Scorecard, ScorecardAdmin)
 admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
-admin.site.register(Status, StatusAdmin)
+admin.site.register(CollegeStatus, CollegeStatusAdmin)
 admin.site.register(Budget, BudgetAdmin)

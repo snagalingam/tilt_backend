@@ -1,7 +1,7 @@
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from .models import College, Scorecard, FieldOfStudy, Status, Budget
+from .models import College, Scorecard, FieldOfStudy, CollegeStatus, Budget
 User = get_user_model()
 
 class CollegeTests(TestCase):
@@ -41,7 +41,7 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
             types=["university", "point_of_interest", "establishment"])
 
-        status = Status.objects.create(
+        CollegeStatus.objects.create(
             user=user,
             college=college,
             status="interested",
@@ -506,7 +506,7 @@ class CollegeTests(TestCase):
         user = User.objects.get(email="demouser@tiltaccess.com")
         college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
 
-        college_status = Status.objects.create(
+        college_status = CollegeStatus.objects.create(
             user=user,
             college=college,
             status="interested",
@@ -533,10 +533,10 @@ class CollegeTests(TestCase):
         self.assertEqual(user.college_status.get_queryset()[0], college_status)
 
     def test_create_budget(self):
-        status = Status.objects.get(user__email="demouser@tiltaccess.com")
+        college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
 
         college_budget = Budget.objects.create(
-            status=status,
+            college_status=college_status,
             work_study=10000,
             job=10000,
             savings=10000,
@@ -548,7 +548,7 @@ class CollegeTests(TestCase):
             loan_private=10000,
             loan_school=10000)
 
-        self.assertEqual(college_budget.status, status)
+        self.assertEqual(college_budget.college_status, college_status)
         self.assertEqual(college_budget.work_study, 10000)
         self.assertEqual(college_budget.job, 10000)
         self.assertEqual(college_budget.savings, 10000)
@@ -563,4 +563,4 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_budget.updated)
 
         # test user budget_set
-        self.assertEqual(status.budget_set.get_queryset()[0], college_budget)
+        self.assertEqual(college_status.budget_set.get_queryset()[0], college_budget)
