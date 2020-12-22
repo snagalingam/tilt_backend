@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('updated', models.DateTimeField(auto_now=True, null=True)),
                 ('aid_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='financial_aid.aidcategory')),
-                ('college_status', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='college_status.collegestatus')),
+                ('college_status', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='colleges.collegestatus')),
             ],
         ),
     ]
