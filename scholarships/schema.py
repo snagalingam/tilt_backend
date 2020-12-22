@@ -31,6 +31,7 @@ class Query(graphene.ObjectType):
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
     scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
 
+
     # providers
     providers_by_fields = graphene.List(
         ProviderType,
@@ -122,6 +123,11 @@ class Query(graphene.ObjectType):
     def resolve_providers_by_fields(self, info, **fields):
         qs = Provider.objects.filter(**fields)
         return qs
+
+    def resolve_scholarship_max_amount(self, info):
+        get_max = Scholarship.objects.aggregate(Max("max_amount"))
+        max = get_max['max_amount__max']
+        return max
 
     def resolve_scholarships_by_fields(self, info, **fields):
         qs = Scholarship.objects.filter(**fields)
@@ -318,4 +324,4 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     create_provider = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()
-     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
+    create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
