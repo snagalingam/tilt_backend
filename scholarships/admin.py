@@ -55,8 +55,7 @@ class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'scholarship']
-    filter_horizontal = ('user',)
+    list_display = ['status', 'scholarship', 'user']
     fieldsets = (
         (None, {'fields': ('user', 'scholarship', 'status', )}),
     )
