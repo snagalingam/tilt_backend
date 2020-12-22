@@ -12,7 +12,7 @@
 2. colleges.Scorecard
 3. colleges.FieldOfStudy
 4. college_status.CollegeStatus
-5. organizations.)rganization
+5. organizations.Organization
 6. financial_aid.AidCategory
 7. financial_aid.AidData
 

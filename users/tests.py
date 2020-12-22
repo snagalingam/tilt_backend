@@ -13,33 +13,33 @@ class CustomUserTests(TestCase):
             email="admin@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Admin",
-            last_name="Testuser"
-        )
+            last_name="Testuser")
+            
         # create user
         User.objects.create_user(
             email="demouser@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo",
-            last_name="Testuser"
-        )
+            last_name="Testuser")
+            
         User.objects.create_user(
             email="demouser1@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo1",
-            last_name="Testuser"
-        )
+            last_name="Testuser")
+            
         User.objects.create_user(
             email="demouser2@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo2",
-            last_name="Testuser"
-        )
+            last_name="Testuser")
+            
         User.objects.create_user(
             email="demouser3@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo3",
-            last_name="Testuser"
-        )
+            last_name="Testuser")
+            
         # create organization
         Organization.objects.create(
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
@@ -53,8 +53,8 @@ class CustomUserTests(TestCase):
             url="https://maps.google.com/?cid=18245956559700032436",
             website="http://www.aamu.edu/",
             types=["school", "point_of_interest", "establishment"],
-            tilt_partnership=False,
-        )
+            tilt_partnership=False,)
+            
 
     def test_create_superuser(self):
         superuser = User.objects.get(email="admin@tiltaccess.com")

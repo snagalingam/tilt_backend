@@ -25,7 +25,7 @@ def start_words_analysis(document):
     print(f"====> Document: \033[94m{document}\033[0m")
     print(f"====> Start Words Analysis with ID: \033[93m{job_id}\033[0m")
     return job_id
-    
+
 def get_result(job_id):
     pages = []
     response = textract.get_document_text_detection(JobId=job_id)

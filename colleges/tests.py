@@ -1,11 +1,18 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
-from colleges.models import College, Scorecard, FieldOfStudy
+from .models import College, Scorecard, FieldOfStudy, CollegeStatus, Budget
+User = get_user_model()
 
 class CollegeTests(TestCase):
 
     def setUp(self):
-        # create college
-        College.objects.create(
+        user = User.objects.create_user(
+            email="demouser@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo",
+            last_name="Testuser")
+
+        college = College.objects.create(
             popularity_score=1,
             unit_id=100654,
             ope_id="00100200",
@@ -30,6 +37,7 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
+
             "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
             types=["university", "point_of_interest", "establishment"],
         )
@@ -51,6 +59,7 @@ class CollegeTests(TestCase):
             favicon="https://www.uab.edu/styles/5.0/images/favicons/favicon-196x196.png",
             description="University of Alabama at Birmingham is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.",
             main_photo="https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+
             photos=[
                 "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
                 "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
@@ -470,8 +479,7 @@ class CollegeTests(TestCase):
             num_students_earnings=25400,
             median_earnings=25400,
             num_students_ipeds_awards1=24,
-            num_students_ipeds_awards2=33,
-        )
+            num_students_ipeds_awards2=33)
 
         self.assertEqual(field_of_study.college, college)
         self.assertEqual(field_of_study.cip_code, "1313")

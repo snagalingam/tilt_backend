@@ -26,7 +26,7 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     )
 
     search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
-    ordering = ('name', 'sent', 'processed', 'number_of_missing','created',)
+    ordering = ('name', 'sent', 'processed', 'number_of_missing', 'created',)
     model = DocumentResult
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -86,6 +86,19 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('name', 'amount', 'college_status', 'aid_category',)
     ordering = ('name', 'amount', 'college_status', 'aid_category',)
     model = AidData
+
+class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['total_cost', 'total_aid', 'net_price',]
+    fieldsets = (
+        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
+    )
+
+    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('college_status',)
+    model = AidSummary
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)

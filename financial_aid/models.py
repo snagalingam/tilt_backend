@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from college_status.models import CollegeStatus
+from colleges.models import CollegeStatus
 
 class DocumentResult(models.Model):
     # Name of document (s3 file name)
@@ -19,7 +19,7 @@ class DocumentResult(models.Model):
         null=True,
         blank=True,
     )
-
+    
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
@@ -35,6 +35,7 @@ class DocumentData(models.Model):
         null=True,
         blank=True,
     )
+
     tables = models.TextField(null=True, blank=True)
 
     # automatically added

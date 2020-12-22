@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 import json
 import os
 import time
+
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, AidCategory, AidData
 from college_status.models import CollegeStatus
@@ -280,7 +281,7 @@ class CheckDocuments(graphene.Mutation):
                             # get college_status_id from document
                             college_status = CollegeStatus.objects.get(pk=college_status_id)
 
-                            # auto award_reviewed=True if check passed and pos_error=False
+                            # auto award_reviewed=True if check passed and pos_error=False 
                             if check["pass_fail"] == "Passed":
                                 college_status.award_reviewed = True
                                 college_status.save()
@@ -455,8 +456,7 @@ class CreateAidCategory(graphene.Mutation):
                 year=year)
             aid_category.save()
             return CreateAidCategory(aid_category=aid_category, success=True)
-        else:
-            raise Exception ('Aid category already exists')
+        raise Exception ('Aid category already exists')
 
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()

@@ -3,7 +3,7 @@
 ## Start App
 1. Download and run Docker Desktop: https://www.docker.com/products/docker-desktop
 2. To start the backend, run `docker-compose up -d --build`
-3. To get the database up and running, run `docker-compose exec backend python manage.py migrate`
+3. To get the database up and running, run `docker-compose exec backend python3 manage.py migrate`
 
 ## Shut Down
 1. To shut down the instances of Docker, run `docker-compose down`
@@ -20,10 +20,10 @@
 4. Install dependencies
       - RUN `pipenv install`
 
-## Setup local database instance:
+## Set up local database
 Create local db instance using postgres. Easiest way: https://postgresapp.com/
 
-## To run local development mode, run following commands in terminal:
+## Set environment variables
 1. `export ENVIRONMENT="development"`
 2. `export DEBUG=1`
 3. `export SECRET_KEY={'<any_random_string>'}`

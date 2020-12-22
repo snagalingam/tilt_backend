@@ -38,27 +38,23 @@ class Scholarship(models.Model):
     number_awards = models.IntegerField(null=True, blank=True)
     education_level = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+        null=True, blank=True)
     education_requirements = models.TextField(null=True, blank=True)
     area_of_study = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+        null=True, blank=True)
     area_of_study_description = models.TextField(null=True, blank=True)
     writing_competition = models.BooleanField(null=True, blank=True)
     interest_description = models.CharField(max_length=255, null=True, blank=True)
     college = models.ManyToManyField(College, blank=True)
     association_requirement = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+        null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
     ethnicity = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+        null=True, blank=True)
     gender = models.CharField(max_length=255, null=True, blank=True)
     min_gpa = models.FloatField(null=True, blank=True)
     max_gpa = models.FloatField(null=True, blank=True)
@@ -68,8 +64,7 @@ class Scholarship(models.Model):
     military = models.TextField(null=True, blank=True)
     citizenship = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True,
-    )
+        null=True, blank=True)
     first_generation = models.BooleanField(null=True, blank=True)
     financial_need = models.BooleanField(null=True, blank=True)
 
@@ -99,6 +94,6 @@ class ScholarshipStatus(models.Model):
 
     class Meta:
         verbose_name_plural = 'Scholarship statuses'
-
+        
     def __str__(self):
         return str(self.status)

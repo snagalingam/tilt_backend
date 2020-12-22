@@ -26,6 +26,11 @@ class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
 
+class ScholarshipPaginationType(graphene.ObjectType):
+    count = graphene.Int()
+    pages = graphene.Int()
+    search_results = graphene.List(ScholarshipType)
+
 class Query(graphene.ObjectType):
     providers = graphene.List(ProviderType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
@@ -122,6 +127,11 @@ class Query(graphene.ObjectType):
     def resolve_providers_by_fields(self, info, **fields):
         qs = Provider.objects.filter(**fields)
         return qs
+
+    def resolve_scholarship_max_amount(self, info):
+        get_max = Scholarship.objects.aggregate(Max("max_amount"))
+        _max = get_max['max_amount__max']
+        return _max
 
     def resolve_scholarships_by_fields(self, info, **fields):
         qs = Scholarship.objects.filter(**fields)
@@ -278,7 +288,6 @@ class CreateScholarship(graphene.Mutation):
             financial_need=financial_need
         )
         scholarship.save()
-
         return CreateScholarship(scholarship=scholarship)
 
 class CreateOrUpdateScholarshipStatus(graphene.Mutation):
@@ -291,11 +300,9 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     def mutate(
         self,
         info,
-        user_id=None,
         scholarship_id=None,
         status=None
     ):
-
         user = info.context.user
         scholarship = Scholarship.objects.get(pk=scholarship_id)
         scholarshipStatus = ScholarshipStatus.objects.filter(
@@ -318,4 +325,4 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     create_provider = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()
-     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
+    create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
