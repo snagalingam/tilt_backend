@@ -22,17 +22,15 @@ class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
-
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
 
-
 class Query(graphene.ObjectType):
     providers = graphene.List(ProviderType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(
-        ScholarshipStatusType, limit=graphene.Int())
+    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+
 
     # providers
     providers_by_fields = graphene.List(
@@ -326,4 +324,4 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     create_provider = CreateProvider.Field()
     create_scholarship = CreateScholarship.Field()
-     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
+    create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
