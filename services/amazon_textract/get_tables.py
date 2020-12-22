@@ -7,9 +7,9 @@ from .table_methods import get_rows_columns_map, get_text, generate_table_csv
 from django.conf import settings
 
 textract = boto3.client(
-    "textract", 
+    "textract",
     region_name=settings.REGION,
-    aws_access_key_id=settings.AWS_ACCESS_KEY, 
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 def start_job(file_name):
@@ -18,7 +18,7 @@ def start_job(file_name):
             "S3Object": {
                 "Bucket": settings.BUCKET,
                 "Name": file_name
-            }}, 
+            }},
         FeatureTypes=["TABLES"])
     return response["JobId"]
 
@@ -32,8 +32,8 @@ def get_result(job_id):
     pages = []
     response = textract.get_document_analysis(JobId=job_id)
     pages.append(response)
-    nextToken = None 
-        
+    nextToken = None
+
     if('NextToken' in response):
         nextToken = response['NextToken']
 

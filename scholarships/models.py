@@ -4,6 +4,9 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
 from colleges.models import College
 
+DEFUALT_SCHOLARSHIP_ID = 1
+DEFAULT_USER_ID = 1
+
 class Provider(models.Model):
     organization = models.CharField(max_length=255, null=True, blank=True, unique=True)
     reference = models.CharField(max_length=255, null=True, blank=True)
@@ -73,9 +76,16 @@ class Scholarship(models.Model):
         return str(self.name)
 
 class ScholarshipStatus(models.Model):
-    user = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
     scholarship = models.ForeignKey(
-        Scholarship, on_delete=models.CASCADE)
+        Scholarship,
+        default=DEFUALT_SCHOLARSHIP_ID,
+        on_delete=models.CASCADE
+    )
     status = models.CharField(max_length=255, null=True, blank=True)
 
     # automatically added

@@ -14,7 +14,6 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'website', 'popularity_score', 'description']
     list_editable = ['description',]
-    
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score',)}),
         (_('College Information'), {
@@ -30,8 +29,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('types', 'main_photo', 'photos',)
         }),
     )
-    search_fields = ('name', 'unit_id', 'ope_id', 'website', 'popularity_score', 
-        'description', 'favicon', 'types',)
+    search_fields = ('name', 'unit_id', 'ope_id', 'website', 'popularity_score', 'description', 'favicon', 'types',)
     ordering = ('name',)
     model = College
 

@@ -3,9 +3,10 @@ from graphene_django import DjangoObjectType
 import json
 import os
 import time
+
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, AidCategory, AidData
-from colleges.models import CollegeStatus
+from college_status.models import CollegeStatus
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
@@ -34,11 +35,11 @@ class AidDataType(DjangoObjectType):
         fields = "__all__"
 
 class AnalyzedResultType(graphene.ObjectType):
-    name = graphene.String()       
+    name = graphene.String()
     sent = graphene.String()
 
 class CheckedResultType(graphene.ObjectType):
-    name = graphene.String()       
+    name = graphene.String()
     pass_fail = graphene.String()
     processed = graphene.Boolean()
     words = graphene.String()
@@ -52,7 +53,7 @@ class Query(graphene.ObjectType):
 
     # document_result
     document_results_by_fields = graphene.List(
-        DocumentResultType, 
+        DocumentResultType,
         name=graphene.String(),
         sent=graphene.Boolean(),
         processed=graphene.Boolean(),
@@ -62,12 +63,12 @@ class Query(graphene.ObjectType):
 
     # document_datas
     document_datas_by_fields = graphene.List(
-        DocumentDataType, 
+        DocumentDataType,
         name=graphene.String())
 
     # aid_categories
     aid_categories_by_fields = graphene.List(
-        AidCategoryType, 
+        AidCategoryType,
         name=graphene.String(),
         main_category=graphene.String(),
         sub_category=graphene.String(),
@@ -76,7 +77,7 @@ class Query(graphene.ObjectType):
 
     # aid_datas
     aid_datas_by_fields = graphene.List(
-        AidDataType, 
+        AidDataType,
         name=graphene.String(),
         amount=graphene.Int(),
         table_number=graphene.Int(),
@@ -152,7 +153,7 @@ class AnalyzeDocuments(graphene.Mutation):
             end_index = document.index("_file")
             college_status_id = int(document[3:end_index])
             college_status = CollegeStatus.objects.get(pk=college_status_id)
-            college_status.award_uploaded = True 
+            college_status.award_uploaded = True
             college_status.save()
 
         # trigger lambda to checkDocuments after 5 minutes
@@ -162,7 +163,7 @@ class AnalyzeDocuments(graphene.Mutation):
 class CheckDocuments(graphene.Mutation):
     checked_list = graphene.List(CheckedResultType)
     aid_data_list = graphene.List(AidDataType)
-    
+
     class Arguments:
         documents = graphene.List(graphene.String)
 
@@ -171,7 +172,7 @@ class CheckDocuments(graphene.Mutation):
         info,
         documents=None,
     ):
-    
+
         check = None
         pos_error = None
         pass_fail = None
@@ -180,13 +181,13 @@ class CheckDocuments(graphene.Mutation):
         aid_data_report = []
         words_failed = None
         tables_failed = None
-        pos_error = None 
+        pos_error = None
         next_college_status_id = None
         last_index = len(documents) - 1
         checked_list = []
         aid_data_list = []
 
-        # interate through list 
+        # interate through list
         for idx, document in enumerate(documents):
             doc = DocumentResult.objects.get(name=document)
             end_index = document.index("_file")
@@ -205,8 +206,8 @@ class CheckDocuments(graphene.Mutation):
                 words = get_words_data(doc.words_id)
             except:
                 doc.processed = False
-                words_failed = True 
-            
+                words_failed = True
+
             # check if tables are processed
             try:
                 tables = get_table_data(doc.tables_id)
@@ -218,48 +219,48 @@ class CheckDocuments(graphene.Mutation):
             if words_failed and tables_failed:
                 checked_list.append(
                     CheckedResultType(
-                        name=doc.name, 
-                        words="Failed", 
-                        tables="Failed", 
-                        pass_fail=None, 
+                        name=doc.name,
+                        words="Failed",
+                        tables="Failed",
+                        pass_fail=None,
                         processed=False))
             elif words_failed and not tables_failed:
                 checked_list.append(
                     CheckedResultType(
-                        name=doc.name, 
-                        words="Failed", 
-                        tables=None, 
-                        pass_fail=None, 
+                        name=doc.name,
+                        words="Failed",
+                        tables=None,
+                        pass_fail=None,
                         processed=False))
             elif tables_failed and not words_failed:
                 checked_list.append(
                     CheckedResultType(
-                        name=doc.name, 
-                        words=None, 
-                        tables="Failed", 
-                        pass_fail=None, 
+                        name=doc.name,
+                        words=None,
+                        tables="Failed",
+                        pass_fail=None,
                         processed=False))
 
             # if document has words and tables
             elif not words_failed and not tables_failed:
-                doc.processed = True 
+                doc.processed = True
                 check = start_document_check(words, tables)
 
                 if check["pass_fail"] == "Failed":
                     checked_list.append(
                         CheckedResultType(
-                            name=doc.name, 
-                            words="Passed", 
-                            tables="Passed", 
-                            pass_fail="Failed", 
+                            name=doc.name,
+                            words="Passed",
+                            tables="Passed",
+                            pass_fail="Failed",
                             processed=True))
-                else: 
+                else:
                     checked_list.append(
                         CheckedResultType(
-                            name=doc.name, 
-                            words="Passed", 
-                            tables="Passed", 
-                            pass_fail="Passed", 
+                            name=doc.name,
+                            words="Passed",
+                            tables="Passed",
+                            pass_fail="Passed",
                             processed=True))
 
                 # aid_data from 'parse_data.py' scripts
@@ -285,15 +286,15 @@ class CheckDocuments(graphene.Mutation):
                                 college_status.award_reviewed = True
                                 college_status.save()
 
-                            # filter/match for category 
+                            # filter/match for category
                             possibilities = find_aid_category(name, document)
                             category_name = filter_possibilities(possibilities)
                             aid_category = AidCategory.objects.get(name=category_name)
-                            
+
                             # check for dups
                             try:
                                 aid_data = AidData.objects.get(
-                                    name=name, 
+                                    name=name,
                                     amount=amount,
                                     table_number=table_number,
                                     row_index=row_index,
@@ -344,7 +345,7 @@ class CheckDocuments(graphene.Mutation):
                                         "col_index": col_index,
                                         "row_data": row_data,
                                     })
-                
+
                 # check if document_data exists
                 try:
                     document_data = DocumentData.objects.get(name=doc.name)
@@ -354,14 +355,14 @@ class CheckDocuments(graphene.Mutation):
                 # else create new document_data
                 if document_data is None:
                     document_data = DocumentData(
-                        name=doc.name, 
+                        name=doc.name,
                         words=words,
                         tables=tables
                     )
                     document_data.save()
 
             if check is not None:
-                # update and save document_data results on each document 
+                # update and save document_data results on each document
                 pass_fail = check.get("pass_fail", None)
                 number_of_missing = check.get("number_of_missing", None)
                 missing_amounts = check.get("missing_amounts", None)
@@ -395,7 +396,7 @@ class CheckDocuments(graphene.Mutation):
                     "message": "There are missing words in tables.",
                     "number_of_missing": number_of_missing,
                     "missing_amounts": missing_amounts,
-                })           
+                })
 
             # create report_data for sendgrid
             report_data = {
@@ -448,7 +449,7 @@ class CreateAidCategory(graphene.Mutation):
 
         if aid_category is None:
             aid_category = AidCategory(
-                name=name, 
+                name=name,
                 main_category=main_category,
                 sub_category=sub_category,
                 sub_sub_category=sub_sub_category,

@@ -58,7 +58,7 @@ class CustomUserTests(TestCase):
 
     def test_create_superuser(self):
         superuser = User.objects.get(email="admin@tiltaccess.com")
-        
+
         self.assertEqual(superuser.email, "admin@tiltaccess.com")
         self.assertEqual(superuser.first_name, "Admin")
         self.assertEqual(superuser.last_name, "Testuser")
@@ -90,14 +90,15 @@ class CustomUserTests(TestCase):
         client = Client()
         superuser = User.objects.get(email="admin@tiltaccess.com")
         user = User.objects.get(email="demouser@tiltaccess.com")
-        
         login_superuser = client.login(
-            username="admin@tiltaccess.com", 
-            password="gWzupKiX5c")
+            username="admin@tiltaccess.com",
+            password="gWzupKiX5c"
+        )
         login_user = client.login(
-            username="demouser@tiltaccess.com", 
-            password="gWzupKiX5c")
-        
+            username="demouser@tiltaccess.com",
+            password="gWzupKiX5c"
+        )
+
         self.assertTrue(login_superuser)
         self.assertTrue(login_user)
 
@@ -152,7 +153,7 @@ class CustomUserTests(TestCase):
         onboard_user1 = User.objects.get(email="demouser1@tiltaccess.com")
         onboard_user2 = User.objects.get(email="demouser2@tiltaccess.com")
         onboard_user3 = User.objects.get(email="demouser3@tiltaccess.com")
-       
+
         onboard_user1.is_verified = True
         onboard_user1.is_onboarded = True
         onboard_user1.preferred_contact_method= "email"
@@ -194,7 +195,7 @@ class CustomUserTests(TestCase):
         onboard_user2.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 2)
-        
+
         onboard_user3.is_verified = True
         onboard_user3.is_onboarded = True
         onboard_user3.preferred_contact_method= "email"
@@ -220,8 +221,9 @@ class CustomUserTests(TestCase):
         date = create_date()
         get_count = DeletedAccount.objects.create(
             date=date,
-            accounts=1)
-            
+            accounts=1
+        )
+
         self.assertEqual(get_count.accounts, 1)
         self.assertEqual(User.objects.all().count(), 4)
 
@@ -241,13 +243,12 @@ class CustomUserTests(TestCase):
     def test_create_action(self):
         timestamp = create_timestamp()
         user = User.objects.get(email="demouser@tiltaccess.com")
-
         action = Action.objects.create(
-            user=user, 
-            description="Testing Actions", 
-            timestamp=timestamp)
+            user=user,
+            description="Testing Actions",
+            timestamp=timestamp
+        )
 
         self.assertEqual(action.user, user)
         self.assertEqual(action.description, "Testing Actions")
         self.assertEqual(action.timestamp, timestamp)
-

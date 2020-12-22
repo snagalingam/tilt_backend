@@ -49,28 +49,9 @@ class NetPriceRangeType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
-    field_of_studies = graphene.List(FieldOfStudyType, limit=graphene.Int())
+    fields_of_study = graphene.List(FieldOfStudyType, college_id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
-    college_statuses = graphene.List(CollegeStatusType, limit=graphene.Int())
-    budgets = graphene.List(BudgetType, limit=graphene.Int())
-
     college_by_id = graphene.Field(CollegeType, id=graphene.Int())
-    college_status_by_college_id = graphene.Field(CollegeStatusType, college_id=graphene.Int())
-    college_status_by_user_id = graphene.Field(CollegeStatusType, user_id=graphene.Int())
-    
-    budget_results_by_fields = graphene.List(
-        BudgetType, 
-        status_id=graphene.Int(),
-        work_study=graphene.Int(),
-        job=graphene.Int(),
-        savings=graphene.Int(),
-        family=graphene.Int(),
-        other_scholarships=graphene.Int(),
-        loan_subsidized=graphene.Int(),
-        loan_unsubsidized=graphene.Int(),
-        loan_plus=graphene.Int(),
-        loan_private=graphene.Int(),
-        loan_school=graphene.Int())
 
     nearby_colleges = graphene.List(
         CollegeType,
@@ -104,7 +85,9 @@ class Query(graphene.ObjectType):
     state_fips = graphene.List(ScorecardType, state_fip=graphene.String())
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
-    net_price_range = graphene.Field(NetPriceRangeType)
+    net_price_range = graphene.Field(
+        NetPriceRangeType, income_quintile=graphene.String()
+    )
     religious_affiliation = graphene.List(ScorecardType)
 
     def resolve_religious_affiliation(self, info):
@@ -278,37 +261,16 @@ class Query(graphene.ObjectType):
         qs = Scorecard.objects.all()[0:limit]
         return qs
 
-    def resolve_statuses(self, info, limit=None):
-        qs = CollegeStatus.objects.all()[0:limit]
-        return qs
-
-    def resolve_budgets(self, info, limit=None):
-        qs = Budget.objects.all()[0:limit]
-        return qs
-
-    def resolve_status_by_college_id(root, info, college_id):
-        qs = CollegeStatus.objects.get(college_id=college_id)
-        return qs
-
-    def resolve_status_by_user_id(root, info, user_id):
-        qs = CollegeStatus.objects.get(user_id=user_id)
+    def resolve_fields_of_study(self, info, college_id):
+        qs = FieldOfStudy.objects.filter(college=college_id, num_students_ipeds_awards2__isnull=False)
         return qs
 
     def resolve_college_by_id(self, info, id):
         qs = College.objects.get(pk=id)
         return qs
 
-    def resolve_budget_results_by_fields(self, info, **kwargs):
-        qs = Budget.objects.filter(**kwargs)
-        return qs
-
     def resolve_colleges_by_popularity(self, info, limit=None):
         qs = College.objects.order_by('-popularity_score')[0:limit]
-        return qs
-
-    def resolve_field_of_studies(self, info, college_id):
-        qs = FieldOfStudy.objects.filter(college=college_id,
-                                           num_students_ipeds_awards2__isnull=False)
         return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):

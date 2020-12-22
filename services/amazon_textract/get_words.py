@@ -6,7 +6,7 @@ import time
 from django.conf import settings
 
 textract = boto3.client(
-    "textract", 
+    "textract",
     region_name=settings.REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
@@ -30,8 +30,8 @@ def get_result(job_id):
     pages = []
     response = textract.get_document_text_detection(JobId=job_id)
     pages.append(response)
-    nextToken = None  
-        
+    nextToken = None
+
     if('NextToken' in response):
         nextToken = response['NextToken']
 
@@ -51,7 +51,7 @@ def get_words_data(job_id):
     words = []
 
     if status == "SUCCEEDED":
-        # Print all words in list 
+        # Print all words in list
         for resultPage in response:
             for item in resultPage["Blocks"]:
                 if item["BlockType"] == "LINE":

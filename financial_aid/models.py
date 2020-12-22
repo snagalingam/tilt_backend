@@ -16,7 +16,9 @@ class DocumentResult(models.Model):
     number_of_missing = models.IntegerField(blank=True, null=True)
     missing_amounts = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True)
+        null=True,
+        blank=True,
+    )
     
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -30,7 +32,10 @@ class DocumentData(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     words = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True)
+        null=True,
+        blank=True,
+    )
+
     tables = models.TextField(null=True, blank=True)
 
     # automatically added
@@ -39,7 +44,6 @@ class DocumentData(models.Model):
 
     def __str__(self):
         return str(self.name)
-
 
 class AidCategory(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -72,7 +76,10 @@ class AidData(models.Model):
     col_index = models.IntegerField(blank=True, null=True)
     row_data = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, blank=True, default=None)
+        null=True,
+        blank=True,
+        default=None
+    )
 
     college_status = models.ForeignKey(
         CollegeStatus, on_delete=models.CASCADE)
@@ -85,21 +92,3 @@ class AidData(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-class AidSummary(models.Model):
-    college_status = models.ForeignKey(
-        CollegeStatus, on_delete=models.CASCADE)
-
-    total_cost = models.IntegerField(blank=True, null=True)
-    total_aid = models.IntegerField(blank=True, null=True)
-    net_price = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Aid summaries'
-
-    def __str__(self):
-        return str(self.pk) 

@@ -17,7 +17,6 @@ class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
         }),
     )
-
     search_fields = ('organization', 'reference', 'email', 'state',)
     ordering = ('organization', 'reference',)
     model = Provider
@@ -29,8 +28,7 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['name', 'provider', 'deadline', 'max_amount',]
-    filter_horizontal = ('college',) 
-
+    filter_horizontal = ('college',)
     fieldsets = (
         (None, {'fields': ('provider', )}),
         (_('College'), {
@@ -49,7 +47,6 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('writing_competition', 'location', 'state', 'disability', 'military', 'ethnicity', 'gender', 'min_gpa', 'max_gpa', 'min_act', 'min_sat', 'first_generation', 'financial_need',)
         }),
     )
-
     search_fields = ('name', 'provider', 'deadline', 'max_amount',)
     ordering = ('name', 'provider',)
     model = Scholarship
@@ -58,13 +55,10 @@ class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'scholarship',]
-    filter_horizontal = ('user',) 
-
+    list_display = ['status', 'scholarship', 'user']
     fieldsets = (
         (None, {'fields': ('user', 'scholarship', 'status', )}),
     )
-
     search_fields = ('user', 'scholarship', 'status',)
     ordering = ('user', 'scholarship',)
     model = ScholarshipStatus

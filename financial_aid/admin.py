@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, AidCategory, AidData, AidSummary
+from .models import DocumentResult, DocumentData, AidCategory, AidData
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -52,7 +52,6 @@ class AidDataInline(admin.TabularInline):
     extra = 0
 
 class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-
     def aid_data_count(self, obj):
         return obj.aiddata_set.count()
 
@@ -67,9 +66,7 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('year', 'main_category', 'sub_category', 'sub_sub_category')
         }),
     )
-
     inlines = [AidDataInline]
-
     search_fields = ('name', 'main_category', 'sub_category',)
     ordering = ('name', 'year')
     model = AidCategory
@@ -107,4 +104,3 @@ admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(AidCategory, AidCategoryAdmin)
 admin.site.register(AidData, AidDataAdmin)
-admin.site.register(AidSummary, AidSummaryAdmin) 

@@ -11,7 +11,7 @@
 1. colleges.College
 2. colleges.Scorecard
 3. colleges.FieldOfStudy
-4. colleges.CollegeStatus
+4. college_status.CollegeStatus
 5. organizations.Organization
 6. financial_aid.AidCategory
 7. financial_aid.AidData
@@ -35,7 +35,7 @@
 2. Dump (extract) current data
     `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
 
-3. Make edits on dumped file 
+3. Make edits on dumped file
 
 4. Load (seed) edited file
     `python manage.py loaddata fixtures/colleges.json`
@@ -47,10 +47,10 @@
 1. Load one file
     `python manage.py loaddata fixtures/<file name>.json`
 
-2. Load all files 
+2. Load all files
    `python manage.py loaddata fixtures/*.json`
 
-3. Run Python Shell 
+3. Run Python Shell
    `python manage.py shell`
    Import Models
    `from <app name>.models import <model>`
