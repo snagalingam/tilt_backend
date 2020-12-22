@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 import datetime
-from .models import Scholarship, Provider, Status
+from .models import Scholarship, Provider, ScholarshipStatus
 from colleges.models import College
 User = get_user_model()
 
@@ -13,7 +13,8 @@ class ScholarshipTests(TestCase):
             email="demouser@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo",
-            last_name="Testuser")
+            last_name="Testuser"
+        )
 
         Provider.objects.create(
             organization="Tilt",
@@ -24,7 +25,8 @@ class ScholarshipTests(TestCase):
             zipcode= "90802",
             email= "scholarships@tiltaccess.com",
             phone_number= "224-306-9466",
-            phone_number_ext= 'x1004')
+            phone_number_ext= 'x1004'
+        )
 
         Provider.objects.create(
             organization="Strouthion",
@@ -35,7 +37,8 @@ class ScholarshipTests(TestCase):
             zipcode= "10016",
             email= "scholarships@strouthion.com",
             phone_number= "212-719-2141",
-            phone_number_ext= "x1004")
+            phone_number_ext= "x1004"
+        )
 
         provider = Provider.objects.create(
             organization="Provider",
@@ -46,7 +49,8 @@ class ScholarshipTests(TestCase):
             zipcode= "64030",
             email= "scholarships@fakeprovider.com",
             phone_number= "816-555-4321",
-            phone_number_ext= 'x4')
+            phone_number_ext= 'x4'
+        )
 
         # create college
         College.objects.create(
@@ -65,17 +69,20 @@ class ScholarshipTests(TestCase):
             favicon="https://www.aamu.edu/_resources/img/icons/favicon-196x196.png",
             description="Alabama A&M University is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.",
             main_photo="https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-            photos=["https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
-            "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
-            "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
-            "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
-            "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
-            "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
-            "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
-            types=["university", "point_of_interest", "establishment"])
+            photos=[
+                "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
+                "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
+                "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
+                "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
+                "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
+                "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
+                "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"
+            ],
+            types=["university", "point_of_interest", "establishment"]
+        )
 
         Scholarship.objects.create(
             name="Provider Scholarship",
@@ -106,11 +113,12 @@ class ScholarshipTests(TestCase):
             military="None",
             citizenship=["USA", "Canada", "Mexico"],
             first_generation=False,
-            financial_need=True)
+            financial_need=True
+        )
 
     def test_create_scholarship(self):
-        tilt = Provider.objects.get(email="scholarships@tiltaccess.com")
-        strouthion = Provider.objects.get(email="scholarships@strouthion.com")
+        tilt = Provider.objects.get(organization="Tilt")
+        strouthion = Provider.objects.get(organization="Strouthion")
         college = College.objects.get(name="Alabama A&M University")
 
         t_scholarship = Scholarship.objects.create(
@@ -255,18 +263,17 @@ class ScholarshipTests(TestCase):
     def test_create_scholarship_status(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
         scholarship = Scholarship.objects.get(name="Provider Scholarship")
-
-        scholarship_status = Status.objects.create(
+        scholarship_status = ScholarshipStatus.objects.create(
             scholarship=scholarship,
-            status="approved")
+            user=user,
+            status="approved"
+        )
 
-        scholarship_status.user.add(user)
-
-        self.assertEqual(scholarship_status.user.get_queryset()[0], user)
+        self.assertEqual(scholarship_status.user, user)
         self.assertEqual(scholarship_status.scholarship, scholarship)
         self.assertEqual(scholarship_status.status, "approved")
         self.assertIsNotNone(scholarship_status.created)
         self.assertIsNotNone(scholarship_status.updated)
 
         # test scholarship status_set
-        self.assertEqual(scholarship.status_set.get_queryset()[0], scholarship_status) 
+        self.assertEqual(user.scholarshipstatus_set.get_queryset()[0], scholarship_status)
