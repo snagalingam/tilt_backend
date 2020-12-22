@@ -35,9 +35,9 @@ operations = [
                 created,
                 updated
             FROM
-                college_status_collegestatus;
+                colleges_status;
         """, reverse_sql="""
-            INSERT INTO college_status_collegestatus (
+            INSERT INTO colleges_status (
                 id,
                 user_id,
                 college_id,
