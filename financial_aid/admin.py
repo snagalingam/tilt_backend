@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, AidCategory, AidData, Summary
+from .models import DocumentResult, DocumentData, AidCategory, AidData, AidSummary
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -90,7 +90,7 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name', 'amount', 'college_status', 'aid_category',)
     model = AidData
 
-class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
     }
@@ -101,10 +101,10 @@ class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
     ordering = ('college_status',)
-    model = Summary
+    model = AidSummary
 
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(AidCategory, AidCategoryAdmin)
 admin.site.register(AidData, AidDataAdmin)
-admin.site.register(Summary, SummaryAdmin) 
+admin.site.register(AidSummary, AidSummaryAdmin) 

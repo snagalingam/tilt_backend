@@ -86,7 +86,7 @@ class AidData(models.Model):
     def __str__(self):
         return str(self.name)
 
-class Summary(models.Model):
+class AidSummary(models.Model):
     college_status = models.ForeignKey(
         CollegeStatus, on_delete=models.CASCADE)
 
@@ -99,7 +99,7 @@ class Summary(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'Summaries'
+        verbose_name_plural = 'Aid summaries'
 
     def __str__(self):
         return str(self.pk) 

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from .models import DocumentResult, DocumentData, AidCategory, AidData, Summary
+from .models import DocumentResult, DocumentData, AidCategory, AidData, AidSummary
 from colleges.models import College, CollegeStatus
 User = get_user_model()
 
@@ -258,21 +258,21 @@ Table: Table_2
         # test college_status data_set
         self.assertEqual(college_status.data_set.get_queryset()[0], data_1)
 
-    def test_create_summary(self):
+    def test_create_aid_summary(self):
         college_status = CollegeStatus.objects.get(status="interested")
 
-        summary = Summary.objects.create(
+        aid_summary = AidSummary.objects.create(
             status=college_status,
             total_cost=50000,
             total_aid=30000,
             net_price= 20000)
 
-        self.assertEqual(summary.status, college_status)
-        self.assertEqual(summary.total_cost, 50000)
-        self.assertEqual(summary.total_aid, 30000)
-        self.assertEqual(summary.net_price, 20000)
-        self.assertIsNotNone(summary.created)
-        self.assertIsNotNone(summary.updated)
+        self.assertEqual(aid_summary.status, college_status)
+        self.assertEqual(aid_summary.total_cost, 50000)
+        self.assertEqual(aid_summary.total_aid, 30000)
+        self.assertEqual(aid_summary.net_price, 20000)
+        self.assertIsNotNone(aid_summary.created)
+        self.assertIsNotNone(aid_summary.updated)
 
-        # test college_status summary_set
-        self.assertEqual(college_status.summary_set.get_queryset()[0], summary)
+        # test college_status aid_summary_set
+        self.assertEqual(college_status.aidsummary_set.get_queryset()[0], aid_summary)
