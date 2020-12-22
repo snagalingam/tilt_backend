@@ -30,7 +30,7 @@ operations = [
                 status,
                 net_price,
                 award_uploaded,
-                reviewed,
+                award_reviewed,
                 user_notified,
                 created,
                 updated
@@ -44,7 +44,7 @@ operations = [
                 status,
                 net_price,
                 award_uploaded,
-                reviewed,
+                award_reviewed,
                 user_notified,
                 created,
                 updated
