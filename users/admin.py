@@ -7,7 +7,6 @@ from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 from users.models import DeletedAccount, Action
-
 CustomUser = get_user_model()
 
 class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
