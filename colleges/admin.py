@@ -15,7 +15,6 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['name', 'website', 'popularity_score', 'description']
     list_editable = ['description',]
-    
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score',)}),
         (_('College Information'), {
@@ -31,7 +30,6 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('types', 'main_photo', 'photos',)
         }),
     )
-
     search_fields = ('name', 'unit_id', 'ope_id', 'website', 'popularity_score', 'description', 'favicon', 'types',)
     ordering = ('name',)
     model = College
@@ -44,7 +42,6 @@ class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['name', 'city', 'state', 'zipcode']
-
     search_fields = ('name', 'unit_id', 'ope_id',)
     ordering = ('name',)
     model = Scorecard
@@ -56,7 +53,6 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
     list_display = ['cip_title', 'college', 'credential_level', ]
-
     search_fields = ('cip_title', 'college__name', 'credential_level',)
     ordering = ('college', 'credential_level',)
     model = FieldOfStudy

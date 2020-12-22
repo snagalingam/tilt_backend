@@ -38,11 +38,9 @@ class NetPriceRangeType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
-    field_of_studies = graphene.List(
-        FieldOfStudyType, college_id=graphene.Int())
+    field_of_studies = graphene.List(FieldOfStudyType, college_id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
-    college_by_id = graphene.Field(
-        CollegeType, id=graphene.Int())
+    college_by_id = graphene.Field(CollegeType, id=graphene.Int())
 
     nearby_colleges = graphene.List(
         CollegeType,
@@ -78,7 +76,8 @@ class Query(graphene.ObjectType):
     states = graphene.List(ScorecardType, state=graphene.String())
     cities = graphene.List(ScorecardType, city=graphene.String())
     net_price_range = graphene.Field(
-        NetPriceRangeType, income_quintile=graphene.String())
+        NetPriceRangeType, income_quintile=graphene.String()
+    )
     religious_affiliation = graphene.List(ScorecardType)
 
     def resolve_religious_affiliation(self, info):
@@ -100,7 +99,9 @@ class Query(graphene.ObjectType):
         qs = Scorecard.objects.filter(city__icontains=city)
         return qs
 
-    def resolve_net_price_range(self, info, income_quintile=None):
+    def resolve_net_price_range(self, info):
+        user = info.context.user
+        income_quintile = user.income_quintile
         avg_net_price_min = Scorecard.objects.aggregate(Min("avg_net_price"))
         avg_net_price_max = Scorecard.objects.aggregate(Max("avg_net_price"))
         min = avg_net_price_min["avg_net_price__min"]
@@ -144,6 +145,8 @@ class Query(graphene.ObjectType):
             income_quintile=None
     ):
         qs = College.objects.all()
+        user = info.context.user
+        income_quintile = user.income_quintile
         if name:
             qs = qs.filter(Q(scorecard__name__icontains=name) | Q(
                 scorecard__alias__icontains=name) | Q(name__icontains=name))
@@ -241,17 +244,20 @@ class Query(graphene.ObjectType):
         return CollegePaginationType(search_results=search_results, pages=pages, count=count)
 
     def resolve_colleges(self, info, limit=None):
-        return College.objects.all()[0:limit]
+        qs = College.objects.all()[0:limit]
+        return qs
 
     def resolve_scorecards(self, info, limit=None):
-        return Scorecard.objects.all()[0:limit]
+        qs = Scorecard.objects.all()[0:limit]
+        return qs
 
     def resolve_field_of_studies(self, info, college_id):
-        return FieldOfStudy.objects.filter(college=college_id,
-                                           num_students_ipeds_awards2__isnull=False)
+        qs = FieldOfStudy.objects.filter(college=college_id, num_students_ipeds_awards2__isnull=False)
+        return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):
-        return College.objects.order_by('-popularity_score')[0:limit]
+        qs = College.objects.order_by('-popularity_score')[0:limit]
+        return qs
 
     def resolve_college_by_id(self, info, id):
         return College.objects.get(pk=id)

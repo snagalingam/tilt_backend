@@ -4,6 +4,9 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
 from colleges.models import College
 
+DEFUALT_SCHOLARSHIP_ID = 1
+DEFAULT_USER_ID = 1
+
 class Provider(models.Model):
     organization = models.CharField(max_length=255, null=True, blank=True, unique=True)
     reference = models.CharField(max_length=255, null=True, blank=True)
@@ -16,8 +19,8 @@ class Provider(models.Model):
     phone_number_ext = models.CharField(max_length=255, null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.organization)
@@ -71,16 +74,31 @@ class Scholarship(models.Model):
     financial_need = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.name)
 
 class ScholarshipStatus(models.Model):
-    user = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    scholarship = models.ManyToManyField(Scholarship)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
+    scholarship = models.ForeignKey(
+        Scholarship,
+        default=DEFUALT_SCHOLARSHIP_ID,
+        on_delete=models.CASCADE
+    )
     status = models.CharField(max_length=255, null=True, blank=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Scholarship statuses'
 
     def __str__(self):
         return str(self.status)

@@ -4,7 +4,6 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 class College(models.Model):
-
     # popularity_score
     popularity_score = models.IntegerField(default=0, blank=True, null=True)
 
@@ -285,7 +284,6 @@ class Scorecard(models.Model):
         return str(self.name)
 
 class FieldOfStudy(models.Model):
-
     # college model
     college = models.ForeignKey(College, on_delete=models.CASCADE)
 
@@ -309,7 +307,7 @@ class FieldOfStudy(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'field of studies'
+        verbose_name_plural = 'Fields of study'
 
     def __str__(self):
         return str(self.cip_title)
