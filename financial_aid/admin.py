@@ -87,19 +87,6 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name', 'amount', 'college_status', 'aid_category',)
     model = AidData
 
-class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['total_cost', 'total_aid', 'net_price',]
-    fieldsets = (
-        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
-    )
-
-    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
-    ordering = ('college_status',)
-    model = AidSummary
-
 admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(AidCategory, AidCategoryAdmin)

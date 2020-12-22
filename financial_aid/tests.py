@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from .models import DocumentResult, DocumentData, AidCategory, AidData, AidSummary
+from .models import DocumentResult, DocumentData, AidCategory, AidData
 from colleges.models import College, CollegeStatus
 User = get_user_model()
 
@@ -38,7 +38,7 @@ class ScholarshipTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
+            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
             types=["university", "point_of_interest", "establishment"])
 
         CollegeStatus.objects.create(
@@ -257,22 +257,3 @@ Table: Table_2
 
         # test college_status data_set
         self.assertEqual(college_status.data_set.get_queryset()[0], data_1)
-
-    def test_create_aid_summary(self):
-        college_status = CollegeStatus.objects.get(status="interested")
-
-        aid_summary = AidSummary.objects.create(
-            status=college_status,
-            total_cost=50000,
-            total_aid=30000,
-            net_price= 20000)
-
-        self.assertEqual(aid_summary.status, college_status)
-        self.assertEqual(aid_summary.total_cost, 50000)
-        self.assertEqual(aid_summary.total_aid, 30000)
-        self.assertEqual(aid_summary.net_price, 20000)
-        self.assertIsNotNone(aid_summary.created)
-        self.assertIsNotNone(aid_summary.updated)
-
-        # test college_status aid_summary_set
-        self.assertEqual(college_status.aidsummary_set.get_queryset()[0], aid_summary)
