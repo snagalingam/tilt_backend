@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
                 migrations.RunSQL("""
-            INSERT INTO colleges_status (
+            INSERT INTO colleges_collegestatus (
                 id,
                 user_id,
                 college_id,
@@ -61,6 +61,6 @@ class Migration(migrations.Migration):
                 created,
                 updated
             FROM
-                colleges_status;
+                colleges_collegestatus;
         """)
     ]
