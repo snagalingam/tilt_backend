@@ -8,12 +8,13 @@
 
 # Examples of Tilt db table names
 
-1. colleges.college
-2. colleges.scorecard
-3. colleges.fieldofstudy
-4. college_status.collegestatus
-5. organizations.organization
-6. financial_aid.aidcategory
+1. colleges.College
+2. colleges.Scorecard
+3. colleges.FieldOfStudy
+4. college_status.CollegeStatus
+5. organizations.)rganization
+6. financial_aid.AidCategory
+7. financial_aid.AidData
 
 # How to dump (extract) data from database
 
@@ -34,7 +35,7 @@
 2. Dump (extract) current data
     `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
 
-3. Make edits on dumped file 
+3. Make edits on dumped file
 
 4. Load (seed) edited file
     `python manage.py loaddata fixtures/colleges.json`
@@ -46,10 +47,10 @@
 1. Load one file
     `python manage.py loaddata fixtures/<file name>.json`
 
-2. Load all files 
+2. Load all files
    `python manage.py loaddata fixtures/*.json`
 
-3. Run Python Shell 
+3. Run Python Shell
    `python manage.py shell`
    Import Models
    `from <app name>.models import <model>`

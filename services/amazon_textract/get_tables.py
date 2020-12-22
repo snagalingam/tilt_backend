@@ -7,9 +7,9 @@ from .table_methods import get_rows_columns_map, get_text, generate_table_csv
 from django.conf import settings
 
 textract = boto3.client(
-    "textract", 
+    "textract",
     region_name=settings.REGION,
-    aws_access_key_id=settings.AWS_ACCESS_KEY, 
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 def start_job(file_name):
@@ -18,16 +18,22 @@ def start_job(file_name):
             "S3Object": {
                 "Bucket": settings.BUCKET,
                 "Name": file_name
-            }}, 
+            }},
         FeatureTypes=["TABLES"])
     return response["JobId"]
 
+def start_tables_analysis(document):
+    job_id = start_job(document)
+    print(f"====> Document: \033[94m{document}\033[0m")
+    print(f"====> Start Tables Analysis with ID: \033[93m{job_id}\033[0m")
+    return job_id
+    
 def get_result(job_id):
     pages = []
     response = textract.get_document_analysis(JobId=job_id)
     pages.append(response)
-    nextToken = None 
-        
+    nextToken = None
+
     if('NextToken' in response):
         nextToken = response['NextToken']
 
@@ -40,12 +46,6 @@ def get_result(job_id):
             nextToken = response['NextToken']
 
     return pages
-
-def start_tables_analysis(document):
-    job_id = start_job(document)
-    print(f"====> Document: \033[94m{document}\033[0m")
-    print(f"====> Start Tables Analysis with ID: \033[93m{job_id}\033[0m")
-    return job_id
 
 def get_table_data(job_id):
     response = get_result(job_id)

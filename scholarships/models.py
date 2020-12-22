@@ -16,8 +16,8 @@ class Provider(models.Model):
     phone_number_ext = models.CharField(max_length=255, null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.organization)
@@ -45,7 +45,7 @@ class Scholarship(models.Model):
     area_of_study_description = models.TextField(null=True, blank=True)
     writing_competition = models.BooleanField(null=True, blank=True)
     interest_description = models.CharField(max_length=255, null=True, blank=True)
-    college = models.ManyToManyField(College)
+    college = models.ManyToManyField(College, blank=True)
     association_requirement = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
@@ -71,19 +71,23 @@ class Scholarship(models.Model):
     financial_need = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.name)
 
 class ScholarshipStatus(models.Model):
     user = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    scholarship = models.ManyToManyField(Scholarship)
+    scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, null=True, blank=True)
 
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
     class Meta:
-        verbose_name_plural = 'scholarship statuses'
+        verbose_name_plural = 'Scholarship statuses'
 
     def __str__(self):
         return str(self.status)

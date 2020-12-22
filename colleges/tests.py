@@ -30,29 +30,58 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
+            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
             types=["university", "point_of_interest", "establishment"],
         )
 
     def test_create_college(self):
-        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
-        
-        self.assertEqual(college.popularity_score, 1)
-        self.assertEqual(college.unit_id, 100654)
-        self.assertEqual(college.ope_id, "00100200")
-        self.assertEqual(college.place_id, "ChIJ91htBQIXYogRtPsg4NGoNv0")
+        college = College.objects.create(
+            popularity_score=2,
+            unit_id=100663,
+            ope_id="00105200",
+            place_id="ChIJRxq4YekbiYgRS7BbCPlZxlE",
+            business_status= "OPERATIONAL",
+            name="University of Alabama at Birmingham",
+            address="1720 University Blvd, Birmingham, AL 35294, USA",
+            phone_number="(205) 934-4011",
+            lat=33.5019893,
+            lng=-86.8064433,
+            url="https://maps.google.com/?cid=5892496088582828107",
+            website="http://www.uab.edu/",
+            favicon="https://www.uab.edu/styles/5.0/images/favicons/favicon-196x196.png",
+            description="University of Alabama at Birmingham is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.",
+            main_photo="https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+            photos=[
+                "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
+                "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
+                "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
+                "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
+                "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
+                "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
+                "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048",
+            ],
+            types=["university", "point_of_interest", "establishment"])
+
+        self.assertEqual(college.popularity_score, 2)
+        self.assertEqual(college.unit_id, 100663)
+        self.assertEqual(college.ope_id, "00105200")
+        self.assertEqual(college.place_id, "ChIJRxq4YekbiYgRS7BbCPlZxlE")
         self.assertEqual(college.business_status, "OPERATIONAL")
-        self.assertEqual(college.name, "Alabama A&M University")
-        self.assertEqual(college.address, "Huntsville, AL 35811, USA")
-        self.assertEqual(college.phone_number, "(256) 372-5000")
-        self.assertEqual(college.lat, 34.7827196)
-        self.assertEqual(college.lng,  -86.568614)
-        self.assertEqual(college.url, "https://maps.google.com/?cid=18245956559700032436")
-        self.assertEqual(college.website, "http://www.aamu.edu/")
-        self.assertEqual(college.favicon, "https://www.aamu.edu/_resources/img/icons/favicon-196x196.png")
-        self.assertEqual(college.description, "Alabama A&M University is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.")
+        self.assertEqual(college.name, "University of Alabama at Birmingham")
+        self.assertEqual(college.address, "1720 University Blvd, Birmingham, AL 35294, USA")
+        self.assertEqual(college.phone_number, "(205) 934-4011")
+        self.assertEqual(college.lat, 33.5019893)
+        self.assertEqual(college.lng, -86.8064433)
+        self.assertEqual(college.url, "https://maps.google.com/?cid=5892496088582828107")
+        self.assertEqual(college.website, "http://www.uab.edu/")
+        self.assertEqual(college.favicon, "https://www.uab.edu/styles/5.0/images/favicons/favicon-196x196.png")
+        self.assertEqual(college.description, "University of Alabama at Birmingham is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.")
         self.assertEqual(college.main_photo, "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048")
-        self.assertEqual(college.photos, ["https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+        self.assertEqual(college.photos, [
+            "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
             "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
             "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
             "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
@@ -61,7 +90,8 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"])
+            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048",
+        ])
         self.assertEqual(college.types, ["university", "point_of_interest", "establishment"])
         self.assertIsNotNone(college.created)
         self.assertIsNotNone(college.updated)
@@ -245,7 +275,7 @@ class CollegeTests(TestCase):
             program_percentage_multidiscipline=0.0,
             program_percentage_mechanic_repair_technology=0.0,
         )
-        
+
         self.assertEqual(scorecard.college, college)
         self.assertEqual(scorecard.unit_id, 100654)
         self.assertEqual(scorecard.ope_id, "00100200")
