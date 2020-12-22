@@ -7,33 +7,27 @@ from colleges.models import College
 import datetime
 from django.db.models import Q, Max, Min, F
 
-
 class ProviderType(DjangoObjectType):
     class Meta:
         model = Provider
-
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
 
-
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
-
 
 class ScholarshipPaginationType(graphene.ObjectType):
     count = graphene.Int()
     pages = graphene.Int()
     search_results = graphene.List(ScholarshipType)
 
-
 class Query(graphene.ObjectType):
     providers = graphene.List(ProviderType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(
-        ScholarshipStatusType, limit=graphene.Int())
+    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
 
     # providers
     providers_by_fields = graphene.List(
@@ -122,8 +116,8 @@ class Query(graphene.ObjectType):
 
     def resolve_scholarship_max_amount(self, info):
         get_max = Scholarship.objects.aggregate(Max("max_amount"))
-        max = get_max['max_amount__max']
-        return max
+        _max = get_max['max_amount__max']
+        return _max
 
     def resolve_scholarships_by_fields(self, info, **fields):
         qs = Scholarship.objects.filter(**fields)
@@ -446,9 +440,7 @@ class CreateScholarship(graphene.Mutation):
             financial_need=financial_need
         )
         scholarship.save()
-
         return CreateScholarship(scholarship=scholarship)
-
 
 class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     scholarship_status = graphene.Field(ScholarshipStatusType)

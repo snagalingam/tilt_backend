@@ -17,7 +17,7 @@ def lambda_handler(documents):
         "graphql_endpoint": GRAPHQL_ENDPOINT,
         "documents": documents
     }
-    print(FUNCTION_NAME)
+
     #For InvocationType = "Event"
     aws_lambda.invoke(
         FunctionName=FUNCTION_NAME, 

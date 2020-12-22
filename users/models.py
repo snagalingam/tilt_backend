@@ -184,7 +184,6 @@ class DeletedAccount(models.Model):
 class Action(models.Model):
     """
     Create New Action
-
         Action(user=user, 
             action='Logged In', (add description)
             timestamp=(check helpers folder for create_timestamp)

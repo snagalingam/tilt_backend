@@ -4,7 +4,6 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 class College(models.Model):
-
     # popularity_score
     popularity_score = models.IntegerField(default=0, blank=True, null=True)
 
@@ -27,12 +26,10 @@ class College(models.Model):
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+        null=True, blank=True, default=None)
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+        null=True, blank=True, default=None)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -285,7 +282,6 @@ class Scorecard(models.Model):
         return str(self.name)
 
 class FieldOfStudy(models.Model):
-
     # college model
     college = models.ForeignKey(College, on_delete=models.CASCADE)
 
@@ -309,16 +305,15 @@ class FieldOfStudy(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'field of studies'
+        verbose_name_plural = 'Field of studies'
 
     def __str__(self):
         return str(self.cip_title)
 
-class Status(models.Model):
+class CollegeStatus(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE,
-        related_name='college_status')
+        on_delete=models.CASCADE)
 
     college = models.ForeignKey(
         College, on_delete=models.CASCADE)
@@ -351,4 +346,29 @@ class Status(models.Model):
             if method == "text":
                 print('--------------> text user with twilio (not yet integrated')
 
-        return super(Status, self).save(*args, **kwargs)
+        return super(CollegeStatus, self).save(*args, **kwargs)
+        
+    def __str__(self):
+        return str(self.pk)
+
+class Budget(models.Model):
+    college_status = models.ForeignKey(
+        CollegeStatus, on_delete=models.CASCADE)
+
+    work_study = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    family = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)

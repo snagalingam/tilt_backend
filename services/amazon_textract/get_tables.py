@@ -22,6 +22,12 @@ def start_job(file_name):
         FeatureTypes=["TABLES"])
     return response["JobId"]
 
+def start_tables_analysis(document):
+    job_id = start_job(document)
+    print(f"====> Document: \033[94m{document}\033[0m")
+    print(f"====> Start Tables Analysis with ID: \033[93m{job_id}\033[0m")
+    return job_id
+    
 def get_result(job_id):
     pages = []
     response = textract.get_document_analysis(JobId=job_id)
@@ -40,12 +46,6 @@ def get_result(job_id):
             nextToken = response['NextToken']
 
     return pages
-
-def start_tables_analysis(document):
-    job_id = start_job(document)
-    print(f"====> Document: \033[94m{document}\033[0m")
-    print(f"====> Start Tables Analysis with ID: \033[93m{job_id}\033[0m")
-    return job_id
 
 def get_table_data(job_id):
     response = get_result(job_id)
