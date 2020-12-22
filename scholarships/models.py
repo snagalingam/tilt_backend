@@ -16,8 +16,8 @@ class Provider(models.Model):
     phone_number_ext = models.CharField(max_length=255, null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.organization)
@@ -66,8 +66,8 @@ class Scholarship(models.Model):
     financial_need = models.BooleanField(null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -79,8 +79,8 @@ class ScholarshipStatus(models.Model):
     status = models.CharField(max_length=255, null=True, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Scholarship statuses'
