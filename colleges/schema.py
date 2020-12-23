@@ -58,7 +58,7 @@ class NetPriceRangeType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
-    field_of_studies = graphene.List(FieldOfStudyType, limit=graphene.Int())
+    fields_of_studies = graphene.List(FieldOfStudyType, limit=graphene.Int())
     college_statuses = graphene.List(CollegeStatusType, limit=graphene.Int())
     budgets = graphene.List(BudgetType, limit=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
@@ -332,7 +332,7 @@ class Query(graphene.ObjectType):
         qs = Scorecard.objects.all()[0:limit]
         return qs
 
-    def resolve_field_of_studies(self, info, college_id):
+    def resolve_fields_of_studies(self, info, college_id):
         qs = FieldOfStudy.objects.filter(college=college_id, num_students_ipeds_awards2__isnull=False)
         return qs
 
@@ -362,7 +362,6 @@ class Query(graphene.ObjectType):
     def resolve_budget_results_by_fields(self, info, **kwargs):
         qs = Budget.objects.filter(**kwargs)
         return qs
-
 
 class CreateCollege(graphene.Mutation):
     college = graphene.Field(CollegeType)
