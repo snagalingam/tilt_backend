@@ -5,7 +5,7 @@ import os
 import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, AidCategory, AidData
-from college_status.models import CollegeStatus
+from college_status.models import Status
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
@@ -13,29 +13,41 @@ from services.amazon_textract.check_document import start_document_check
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
 
+
 class DocumentResultType(DjangoObjectType):
     class Meta:
         model = DocumentResult
         fields = "__all__"
+
 
 class DocumentDataType(DjangoObjectType):
     class Meta:
         model = DocumentData
         fields = "__all__"
 
+
 class AidCategoryType(DjangoObjectType):
     class Meta:
         model = AidCategory
         fields = "__all__"
+
 
 class AidDataType(DjangoObjectType):
     class Meta:
         model = AidData
         fields = "__all__"
 
+
+class StatusType(DjangoObjectType):
+    class Meta:
+        model = Status
+        fields = "__all__"
+
+
 class AnalyzedResultType(graphene.ObjectType):
     name = graphene.String()
     sent = graphene.String()
+
 
 class CheckedResultType(graphene.ObjectType):
     name = graphene.String()
@@ -43,6 +55,7 @@ class CheckedResultType(graphene.ObjectType):
     processed = graphene.Boolean()
     words = graphene.String()
     tables = graphene.String()
+
 
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
@@ -119,6 +132,7 @@ class Query(graphene.ObjectType):
         qs = AidData.objects.filter(**fields)
         return qs
 
+
 class AnalyzeDocuments(graphene.Mutation):
     sent_list = graphene.List(AnalyzedResultType)
 
@@ -143,21 +157,21 @@ class AnalyzeDocuments(graphene.Mutation):
                 name=document,
                 words_id=words_id,
                 tables_id=tables_id,
-                sent=True
-            )
+                sent=True)
             document_result.save()
             sent_list.append(AnalyzedResultType(name=document, sent=True))
 
             # find college_status and update award_uploaded=True
             end_index = document.index("_file")
             college_status_id = int(document[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
+            college_status = Status.objects.get(pk=college_status_id)
             college_status.award_uploaded = True
             college_status.save()
 
         # trigger lambda to checkDocuments after 5 minutes
         lambda_handler(documents)
         return AnalyzeDocuments(sent_list=sent_list)
+
 
 class CheckDocuments(graphene.Mutation):
     checked_list = graphene.List(CheckedResultType)
@@ -278,11 +292,11 @@ class CheckDocuments(graphene.Mutation):
                             row_data = each.get("Row Data")
 
                             # get college_status_id from document
-                            college_status = CollegeStatus.objects.get(pk=college_status_id)
+                            college_status = Status.objects.get(pk=college_status_id)
 
                             # auto award_reviewed=True if check passed and pos_error=False
                             if check["pass_fail"] == "Passed":
-                                college_status.award_reviewed = True
+                                college_status.reviewed = True
                                 college_status.save()
 
                             # filter/match for category
@@ -300,8 +314,7 @@ class CheckDocuments(graphene.Mutation):
                                     col_index=col_index,
                                     row_data=row_data,
                                     college_status=college_status,
-                                    aid_category=aid_category
-                                )
+                                    aid_category=aid_category)
                                 aid_data_list.append(aid_data)
 
                                 # add aid data for report
@@ -313,8 +326,7 @@ class CheckDocuments(graphene.Mutation):
                                     "table_number": table_number,
                                     "row_index": row_index,
                                     "col_index": col_index,
-                                    "row_data": row_data,
-                                })
+                                    "row_data": row_data})
                             except:
                                 aid_data = None
 
@@ -328,8 +340,7 @@ class CheckDocuments(graphene.Mutation):
                                         col_index=col_index,
                                         row_data=row_data,
                                         college_status=college_status,
-                                        aid_category=aid_category
-                                    )
+                                        aid_category=aid_category)
                                     aid_data.save()
                                     aid_data_list.append(aid_data)
 
@@ -342,8 +353,7 @@ class CheckDocuments(graphene.Mutation):
                                         "table_number": table_number,
                                         "row_index": row_index,
                                         "col_index": col_index,
-                                        "row_data": row_data,
-                                    })
+                                        "row_data": row_data})
 
                 # check if document_data exists
                 try:
@@ -356,8 +366,7 @@ class CheckDocuments(graphene.Mutation):
                     document_data = DocumentData(
                         name=doc.name,
                         words=words,
-                        tables=tables
-                    )
+                        tables=tables)
                     document_data.save()
 
             if check is not None:
@@ -374,37 +383,32 @@ class CheckDocuments(graphene.Mutation):
             if pos_error:
                 errors.append({
                     "type": "Aid Data Processing Error",
-                    "message": "Aid data has not been processed.",
-                })
+                    "message": "Aid data has not been processed."})
 
             if words_failed:
                 errors.append({
                     "type": "Textract Error",
-                    "message": "Words analysis stll in progress."
-                })
+                    "message": "Words analysis stll in progress."})
 
             if tables_failed:
                 errors.append({
                     "type": "Textract Error",
-                    "message": "Tables analysis stll in progress."
-                })
+                    "message": "Tables analysis stll in progress."})
 
             if check is not None and check["pass_fail"] == "Failed":
                 errors.append({
                     "type": "Document Check Failed",
                     "message": "There are missing words in tables.",
                     "number_of_missing": number_of_missing,
-                    "missing_amounts": missing_amounts,
-                })
+                    "missing_amounts": missing_amounts})
 
             # create report_data for sendgrid
             report_data = {
                 "document_name": document,
                 "document_check": pass_fail,
-                "award_reviewed": college_status.award_reviewed,
+                "award_reviewed": college_status.reviewed,
                 "errors": errors,
-                "aid_data": aid_data_report,
-            }
+                "aid_data": aid_data_report}
 
             # catch all multiples of the same document
             if college_status_id == next_college_status_id:
@@ -420,6 +424,7 @@ class CheckDocuments(graphene.Mutation):
                 errors = []
 
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
+
 
 class CreateAidCategory(graphene.Mutation):
     aid_category = graphene.Field(AidCategoryType)
@@ -454,9 +459,10 @@ class CreateAidCategory(graphene.Mutation):
                 sub_sub_category=sub_sub_category,
                 year=year)
             aid_category.save()
+
             return CreateAidCategory(aid_category=aid_category, success=True)
-        else:
-            raise Exception ('Aid category already exists')
+        raise Exception ('Aid category already exists')
+
 
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
