@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from college_status.models import CollegeStatus
+from college_status.models import Status
 
 class DocumentResult(models.Model):
     # Name of document (s3 file name)
@@ -16,9 +16,7 @@ class DocumentResult(models.Model):
     number_of_missing = models.IntegerField(blank=True, null=True)
     missing_amounts = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True,
-        blank=True,
-    )
+    null=True, blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -32,9 +30,7 @@ class DocumentData(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, unique=True)
     words = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True,
-        blank=True,
-    )
+    null=True, blank=True)
     tables = models.TextField(null=True, blank=True)
 
     # automatically added
@@ -67,6 +63,7 @@ class AidCategory(models.Model):
     def __str__(self):
         return str(self.name)
 
+
 class AidData(models.Model):
     name = models.TextField(null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
@@ -75,15 +72,12 @@ class AidData(models.Model):
     col_index = models.IntegerField(blank=True, null=True)
     row_data = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True,
-        blank=True,
-        default=None
-    )
+    null=True, blank=True)
 
     college_status = models.ForeignKey(
-        CollegeStatus, on_delete=models.CASCADE)
+        Status, on_delete=models.CASCADE, default=1)
     aid_category =models.ForeignKey(
-        AidCategory, on_delete=models.CASCADE)
+        AidCategory, on_delete=models.CASCADE, default=1)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)

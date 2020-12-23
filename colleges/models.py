@@ -1,7 +1,9 @@
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
+from services.sendgrid_api.send_email import send_notification_email
 
 class College(models.Model):
     # popularity_score
@@ -26,12 +28,10 @@ class College(models.Model):
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+    null=True, blank=True, default=None)
     types = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
-        null=True, blank=True, default=None
-    )
+    null=True, blank=True, default=None)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -283,9 +283,11 @@ class Scorecard(models.Model):
     def __str__(self):
         return str(self.name)
 
+
 class FieldOfStudy(models.Model):
     # college model
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    college = models.ForeignKey(
+        College, on_delete=models.CASCADE, default=1)
 
     cip_code = models.CharField(max_length=255, blank=True, null=True)
     cip_title = models.CharField(max_length=255, blank=True, null=True)
@@ -307,7 +309,68 @@ class FieldOfStudy(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'Fields of study'
+        verbose_name_plural = 'Field of studies'
 
     def __str__(self):
         return str(self.cip_title)
+
+class CollegeStatus(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    college = models.ForeignKey(
+        College, on_delete=models.CASCADE, default=1)
+
+    status = models.CharField(max_length=255, blank=True, null=True)
+    net_price = models.IntegerField(blank=True, null=True)
+    award_uploaded = models.BooleanField(default=False)
+    award_reviewed = models.BooleanField(default=False)
+    user_notified = models.BooleanField(default=False)
+    residency = models.CharField(max_length=255, blank=True, null=True)
+    in_state_tuition = models.CharField(max_length=255, blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'College statuses'
+
+    def save(self, *args, **kwargs):
+        method = self.user.preferred_contact_method
+
+        # send user notification about financial aid letter if award_reviewed=True
+        if self.award_reviewed is True and method is not None and self.user_notified is not True:
+            self.user_notified = True
+
+            if method == "email":
+                send_notification_email(self.user.email, self.user.first_name)
+            if method == "text":
+                print('--------------> text user with twilio (not yet integrated')
+        
+        return super(CollegeStatus, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class Budget(models.Model):
+    college_status = models.ForeignKey(
+        CollegeStatus, on_delete=models.CASCADE, default=1)
+
+    work_study = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    family = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)
