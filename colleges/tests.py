@@ -148,7 +148,7 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_status.created)
         self.assertIsNotNone(college_status.updated)
         # test user college_status_set
-        self.assertEqual(user.status_set.get_queryset()[1], college_status)
+        self.assertEqual(user.status_set.get_queryset()[0], college_status)
 
     def test_create_budget(self):
         college_status = Status.objects.get(user__email="demouser@tiltaccess.com")

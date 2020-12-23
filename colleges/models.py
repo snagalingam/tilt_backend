@@ -7,35 +7,16 @@ from services.sendgrid_api.send_email import send_notification_email
 
 DEFAULT_COLLEGE = 1
 DEFAULT_COLLEGE_STATUS = 1
+DEFAULT_POPULARITY_SCORE = 0
 DEFAULT_USER = 1
-
-class Budget(models.Model):
-    college_status = models.ForeignKey(
-        Status,
-        default=DEFAULT_COLLEGE_STATUS,
-        on_delete=models.CASCADE,
-    )
-    work_study = models.IntegerField(blank=True, null=True)
-    job = models.IntegerField(blank=True, null=True)
-    savings = models.IntegerField(blank=True, null=True)
-    family = models.IntegerField(blank=True, null=True)
-    other_scholarships = models.IntegerField(blank=True, null=True)
-    loan_subsidized = models.IntegerField(blank=True, null=True)
-    loan_unsubsidized = models.IntegerField(blank=True, null=True)
-    loan_plus = models.IntegerField(blank=True, null=True)
-    loan_private = models.IntegerField(blank=True, null=True)
-    loan_school = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    def __str__(self):
-        return str(self.pk)
 
 class College(models.Model):
     # popularity_score
-    popularity_score = models.IntegerField(default=0, blank=True, null=True)
+    popularity_score = models.IntegerField(
+        blank=True,
+        default=DEFAULT_POPULARITY_SCORE,
+        null=True
+    )
 
     # college scorecard info
     unit_id = models.IntegerField(blank=True, null=True)
@@ -106,7 +87,7 @@ class FieldOfStudy(models.Model):
     def __str__(self):
         return str(self.cip_title)
 
-        
+
 class Scorecard(models.Model):
     # college model
     college = models.OneToOneField(College, on_delete=models.CASCADE)
@@ -457,6 +438,30 @@ class Status(models.Model):
                 print('--------------> text user with twilio (not yet integrated')
 
         return super(Status, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.pk)
+
+class Budget(models.Model):
+    college_status = models.ForeignKey(
+        Status,
+        default=DEFAULT_COLLEGE_STATUS,
+        on_delete=models.CASCADE
+    )
+    work_study = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    family = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.pk)
