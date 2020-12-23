@@ -9,12 +9,12 @@ from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
 
 from graphene_django import DjangoObjectType
-from organizations.models import Organization
+from organization.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.sendgrid_api.add_subscriber_email import send_subscription_verification, add_subscriber
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from users.models import DeletedAccount, Action
+from user.models import DeletedAccount, Action
 
 class UserType(DjangoObjectType):
     class Meta:

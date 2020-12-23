@@ -1,102 +1,125 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from django.utils.translation import gettext_lazy as _
-
 from django.forms import TextInput, Textarea
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-from users.models import DeletedAccount, Action
+from user.models import DeletedAccount, Action
 
-CustomUser = get_user_model()
 
-class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
+User = get_user_model()
+
+################################################
+### Inline
+################################################
+class ActionInline(admin.TabularInline):
+    extra = 0
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
-    list_display = ['date', 'accounts',]
-
-    fieldsets = (
-        (None, {'fields': ('date', 'accounts',)}),
-    )
-
-    search_fields = ('date', 'accounts',)
-    ordering = ('date',)
-
-    model = DeletedAccount
+    model = Action
 
 
+################################################
+### Admin Panel
+################################################
 class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    fieldsets = ((None, {'fields': ('user', 'description', 'timestamp',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
     list_display = ['user', 'description', 'timestamp']
-
-    fieldsets = (
-        (None, {'fields': ('user', 'description', 'timestamp',)}),
-    )
-
-    search_fields = ('user__email', 'description', 'timestamp',)
+    model = Action
     ordering = ('timestamp',)
+    search_fields = ('user__email', 'description', 'timestamp',)
 
-    model = Action
 
-class ActionInline(admin.TabularInline):
-    model = Action
+class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    fieldsets = ((None, {'fields': ('date', 'accounts',)}),)
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    extra = 0
+    list_display = ['date', 'accounts',]
+    model = DeletedAccount
+    ordering = ('date',)
+    search_fields = ('date', 'accounts',)
 
-class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
-    }
-    list_display = ['email', 'is_staff', 'is_superuser',
-                    'is_active', 'is_verified', 'is_onboarded', 'is_test_account']
-    list_editable = ['is_staff', 'is_superuser',
-                     'is_active', 'is_verified', 'is_onboarded', 'is_test_account']
-    filter_horizontal = ('organization',) 
-    
-    fieldsets = (
-        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method')}),
-        (_('Personal Information'), {
-            'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
-        }),
-        (_('Account Status'), {
-            'fields': ('is_staff', 'is_superuser', 'is_active', 'is_verified', 'is_onboarded', 'is_test_account', 'user_type')
-        }),
-        (_('Background Information'), {
-            'fields': ('ethnicity', 'found_from'),
-        }),
-        (_('Organization Information'), {
-            'fields': ('organization',),
-        }),
-        (_('Academic Information'), {
-            'fields': ('gpa', 'act_score', 'sat_math', 'sat_verbal', 'high_school_grad_year')
-        }),
-        (_('Financial Information'), {
-            'fields': ('efc', 'income_quintile',)
-        }),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-    )
-    
-    inlines = [ActionInline]
+
+class UserAdmin(UserAdmin, DynamicArrayMixin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    search_fields = ('email', 'first_name', 'last_name', 'is_staff',
-                     'is_superuser', 'is_active', 'is_verified', 'is_onboarded')
+    fieldsets = (
+        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method')}),
+        (('Personal Information'), {'fields': (
+            'first_name',
+            'last_name',
+            'preferred_name',
+            'pronouns')
+        }),
+        (('Account Status'), {'fields': (
+            'is_staff',
+            'is_superuser',
+            'is_active',
+            'is_verified',
+            'is_onboarded',
+            'is_test',
+            'user_type')
+        }),
+        (('Background Information'), {'fields': ('ethnicity', 'found_from')}),
+        (('Organization Information'), {'fields': ('organization')}),
+        (('Academic Information'), {'fields': (
+            'gpa',
+            'act_score',
+            'sat_math',
+            'sat_verbal',
+            'high_school_grad_year'
+        )}),
+        (('Financial Information'), {'fields': ('efc', 'income_quintile')}),
+        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    filter_horizontal = ('organization',)
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
+    inlines = [ActionInline]
+    list_display = [
+        'email',
+        'is_staff',
+        'is_superuser',
+        'is_active',
+        'is_verified',
+        'is_onboarded',
+        'is_test'
+    ]
+    list_editable = [
+        'is_staff',
+        'is_superuser',
+        'is_active',
+        'is_verified',
+        'is_onboarded',
+        'is_test'
+    ]
+    model = User
+    search_fields = (
+        'email',
+        'first_name',
+        'last_name',
+        'is_staff',
+        'is_superuser',
+        'is_active',
+        'is_verified',
+        'is_onboarded'
+    )
     ordering = ('email',)
 
-    model = CustomUser
 
-
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(DeletedAccount, DeletedAccountAdmin)
 admin.site.register(Action, ActionAdmin)

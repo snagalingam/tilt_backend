@@ -1,12 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from organizations.models import Organization
-from users.models import DeletedAccount, Action
+from organization.models import Organization
+from user.models import DeletedAccount, Action
 from services.helpers.actions import create_action, create_timestamp, create_date
+
+
 User = get_user_model()
 
 class CustomUserTests(TestCase):
-
     def setUp(self):
         # create superuser
         User.objects.create_superuser(

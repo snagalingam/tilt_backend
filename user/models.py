@@ -1,16 +1,17 @@
+import datetime
+
 from django.contrib.auth.base_user import (
     AbstractBaseUser,
     BaseUserManager,
 )
-from django_better_admin_arrayfield.models.fields import ArrayField
 from django.contrib.auth.models import PermissionsMixin
-from django.db import models
-
 from django.core.mail import send_mail
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django_better_admin_arrayfield.models.fields import ArrayField
 from organizations.models import Organization
-from datetime import datetime
+
 
 
 class UserManager(BaseUserManager):
@@ -48,7 +49,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, first_name, last_name, password, **extra_fields)
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model that extends AbstractBaseUser and PermissionsMixin
     """
@@ -68,7 +69,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     is_verified = models.BooleanField(default=False)
     is_onboarded = models.BooleanField(default=False)
-    is_test_account = models.BooleanField(default=False)
+    is_test = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(
         _("staff status"),
