@@ -10,7 +10,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified']
+    list_display = ['status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified',]
     list_editable = ['reviewed', ]
 
     fieldsets = (
