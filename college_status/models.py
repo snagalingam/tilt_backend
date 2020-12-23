@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from colleges.models import College
 
-class Status(models.Model):
+class CollegeStatus(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     college = models.ForeignKey(
