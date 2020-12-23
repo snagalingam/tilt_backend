@@ -56,6 +56,51 @@ class College(models.Model):
         return str(self.name)
 
 
+class CollegeStatus(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        default=DEFAULT_USER,
+        on_delete=models.CASCADE
+    )
+    college = models.ForeignKey(
+        College,
+        default=DEFAULT_COLLEGE,
+        on_delete=models.CASCADE
+    )
+    status = models.CharField(max_length=255, blank=True, null=True)
+    net_price = models.IntegerField(blank=True, null=True)
+    award_uploaded = models.BooleanField(default=False)
+    award_reviewed = models.BooleanField(default=False)
+    user_notified = models.BooleanField(default=False)
+    residency = models.CharField(max_length=255, blank=True, null=True)
+    in_state_tuition = models.CharField(max_length=255, blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def save(self, *args, **kwargs):
+        method = self.user.preferred_contact_method
+
+        # send user notification about financial aid letter if award_reviewed=True
+        if self.award_reviewed is True and method is not None and self.user_notified is not True:
+            self.user_notified = True
+
+            if method == "email":
+                send_notification_email(self.user.email, self.user.first_name)
+            if method == "text":
+                print('--------------> text user with twilio (not yet integrated')
+
+        return super(Status, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'college status'
+        verbose_name_plural = 'college status'
+
+    def __str__(self):
+        return str(self.pk)
+
+
 class FieldOfStudy(models.Model):
     # college model
     college = models.ForeignKey(
@@ -398,49 +443,6 @@ class Scorecard(models.Model):
     def __str__(self):
         return str(self.name)
 
-
-class Status(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        default=DEFAULT_USER,
-        on_delete=models.CASCADE
-    )
-    college = models.ForeignKey(
-        College,
-        default=DEFAULT_COLLEGE,
-        on_delete=models.CASCADE
-    )
-    status = models.CharField(max_length=255, blank=True, null=True)
-    net_price = models.IntegerField(blank=True, null=True)
-    award_uploaded = models.BooleanField(default=False)
-    award_reviewed = models.BooleanField(default=False)
-    user_notified = models.BooleanField(default=False)
-    residency = models.CharField(max_length=255, blank=True, null=True)
-    in_state_tuition = models.CharField(max_length=255, blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Statuses'
-
-    def save(self, *args, **kwargs):
-        method = self.user.preferred_contact_method
-
-        # send user notification about financial aid letter if award_reviewed=True
-        if self.award_reviewed is True and method is not None and self.user_notified is not True:
-            self.user_notified = True
-
-            if method == "email":
-                send_notification_email(self.user.email, self.user.first_name)
-            if method == "text":
-                print('--------------> text user with twilio (not yet integrated')
-
-        return super(Status, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return str(self.pk)
 
 class Budget(models.Model):
     college_status = models.ForeignKey(

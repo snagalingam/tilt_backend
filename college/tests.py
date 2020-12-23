@@ -1,4 +1,4 @@
-from .models import Budget, College, FieldOfStudy, Scorecard, Status
+from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 

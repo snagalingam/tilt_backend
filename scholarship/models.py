@@ -93,7 +93,7 @@ class Scholarship(models.Model):
     def __str__(self):
         return str(self.name)
 
-class Status(models.Model):
+class ScholarshipStatus(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
@@ -111,8 +111,8 @@ class Status(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'status'
-        verbose_name_plural = 'status'
+        verbose_name = 'scholarhip status'
+        verbose_name_plural = 'scholarship status'
 
     def __str__(self):
         return str(self.status)

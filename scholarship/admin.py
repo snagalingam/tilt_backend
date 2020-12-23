@@ -1,4 +1,4 @@
-from .models import Provider, Scholarship, Status
+from .models import Provider, Scholarship, ScholarshipStatus
 from django.contrib import admin
 from django.db import models
 from django.forms import TextInput, Textarea
@@ -70,13 +70,13 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('name', 'provider', 'deadline', 'max_amount',)
 
 
-class StatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = ((None, {'fields': ('user', 'scholarship', 'status', )}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
     list_display = ['status', 'scholarship', 'user']
-    model = Status
+    model = ScholarshipStatus
     ordering = ('user', 'scholarship',)
     search_fields = ('user', 'scholarship', 'status',)
 

@@ -1,4 +1,4 @@
-from .models import Budget, College, Status, FieldOfStudy, Scorecard
+from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 
 from django.contrib import admin
 from django.db import models
@@ -70,31 +70,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     )
 
 
-class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
-    }
-    list_display = ['cip_title', 'college', 'credential_level',]
-    model = FieldOfStudy
-    ordering = ('college', 'credential_level',)
-    search_fields = ('cip_title', 'college__name', 'credential_level',)
-
-
-class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
-    }
-    list_display = ['name', 'city', 'state', 'zipcode',]
-    model = Scorecard
-    ordering = ('name',)
-    search_fields = ('name', 'unit_id', 'ope_id',)
-
-
-class StatusAdmin(admin.ModelAdmin):
+class CollegeStatusAdmin(admin.ModelAdmin):
     fieldsets = (
         (('College Status Information'), {
             'fields': (
@@ -122,13 +98,37 @@ class StatusAdmin(admin.ModelAdmin):
         'user_notified',
     ]
     list_editable = ['award_reviewed',]
-    model = Status
+    model = CollegeStatus
     ordering = ('status', 'college', 'user',)
     search_fields = ('status', 'college', 'user',)
 
 
+class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
+    list_display = ['cip_title', 'college', 'credential_level',]
+    model = FieldOfStudy
+    ordering = ('college', 'credential_level',)
+    search_fields = ('cip_title', 'college__name', 'credential_level',)
+
+
+class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
+    list_display = ['name', 'city', 'state', 'zipcode',]
+    model = Scorecard
+    ordering = ('name',)
+    search_fields = ('name', 'unit_id', 'ope_id',)
+
+
 admin.site.register(Budget, BudgetAdmin)
-admin.site.register(College, CollegeAdmin)
+admin.site.register(CollegeStatus, CollegeStatusAdmin)
 admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
 admin.site.register(Scorecard, ScorecardAdmin)
 admin.site.register(Status, StatusAdmin)

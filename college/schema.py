@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from .models import Budget, College, FieldOfStudy, Scorecard, Status
+from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least

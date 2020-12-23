@@ -2,7 +2,7 @@ import datetime
 import graphene
 import math
 
-from .models import Provider, Scholarship, Status
+from .models import Provider, Scholarship, ScholarshipStatus
 from colleges.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
@@ -38,7 +38,7 @@ class ScholarshipStatusType(DjangoObjectType):
 ################################################
 class Query(graphene.ObjectType):
     scholarship_providers = graphene.List(ScholarshipProviderType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+    scholarship_status = graphene.List(ScholarshipStatusType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
 
     # providers
@@ -100,8 +100,8 @@ class Query(graphene.ObjectType):
         per_page=graphene.Int(),
         page=graphene.Int())
 
-    # scholarship_statuses
-    scholarship_statuses_by_fields = graphene.List(
+    # scholarship_status
+    scholarship_status_by_fields = graphene.List(
         ScholarshipStatusType,
         user_id=graphene.Int(),
         scholarship_id=graphene.Int(),
@@ -121,7 +121,7 @@ class Query(graphene.ObjectType):
         qs = Scholarship.objects.all()[0:limit]
         return qs
 
-    def resolve_scholarship_statuses(self, info, limit=None):
+    def resolve_scholarship_status(self, info, limit=None):
         qs = ScholarshipStatus.objects.all()[0:limit]
         return qs
 
@@ -139,7 +139,7 @@ class Query(graphene.ObjectType):
         qs = Scholarship.objects.filter(**fields)
         return qs
 
-    def resolve_scholarship_statuses_by_fields(self, info, **fields):
+    def resolve_scholarship_status_by_fields(self, info, **fields):
         qs = ScholarshipStatus.objects.filter(**fields)
         return qs
 
