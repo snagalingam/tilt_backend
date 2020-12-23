@@ -54,8 +54,8 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'website', 'popularity_score', 'description']
-    list_editable = ['description']
+    list_display = ['name', 'website', 'popularity_score', 'description',]
+    list_editable = ['description',]
     model = College
     ordering = ('name',)
     search_fields = (
@@ -76,7 +76,7 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['cip_title', 'college', 'credential_level', ]
+    list_display = ['cip_title', 'college', 'credential_level',]
     model = FieldOfStudy
     ordering = ('college', 'credential_level',)
     search_fields = ('cip_title', 'college__name', 'credential_level',)
@@ -88,7 +88,7 @@ class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'city', 'state', 'zipcode']
+    list_display = ['name', 'city', 'state', 'zipcode',]
     model = Scorecard
     ordering = ('name',)
     search_fields = ('name', 'unit_id', 'ope_id',)
@@ -121,7 +121,7 @@ class StatusAdmin(admin.ModelAdmin):
         'award_reviewed',
         'user_notified',
     ]
-    list_editable = ['award_reviewed']
+    list_editable = ['award_reviewed',]
     model = Status
     ordering = ('status', 'college', 'user',)
     search_fields = ('status', 'college', 'user',)

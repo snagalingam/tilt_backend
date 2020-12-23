@@ -9,6 +9,30 @@ DEFAULT_COLLEGE = 1
 DEFAULT_COLLEGE_STATUS = 1
 DEFAULT_USER = 1
 
+class Budget(models.Model):
+    college_status = models.ForeignKey(
+        Status,
+        default=DEFAULT_COLLEGE_STATUS,
+        on_delete=models.CASCADE,
+    )
+    work_study = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    family = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)
+
 class College(models.Model):
     # popularity_score
     popularity_score = models.IntegerField(default=0, blank=True, null=True)
@@ -51,6 +75,38 @@ class College(models.Model):
         return str(self.name)
 
 
+class FieldOfStudy(models.Model):
+    # college model
+    college = models.ForeignKey(
+        College,
+        on_delete=models.CASCADE,
+        default=DEFAULT_COLLEGE
+    )
+    cip_code = models.CharField(max_length=255, blank=True, null=True)
+    cip_title = models.CharField(max_length=255, blank=True, null=True)
+    credential_level = models.CharField(max_length=255, blank=True, null=True)
+    credential_title = models.CharField(max_length=255, blank=True, null=True)
+    num_students_debt = models.IntegerField(blank=True, null=True)
+    median_debt = models.IntegerField(blank=True, null=True)
+    monthly_debt_payment = models.IntegerField(blank=True, null=True)
+    mean_debt = models.IntegerField(blank=True, null=True)
+    num_students_titleiv = models.IntegerField(blank=True, null=True)
+    num_students_earnings = models.IntegerField(blank=True, null=True)
+    median_earnings = models.IntegerField(blank=True, null=True)
+    num_students_ipeds_awards1 = models.IntegerField(blank=True, null=True)
+    num_students_ipeds_awards2 = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Fields of study'
+
+    def __str__(self):
+        return str(self.cip_title)
+
+        
 class Scorecard(models.Model):
     # college model
     college = models.OneToOneField(College, on_delete=models.CASCADE)
@@ -362,37 +418,6 @@ class Scorecard(models.Model):
         return str(self.name)
 
 
-class FieldOfStudy(models.Model):
-    # college model
-    college = models.ForeignKey(
-        College,
-        on_delete=models.CASCADE,
-        default=DEFAULT_COLLEGE
-    )
-    cip_code = models.CharField(max_length=255, blank=True, null=True)
-    cip_title = models.CharField(max_length=255, blank=True, null=True)
-    credential_level = models.CharField(max_length=255, blank=True, null=True)
-    credential_title = models.CharField(max_length=255, blank=True, null=True)
-    num_students_debt = models.IntegerField(blank=True, null=True)
-    median_debt = models.IntegerField(blank=True, null=True)
-    monthly_debt_payment = models.IntegerField(blank=True, null=True)
-    mean_debt = models.IntegerField(blank=True, null=True)
-    num_students_titleiv = models.IntegerField(blank=True, null=True)
-    num_students_earnings = models.IntegerField(blank=True, null=True)
-    median_earnings = models.IntegerField(blank=True, null=True)
-    num_students_ipeds_awards1 = models.IntegerField(blank=True, null=True)
-    num_students_ipeds_awards2 = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Fields of study'
-
-    def __str__(self):
-        return str(self.cip_title)
-
 class Status(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -432,31 +457,6 @@ class Status(models.Model):
                 print('--------------> text user with twilio (not yet integrated')
 
         return super(Status, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return str(self.pk)
-
-
-class Budget(models.Model):
-    college_status = models.ForeignKey(
-        Status,
-        default=DEFAULT_COLLEGE_STATUS,
-        on_delete=models.CASCADE,
-    )
-    work_study = models.IntegerField(blank=True, null=True)
-    job = models.IntegerField(blank=True, null=True)
-    savings = models.IntegerField(blank=True, null=True)
-    family = models.IntegerField(blank=True, null=True)
-    other_scholarships = models.IntegerField(blank=True, null=True)
-    loan_subsidized = models.IntegerField(blank=True, null=True)
-    loan_unsubsidized = models.IntegerField(blank=True, null=True)
-    loan_plus = models.IntegerField(blank=True, null=True)
-    loan_private = models.IntegerField(blank=True, null=True)
-    loan_school = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return str(self.pk)
