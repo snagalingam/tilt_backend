@@ -5,7 +5,7 @@ import os
 import time
 from django.contrib.auth import get_user_model
 from .models import DocumentResult, DocumentData, AidCategory, AidData
-from college_status.models import Status
+from college_status.models import CollegeStatus
 from services.amazon_textract.lambda_handler import lambda_handler
 from services.amazon_textract.get_words import start_words_analysis, get_words_data
 from services.amazon_textract.get_tables import start_tables_analysis, get_table_data
@@ -38,9 +38,9 @@ class AidDataType(DjangoObjectType):
         fields = "__all__"
 
 
-class StatusType(DjangoObjectType):
+class CollegeStatusType(DjangoObjectType):
     class Meta:
-        model = Status
+        model = CollegeStatus
         fields = "__all__"
 
 
