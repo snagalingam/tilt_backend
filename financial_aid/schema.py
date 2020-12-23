@@ -57,6 +57,7 @@ class CheckedResultType(graphene.ObjectType):
     words = graphene.String()
     tables = graphene.String()
 
+
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
     document_datas = graphene.List(DocumentDataType, limit=graphene.Int())
@@ -485,7 +486,7 @@ class UploadOrDeleteDocument(graphene.Mutation):
                 success = upload_document(file_name, blob)
             elif upload_or_delete == "delete":
                 success = delete_document(file_name)
-                
+
             return UploadOrDeleteDocument(success=success)
         raise Exception ('Document file name required')
 
