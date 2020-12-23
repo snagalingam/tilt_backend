@@ -1,5 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
+from graphene_file_upload.scalars import Upload
 import json
 import os
 import time
@@ -12,7 +13,7 @@ from services.amazon_textract.get_tables import start_tables_analysis, get_table
 from services.amazon_textract.check_document import start_document_check
 from services.amazon_textract.parse_data import get_aid_data, find_aid_category, filter_possibilities
 from services.sendgrid_api.send_email import send_report_email, send_notification_email
-
+from services.amazon_textract.s3_methods import upload_document, delete_document
 
 class DocumentResultType(DjangoObjectType):
     class Meta:
@@ -55,7 +56,6 @@ class CheckedResultType(graphene.ObjectType):
     processed = graphene.Boolean()
     words = graphene.String()
     tables = graphene.String()
-
 
 class Query(graphene.ObjectType):
     document_results = graphene.List(DocumentResultType, limit=graphene.Int())
@@ -464,7 +464,34 @@ class CreateAidCategory(graphene.Mutation):
         raise Exception ('Aid category already exists')
 
 
+class UploadOrDeleteDocument(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        blob = Upload(required=True)
+        file_name = graphene.String()
+        upload_or_delete = graphene.String()
+
+    def mutate(
+        self, 
+        info, 
+        blob=None, 
+        file_name=None,
+        upload_or_delete=None
+    ):
+        
+        if file_name:
+            if upload_or_delete == "upload":
+                success = upload_document(file_name, blob)
+            elif upload_or_delete == "delete":
+                success = delete_document(file_name)
+                
+            return UploadOrDeleteDocument(success=success)
+        raise Exception ('Document file name required')
+
+
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
     create_aid_category = CreateAidCategory.Field()
+    upload_or_delete_document = UploadOrDeleteDocument.Field()
