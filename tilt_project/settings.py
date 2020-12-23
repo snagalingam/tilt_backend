@@ -11,6 +11,10 @@ AWS_SECRET_KEY = os.environ.get("AWS_SECRET")
 REGION = os.environ.get("REGION")
 BUCKET = os.environ.get("BUCKET")
 
+TWILIO_ACCOUNT = os.environ.get("TWILIO_ACCOUNT")
+TWILIO_AUTH = os.environ.get("TWILIO_AUTH")
+TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 

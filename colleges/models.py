@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
-from services.sendgrid_api.send_email import send_notification_email
+from services.sendgrid_api.send_email import send_notification_email, send_notification_sms
 
 class College(models.Model):
     # popularity_score
@@ -345,7 +345,7 @@ class CollegeStatus(models.Model):
             if method == "email":
                 send_notification_email(self.user.email, self.user.first_name)
             if method == "text":
-                print('--------------> text user with twilio (not yet integrated')
+                send_notification_sms(self.user.phone_number)
         
         return super(CollegeStatus, self).save(*args, **kwargs)
 
