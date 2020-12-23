@@ -19,8 +19,8 @@ class StatusAdmin(admin.ModelAdmin):
         }),
     )
 
-    search_fields = ('status', 'college__name', 'user__email',)
-    ordering = ('status', 'college__name', 'user__email',)
+    search_fields = ('status', 'college', 'user',)
+    ordering = ('status', 'college', 'user',)
     model = Status
 
 admin.site.register(Status, StatusAdmin)
