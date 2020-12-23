@@ -64,7 +64,7 @@ class NetPriceRangeType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     # standard model queries
     budgets = graphene.List(BudgetType, limit=graphene.Int())
-    college_statuses = graphene.List(CollegeStatusType, limit=graphene.Int())
+    college_status = graphene.List(CollegeStatusType, limit=graphene.Int())
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     fields_of_study = graphene.List(FieldOfStudyType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
@@ -129,7 +129,7 @@ class Query(graphene.ObjectType):
         qs = Budget.objects.all()[0:limit]
         return qs
 
-    def resolve_college_statuses(self, info, limit=None):
+    def resolve_college_status(self, info, limit=None):
         qs = Status.objects.all()[0:limit]
         return qs
 

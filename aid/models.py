@@ -1,4 +1,4 @@
-from college.models import Status
+from college.models import CollegeStatus
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -29,7 +29,7 @@ class Category(models.Model):
 
 class Data(models.Model):
     college_status = models.ForeignKey(
-        Status,
+        CollegeStatus,
         default=DEFAULT_COLLEGE_STATUS,
         on_delete=models.CASCADE
     )

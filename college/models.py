@@ -5,10 +5,10 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from services.sendgrid_api.send_email import send_notification_email
 
 
-DEFAULT_COLLEGE = 1
-DEFAULT_COLLEGE_STATUS = 1
+DEFAULT_COLLEGE_ID = 1
+DEFAULT_COLLEGE_STATUS_ID= 1
 DEFAULT_POPULARITY_SCORE = 0
-DEFAULT_USER = 1
+DEFAULT_USER_ID = 1
 
 class College(models.Model):
     # popularity_score
@@ -59,12 +59,12 @@ class College(models.Model):
 class CollegeStatus(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        default=DEFAULT_USER,
+        default=DEFAULT_USER_ID,
         on_delete=models.CASCADE
     )
     college = models.ForeignKey(
         College,
-        default=DEFAULT_COLLEGE,
+        default=DEFAULT_COLLEGE_ID,
         on_delete=models.CASCADE
     )
     status = models.CharField(max_length=255, blank=True, null=True)
@@ -91,7 +91,7 @@ class CollegeStatus(models.Model):
             if method == "text":
                 print('--------------> text user with twilio (not yet integrated')
 
-        return super(Status, self).save(*args, **kwargs)
+        return super(CollegeStatus, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'college status'
@@ -106,7 +106,7 @@ class FieldOfStudy(models.Model):
     college = models.ForeignKey(
         College,
         on_delete=models.CASCADE,
-        default=DEFAULT_COLLEGE
+        default=DEFAULT_COLLEGE_ID
     )
     cip_code = models.CharField(max_length=255, blank=True, null=True)
     cip_title = models.CharField(max_length=255, blank=True, null=True)
@@ -446,8 +446,8 @@ class Scorecard(models.Model):
 
 class Budget(models.Model):
     college_status = models.ForeignKey(
-        Status,
-        default=DEFAULT_COLLEGE_STATUS,
+        CollegeStatus,
+        default=DEFAULT_COLLEGE_STATUS_ID,
         on_delete=models.CASCADE
     )
     work_study = models.IntegerField(blank=True, null=True)

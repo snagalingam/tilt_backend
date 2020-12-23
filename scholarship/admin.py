@@ -83,4 +83,4 @@ class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 admin.site.register(Provider, ProviderAdmin)
 admin.site.register(Scholarship, ScholarshipAdmin)
-admin.site.register(Status, StatusAdmin)
+admin.site.register(ScholarshipStatus, ScholarshipStatusAdmin)

@@ -128,7 +128,7 @@ class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 admin.site.register(Budget, BudgetAdmin)
+admin.site.register(College, CollegeAdmin)
 admin.site.register(CollegeStatus, CollegeStatusAdmin)
 admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
 admin.site.register(Scorecard, ScorecardAdmin)
-admin.site.register(Status, StatusAdmin)
