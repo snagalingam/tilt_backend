@@ -1,43 +1,44 @@
 import graphene
-from graphene_django import DjangoObjectType
 
 from .models import Organization
+from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI
 
 
+################################################
+### Standard Model Definitions
+################################################
 class OrganizationType(DjangoObjectType):
     class Meta:
         model = Organization
         fields = "__all__"
 
 
+################################################
+### Query
+################################################
 class Query(graphene.ObjectType):
     organizations = graphene.List(OrganizationType)
-    organization_by_id = graphene.Field(
-        OrganizationType, id=graphene.Int())
-    organization_by_place_id = graphene.Field(
-        OrganizationType, place_id=graphene.String())
-    organization_by_name = graphene.List(
-        OrganizationType, name=graphene.String())
-    organization_by_tilt_partnership = graphene.List(
-        OrganizationType, tilt_partnership=graphene.Boolean())
+    organizations_by_fields = graphene.Field(
+        OrganizationType,
+        id=graphene.Int(),
+        name=graphene.String(),
+        partner=graphene.Boolean(),
+        place_id=graphene.String()
+    )
 
     def resolve_organizations(self, info):
-        return Organization.objects.all()
+        qs = Organization.objects.all()
+        return qs
 
-    def resolve_organization_by_id(self, info, id):
-        return Organization.objects.get(pk=id)
-
-    def resolve_organization_by_place_id(self, info, place_id):
-        return Organization.objects.get(place_id=place_id)
-
-    def resolve_organization_by_name(self, info, name):
-        return Organization.objects.filter(name=name)
-
-    def resolve_organization_by_tilt_partnership(self, info, tilt_partnership):
-        return Organization.objects.filter(tilt_partnership=tilt_partnership)
+    def resolve_organizations_by_fields(self, info, **fields):
+        qs = Organization.objects.filter(**fields)
+        return qs
 
 
+################################################
+### Mutation
+################################################
 class CreateOrganization(graphene.Mutation):
     organization = graphene.Field(OrganizationType)
 

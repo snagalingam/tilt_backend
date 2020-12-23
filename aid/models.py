@@ -40,11 +40,7 @@ class Data(models.Model):
     )
     name = models.TextField()
     amount = models.PositiveIntegerField()
-    row_data = ArrayField(
-        models.TextField(null=True, blank=True),
-        blank=True,
-        null=True
-    )
+    row_data = ArrayField(models.TextField(blank=True), blank=True, null=True)
     table_number = models.PositiveIntegerField(blank=True, null=True)
     row_index = models.PositiveIntegerField(blank=True, null=True)
     col_index = models.PositiveIntegerField(blank=True, null=True)
@@ -64,7 +60,7 @@ class Data(models.Model):
 class DocumentData(models.Model):
     document_name = models.CharField(max_length=255, unique=True)
     words = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
+        models.CharField(max_length=255, blank=True),
         blank=True,
         null=True
     )
@@ -91,7 +87,7 @@ class DocumentResult(models.Model):
     pass_fail = models.CharField(max_length=255, blank=True)
     number_of_missing = models.PositiveIntegerField(blank=True, null=True)
     missing_amounts = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
+        models.CharField(max_length=255, blank=True),
         blank=True,
         null=True
     )
