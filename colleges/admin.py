@@ -7,6 +7,32 @@ from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 
+class BudgetAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': (
+                'college_status',
+                'work_study',
+                'job',
+                'savings',
+                'family',
+                'other_scholarships',
+                'loan_subsidized',
+                'loan_unsubsidized',
+                'loan_plus',
+                'loan_private',
+                'loan_school',
+            )
+        }),
+    )
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['college_status']
+    model = Budget
+    ordering = ('college_status',)
+    search_fields = ('college_status',)
+
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score')}),
@@ -31,7 +57,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['name', 'website', 'popularity_score', 'description']
     list_editable = ['description']
     model = College
-    ordering = ('name')
+    ordering = ('name',)
     search_fields = (
         'name',
         'unit_id',
@@ -42,19 +68,6 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
         'favicon',
         'types',
     )
-    ordering = ('name')
-
-
-class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
-    }
-    list_display = ['name', 'city', 'state', 'zipcode']
-    model = Scorecard
-    ordering = ('name')
-    search_fields = ('name', 'unit_id', 'ope_id')
 
 
 class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -65,8 +78,20 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     }
     list_display = ['cip_title', 'college', 'credential_level', ]
     model = FieldOfStudy
-    ordering = ('college', 'credential_level')
-    search_fields = ('cip_title', 'college__name', 'credential_level')
+    ordering = ('college', 'credential_level',)
+    search_fields = ('cip_title', 'college__name', 'credential_level',)
+
+
+class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
+    }
+    list_display = ['name', 'city', 'state', 'zipcode']
+    model = Scorecard
+    ordering = ('name',)
+    search_fields = ('name', 'unit_id', 'ope_id',)
 
 
 class StatusAdmin(admin.ModelAdmin):
@@ -81,7 +106,7 @@ class StatusAdmin(admin.ModelAdmin):
                 'award_reviewed',
                 'user_notified',
             )
-        })
+        }),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -98,39 +123,12 @@ class StatusAdmin(admin.ModelAdmin):
     ]
     list_editable = ['award_reviewed']
     model = Status
-    ordering = ('status', 'college', 'user')
-    search_fields = ('status', 'college', 'user')
+    ordering = ('status', 'college', 'user',)
+    search_fields = ('status', 'college', 'user',)
 
 
-class BudgetAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None, {
-            'fields': (
-                'college_status',
-                'work_study',
-                'job',
-                'savings',
-                'family',
-                'other_scholarships',
-                'loan_subsidized',
-                'loan_unsubsidized',
-                'loan_plus',
-                'loan_private',
-                'loan_school',
-            )
-        })
-    )
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['college_status']
-    model = Budget
-    ordering = ('college_status')
-    search_fields = ('college_status')
-
-
-admin.site.register(College, CollegeAdmin)
-admin.site.register(Scorecard, ScorecardAdmin)
-admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
-admin.site.register(Status, StatusAdmin)
 admin.site.register(Budget, BudgetAdmin)
+admin.site.register(College, CollegeAdmin)
+admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
+admin.site.register(Scorecard, ScorecardAdmin)
+admin.site.register(Status, StatusAdmin)
