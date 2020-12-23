@@ -8,16 +8,16 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields': ('organization', 'reference', 'email', )}),
+        (None, {'fields': ('organization', 'addressee', 'email', )}),
         (('Details'), {'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext',)}),
     )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['organization', 'reference', 'email', 'state', ]
+    list_display = ['organization', 'addressee', 'email', 'state', ]
     model = Provider
-    ordering = ('organization', 'reference',)
-    search_fields = ('organization', 'reference', 'email', 'state',)
+    ordering = ('organization', 'addressee',)
+    search_fields = ('organization', 'addressee', 'email', 'state',)
 
 
 class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -76,7 +76,7 @@ class StatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
     list_display = ['status', 'scholarship', 'user']
-    model = ScholarshipStatus
+    model = Status
     ordering = ('user', 'scholarship',)
     search_fields = ('user', 'scholarship', 'status',)
 

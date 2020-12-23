@@ -8,7 +8,7 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class OrganizationAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (('Partnership'), {'fields': ('tilt_partnership',)}),
+        (('Partnership'), {'fields': ('partner',)}),
         (('Contact Information'), {'fields': ('name', 'address', 'phone_number',)}),
         (('Detailed Information'), {'fields': ('business_status', 'types', 'website',)}),
         (('Google Information'), {'fields': ('place_id', 'lat', 'lng', 'url',)}),
@@ -18,11 +18,11 @@ class OrganizationAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'tilt_partnership', 'address', ]
-    list_editable = ['tilt_partnership', ]
+    list_display = ['name', 'partner', 'address', ]
+    list_editable = ['partner', ]
     model = Organization
     ordering = ('name',)
-    search_fields = ('name', 'tilt_partnership', 'address',)
+    search_fields = ('name', 'partner', 'address',)
 
 
 admin.site.register(Organization, OrganizationAdmin)

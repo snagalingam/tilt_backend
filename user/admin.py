@@ -50,17 +50,17 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('email', 'password1', 'password2',),
         }),
     )
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method')}),
+        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method',)}),
         (('Personal Information'), {'fields': (
             'first_name',
             'last_name',
             'preferred_name',
-            'pronouns')
-        }),
+            'pronouns',
+        )}),
         (('Account Status'), {'fields': (
             'is_staff',
             'is_superuser',
@@ -68,19 +68,19 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
             'is_verified',
             'is_onboarded',
             'is_test',
-            'user_type')
-        }),
-        (('Background Information'), {'fields': ('ethnicity', 'found_from')}),
-        (('Organization Information'), {'fields': ('organization')}),
+            'user_type',
+        )}),
+        (('Background Information'), {'fields': ('ethnicity', 'found_from',)}),
+        (('Organization Information'), {'fields': ('organization',)}),
         (('Academic Information'), {'fields': (
             'gpa',
             'act_score',
             'sat_math',
             'sat_verbal',
-            'high_school_grad_year'
+            'high_school_grad_year',
         )}),
-        (('Financial Information'), {'fields': ('efc', 'income_quintile')}),
-        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (('Financial Information'), {'fields': ('efc', 'income_quintile',)}),
+        (('Important dates'), {'fields': ('last_login', 'date_joined',)}),
     )
     filter_horizontal = ('organization',)
     formfield_overrides = {
@@ -96,7 +96,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
         'is_active',
         'is_verified',
         'is_onboarded',
-        'is_test'
+        'is_test',
     ]
     list_editable = [
         'is_staff',
@@ -104,7 +104,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
         'is_active',
         'is_verified',
         'is_onboarded',
-        'is_test'
+        'is_test',
     ]
     model = User
     search_fields = (
@@ -115,7 +115,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
         'is_superuser',
         'is_active',
         'is_verified',
-        'is_onboarded'
+        'is_onboarded',
     )
     ordering = ('email',)
 

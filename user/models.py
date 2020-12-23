@@ -10,7 +10,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.models.fields import ArrayField
-from organizations.models import Organization
+from organization.models import Organization
 
 
 
@@ -191,7 +191,7 @@ class Action(models.Model):
     """
 
     user = models.ForeignKey(
-        CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+        User, null=True, blank=True, on_delete=models.CASCADE)
     description = models.CharField(
         max_length=255, default=None, null=True, blank=True)
 

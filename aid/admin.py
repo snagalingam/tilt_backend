@@ -26,31 +26,31 @@ class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     fieldsets = (
         (None, {'fields': ('name',)}),
-        (('Information'), {'fields': ('year', 'main_category', 'sub_category', 'sub_sub_category')}),
+        (('Information'), {'fields': ('primary', 'secondary', 'tertiary',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    inlines = [AidDataInline]
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'data_count']
+    inlines = [DataInline]
+    list_display = ['name', 'primary', 'secondary', 'tertiary',]
     model = Category
-    ordering = ('name', 'year')
+    ordering = ('name',)
 
 
 class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'aid_category')}),
-        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')}),
+        (None, {'fields': ('name', 'college_status', 'category',)}),
+        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['college_status', 'name', 'amount', 'aid_category',]
+    list_display = ['college_status', 'name', 'amount', 'category',]
     model = Data
-    ordering = ('name', 'amount', 'college_status', 'aid_category',)
-    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
+    ordering = ('name', 'amount', 'college_status', 'category',)
+    search_fields = ('name', 'amount', 'college_status', 'category',)
 
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -62,26 +62,26 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
     }
-    list_display = ['name', ]
+    list_display = ['document_name',]
     model = DocumentData
-    ordering = ('name',)
-    search_fields = ('name',)
+    ordering = ('document_name',)
+    search_fields = ('document_name',)
 
 
 class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields':('sent', 'processed', 'pass_fail')}),
-        (('Details'), {'fields': ('name', 'words_id', 'tables_id')}),
-        (('Missing'), {'fields': ('number_of_missing', 'missing_amounts')}),
+        (None, {'fields':('sent', 'processed', 'pass_fail',)}),
+        (('Details'), {'fields': ('name', 'words_id', 'tables_id',)}),
+        (('Missing'), {'fields': ('number_of_missing', 'missing_amounts',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created']
+    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created',]
     model = DocumentResult
-    ordering = ('name', 'sent', 'processed', 'number_of_missing','created',)
-    search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
+    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 'created',)
+    search_fields = ('document_name', 'pass_fail', 'number_of_missing', 'created',)
 
 
 admin.site.register(Category, CategoryAdmin)
