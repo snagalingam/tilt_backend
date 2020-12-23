@@ -9,7 +9,6 @@ DEFAULT_COLLEGE = 1
 DEFAULT_COLLEGE_STATUS = 1
 DEFAULT_USER = 1
 
-
 class College(models.Model):
     # popularity_score
     popularity_score = models.IntegerField(default=0, blank=True, null=True)

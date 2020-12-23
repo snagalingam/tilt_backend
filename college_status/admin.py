@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import Status
+from .models import CollegeStatus
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -21,6 +21,6 @@ class CollegeStatusAdmin(admin.ModelAdmin):
 
     search_fields = ('status', 'college', 'user',)
     ordering = ('status', 'college', 'user',)
-    model = Status
+    model = CollegeStatus
 
-admin.site.register(Status, StatusAdmin)
+admin.site.register(CollegeStatus, CollegeStatusAdmin)
