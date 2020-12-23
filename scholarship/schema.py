@@ -2,14 +2,17 @@ import datetime
 import graphene
 import math
 
-from .models import Provider, Scholarship, ScholarshipStatus
+from .models import Provider, Scholarship, Status
 from colleges.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
 from graphene_django import DjangoObjectType
 
 
-class ProviderType(DjangoObjectType):
+################################################
+### Standard Model Definitions
+################################################
+class ScholarshipProviderType(DjangoObjectType):
     class Meta:
         model = Provider
 
@@ -30,14 +33,17 @@ class ScholarshipStatusType(DjangoObjectType):
         model = ScholarshipStatus
 
 
+################################################
+### Query
+################################################
 class Query(graphene.ObjectType):
-    providers = graphene.List(ProviderType, limit=graphene.Int())
-    scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
+    scholarship_providers = graphene.List(ScholarshipProviderType, limit=graphene.Int())
     scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+    scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
 
     # providers
     providers_by_fields = graphene.List(
-        ProviderType,
+        ScholarshipProviderType,
         organization=graphene.String(),
         reference=graphene.String(),
         address=graphene.String(),
@@ -103,7 +109,7 @@ class Query(graphene.ObjectType):
 
     # get_all()
     def resolve_providers(self, info, limit=None):
-        qs = Provider.objects.all()[0:limit]
+        qs = ScholarshipProvider.objects.all()[0:limit]
         return qs
 
     def resolve_scholarship_max_amount(self, info):
@@ -121,7 +127,7 @@ class Query(graphene.ObjectType):
 
     # get_by_fields()
     def resolve_providers_by_fields(self, info, **fields):
-        qs = Provider.objects.filter(**fields)
+        qs = ScholarshipProvider.objects.filter(**fields)
         return qs
 
     def resolve_scholarship_max_amount(self, info):
@@ -249,7 +255,7 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        provider = Provider.objects.get(pk=provider_id)
+        provider = ScholarshipProvider.objects.get(pk=provider_id)
         college = College.objects.get(pk=college_id)
 
         scholarship = Scholarship(

@@ -1,34 +1,43 @@
+from colleges.models import College
 from django.conf import settings
 from django.db import models
-from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils import timezone
-from colleges.models import College
+from django_better_admin_arrayfield.models.fields import ArrayField
+
 
 DEFUALT_SCHOLARSHIP_ID = 1
+DEFAULT_PROVIDER_ID = 1
 DEFAULT_USER_ID = 1
 
 class Provider(models.Model):
-    organization = models.CharField(max_length=255, null=True, blank=True, unique=True)
-    reference = models.CharField(max_length=255, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(max_length=255, null=True, blank=True)
-    state = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(max_length=255, null=True, blank=True)
-    email = models.CharField(max_length=255, null=True, blank=True)
-    phone_number = models.CharField(max_length=255, null=True, blank=True)
-    phone_number_ext = models.CharField(max_length=255, null=True, blank=True)
+    organization = models.CharField(max_length=255, unique=True)
+    addressee = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    zipcode = models.CharField(max_length=255, blank=True)
+    email = models.CharField(max_length=255, blank=True)
+    phone_number = models.CharField(max_length=255, blank=True)
+    phone_number_ext = models.CharField(max_length=255, blank=True)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'provider'
+        verbose_name_plural = 'providers'
 
     def __str__(self):
         return str(self.organization)
 
 class Scholarship(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
     provider = models.ForeignKey(
-        Provider, on_delete=models.CASCADE)
+        Provider,
+        default=DEFAULT_PROVIDER_ID,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
@@ -77,10 +86,14 @@ class Scholarship(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
+    class Meta:
+        verbose_name = 'scholarship'
+        verbose_name_plural = 'scholarships'
+
     def __str__(self):
         return str(self.name)
 
-class ScholarshipStatus(models.Model):
+class Status(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
@@ -91,14 +104,15 @@ class ScholarshipStatus(models.Model):
         default=DEFUALT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
-    status = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=255)
 
     # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = 'Scholarship statuses'
+        verbose_name = 'status'
+        verbose_name_plural = 'status'
 
     def __str__(self):
         return str(self.status)
