@@ -42,7 +42,7 @@ class ScorecardType(DjangoObjectType):
         fields = "__all__"
 
 
-class StatusType(DjangoObjectType):
+class CollegeStatusType(DjangoObjectType):
     class Meta:
         model = Status
         fields = "__all__"
@@ -64,7 +64,7 @@ class NetPriceRangeType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     # standard model queries
     budgets = graphene.List(BudgetType, limit=graphene.Int())
-    college_statuses = graphene.List(StatusType, limit=graphene.Int())
+    college_statuses = graphene.List(CollegeStatusType, limit=graphene.Int())
     colleges = graphene.List(CollegeType, limit=graphene.Int())
     fields_of_study = graphene.List(FieldOfStudyType, limit=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())

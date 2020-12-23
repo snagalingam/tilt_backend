@@ -43,12 +43,11 @@ INSTALLED_APPS = [
     'django_better_admin_arrayfield',
 
     # local
-    'users.apps.UsersConfig',
-    'scholarships.apps.ScholarshipsConfig',
-    'organizations.apps.OrganizationsConfig',
-    'colleges.apps.CollegesConfig',
-    'college_status.apps.CollegeStatusConfig',
-    'financial_aid.apps.FinancialAidConfig',
+    'aid.apps.AidConfig',
+    'college.apps.CollegeConfig',
+    'organization.apps.OrganizationConfig',
+    'scholarship.apps.ScholarshipConfig',
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'tilt_project.urls'
+ROOT_URLCONF = 'tilt.urls'
 
 TEMPLATES = [
     {
@@ -82,7 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tilt_project.wsgi.application'
+WSGI_APPLICATION = 'tilt.wsgi.application'
 
 
 # Database
@@ -163,7 +162,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
 ]
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'user.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
@@ -234,7 +233,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_SECRET', default='')
 
 # graphene
 GRAPHENE = {
-    'SCHEMA': 'tilt_project.schema.schema',
+    'SCHEMA': 'tilt.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],

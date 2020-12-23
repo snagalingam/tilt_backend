@@ -9,22 +9,22 @@ import financial_aid.schema
 
 
 class Query(
-    users.schema.Query,
-    organizations.schema.Query,
-    colleges.schema.Query,
-    scholarships.schema.Query,
-    financial_aid.schema.Query,
+    aid.schema.Query,
+    college.schema.Query,
+    organization.schema.Query,
+    scholarship.schema.Query,
+    user.schema.Query,
     graphene.ObjectType
 ):
     pass
 
 
 class Mutation(
-    users.schema.Mutation,
-    organizations.schema.Mutation,
-    colleges.schema.Mutation,
-    scholarships.schema.Mutation,
-    financial_aid.schema.Mutation,
+    aid.schema.Mutation,
+    college.schema.Mutation,
+    organization.schema.Mutation,
+    scholarship.schema.Mutation,
+    user.schema.Mutation,
     graphene.ObjectType
 ):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()

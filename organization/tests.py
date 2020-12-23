@@ -1,8 +1,8 @@
 from django.test import TestCase
-from organizations.models import Organization
+from organization.models import Organization
 
 class OrganizationTests(TestCase):
-    
+
     def setUp(self):
         Organization.objects.create(
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
@@ -18,10 +18,10 @@ class OrganizationTests(TestCase):
             types=["school", "point_of_interest", "establishment"],
             tilt_partnership=False,
         )
-        
+
     def test_create_organization(self):
         organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
-        
+
         self.assertEqual(organization.place_id, "ChIJ91htBQIXYogRtPsg4NGoNv0")
         self.assertEqual(organization.business_status, "OPERATIONAL")
         self.assertEqual(organization.icon, None)
@@ -36,5 +36,3 @@ class OrganizationTests(TestCase):
         self.assertFalse(organization.tilt_partnership)
         self.assertIsNotNone(organization.created)
         self.assertIsNotNone(organization.updated)
-
-    
