@@ -4,7 +4,7 @@ services:
   backend:
     container_name: backend
     build: .
-    command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
+    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     environment:
       - REGION=us-east-2
       - ENVIRONMENT=development
@@ -15,7 +15,7 @@ services:
       - DEBUG=1
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
     ports:
-      - "8000:8000"
+      - 8000:8000
     volumes:
       - .:/app
     depends_on:
@@ -25,4 +25,14 @@ services:
     container_name: db
     image: postgres:11
     environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - 5050:5050
