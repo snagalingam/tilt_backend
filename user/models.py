@@ -13,11 +13,25 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from organization.models import Organization
 
 
+class Action(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.description
+
+
+class DeletedAccount(models.Model):
+    date = models.DateField()
+    accounts = models.IntegerField()
+
+    def __str__(self):
+        return str(self.date)
+
 
 class UserManager(BaseUserManager):
-    """
-    User manager for Custom User that allows users to be created
-    """
+    """ User manager for Custom User that allows users to be created """
 
     use_in_migrations = True
 
@@ -50,14 +64,13 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom user model that extends AbstractBaseUser and PermissionsMixin
-    """
+    """ Custom user model that extends AbstractBaseUser and PermissionsMixin """
 
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
-
     REQUIRED_FIELDS = ["first_name", "last_name"]
+        USERNAME_FIELD = "email"
+    CONTACT_METHOD_CHOICES = Choices("text", "email")
 
     email = models.EmailField(
         _("email address"),
@@ -66,18 +79,29 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
-
+    user_type = models.CharField(_("user type"), default=None, blank=True, max_length=255)
+    first_name = models.CharField(_("first name"), max_length=255)
+    last_name = models.CharField(_("last name"), max_length=255)
+    preferred_name = models.CharField(_("preferred name"), max_length=255, blank=True)
+    preferred_contact_method = models.CharField(
+        _("preferred contact method"),
+         blank=True,
+         choices=CONTACT_METHOD_CHOICES,
+         max_length=255,
+    )
+    phone_number = models.CharField(
+        _("phone number"),
+        blank=True,
+        max_length=15
+    )
     is_verified = models.BooleanField(default=False)
     is_onboarded = models.BooleanField(default=False)
     is_test = models.BooleanField(default=False)
-
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_(
-            "Designates whether the user can log into this admin site."),
+        help_text=_("Designates whether the user can log into this admin site."),
     )
-
     is_active = models.BooleanField(
         _("active"),
         default=True,
@@ -86,64 +110,44 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-
-    # text or email
-    preferred_contact_method = models.CharField(
-        _("preferred contact method"), max_length=255, null=True, blank=True)
-
-    first_name = models.CharField(
-        _("first name"), max_length=255, null=True, blank=True)
-
-    last_name = models.CharField(
-        _("last name"), max_length=255, null=True, blank=True)
-
-    phone_number = models.CharField(
-        _("phone number"), max_length=255, null=True, blank=True)
-
-    preferred_name = models.CharField(
-        _("preferred name"), max_length=255, null=True, blank=True)
-
     gpa = models.DecimalField(
-        _("GPA"), max_digits=5, decimal_places=2, null=True, blank=True)
-
-    act_score = models.PositiveSmallIntegerField(
-        _("ACT score"), null=True, blank=True)
-
-    sat_math = models.PositiveSmallIntegerField(
-        _("SAT math"), null=True, blank=True)
-
-    sat_verbal = models.PositiveSmallIntegerField(
-        _("SAT verbal"), null=True, blank=True)
-
-    efc = models.IntegerField(
-        _("Expected Family Contribution"), null=True, blank=True)
-
-    pronouns = models.CharField(
-        _("pronoun"), max_length=255, default=None, null=True, blank=True)
-
+        _("GPA"),
+        blank=True,
+        decimal_places=2,
+        max_digits=5,
+        null=True
+    )
+    act_score = models.PositiveSmallIntegerField(_("ACT score"), blank=True, null=True)
+    sat_math = models.PositiveSmallIntegerField(_("SAT math"), blank=True, null=True)
+    sat_verbal = models.PositiveSmallIntegerField(_("SAT verbal"), blank=True, null=True)
+    efc = models.PositiveIntegerField(_("Expected Family Contribution"), blank=True, null=True)
+    pronouns = models.CharField(_("pronoun"), max_length=255, default=None, blank=True)
     ethnicity = ArrayField(
-        models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
-        null=True, blank=True,
+        models.CharField(_("ethnicity"), max_length=255, blank=True),
+        blank=True,
+        null=True,
     )
-
-    user_type = models.CharField(
-        _("user type"), max_length=255, default=None, null=True, blank=True)
-
-    organization = models.ManyToManyField(Organization)
-
-    high_school_grad_year = models.IntegerField(
-        _("high school graduation year"), null=True, blank=True
+    high_school_grad_year = models.PositiveIntegerField(
+        _("high school graduation year"),
+        blank=True,
+        null=True,
     )
-
     income_quintile = models.CharField(
-        _("income quintile"), max_length=255, null=True, blank=True, default=None)
-
+        _("income quintile"),
+        max_length=255,
+        null=True,
+        blank=True,
+        default=None
+    )
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
         null=True, blank=True,
     )
+    organization = models.ManyToManyField(Organization)
 
-    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    # automatically added
+    created = models.DateTimeField(_("date joined"), auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 
@@ -152,9 +156,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("users")
 
     def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
+        """ Return the first_name plus the last_name, with a space in between. """
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
@@ -164,38 +166,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
+        send_email(subject, message, from_email, [self.email], **kwargs)
 
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def __str__(self):
-        return str(self.email)
-
-
-class DeletedAccount(models.Model):
-
-    date = models.DateField()
-    accounts = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return str(self.date)
-
-class Action(models.Model):
-    """
-    Create New Action
-        Action(user=user,
-            action='Logged In', (add description)
-            timestamp=(check helpers folder for create_timestamp)
-    """
-
-    user = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.CASCADE)
-    description = models.CharField(
-        max_length=255, default=None, null=True, blank=True)
-
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return str(self.description)
+        return self.email
