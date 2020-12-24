@@ -2,7 +2,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
-from services.sendgrid_api.send_email import send_notification_email, send_notification_sms
+from services.sendgrid_api.send_email import send_notification_email
+from services.twilio import send_notification_sms
 
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
