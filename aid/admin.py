@@ -1,4 +1,4 @@
-from .models import AidCategory, AidData, DocumentData, DocumentResult
+from .models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
@@ -38,11 +38,11 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
         return obj.data_set.count()
 
 
-
 class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('name', 'college_status', 'category',)}),
-        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data',)}),
+        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 
+            'col_index', 'row_data',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -79,26 +79,30 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created',]
+    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 
+        'number_of_missing', 'created',]
     model = DocumentResult
-    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 'created',)
-    search_fields = ('document_name', 'pass_fail', 'number_of_missing', 'created',)
+    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 
+        'created',)
+    search_fields = ('document_name', 'sent', 'processed', 'pass_fail', 
+        'number_of_missing', 'created',)
 
-class SummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+
+class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    fieldsets = (
+        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
+    )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'total_cost', 'total_aid', 'net_price',]
-    fieldsets = (
-        (None, {'fields': ('status', 'total_cost', 'total_aid', 'net_price',)}),
-    )
+    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
+    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('college_status',)
+    model = AidSummary
 
-    search_fields = ('status__pk', 'total_cost', 'total_aid', 'net_price',)
-    ordering = ('status__pk',)
-    model = Summary
-    
+
 admin.site.register(AidCategory, AidCategoryAdmin)
 admin.site.register(AidData, AidDataAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(DocumentResult, DocumentResultAdmin)
-admin.site.register(Summary, SummaryAdmin)
+admin.site.register(AidSummary, AidSummaryAdmin)

@@ -9,7 +9,7 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 DEFAULT_COLLEGE_STATUS = 1
 DEFAULT_CATEGORY = 1
 
-class Category(models.Model):
+class AidCategory(models.Model):
     name = models.CharField(max_length=255)
     primary = models.CharField(max_length=255)
     secondary = models.CharField(max_length=255)
@@ -20,21 +20,21 @@ class Category(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
+        verbose_name = 'aid category'
+        verbose_name_plural = 'aid categories'
 
     def __str__(self):
         return self.name
 
 
-class Data(models.Model):
+class AidData(models.Model):
     college_status = models.ForeignKey(
         CollegeStatus,
         default=DEFAULT_COLLEGE_STATUS,
         on_delete=models.CASCADE
     )
-    category = models.ForeignKey(
-        Category,
+    aid_category = models.ForeignKey(
+        AidCategory,
         default=DEFAULT_CATEGORY,
         on_delete=models.CASCADE
     )
@@ -50,8 +50,8 @@ class Data(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'data'
-        verbose_name_plural = 'data'
+        verbose_name = 'aid data'
+        verbose_name_plural = 'aid data'
 
     def __str__(self):
         return str(self.name)
@@ -71,8 +71,8 @@ class DocumentData(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'document data'
-        verbose_name_plural = 'document data'
+        verbose_name = 'aid document data'
+        verbose_name_plural = 'aid document data'
 
     def __str__(self):
         return self.name
@@ -97,8 +97,31 @@ class DocumentResult(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'document result'
-        verbose_name_plural = 'document results'
+        verbose_name = 'aid document result'
+        verbose_name_plural = 'aid document results'
 
     def __str__(self):
         return self.name
+
+
+class AidSummary(models.Model):
+    college_status = models.ForeignKey(
+        CollegeStatus,
+        default=DEFAULT_COLLEGE_STATUS,
+        on_delete=models.CASCADE
+    )
+
+    total_cost = models.IntegerField(blank=True, null=True)
+    total_aid = models.IntegerField(blank=True, null=True)
+    net_price = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name = 'aid summary'
+        verbose_name_plural = 'aid summaries'
+
+    def __str__(self):
+        return self.pk

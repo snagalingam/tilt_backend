@@ -8,13 +8,13 @@
 
 # Examples of Tilt db table names
 
-1. colleges.College
-2. colleges.Scorecard
-3. colleges.FieldOfStudy
-4. college_status.CollegeStatus
-5. organizations.)rganization
-6. financial_aid.AidCategory
-7. financial_aid.AidData
+1. aid.AidCategory
+2. aid.AidData
+3. college.College
+4. college.Scorecard
+5. college.FieldOfStudy
+6. college.CollegeStatus
+7. organization.Organization
 
 # How to dump (extract) data from database
 

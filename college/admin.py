@@ -33,11 +33,13 @@ class BudgetAdmin(admin.ModelAdmin):
     ordering = ('college_status',)
     search_fields = ('college_status',)
 
+
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score')}),
         (('College Information'), {
-            'fields': ('name', 'address', 'phone_number', 'website', 'business_status')
+            'fields': ('name', 'address', 'phone_number', 'website', 
+                'business_status')
         }),
         (('Scorcard Information'), {
             'fields': ('unit_id', 'ope_id')
