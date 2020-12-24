@@ -7,7 +7,6 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate, login, logout, password_validation
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
-
 from graphene_django import DjangoObjectType
 from organization.models import Organization
 from services.sendgrid_api.send_email import send_verification, send_reset_password, send_password_changed, send_email_changed
@@ -16,11 +15,11 @@ from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
 from user.models import DeletedAccount, Action
 
-class UserType(DjangoObjectType):
-    class Meta:
-        model = get_user_model()
 
-class ActionType(DjangoObjectType):
+################################################
+### Standard Model Definitions
+################################################
+class UserActionType(DjangoObjectType):
     class Meta:
         model = Action
         fields = "__all__"
@@ -30,6 +29,14 @@ class OrganizationType_(DjangoObjectType):
         model = Organization
         fields = "__all__"
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = get_user_model()
+
+
+################################################
+### Query
+################################################
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
@@ -62,42 +69,40 @@ class Query(graphene.ObjectType):
                 raise Exception("User is not verified")
 
 
-class LoginUser(graphene.Mutation):
+################################################
+### Mutations
+################################################
+class AddSubscriber(graphene.Mutation):
     user = graphene.Field(UserType)
-    is_authenticated = graphene.Boolean()
+    success = graphene.Boolean()
 
     class Arguments:
         email = graphene.String()
-        password = graphene.String()
 
-    def mutate(self, info, email, password):
+    def mutate(
+        self,
+        info,
+        email
+    ):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-        user = authenticate(username=email, password=password)
-
-        if user is not None:
-            if user.is_verified:
-                login(info.context, user,
-                      backend="django.contrib.auth.backends.ModelBackend")
-                # track user login
-                create_action(user, 'Logged in')
-                return LoginUser(user=user, is_authenticated=user.is_authenticated)
-            else:
-                raise Exception("User is not verified")
-        else:
-            raise Exception("Incorrect credentials")
+        add_subscriber(email)
+        return AddSubscriber(success=True)
 
 
-class LogoutUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    is_logged_out = graphene.Boolean()
+class CreateAction(graphene.Mutation):
+    success = graphene.Boolean()
 
-    def mutate(self, info):
+    class Arguments:
+        description = graphene.String()
+
+    def mutate(self, info, description):
         user = info.context.user
-        # track user logout
-        create_action(user, 'Logged out')
-        logout(info.context)
-        return LogoutUser(is_logged_out=True)
+        if user.is_authenticated:
+            create_action(user, description)
+            return CreateAction(success=True)
+        else:
+            return CreateAction(success=False)
 
 
 class CreateUser(graphene.Mutation):
@@ -142,6 +147,79 @@ class CreateUser(graphene.Mutation):
             return CreateUser(user=user)
         else:
             raise Exception("Unable to create user")
+
+
+class DeleteUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_deleted = graphene.Boolean()
+
+    def mutate(self, info):
+        user = info.context.user
+
+        if user.is_authenticated and user.is_active:
+            user.delete()
+
+            # get and format today's date (mm/dd/yyyy)
+            date = create_date()
+
+            # search for date
+            try:
+                get_count = DeletedAccount.objects.get(date=date)
+            except:
+                get_count = None
+
+            # iternate get_count or create new_count
+            if get_count is not None:
+                get_count.accounts += 1
+            else:
+                get_count = DeletedAccount(
+                    date=date,
+                    accounts=1
+                )
+            # save DeletedAccount object
+            get_count.save()
+
+            return DeleteUser(is_deleted=True)
+        else:
+            raise Exception("User account was not deleted")
+
+
+class LoginUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_authenticated = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+
+    def mutate(self, info, email, password):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+        user = authenticate(username=email, password=password)
+
+        if user is not None:
+            if user.is_verified:
+                login(info.context, user,
+                      backend="django.contrib.auth.backends.ModelBackend")
+                # track user login
+                create_action(user, 'Logged in')
+                return LoginUser(user=user, is_authenticated=user.is_authenticated)
+            else:
+                raise Exception("User is not verified")
+        else:
+            raise Exception("Incorrect credentials")
+
+
+class LogoutUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+    is_logged_out = graphene.Boolean()
+
+    def mutate(self, info):
+        user = info.context.user
+        # track user logout
+        create_action(user, 'Logged out')
+        logout(info.context)
+        return LogoutUser(is_logged_out=True)
 
 
 class OnboardUser(graphene.Mutation):
@@ -274,106 +352,6 @@ class OnboardUser(graphene.Mutation):
             raise Exception("User is not logged in")
 
 
-class DeleteUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    is_deleted = graphene.Boolean()
-
-    def mutate(self, info):
-        user = info.context.user
-
-        if user.is_authenticated and user.is_active:
-            user.delete()
-
-            # get and format today's date (mm/dd/yyyy)
-            date = create_date()
-
-            # search for date
-            try:
-                get_count = DeletedAccount.objects.get(date=date)
-            except:
-                get_count = None
-
-            # iternate get_count or create new_count
-            if get_count is not None:
-                get_count.accounts += 1
-            else:
-                get_count = DeletedAccount(
-                    date=date,
-                    accounts=1
-                )
-            # save DeletedAccount object
-            get_count.save()
-
-            return DeleteUser(is_deleted=True)
-        else:
-            raise Exception("User account was not deleted")
-
-
-class SendVerificationEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    class Arguments:
-        email = graphene.String()
-
-    def mutate(
-        self,
-        info,
-        email,
-
-    ):
-        lowercase_email = email.lower()
-        email = BaseUserManager.normalize_email(lowercase_email)
-        user = get_user_model().objects.get(email=email)
-
-        if user is not None:
-            send_verification(user.email, user.first_name)
-            return SendVerificationEmail(success=True)
-        else:
-            raise Exception("Email not found")
-
-
-class SendForgotEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    class Arguments:
-        email = graphene.String()
-
-    def mutate(self, info, email):
-        lowercase_email = email.lower()
-        email = BaseUserManager.normalize_email(lowercase_email)
-        user = get_user_model().objects.get(email=email)
-
-        if user is not None:
-            send_reset_password(user.email, user.first_name)
-            return SendForgotEmail(success=True)
-        else:
-            raise Exception("Email not found")
-
-
-class VerifyEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    class Arguments:
-        token = graphene.String(required=True)
-
-    def mutate(self, info, token):
-        email = jwt.decode(token,
-                           os.environ.get('SECRET_KEY'),
-                           algorithms=['HS256'])['email']
-
-        user = get_user_model().objects.get(email=email)
-
-        if email and not user.is_verified:
-            user.is_verified = True
-            user.save()
-            login(info.context, user,
-                  backend="django.contrib.auth.backends.ModelBackend")
-            return VerifyEmail(success=user.is_verified)
-
-
 class ResetPassword(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
@@ -400,6 +378,25 @@ class ResetPassword(graphene.Mutation):
             raise Exception("Password did not reset")
 
 
+class SendForgotEmail(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+
+    def mutate(self, info, email):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+        user = get_user_model().objects.get(email=email)
+
+        if user is not None:
+            send_reset_password(user.email, user.first_name)
+            return SendForgotEmail(success=True)
+        else:
+            raise Exception("Email not found")
+
+
 class SendSubscriptionVerification(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
@@ -414,7 +411,7 @@ class SendSubscriptionVerification(graphene.Mutation):
         return SendSubscriptionVerification(success=True)
 
 
-class AddSubscriber(graphene.Mutation):
+class SendVerificationEmail(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
 
@@ -424,12 +421,53 @@ class AddSubscriber(graphene.Mutation):
     def mutate(
         self,
         info,
-        email
+        email,
+
     ):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-        add_subscriber(email)
-        return AddSubscriber(success=True)
+        user = get_user_model().objects.get(email=email)
+
+        if user is not None:
+            send_verification(user.email, user.first_name)
+            return SendVerificationEmail(success=True)
+        else:
+            raise Exception("Email not found")
+
+
+class UpdatePassword(graphene.Mutation):
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        new_password = graphene.String()
+        first_name = graphene.String()
+
+    def mutate(
+        self,
+        info,
+        email,
+        password,
+        new_password,
+        first_name
+    ):
+        user = authenticate(username=email, password=password)
+
+        if user is not None:
+            # password validation
+            try:
+                password_validation.validate_password(new_password, user=user)
+            except ValidationError as e:
+                return e
+            user.set_password(new_password)
+            user.save()
+            success = True
+            send_password_changed(email, first_name)
+            return UpdatePassword(success=success)
+        else:
+            raise Exception("Incorrect credentials")
 
 
 class UpdateUser(graphene.Mutation):
@@ -579,69 +617,41 @@ class UpdateUser(graphene.Mutation):
             raise Exception("User is not logged in")
 
 
-class UpdatePassword(graphene.Mutation):
+class VerifyEmail(graphene.Mutation):
     user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
-        email = graphene.String()
-        password = graphene.String()
-        new_password = graphene.String()
-        first_name = graphene.String()
+        token = graphene.String(required=True)
 
-    def mutate(
-        self,
-        info,
-        email,
-        password,
-        new_password,
-        first_name
-    ):
-        user = authenticate(username=email, password=password)
+    def mutate(self, info, token):
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
 
-        if user is not None:
-            # password validation
-            try:
-                password_validation.validate_password(new_password, user=user)
-            except ValidationError as e:
-                return e
-            user.set_password(new_password)
+        user = get_user_model().objects.get(email=email)
+
+        if email and not user.is_verified:
+            user.is_verified = True
             user.save()
-            success = True
-            send_password_changed(email, first_name)
-            return UpdatePassword(success=success)
-        else:
-            raise Exception("Incorrect credentials")
-
-
-class CreateAction(graphene.Mutation):
-    success = graphene.Boolean()
-
-    class Arguments:
-        description = graphene.String()
-
-    def mutate(self, info, description):
-        user = info.context.user
-        if user.is_authenticated:
-            create_action(user, description)
-            return CreateAction(success=True)
-        else:
-            return CreateAction(success=False)
+            login(info.context, user,
+                  backend="django.contrib.auth.backends.ModelBackend")
+            return VerifyEmail(success=user.is_verified)
 
 
 class Mutation(graphene.ObjectType):
+    add_subscriber = AddSubscriber.Field()
+    create_action = CreateAction.Field()
     create_user = CreateUser.Field()
-    login_user = LoginUser.Field()
     delete_user = DeleteUser.Field()
-    onboard_user = OnboardUser.Field()
+    login_user = LoginUser.Field()
     logout_user = LogoutUser.Field()
-    verify_email = VerifyEmail.Field()
-    send_forgot_email = SendForgotEmail.Field()
+    onboard_user = OnboardUser.Field()
     reset_password = ResetPassword.Field()
+    send_forgot_email = SendForgotEmail.Field()
+    send_subscription_verification = SendSubscriptionVerification.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
-    send_subscription_verification = SendSubscriptionVerification.Field()
-    add_subscriber = AddSubscriber.Field()
-    update_user = UpdateUser.Field()
     update_password = UpdatePassword.Field()
-    create_action = CreateAction.Field()
+    update_user = UpdateUser.Field()
+    verify_email = VerifyEmail.Field()

@@ -64,7 +64,6 @@ class Query(graphene.ObjectType):
     aid_document_data = graphene.List(AidDocumentDataType, limit=graphene.Int())
     aid_document_results = graphene.List(AidDocumentResultType, limit=graphene.Int())
 
-    # aid_categories
     aid_categories_by_fields = graphene.List(
         AidCategoryType,
         name=graphene.String(),
@@ -72,7 +71,6 @@ class Query(graphene.ObjectType):
         secondary=graphene.String(),
         tertiary=graphene.String()
     )
-    # aid_data
     aid_data_by_fields = graphene.List(
         AidDataType,
         amount=graphene.Int(),
@@ -83,12 +81,10 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
-    # document_data
     aid_document_data_by_fields = graphene.List(
         AidDocumentDataType,
         document_name=graphene.String()
     )
-    # document_results
     aid_document_results_by_fields = graphene.List(
         AidDocumentResultType,
         document_name=graphene.String(),

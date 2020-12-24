@@ -21,9 +21,6 @@ class DataInline(admin.TabularInline):
 ### Admin Panel
 ################################################
 class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    def data_count(self, obj):
-        return obj.data_set.count()
-
     fieldsets = (
         (None, {'fields': ('name',)}),
         (('Information'), {'fields': ('primary', 'secondary', 'tertiary',)}),
@@ -36,6 +33,10 @@ class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['name', 'primary', 'secondary', 'tertiary',]
     model = Category
     ordering = ('name',)
+
+    def data_count(self, obj):
+        return obj.data_set.count()
+
 
 
 class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -71,7 +72,7 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
 class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields':('sent', 'processed', 'pass_fail',)}),
-        (('Details'), {'fields': ('name', 'words_id', 'tables_id',)}),
+        (('Details'), {'fields': ('document_name', 'words_id', 'tables_id',)}),
         (('Missing'), {'fields': ('number_of_missing', 'missing_amounts',)}),
     )
     formfield_overrides = {

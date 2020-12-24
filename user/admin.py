@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import Group
 from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -120,6 +121,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
     ordering = ('email',)
 
 
-admin.site.register(User, UserAdmin)
-admin.site.register(DeletedAccount, DeletedAccountAdmin)
 admin.site.register(Action, ActionAdmin)
+admin.site.register(DeletedAccount, DeletedAccountAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.unregister(Group)

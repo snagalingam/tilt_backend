@@ -35,9 +35,6 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # 3rd-party apps
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'graphene_django',
     'social_django',
     'django_better_admin_arrayfield',

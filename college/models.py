@@ -11,6 +11,13 @@ DEFAULT_POPULARITY_SCORE = 0
 DEFAULT_USER_ID = 1
 
 class College(models.Model):
+    # college scorecard info
+    unit_id = models.IntegerField(blank=True, null=True)
+    ope_id = models.CharField(max_length=255, blank=True, null=True)
+
+    # google api inputted
+    name = models.CharField(max_length=255, blank=True, null=True)
+
     # popularity_score
     popularity_score = models.IntegerField(
         blank=True,
@@ -18,22 +25,22 @@ class College(models.Model):
         null=True
     )
 
-    # college scorecard info
-    unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(max_length=255, blank=True, null=True)
-
-    # google api inputted
+    # google api inputted continued
     place_id = models.CharField(max_length=255, blank=True, null=True)
     business_status = models.CharField(max_length=255, blank=True, null=True)
-    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(null=True, blank=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
     url = models.TextField(null=True, blank=True)
     website = models.TextField(null=True, blank=True)
-    favicon = models.TextField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    types = ArrayField(
+        models.CharField(max_length=255, null=True, blank=True),
+        null=True,
+        blank=True,
+        default=None
+    )
     main_photo = models.TextField(null=True, blank=True)
     photos = ArrayField(
         models.TextField(null=True, blank=True),
@@ -41,19 +48,17 @@ class College(models.Model):
         blank=True,
         default=None
     )
-    types = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
-        null=True,
-        blank=True,
-        default=None
-    )
+
+    # other
+    favicon = models.TextField(null=True, blank=True)
+
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 
 class CollegeStatus(models.Model):
@@ -130,7 +135,7 @@ class FieldOfStudy(models.Model):
         verbose_name_plural = 'Fields of study'
 
     def __str__(self):
-        return str(self.cip_title)
+        return self.cip_title
 
 
 class Scorecard(models.Model):
@@ -441,7 +446,7 @@ class Scorecard(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 
 class Budget(models.Model):
@@ -466,4 +471,4 @@ class Budget(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return str(self.pk)
+        return self.pk
