@@ -75,7 +75,7 @@ class CreateOrganization(graphene.Mutation):
 
         try:
             organization = Organization.objects.get(place_id=place_id)
-        except Organization.DoesNotExist:
+        except:
             organization = None
 
         if organization is None:
@@ -93,10 +93,10 @@ class CreateOrganization(graphene.Mutation):
                 types=types,
                 tilt_partnership=tilt_partnership,
             )
+            
             organization.save()
             return CreateOrganization(organization=organization)
-        else:
-            return CreateOrganization(organization=organization)
+        raise Exception('Organization already exists')
 
 
 class OrganizationSearch(graphene.Mutation):
@@ -109,40 +109,39 @@ class OrganizationSearch(graphene.Mutation):
     def mutate(self, info, place, location):
         api = GooglePlacesAPI()
         data = api.details(place, location)
+        errors = data.get("errors", None)
 
-        try:
-            if data["errors"] is not None:
-                return ValueError(data["errors"])
-        except:
-            results = data.get('result')
+        if errors:
+            raise errors
 
-            place_id = data.get('place_id')
-            business_status = results.get('business_status', None)
-            icon = results.get('icon', None)
-            name = results.get('name', None)
-            lat = results.get("geometry")["location"]["lat"]
-            lng = results.get("geometry")["location"]["lng"]
-            address = results.get('formatted_address', None)
-            phone_number = results.get('formatted_phone_number', None)
-            url = results.get('url', None)
-            website = results.get('website', None)
-            types = results.get('types', [])
+        results = data.get("result", None)
+        place_id = data.get('place_id', "")
+        place_name = results.get("name")
+        location = results["geometry"]["location"]
+        lat = location.get("lat", "")
+        lng = location.get("lng", "")
+        business_status = results.get("business_status", "")
+        icon = results.get("icon", "")
+        address = results.get("formatted_address", "")
+        place_phone_number = results.get("formatted_phone_number", "")
+        url = results.get("url", "")
+        types = results.get("types", [])
+        website = results.get("website", "")
 
-            organization = Organization(
-                place_id=place_id,
-                business_status=business_status,
-                icon=icon,
-                name=name,
-                lat=lat,
-                lng=lng,
-                address=address,
-                phone_number=phone_number,
-                url=url,
-                website=website,
-                types=types,
-            )
-
-            return OrganizationSearch(organization=organization)
+        organization = Organization(
+            place_id=place_id,
+            business_status=business_status,
+            icon=icon,
+            name=place_name,
+            lat=lat,
+            lng=lng,
+            address=address,
+            phone_number=place_phone_number,
+            url=url,
+            website=website,
+            types=types,
+        )
+        return OrganizationSearch(organization=organization)
 
 
 class Mutation(graphene.ObjectType):

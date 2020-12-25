@@ -1,5 +1,5 @@
 from .get_tables import get_table_data
-from .check_document import start_document_check, strip_money_string
+from .check_document import start_document_check, format_money
 
 # -------------- Change Money to Integer
 
@@ -7,8 +7,9 @@ def change_to_int(word):
     if len(word) < 4 or "$" not in word:
         return word
 
-    money = strip_money_string(word)
+    money = format_money(word)
     money = money[1:].replace(",", "")
+  
     return int(money)
 
 # -------------- Tests For Clean Money
@@ -46,14 +47,14 @@ def get_max_amount(**kwargs):
 
     # check for blanks
     if len(max_check) < 1:
-        return "0"
+        return 0
     
     index = max(max_check)
     return max_check[index]
 
 # -------------- Formats Money or Or Returns Non-money words 
 
-def format_money(word):
+def check_if_money(word):
     if "$" not in word or len(word) < 3:
         return word
 
@@ -67,7 +68,8 @@ def format_money(word):
         "6": True,
         "7": True,
         "8": True,
-        "9": True }
+        "9": True
+      }
 
     money = None
 
@@ -86,29 +88,13 @@ def format_money(word):
         money = get_max_amount(word=word)
 
     # from check_document.py 
-    money = strip_money_string(money)
+    money = format_money(money)
 
     # for money with only dollar sign
     if len(money) == 1:
         money = money + "0"
 
     return money
-
-# -------------- Formats Amounts To Verify Highest Amount Within Row
-
-def clean_money(col_data):
-    amount = None
-
-    if len(col_data) == 1:
-        first = col_data['Col-1']
-        if "$" in first:
-            amount = first
-
-    elif len(col_data) > 1:
-        amount = get_max_amount(col_data=col_data)
-
-    # if money return integers else return None
-    return amount
 
 # -------------- Creates Dictionary for Col-Index Values
 
@@ -131,7 +117,7 @@ def dict_builder(arr):
             if word[-1] == ",":
               word = word[0:-1]
 
-            words[f'Col-{idx}'] = format_money(word)
+            words[f'Col-{idx}'] = check_if_money(word)
 
     return words
 
@@ -161,7 +147,6 @@ def parse_tables(source):
                 title = row_arr[0].replace('"', "")
 
                 if len(row_arr) > 1:
-                    title = row_arr[0]
                     row_arr = row_arr[1:]
 
                 values = dict_builder(row_arr)
@@ -175,115 +160,59 @@ def parse_tables(source):
 
 # -------------- Format Table Dictionary For Titles And Highest Amounts 
 
-def format_data(table_dict):
-    keywords = [
-        "pell grant",
-        "scholarship",
-        "grant",
-        "subsidized",
-        "unsubsidized",
-        "unsub",
-        "federal",
-        "fed",
-        "direct",
-        "indirect",
-        "plus",
-        "stafford loan",
-        "work study",
-        "orientation",
-        "tuition",
-        "room",
-        "meals",
-        "books",
-        "personal", 
-        "expenses",
-        "transportation",
-        "health", 
-        "insurance",
-        "off campus", 
-        "on campus",
-        "housing",
-        "loans",
-        "fee",
-        "total",
-        "cost",
-        "seog",
-        "il map",
-        "aid",
-        "net", 
-        "price",
-        "grant",
-        "loan",
-        "non-resident",
-        "resident",
-        "award",
-        "financial",
-        ]
+def format_data_to_max_amounts(table_dict):
+    formatted_max = {}
+    table_list = list(table_dict.keys())
 
-    formatted_data = {}
+    # for each table in document
+    for table in table_list:
+        table_data = table_dict[table]
+        table_num = table[7:]
+        formatted_max[table_num] = {}
+
+        # for each title in table
+        for row_title in table_data:
+            col_data = table_data[row_title]
+            amount = get_max_amount(col_data=col_data)
+
+            if amount == 0:
+                amount = "$0"
+
+            formatted_max[table_num][row_title] = amount 
+                                                              
+    # return Falase if no formatted_max
+    if len(formatted_max) < 1:
+        return False 
+
+    return formatted_max
+
+# -------------- Track Rows And Cols For Final Object For Database 
+
+def track_position(formatted_max, table_dict):
     seen = []
+    tracker = {}
     table_list = list(table_dict.keys())
 
     for table in table_list:
         table_data = table_dict[table]
-
-        for row_title in table_data:
-            row_list = list(table_data.keys())
-            col_data = table_data[row_title]
-            
-            for key in keywords: 
-                if key in row_title.lower():
-                    # check for dup keys
-                    if row_title not in seen:
-                        seen.append(row_title)
-                        amount = clean_money(col_data)
-
-                        if amount is not None:
-                            formatted_data[row_title] = amount 
-                    else:
-                        for value in col_data.values():
-                            if test_money(value):
-                                amount = clean_money(col_data)
-                                current_amt = change_to_int(amount)
-                                existing_amt = change_to_int(formatted_data[row_title])
-
-                                # if row_title is dup apply greatest dollar amount
-                                if current_amt > existing_amt:
-                                    formatted_data[row_title] = amount  
-                                                              
-    # return Falase if no formatted_data
-    if len(formatted_data) < 1:
-        return False 
-    
-    return formatted_data
-
-# -------------- Track Rows And Cols For Final Object For Database 
-
-def track_position(formatted_data, parsed_table):
-    seen = []
-    tracker = {}
-    table_list = list(parsed_table.keys())
-
-    for table in table_list:
-        table_data = parsed_table[table]
-        table_num = table_list.index(table) + 1
-        tracker[f'Table_{table_num}'] = []
+        table_num = table[7:]
+        tracker[table_num] = []
 
         for row_title in table_data:
             row_list = list(table_data.keys())
             row_values = list(table_data[row_title].values())
 
-            for key in formatted_data: 
+            for key in formatted_max[table_num]:
                 if key == row_title and row_title not in seen:
                     seen.append(row_title)
                     row_index = row_list.index(row_title)
                     row_data = [key]
-                    row_val = formatted_data[key]
+                    row_val = formatted_max[table_num][key]
                     amount = row_val
                     col_index = None
 
                     # check if row_val is not blank
-                    if len(row_val) > 0:
+                    if row_val and len(row_val) > 0:
                         amount = change_to_int(row_val)
 
                     # check if amount is in row_values
@@ -292,27 +221,30 @@ def track_position(formatted_data, parsed_table):
 
                     for each in table_data[key].values():
                         row_data.append(each)
+                        
+                    if amount == "$0":
+                        amount = 0
 
                     data = {
-                            "Name": key,
-                            "Amount": amount,
-                            "Row Index": row_index,
-                            "Col Index": col_index,
-                            "Row Data": row_data
+                        "Name": key,
+                        "Amount": amount,
+                        "Row Index": row_index,
+                        "Col Index": col_index,
+                        "Row Data": row_data
                     }
 
-                    tracker[f'Table_{table_num}'].append(data)
+                    tracker[table_num].append(data)
     return tracker
 
 # -------------- Method To Start Operations
 
-def get_aid_data(csv_data, name):
+def get_aid_data(csv_data, document_name):
     table_dict = parse_tables(csv_data)
-    formatted_data = format_data(table_dict)
-    pos = { "Document Error": name }
+    formatted_max = format_data_to_max_amounts(table_dict)
+    pos = { "Document Error": document_name }
 
-    if formatted_data:
-        pos = track_position(formatted_data, table_dict)
+    if formatted_max:
+        pos = track_position(formatted_max, table_dict)
 
     return pos
 
@@ -353,7 +285,7 @@ def find_aid_category(name, doc_name):
         "tuition": "tuition",
         "indirect": "total indirect cost",
         "estimate": "total cost defined by school",
-        "total": "totals",
+        "total": "total",
         "award": "other grant",
     }
 
@@ -409,15 +341,15 @@ def filter_possibilities(possibilities):
     if "tuition" in category and "other grant" in category:
         return "other grant"
 
-    elif "totals" in category:
+    elif "total" in category:
         if "work" in name.lower():
-                return "work study"
+            return "work study"
         elif "grant" in name.lower():
-                return "total grants"     
+            return "total grants"     
         elif "loan" in name.lower():
-                return "total loans"
+            return "total loans"
         elif "aid" in name.lower():
-                return "total aid"
+            return "total aid"
         return "total cost"
 
     return category[0]

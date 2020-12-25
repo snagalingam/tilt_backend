@@ -3,7 +3,7 @@ import graphene
 import math
 
 from .models import Provider, Scholarship, ScholarshipStatus
-from colleges.models import College
+from college.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
 from graphene_django import DjangoObjectType
@@ -15,11 +15,12 @@ from graphene_django import DjangoObjectType
 class ScholarshipProviderType(DjangoObjectType):
     class Meta:
         model = Provider
-
+        fields = "__all__"
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
+        fields = "__all__"
 
 
 class ScholarshipPaginationType(graphene.ObjectType):
@@ -31,7 +32,7 @@ class ScholarshipPaginationType(graphene.ObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
-
+        fields = "__all__"
 
 ################################################
 ### Query
@@ -145,7 +146,7 @@ class Query(graphene.ObjectType):
 
 
 class CreateProvider(graphene.Mutation):
-    provider = graphene.Field(ProviderType)
+    provider = graphene.Field(ScholarshipProviderType)
 
     class Arguments:
         organization = graphene.String()
@@ -255,7 +256,7 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        provider = ScholarshipProvider.objects.get(pk=provider_id)
+        provider = Provider.objects.get(pk=provider_id)
         college = College.objects.get(pk=college_id)
 
         scholarship = Scholarship(

@@ -1,11 +1,11 @@
 import graphene
 import graphql_jwt
 
-import users.schema
-import organizations.schema
-import colleges.schema
-import scholarships.schema
-import financial_aid.schema
+import aid.schema
+import college.schema
+import organization.schema
+import scholarship.schema
+import user.schema
 
 
 class Query(

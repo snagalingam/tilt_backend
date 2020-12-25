@@ -32,7 +32,7 @@ def scorecard_api(college_id, college_pk):
         student = latest.get('student')
 
         operating = bool_list[school.get('operating') or 2]
-        undergraduate_students = student.get('size') or None
+        undergraduate_students = student.get('size', None)
         degree_awarded_data = school.get('degrees_awarded')
         degree_awarded_num = degree_awarded_data.get('predominant')
 
@@ -48,7 +48,7 @@ def scorecard_api(college_id, college_pk):
                             "Predominantly associate's-degree granting",
                             "Predominantly bachelor's-degree granting",
                             "Entirely graduate-degree granting", 
-                            None]
+                            ""]
                 predominant_degree_awarded_recoded = degree_list[degree_awarded_data[
                     'predominant_recoded'] or 5]
                 predominant_degree_awarded = degree_list[degree_awarded_data[
@@ -58,7 +58,7 @@ def scorecard_api(college_id, college_pk):
                                 "Associate degree",
                                 "Bachelor's degree",
                                 "Graduate degree",
-                                None]
+                                ""]
                 highest_degree_awarded = highest_list[degree_awarded_data[
                             'highest'] or 5]
                 # 1st level in results
@@ -69,24 +69,24 @@ def scorecard_api(college_id, college_pk):
                 longitude = data.get('location')['lon']
                 # 2nd level in results > school
                 name = school.get('name')
-                alias = school.get('alias')
+                alias = school.get('alias', "")
                 city = school.get('city')
                 state = school.get('state')
                 zipcode = school.get('zip')
-                accreditor = school.get('accreditor')
-                school_url = school.get('school_url')
+                accreditor = school.get('accreditor', "")
+                school_url = school.get('school_url', "")
                 price_calculator_url = school.get('price_calculator_url')
                 # boolean list on line 20
                 under_investigation = bool_list[school.get('under_investigation') or 2]
                 main_campus = bool_list[school.get('main_campus') or 2]
                 branches = school.get('branches')
-                ownership_list = [None,
+                ownership_list = ["",
                                   "Public",
                                   "Private Nonprofit",
                                   "Private For-Profit"]
                 ownership = ownership_list[school.get('ownership') or 0]
                 state_dict = {
-                    "None": None,
+                    "None": "",
                     "1": "Alabama",
                     "2": "Alaska",
                     "4": "Arizona",
@@ -151,7 +151,7 @@ def scorecard_api(college_id, college_pk):
                 if state_fips in state_dict:
                     state_fips = state_dict[str(school.get('state_fips'))]
                 else:
-                    state_fips = None
+                    state_fips = ""
 
                 region_list = ["U.S. Service Schools",
                             "New England",
@@ -163,7 +163,7 @@ def scorecard_api(college_id, college_pk):
                             "Rocky Mountains",
                             "Far West",
                             "Outlying Areas",
-                            None]
+                            ""]
                 region = region_list[school.get('region_id') or 10]
                 locale_dict = {
                     "11": "City: Large(population of 250, 000 or more)",
@@ -186,7 +186,7 @@ def scorecard_api(college_id, college_pk):
                     else: 
                         locale = locale_dict[str(locale)]
                 carnegie_basic_dict = {
-                    "None": None,
+                    "None": "",
                     "-2": "Not Applicable",
                     "0": "Not Classified",
                     "1": "Associate's Colleges: High Transfer-High Traditional",
@@ -225,7 +225,7 @@ def scorecard_api(college_id, college_pk):
                 }
                 carnegie_basic = carnegie_basic_dict[str(school.get('carnegie_basic')) or "None"]
                 carnegie_undergrad_dict = {
-                    "None": None,
+                    "None": "",
                     "-2": "Not Applicable",
                     "0": "Not Classified",
                     "1": "Two-year, higher part-time",
@@ -247,7 +247,7 @@ def scorecard_api(college_id, college_pk):
                 carnegie_undergrad = carnegie_undergrad_dict[str(
                     school.get('carnegie_undergrad')) or "None"]
                 carnegie_size_setting_dict = {
-                    "None": None,
+                    "None": "",
                     "-2": "Not Applicable",
                     "0": "Not Classified",
                     "1": "Two-year, very small",
@@ -288,17 +288,17 @@ def scorecard_api(college_id, college_pk):
                 women_only = bool_list[school.get('women_only') or 2]
                 online_only = bool_list[school.get('online_only') or 2]
 
-                institutional_list = [None,
+                institutional_list = ["",
                                     "4-year",
                                     "2-year",
                                     "Less-than-2-year"]
                 institutional_level = institutional_list[school.get(
                     'institutional_characteristics')['level'] or 0]
-                open_list = [None, True, False, False]
+                open_list = ["", True, False, False]
                 open_admissions = open_list[school.get('open_admissions_policy') or 0]
                 religious_dict = {
-                    "-1": None,
-                    "-2": None,
+                    "-1": "",
+                    "-2": "",
                     "22": "American Evangelical Lutheran Church",
                     "24": "African Methodist Episcopal Zion Church",
                     "27": "Assemblies of God Church",
@@ -666,7 +666,7 @@ def scorecard_api(college_id, college_pk):
                     'mechanic_repair_technology')
 
                 seed = {
-                    "model": "colleges.Scorecard",
+                    "model": "college.Scorecard",
                     "pk": college_pk,
                     "fields": {
                         "unit_id": unit_id,
@@ -878,7 +878,7 @@ def field_study_api(programs, college_pk):
         if cred_level < 4:
             cip_code = program.get('code')
             cip_title = program.get('title')
-            credential_list = [None,
+            credential_list = ["",
                                "Undergraduate Certificate or Diploma",
                                "Associate's Degree",
                                "Bachelor’s Degree",]
@@ -899,7 +899,7 @@ def field_study_api(programs, college_pk):
             num_students_ipeds_awards2 = program.get(
                 'counts')['ipeds_awards2'] or None
             seed = {
-                "model": "colleges.FieldOfStudy",
+                "model": "college.FieldOfStudy",
                 "pk": count,
                 "fields": {
                     "cip_code": cip_code,
@@ -1011,14 +1011,14 @@ def update_scorecards(file_name):
         "Rural: Remote(rural territory more than 25 miles from an urbanized area and more than 10 miles from an urban cluster)"
     ]
 
-    locale_new = [None,
+    locale_new = ["",
                   "Large City", "Midsize City", "Small City",
                   "Large Suburb", "Midsize Suburb", "Small Suburb",
                   "Town", "Town", "Town",
                   "Rural", "Rural", "Rural"]
 
     carnegie_list = [
-        None,
+        "",
         "Not Applicable",
         "Not Classified",
         "Two-year, very small",
@@ -1041,21 +1041,21 @@ def update_scorecards(file_name):
         "Exclusively graduate/professional"
     ]
 
-    carnegie_new = [None, None, None,
+    carnegie_new = ["", "", "",
                     "Very Small", "Small", "Medium", "Large", "Very Large",
                     "Very Small", "Very Small", "Very Small",
                     "Small", "Small", "Small",
                     "Medium", "Medium", "Medium",
                     "Large", "Large", "Large",
-                    None]
+                    ""]
 
-    residental_new = [None, None, None,
+    residental_new = ["", "", "",
                       "Commuter", "Commuter", "Commuter", "Commuter", "Commuter",
                       "Primarily Commuter", "Primarily Residential", "Highly Residential",
                       "Primarily Commuter", "Primarily Residential", "Highly Residential",
                       "Primarily Commuter", "Primarily Residential", "Highly Residential",
                       "Primarily Commuter", "Primarily Residential", "Highly Residential",
-                      None]
+                      ""]
 
     for scorecard in scorecards[0:]:
         # find index
@@ -1063,9 +1063,9 @@ def update_scorecards(file_name):
         carnegie_index = carnegie_list.index(scorecard['fields']['carnegie_size_setting'])
 
         # set new key with index of new list 
-        scorecard['fields']['locale_updated'] = locale_new[locale_index]
-        scorecard['fields']['carnegie_size_setting_size'] = carnegie_new[carnegie_index]
-        scorecard['fields']['carnegie_size_setting_residential'] = residental_new[carnegie_index]
+        scorecard['fields']['locale_updated'] = locale_new[locale_index] or ""
+        scorecard['fields']['carnegie_size_setting_size'] = carnegie_new[carnegie_index] or ""
+        scorecard['fields']['carnegie_size_setting_residential'] = residental_new[carnegie_index] or ""
 
         # append updated scorecard to scorecard list
         scorecard_list.append(scorecard)
