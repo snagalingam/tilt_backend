@@ -27,6 +27,7 @@ class AidCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class AidData(models.Model):
     college_status = models.ForeignKey(
         CollegeStatus,
@@ -61,7 +62,7 @@ class AidData(models.Model):
         verbose_name_plural = 'aid data'
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 
 class DocumentData(models.Model):
@@ -140,4 +141,4 @@ class AidSummary(models.Model):
         verbose_name_plural = 'aid summaries'
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)

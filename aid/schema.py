@@ -331,11 +331,8 @@ class CheckDocuments(graphene.Mutation):
                             # filter/match for category
                             possibilities = find_aid_category(aid_data_name, document_name)
                             category_name = filter_possibilities(possibilities)
+                            aid_category = AidCategory.objects.get(name=category_name)
 
-                            try:
-                                aid_category = AidCategory.objects.get(name=category_name)
-                            except:
-                                breakpoint()
                             # check for dups
                             try:
                                 aid_data = AidData.objects.get(
@@ -395,14 +392,14 @@ class CheckDocuments(graphene.Mutation):
 
             # if no error in document_check
             if check is not None:
-                # update and save document_data results on each document
+                # update and save document_result results on each document
                 pass_fail = check.get("pass_fail", "")
                 number_of_missing = check.get("number_of_missing", "")
                 missing_amounts = check.get("missing_amounts", "")
-                document_data.pass_fail = pass_fail
-                document_data.number_of_missing = number_of_missing
-                document_data.missing_amounts = missing_amounts
-            document_data.save()
+                document_result.pass_fail = pass_fail
+                document_result.number_of_missing = number_of_missing
+                document_result.missing_amounts = missing_amounts
+            document_result.save()
 
             # handle errors
             if pos_error:
@@ -448,7 +445,7 @@ class CheckDocuments(graphene.Mutation):
             else:
                 # send report and reset for next different document
                 collection.append(report_data)
-                # send_report_email(college_status_id, collection)
+                send_report_email(college_status_id, collection)
                 collection = []
                 aid_data_report = []
                 errors = []

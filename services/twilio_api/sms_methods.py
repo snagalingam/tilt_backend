@@ -8,11 +8,12 @@ client = Client(
 def send_notification_sms(user_number):
     try:
         message = client.messages.create(
-            to=user_number, 
-            from_=f"+1{settings.TWILIO_NUMBER}",
+            to=f"+1{user_number}", 
+            from_=settings.TWILIO_NUMBER,
             body="""
             We finished reviewing your award letter! Check back at www.tiltaccess.com to see your report.
             """)
+        print(message)
     except Exception as e:
         print(e)
         raise e 
