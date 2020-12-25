@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from services.sendgrid_api.send_email import send_notification_email
-from services.twilio import send_notification_sms
+from services.twilio_api.sms_methods import send_notification_sms
 
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
@@ -84,26 +84,26 @@ class CollegeStatus(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
-    def save(self, *args, **kwargs):
-        method = self.user.preferred_contact_method
+    # def save(self, *args, **kwargs):
+    #     method = self.user.preferred_contact_method
 
-        # send user notification about financial aid letter if award_reviewed=True
-        if self.award_reviewed is True and method is not None and self.user_notified is not True:
-            self.user_notified = True
+    #     # send user notification about financial aid letter if award_reviewed=True
+    #     if self.award_reviewed is True and method is not None and self.user_notified is not True:
+    #         self.user_notified = True
 
-            if method == "email":
-                send_notification_email(self.user.email, self.user.first_name)
-            if method == "text":
-                send_notification_sms(self.user.phone_number)
+    #         if method == "email":
+    #             send_notification_email(self.user.email, self.user.first_name)
+    #         if method == "text":
+    #             send_notification_sms(self.user.phone_number)
 
-        return super(CollegeStatus, self).save(*args, **kwargs)
+    #     return super(CollegeStatus, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'college status'
         verbose_name_plural = 'college status'
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class FieldOfStudy(models.Model):
@@ -481,4 +481,4 @@ class Budget(models.Model):
         verbose_name_plural = 'budgets'
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)

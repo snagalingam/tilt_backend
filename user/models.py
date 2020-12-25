@@ -13,15 +13,6 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from organization.models import Organization
 
 
-class Action(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.description
-
-
 class DeletedAccount(models.Model):
     date = models.DateField()
     accounts = models.IntegerField()
@@ -31,7 +22,7 @@ class DeletedAccount(models.Model):
 
 
 class UserManager(BaseUserManager):
-    """ User manager for Custom User that allows users to be created """
+    """ User manager for User that allows users to be created """
 
     use_in_migrations = True
 
@@ -66,11 +57,14 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """ Custom user model that extends AbstractBaseUser and PermissionsMixin """
 
+    DEFAULT_CHAR_TEXT = ""
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
-        USERNAME_FIELD = "email"
-    CONTACT_METHOD_CHOICES = Choices("text", "email")
+    CONTACT_METHOD_CHOICES = (
+        ("text", "text"),
+        ("email", "email")
+    )
 
     email = models.EmailField(
         _("email address"),
@@ -79,10 +73,17 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
-    user_type = models.CharField(_("user type"), default=None, blank=True, max_length=255)
+    user_type = models.CharField(_("user type"), 
+        default=DEFAULT_CHAR_TEXT, 
+        blank=True, 
+        max_length=255
+    )
     first_name = models.CharField(_("first name"), max_length=255)
     last_name = models.CharField(_("last name"), max_length=255)
-    preferred_name = models.CharField(_("preferred name"), max_length=255, blank=True)
+    preferred_name = models.CharField(_("preferred name"),
+        default=DEFAULT_CHAR_TEXT, 
+        max_length=255, blank=True
+    )
     preferred_contact_method = models.CharField(
         _("preferred contact method"),
          blank=True,
@@ -121,9 +122,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     sat_math = models.PositiveSmallIntegerField(_("SAT math"), blank=True, null=True)
     sat_verbal = models.PositiveSmallIntegerField(_("SAT verbal"), blank=True, null=True)
     efc = models.PositiveIntegerField(_("Expected Family Contribution"), blank=True, null=True)
-    pronouns = models.CharField(_("pronoun"), max_length=255, default=None, blank=True)
+    pronouns = models.CharField(_("pronoun"),
+        default=DEFAULT_CHAR_TEXT, 
+        max_length=255, 
+        blank=True
+    )
     ethnicity = ArrayField(
-        models.CharField(_("ethnicity"), max_length=255, blank=True),
+        models.CharField(_("ethnicity"),
+            default=DEFAULT_CHAR_TEXT, 
+            max_length=255, 
+            blank=True
+        ),
         blank=True,
         null=True,
     )
@@ -135,9 +144,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     income_quintile = models.CharField(
         _("income quintile"),
         max_length=255,
-        null=True,
+        default=DEFAULT_CHAR_TEXT, 
         blank=True,
-        default=None
     )
     found_from = ArrayField(
         models.CharField(_("found from"), max_length=255, null=True, blank=True),
@@ -164,13 +172,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Return the short name for the user."""
         return self.first_name
 
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        send_email(subject, message, from_email, [self.email], **kwargs)
-
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def __str__(self):
         return self.email
+
+class Action(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.description

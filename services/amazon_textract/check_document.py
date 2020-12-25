@@ -31,66 +31,69 @@ NUMBERS = {
   "9": True,
 }
 
-# -------------- Format Word To Valid Money Amount
 
-def strip_money_string(word):
+# -------------- Format Money String 
+
+def format_money(word):
     if word.count("$") > 1 and word[1] != "$":
         return word
 
     start_index = word.index("$")
-    stripped = word[start_index:].strip()
+    formatted_money = word[start_index:].strip()
 
-    if "*" in stripped:
-        stripped = stripped.replace("*", "")
+    if "*" in formatted_money:
+        formatted_money = formatted_money.replace("*", "")
 
-    if "=" in stripped:
-        stripped = stripped.replace("=", "")
+    if "=" in formatted_money:
+        formatted_money = formatted_money.replace("=", "")
 
-    if "+" in stripped:
-        stripped = stripped.replace("+", "")
+    if "+" in formatted_money:
+        formatted_money = formatted_money.replace("+", "")
 
-    if "-" in stripped:
-        stripped = stripped.replace("-", "")
+    if "-" in formatted_money:
+        formatted_money = formatted_money.replace("-", "")
 
-    if " " in stripped:
-        idx = stripped.index(" ")
-        if stripped[idx + 1] in NUMBERS:
-            stripped.replace(" ", "")
+    if " " in formatted_money:
+        idx = formatted_money.index(" ")
+        if formatted_money[idx + 1] in NUMBERS:
+            formatted_money.replace(" ", "")
         else:
-          stripped = stripped[0:idx]
+          formatted_money = formatted_money[0:idx]
+    
+    if "/" in formatted_money:
+        idx = formatted_money.index("/")
+        formatted_money = formatted_money[0:idx]
 
-    if "/" in stripped:
-        idx = stripped.index("/")
-        stripped = stripped[0:idx]
+    if formatted_money[-1] == ",":
+        formatted_money = formatted_money[0:-1]
+    
+    if formatted_money[-1] == ".":
+        formatted_money = formatted_money[0:-1]
 
-    if stripped[-1] == ",":
-        stripped = stripped[0:-1]
+    if formatted_money[-3:-2] == ".":
+        formatted_money = formatted_money[0:-3]
 
-    if stripped[-1] == ".":
-        stripped = stripped[0:-1]
+    if formatted_money[-3:-2] == ",":
+        formatted_money = formatted_money[0:-3]
 
-    if stripped[-3:-2] == ".":
-        stripped = stripped[0:-3]
+    if "." in formatted_money:
+        formatted_money = formatted_money.replace(".", ",")
 
-    if stripped[-3:-2] == ",":
-        stripped = stripped[0:-3]
+    return formatted_money
 
-    if "." in stripped:
-        stripped = stripped.replace(".", ",")
-
-    return stripped
-
-# -------------- Create A List Of All Money In Document
+# -------------- Create List Of All Money In Document
 
 def document_money_list(all_document_words):
     money_words = []
 
     for word in all_document_words:
         if "$" in word:
-            money = strip_money_string(word)
+            money = format_money(word)
             money_words.append(money)
 
     return money_words
+
+# -------------- Create List Of Words From Table
 
 def table_list(source):
     tables = source.split("\n\n")
@@ -100,17 +103,18 @@ def table_list(source):
         if line[0:13] == "Table: Table_":
             continue
         else:
-            if len(line) > 0:
+            if len(line) > 0: 
                 table_arr = line.split(",\n")
 
                 for each_row in table_arr:
                     row_arr = each_row.split('","')
-                    for word in row_arr:
+                    for word in row_arr: 
                         table_list.append(word.replace('"', ""))
 
     return table_list
 
-# -------------- Check If All Words In Documents Are In Tables
+
+# -------------- Create List Of Words From Table
 
 def check_tables(tables_words, all_document_words):
     money_list = document_money_list(all_document_words)
@@ -125,28 +129,29 @@ def check_tables(tables_words, all_document_words):
         data = {
             "number_of_missing": len(money_list),
             "missing_amounts" : money_list,
-            "pass_fail": "Failed"
+            "pass_fail": "Failed" 
         }
     else:
         data = {
             "number_of_missing": len(money_list),
             "missing_amounts" : money_list,
-            "pass_fail": "Passed"
+            "pass_fail": "Passed" 
         }
 
     return data
 
-# -------------- Start Document Check
+# -------------- Check Document Pass/Fail
 
 def start_document_check(all_document_words, csv_table):
     tables_words = table_list(csv_table)
     check = check_tables(tables_words, all_document_words)
 
-    if check["pass_fail"] == "Passed":
+    if check["pass_fail"] == "Passed": 
         # Green True
         print(f"=====> CHECK: \033[92m{check}\033[0m")
-    else:
+    else: 
         # Red False
         print(f"=====> CHECK: \033[91m{check}\033[0m")
 
     return check
+

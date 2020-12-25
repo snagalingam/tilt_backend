@@ -13,7 +13,7 @@ from services.google_api.google_places import extract_photo_urls, GooglePlacesAP
 from services.helpers.fav_finder import get_favicon
 from services.helpers.nearby_coordinates import check_by_city, check_by_coordinates, check_by_zipcode, check_distance
 
-CustomUser = get_user_model()
+User = get_user_model()
 
 ################################################
 ### Standard Model Definitions
@@ -400,33 +400,31 @@ class CollegeSearch(graphene.Mutation):
         api = GooglePlacesAPI()
         data = api.details(place, location)
         errors = data.get("errors", None)
-        results = data.get("result", None)
-        place_id = data.get('place_id', None)
 
-        if errors is not None:
+        if errors:
             raise errors
 
+        results = data.get("result", None)
         photos_result = results.get("photos", None)
-        main_photo = None                
+        place_id = data.get('place_id', "")
+        place_name = results.get("name")
+        location = results["geometry"]["location"]
+        lat = location.get("lat", "")
+        lng = location.get("lng", "")
+        business_status = results.get("business_status", "")
+        icon = results.get("icon", "")
+        address = results.get("formatted_address", "")
+        place_phone_number = results.get("formatted_phone_number", "")
+        url = results.get("url", "")
+        types = results.get("types", [])
+        website = results.get("website", "")
+        main_photo = ""                
         photos = []
 
-        if photos_result is not None:
+        if photos_result:
             photo_arr = extract_photo_urls(photos_result)
             main_photo = photo_arr[0]
             photos = photo_arr
-
-        place_name = results.get("name")
-        location = results["geometry"]["location"]
-        lat = location.get("lat", None)
-        lng = location.get("lng", None)
-        business_status = results.get("business_status", None)
-        icon = results.get("icon", None)
-        address = results.get("formatted_address", None)
-        place_phone_number = results.get("formatted_phone_number", None)
-        url = results.get("url", None)
-        types = results.get("types", [])
-        website = results.get("website", None)
-        photos_result = results.get("photos", None)
 
         try:
             favicon = get_favicon(website)
@@ -446,7 +444,8 @@ class CollegeSearch(graphene.Mutation):
             favicon=favicon,
             main_photo=main_photo,
             photos=photos,
-            types=types)
+            types=types
+        )
         return CollegeSearch(college=college)
 
 
@@ -454,7 +453,7 @@ class CreateBudget(graphene.Mutation):
     budget = graphene.Field(CollegeBudgetType)
 
     class Arguments:
-        college_status_id = graphene.Int()
+        college_status_id = graphene.ID()
         work_study = graphene.Int()
         job = graphene.Int()
         savings = graphene.Int()
@@ -499,7 +498,8 @@ class CreateBudget(graphene.Mutation):
                 loan_unsubsidized=loan_unsubsidized,
                 loan_plus=loan_plus,
                 loan_private=loan_private,
-                loan_school=loan_school)
+                loan_school=loan_school
+            )
             budget.save()
 
             return CreateBudget(budget=budget)
@@ -567,7 +567,8 @@ class CreateCollege(graphene.Mutation):
                 favicon=favicon,
                 main_photo=main_photo,
                 photos=photos,
-                types=types)
+                types=types
+            )
             college.save()
 
             return CreateCollege(college=college)
@@ -577,8 +578,8 @@ class CreateStatus(graphene.Mutation):
     college_status = graphene.Field(CollegeStatusType)
 
     class Arguments:
-        user_id = graphene.Int()
-        college_id = graphene.Int()
+        user_id = graphene.ID()
+        college_id = graphene.ID()
         status = graphene.String()
         net_price = graphene.Int()
         award_uploaded = graphene.Boolean()
@@ -607,7 +608,7 @@ class CreateStatus(graphene.Mutation):
                        "waitlisted",
                        "not accepted")
 
-        user = CustomUser.objects.get(pk=user_id)
+        user = User.objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
 
         try:
@@ -629,7 +630,8 @@ class CreateStatus(graphene.Mutation):
                 award_reviewed=award_reviewed,
                 user_notified=user_notified,
                 residency=residency,
-                in_state_tuition=in_state_tuition)
+                in_state_tuition=in_state_tuition
+            )
             college_status.save()
 
             return CreateStatus(college_status=college_status)
@@ -690,11 +692,11 @@ class UpdateBudget(graphene.Mutation):
 
 
 class UpdateStatus(graphene.Mutation):
-    college_status = graphene.Field(College)
+    college_status = graphene.Field(CollegeType)
 
     class Arguments:
-        user_id = graphene.Int()
-        college_id = graphene.Int()
+        user_id = graphene.ID()
+        college_id = graphene.ID()
         status = graphene.String()
         net_price = graphene.Int()
         award_uploaded = graphene.Boolean()
@@ -723,7 +725,7 @@ class UpdateStatus(graphene.Mutation):
                        "waitlisted",
                        "not accepted")
 
-        user = CustomUser.objects.get(pk=user_id)
+        user = User.objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
 
         try:

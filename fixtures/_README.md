@@ -33,7 +33,7 @@
 1. Connect to staging database
 
 2. Dump (extract) current data
-    `./manage.py dumpdata colleges.college --indent 2 --format json > fixtures/colleges.json`
+    `./manage.py dumpdata college.college --indent 2 --format json > fixtures/colleges.json`
 
 3. Make edits on dumped file
 

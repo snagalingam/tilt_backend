@@ -6,7 +6,7 @@
     "name": "tuition",
     "primary": "cost",
     "secondary": "direct",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -17,7 +17,7 @@
     "name": "fees",
     "primary": "cost",
     "secondary": "direct",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -28,7 +28,7 @@
     "name": "room",
     "primary": "cost",
     "secondary": "direct",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -50,7 +50,7 @@
     "name": "meals",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -61,7 +61,7 @@
     "name": "books",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -72,7 +72,7 @@
     "name": "personal expenses",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -83,7 +83,7 @@
     "name": "transportation",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -94,7 +94,7 @@
     "name": "health insurance",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -105,7 +105,7 @@
     "name": "off campus housing",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -116,7 +116,7 @@
     "name": "stafford loan fees",
     "primary": "cost",
     "secondary": "indirect",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -149,7 +149,7 @@
     "name": "total cost",
     "primary": "cost",
     "secondary": "total",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -215,7 +215,7 @@
     "name": "work study",
     "primary": "aid",
     "secondary": "work study",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -281,7 +281,7 @@
     "name": "total aid",
     "primary": "aid",
     "secondary": "total",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -292,7 +292,7 @@
     "name": "net price defined by school",
     "primary": "net price",
     "secondary": "unknown",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -303,7 +303,7 @@
     "name": "net price after grants",
     "primary": "net price",
     "secondary": "scholarships",
-    "tertiary": null,
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -324,9 +324,9 @@
   "pk": 30,
   "fields": {
     "name": "uncategorized",
-    "primary": null,
-    "secondary": null,
-    "tertiary": null,
+    "primary": "",
+    "secondary": "",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }

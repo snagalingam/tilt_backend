@@ -40,7 +40,7 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'category',)}),
+        (None, {'fields': ('name', 'college_status', 'aid_category',)}),
         (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 
             'col_index', 'row_data',)}),
     )
@@ -48,10 +48,10 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['college_status', 'name', 'amount', 'category',]
+    list_display = ['college_status', 'name', 'amount', 'aid_category',]
     model = AidData
-    ordering = ('name', 'amount', 'college_status', 'category',)
-    search_fields = ('name', 'amount', 'college_status', 'category',)
+    ordering = ('name', 'amount', 'college_status', 'aid_category',)
+    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
 
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):

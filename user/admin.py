@@ -81,7 +81,6 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
             'high_school_grad_year',
         )}),
         (('Financial Information'), {'fields': ('efc', 'income_quintile',)}),
-        (('Important dates'), {'fields': ('last_login', 'date_joined',)}),
     )
     filter_horizontal = ('organization',)
     formfield_overrides = {

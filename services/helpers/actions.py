@@ -1,4 +1,4 @@
-from users.models import Action
+from user.models import Action
 import datetime
 
 def create_timestamp():

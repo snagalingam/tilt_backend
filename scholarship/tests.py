@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.utils import timezone
 import datetime
 from .models import Scholarship, Provider, ScholarshipStatus
-from colleges.models import College
+from college.models import College
 User = get_user_model()
 
 class ScholarshipTests(TestCase):

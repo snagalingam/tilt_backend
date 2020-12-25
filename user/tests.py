@@ -7,7 +7,7 @@ from services.helpers.actions import create_action, create_timestamp, create_dat
 
 User = get_user_model()
 
-class CustomUserTests(TestCase):
+class UserTests(TestCase):
     def setUp(self):
         # create superuser
         User.objects.create_superuser(
