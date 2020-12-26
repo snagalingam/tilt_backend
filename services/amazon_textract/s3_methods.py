@@ -8,22 +8,22 @@ client = boto3.client(
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
-def delete_document(file_name):
+def delete_document(document_name):
     try:
         response = client.delete_object(
             Bucket=settings.BUCKET,
-            Key=file_name)
+            Key=document_name)
     except ClientError as e:
         print(e)
         return False
     return True
 
-def upload_document(file_name, blob):
+def upload_document(document_name, blob):
     try:
         response = client.upload_file(
             Filename=blob, 
             Bucket=settings.BUCKET,
-            Key=file_name)
+            Key=document_name)
     except ClientError as e:
         print(e)
         return False

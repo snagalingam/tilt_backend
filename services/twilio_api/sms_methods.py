@@ -13,7 +13,9 @@ def send_notification_sms(user_number):
             body="""
             We finished reviewing your award letter! Check back at www.tiltaccess.com to see your report.
             """)
-        print(message)
+        print(f" ---> To: {message.to}")
+        print(f" ---> From: {message.from_}")
+        print(f" ---> Body: {message.body}")
     except Exception as e:
         print(e)
         raise e 

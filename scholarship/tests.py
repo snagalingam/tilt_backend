@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 import datetime
-from .models import Scholarship, Provider, ScholarshipStatus
+from scholarship.models import Scholarship, Provider, ScholarshipStatus
 from college.models import College
 User = get_user_model()
 
@@ -15,10 +15,9 @@ class ScholarshipTests(TestCase):
             first_name="Demo",
             last_name="Testuser"
         )
-
         Provider.objects.create(
             organization="Tilt",
-            reference="Tilt Scholarship Committee",
+            addressee="Tilt Scholarship Committee",
             address= "65 Pine Ave Suite 103",
             city= "Long Beach",
             state= "CA",
@@ -27,10 +26,9 @@ class ScholarshipTests(TestCase):
             phone_number= "224-306-9466",
             phone_number_ext= 'x1004'
         )
-
         Provider.objects.create(
             organization="Strouthion",
-            reference="Strouthion Scholarship Committee",
+            addressee="Strouthion Scholarship Committee",
             address= "172 Madison Ave",
             city= "New York",
             state= "NY",
@@ -39,10 +37,9 @@ class ScholarshipTests(TestCase):
             phone_number= "212-719-2141",
             phone_number_ext= "x1004"
         )
-
         provider = Provider.objects.create(
             organization="Provider",
-            reference="Provider Scholarship Committee",
+            addressee="Provider Scholarship Committee",
             address= "100 Provider Lane Suite 555",
             city= "Kansas City",
             state= "MO",
@@ -51,7 +48,6 @@ class ScholarshipTests(TestCase):
             phone_number= "816-555-4321",
             phone_number_ext= 'x4'
         )
-
         # create college
         College.objects.create(
             popularity_score=1,
@@ -83,7 +79,6 @@ class ScholarshipTests(TestCase):
             ],
             types=["university", "point_of_interest", "establishment"]
         )
-
         Scholarship.objects.create(
             name="Provider Scholarship",
             provider=provider,
@@ -150,8 +145,8 @@ class ScholarshipTests(TestCase):
             military="None",
             citizenship=["USA", "Canada", "Mexico"],
             first_generation=False,
-            financial_need=True)
-
+            financial_need=True
+        )
         s_scholarship = Scholarship.objects.create(
             name="Strouthion Scholarship",
             provider=strouthion,
@@ -181,8 +176,8 @@ class ScholarshipTests(TestCase):
             military="None",
             citizenship=["USA", "Canada"],
             first_generation=False,
-            financial_need=True)
-
+            financial_need=True
+        )
         t_scholarship.college.add(college)
         s_scholarship.college.add(college)
 
@@ -268,7 +263,6 @@ class ScholarshipTests(TestCase):
             user=user,
             status="approved"
         )
-
         self.assertEqual(scholarship_status.user, user)
         self.assertEqual(scholarship_status.scholarship, scholarship)
         self.assertEqual(scholarship_status.status, "approved")

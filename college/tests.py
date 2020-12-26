@@ -1,4 +1,4 @@
-from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 User = get_user_model()
@@ -10,8 +10,8 @@ class CollegeTests(TestCase):
             email="demouser@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo",
-            last_name="Testuser")
-
+            last_name="Testuser"
+        )
         college = College.objects.create(
             popularity_score=1,
             unit_id=100654,
@@ -38,8 +38,8 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
             "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
-            types=["university", "point_of_interest", "establishment"])
-
+            types=["university", "point_of_interest", "establishment"]
+        )
         CollegeStatus.objects.create(
             user=user,
             college=college,
@@ -49,7 +49,8 @@ class CollegeTests(TestCase):
             award_reviewed=False,
             user_notified=False,
             residency="NY",
-            in_state_tuition="NY")
+            in_state_tuition="NY"
+        )
 
     def test_create_college(self):
         college = College.objects.create(
@@ -78,8 +79,8 @@ class CollegeTests(TestCase):
                 "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
                 "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
                 "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
-            types=["university", "point_of_interest", "establishment"])
-        
+            types=["university", "point_of_interest", "establishment"]
+        )
         self.assertEqual(college.popularity_score, 2)
         self.assertEqual(college.unit_id, 100663)
         self.assertEqual(college.ope_id, "00105200")
@@ -286,7 +287,8 @@ class CollegeTests(TestCase):
             program_percentage_philosophy_religious=0.0,
             program_percentage_personal_culinary=0.0,
             program_percentage_multidiscipline=0.0,
-            program_percentage_mechanic_repair_technology=0.0)
+            program_percentage_mechanic_repair_technology=0.0
+        )
         
         self.assertEqual(scorecard.college, college)
         self.assertEqual(scorecard.unit_id, 100654)
@@ -482,8 +484,8 @@ class CollegeTests(TestCase):
             num_students_earnings=25400,
             median_earnings=25400,
             num_students_ipeds_awards1=24,
-            num_students_ipeds_awards2=33)
-
+            num_students_ipeds_awards2=33
+        )
         self.assertEqual(field_of_study.college, college)
         self.assertEqual(field_of_study.cip_code, "1313")
         self.assertEqual(field_of_study.cip_title, "Teacher Education and Professional Development, Specific Subject Areas.")
@@ -529,7 +531,7 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_status.updated)
 
         # test user college_status_set
-        self.assertEqual(user.college_status.get_queryset()[1], college_status)
+        self.assertEqual(user.collegestatus_set.get_queryset()[1], college_status)
 
     def test_create_budget(self):
         college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
@@ -545,8 +547,8 @@ class CollegeTests(TestCase):
             loan_unsubsidized=10000,
             loan_plus=10000,
             loan_private=10000,
-            loan_school=10000)
-
+            loan_school=10000
+        )
         self.assertEqual(college_budget.college_status, college_status)
         self.assertEqual(college_budget.work_study, 10000)
         self.assertEqual(college_budget.job, 10000)

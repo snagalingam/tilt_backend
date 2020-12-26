@@ -9,43 +9,90 @@ from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
 from graphene_django import DjangoObjectType
 from organization.models import Organization
+from organization.schema import OrganizationType
 from services.sendgrid_api.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from user.models import DeletedAccount, Action
+from user.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserType
+
+
+User = get_user_model()
 
 
 ################################################
 ### Standard Model Definitions
 ################################################
-class UserActionType(DjangoObjectType):
+class ActionType(DjangoObjectType):
     class Meta:
         model = Action
         fields = "__all__"
 
-class OrganizationType_(DjangoObjectType):
+
+class EthnicityType(DjangoObjectType):
     class Meta:
-        model = Organization
+        model = Ethnicity
         fields = "__all__"
 
-class UserType(DjangoObjectType):
+
+class EthnicityUserType(DjangoObjectType):
     class Meta:
-        model = get_user_model()
+        model = EthnicityUser
+        fields = "__all__"
+
+
+class IncomeType(DjangoObjectType):
+    class Meta:
+        model = Income
+        fields = "__all__"
+
+
+class PronounType(DjangoObjectType):
+    class Meta:
+        model = Pronoun
+        fields = "__all__"
+
+
+class PronounUserType(DjangoObjectType):
+    class Meta:
+        model = PronounUser
+        fields = "__all__"
+
+
+class SourceType(DjangoObjectType):
+    class Meta:
+        model = Source
+        fields = "__all__"
+
+
+class SourceUserType(DjangoObjectType):
+    class Meta:
+        model = SourceUser
+        fields = "__all__"
+
+
+class UserAccountType(DjangoObjectType):
+    class Meta:
+        model = UserType
+        fields = "__all__"
+
+
+class TiltUserType(DjangoObjectType):
+    class Meta:
+        model = User
 
 
 ################################################
 ### Query
 ################################################
 class Query(graphene.ObjectType):
-    me = graphene.Field(UserType)
-    users = graphene.List(UserType)
+    me = graphene.Field(TiltUserType)
+    users = graphene.List(TiltUserType)
 
     def resolve_users(self, info):
         user = info.context.user
         if user.is_staff:
-            return get_user_model().objects.all()
-        else:
-            raise Exception('User not authorized please contact admin')
+            return User.objects.all()
+        raise Exception('User not authorized please contact admin')
 
     def resolve_me(self, info):
         user = info.context.user
@@ -64,15 +111,15 @@ class Query(graphene.ObjectType):
                 # track GET_ME query
                 create_action(user, 'Non-social GET_ME query')
                 return user
-            else:
-                raise Exception("User is not verified")
+            # user is_authenticated and not is_verified
+            raise Exception("User is not verified")
 
 
 ################################################
 ### Mutations
 ################################################
 class AddSubscriber(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -100,12 +147,11 @@ class CreateAction(graphene.Mutation):
         if user.is_authenticated:
             create_action(user, description)
             return CreateAction(success=True)
-        else:
-            return CreateAction(success=False)
+        raise Exception("User not logged in")
 
 
 class CreateUser(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
 
     class Arguments:
         email = graphene.String()
@@ -123,7 +169,7 @@ class CreateUser(graphene.Mutation):
     ):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-        user = get_user_model()(
+        user = User(
             email=email,
             first_name=first_name,
             last_name=last_name,
@@ -134,22 +180,17 @@ class CreateUser(graphene.Mutation):
         try:
             password_validation.validate_password(password, user=user)
         except ValidationError as e:
-            return e
+            raise e
 
         user.set_password(password)
         user.save()
-
         # send email verification user after signup
         send_verification(user.email, user.first_name)
-
-        if user is not None:
-            return CreateUser(user=user)
-        else:
-            raise Exception("Unable to create user")
+        return CreateUser(user=user)
 
 
 class DeleteUser(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     is_deleted = graphene.Boolean()
 
     def mutate(self, info):
@@ -179,12 +220,11 @@ class DeleteUser(graphene.Mutation):
             get_count.save()
 
             return DeleteUser(is_deleted=True)
-        else:
-            raise Exception("User account was not deleted")
+        raise Exception("User account was not deleted")
 
 
 class LoginUser(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     is_authenticated = graphene.Boolean()
 
     class Arguments:
@@ -196,21 +236,19 @@ class LoginUser(graphene.Mutation):
         email = BaseUserManager.normalize_email(lowercase_email)
         user = authenticate(username=email, password=password)
 
-        if user is not None:
+        if user:
             if user.is_verified:
                 login(info.context, user,
                       backend="django.contrib.auth.backends.ModelBackend")
                 # track user login
                 create_action(user, 'Logged in')
                 return LoginUser(user=user, is_authenticated=user.is_authenticated)
-            else:
-                raise Exception("User is not verified")
-        else:
-            raise Exception("Incorrect credentials")
+            raise Exception("User is not verified")
+        raise Exception("Incorrect credentials")
 
 
 class LogoutUser(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     is_logged_out = graphene.Boolean()
 
     def mutate(self, info):
@@ -222,112 +260,155 @@ class LogoutUser(graphene.Mutation):
 
 
 class OnboardUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    organization = graphene.Field(OrganizationType_)
+    user = graphene.Field(TiltUserType)
 
     class Arguments:
-        id = graphene.ID()
-        phone_number = graphene.String()
         preferred_contact_method = graphene.String()
+        phone_number = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
         sat_math = graphene.Int()
         sat_verbal = graphene.Int()
         efc = graphene.Int()
-        pronouns = graphene.String()
+        high_school_grad_year = graphene.Int()
+
+        # relationship to other models
+        pronoun = graphene.String()
+        source = graphene.List(graphene.String)
         ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
+        income = graphene.String()
+
+        # for organizations
         place_id = graphene.String()
         place_name = graphene.String()
-        high_school_grad_year = graphene.Int()
-        income_quintile = graphene.String()
-        found_from = graphene.List(graphene.String)
 
     def mutate(
         self,
         info,
-        id,
-        phone_number=None,
         preferred_contact_method=None,
+        phone_number=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
         sat_math=None,
         sat_verbal=None,
         efc=None,
-        pronouns=None,
+        high_school_grad_year=None,
+        pronoun=None,
+        source=None,
         ethnicity=None,
         user_type=None,
+        income=None,
         place_id=None,
         place_name=None,
-        high_school_grad_year=None,
-        income_quintile=None,
-        found_from=None
     ):
+    
+        user = info.context.user
 
-        user = get_user_model().objects.get(pk=id)
+        if not user.is_authenticated:
+            raise Exception ("Incorrect Credentials")
 
-        if place_id is not None or place_name is not None:
+        if preferred_name is None:
+            preferredName = ""
+            
+        # create pronoun_user
+        pronoun = Pronoun.objects.get(pronoun=pronoun)
+        pronoun_user = PronounUser(
+            user=user, 
+            pronoun=pronoun)
+        pronoun_user.save()
 
+        # create source_user
+        for found_from in source:
             try:
-                organization = Organization.objects.get(place_id=place_id)
+                source = Source.objects.get(source=found_from)
+                source_user = SourceUser(
+                    user=user, 
+                    source=source)
+                source_user.save()
+            except: 
+                source_user = SourceUser(
+                    user=user, 
+                    other_value=found_from)
+                source_user.save()
+
+        # create ethnicity_user
+        for background in ethnicity:
+            try:
+                ethnicity = Ethnicity.objects.get(ethnicity=background)
+                ethnicity_user = EthnicityUser(
+                    user=user, 
+                    ethnicity=background)
+                ethnicity_user.save()
+            except: 
+                ethnicity_user = EthnicityUser(
+                    user=user, 
+                    other_value=background)
+                ethnicity_user.save()
+
+        # get user_type and income
+        user_type = UserType.objects.get(user_type=user_type)
+        income = Income.objects.get(category=income)
+
+        # get organization
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except:
+            organization = None
+
+        if organization is None:
+            try:
+                organization = Organization.objects.get(name=place_name)
             except:
                 organization = None
 
-            if place_name is not None:
-                try:
-                    organization = Organization.objects.get(name=place_name)
-                except:
-                    organization = None
+        # create new organization
+        if organization is None:
+            place_id = ""
+            business_status = ""
+            icon = ""
+            lat = None
+            lng = None
+            address = ""
+            place_phone_number = ""
+            url = ""
+            website = ""
+            types = []
 
-            if organization is None:
+            if place_id:
+                data = search_details(place_id)
+                results = data.get("result", "")
+                place_name = results.get("name")
+                location = results["geometry"]["location"]
+                lat = location.get("lat", "")
+                lng = location.get("lng", "")
+                business_status = results.get("business_status", "")
+                icon = results.get("icon", "")
+                address = results.get("formatted_address", "")
+                place_phone_number = results.get(
+                        "formatted_phone_number", "")
+                url = results.get("url", "")
+                website = results.get("website", "")
+                types = results.get("types", [])
 
-                if place_id is not None:
-                    data = search_details(place_id)
-                    results = data.get("result")
-                    lat = results.get("geometry")["location"]["lat"]
-                    lng = results.get("geometry")["location"]["lng"]
-                    place_name = results.get("name")
-                    business_status = results.get("business_status", None)
-                    icon = results.get("icon", None)
-                    address = results.get("formatted_address", None)
-                    place_phone_number = results.get(
-                        "formatted_phone_number", None)
-                    url = results.get("url", None)
-                    website = results.get("website", None)
-                    types = results.get("types", [])
+            organization = Organization(
+                place_id=place_id,
+                business_status=business_status,
+                icon=icon,
+                name=place_name,
+                lat=lat,
+                lng=lng,
+                address=address,
+                phone_number=place_phone_number,
+                url=url,
+                website=website,
+                types=types)
+            organization.save()
 
-                else:
-                    results = {}
-                    place_id = None
-                    lat = None
-                    lng = None
-                    business_status = None
-                    icon = None
-                    address = None
-                    place_phone_number = None
-                    url = None
-                    website = None
-                    types = []
-
-                organization = Organization(
-                    place_id=place_id,
-                    business_status=business_status,
-                    icon=icon,
-                    name=place_name,
-                    lat=lat,
-                    lng=lng,
-                    address=address,
-                    phone_number=place_phone_number,
-                    url=url,
-                    website=website,
-                    types=types,
-                )
-                organization.save()
-
-            # add organization to user after user is onboarded
-            user.organization.add(organization)
+        # add organization to user
+        user.organization.add(organization)
 
         if user is not None:
             user.phone_number = phone_number
@@ -338,21 +419,16 @@ class OnboardUser(graphene.Mutation):
             user.sat_math = sat_math
             user.sat_verbal = sat_verbal
             user.efc = efc
-            user.pronouns = pronouns
-            user.ethnicity = ethnicity
-            user.user_type = user_type
             user.high_school_grad_year = high_school_grad_year
-            user.income_quintile = income_quintile
-            user.found_from = found_from
             user.is_onboarded = True
+            user.user_type = user_type
+            user.income = income
             user.save()
             return OnboardUser(user=user)
-        else:
-            raise Exception("User is not logged in")
 
 
 class ResetPassword(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -365,7 +441,7 @@ class ResetPassword(graphene.Mutation):
         email = jwt.decode(token,
                            os.environ.get('SECRET_KEY'),
                            algorithms=['HS256'])['email']
-        user = get_user_model().objects.get(email=email)
+        user = User.objects.get(email=email)
 
         if user is not None and password == password_repeat:
             user.set_password(password)
@@ -373,12 +449,11 @@ class ResetPassword(graphene.Mutation):
             return ResetPassword(success=True)
         elif password != password_repeat:
             raise Exception("Passwords do not match")
-        else:
-            raise Exception("Password did not reset")
+        raise Exception("Password did not reset")
 
 
 class SendForgotEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -387,17 +462,20 @@ class SendForgotEmail(graphene.Mutation):
     def mutate(self, info, email):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-        user = get_user_model().objects.get(email=email)
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            user = None
 
         if user is not None:
             send_reset_password(user.email, user.first_name)
             return SendForgotEmail(success=True)
-        else:
-            raise Exception("Email not found")
+        raise Exception("Email not found")
 
 
 class SendSubscriptionVerification(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -411,7 +489,7 @@ class SendSubscriptionVerification(graphene.Mutation):
 
 
 class SendVerificationEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -425,17 +503,20 @@ class SendVerificationEmail(graphene.Mutation):
     ):
         lowercase_email = email.lower()
         email = BaseUserManager.normalize_email(lowercase_email)
-        user = get_user_model().objects.get(email=email)
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            user = None
 
         if user is not None:
             send_verification(user.email, user.first_name)
             return SendVerificationEmail(success=True)
-        else:
-            raise Exception("Email not found")
+        raise Exception("Email not found")
 
 
 class UpdatePassword(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -452,158 +533,185 @@ class UpdatePassword(graphene.Mutation):
         new_password,
         first_name
     ):
-        user = authenticate(username=email, password=password)
 
-        if user is not None:
+        user = info.context.user
+
+        if user.is_authenticated:
             # password validation
             try:
                 password_validation.validate_password(new_password, user=user)
             except ValidationError as e:
-                return e
+                raise e
+
             user.set_password(new_password)
             user.save()
             success = True
             send_password_changed(email, first_name)
+
             return UpdatePassword(success=success)
-        else:
-            raise Exception("Incorrect credentials")
+        raise Exception("Incorrect credentials")
 
 
 class UpdateUser(graphene.Mutation):
-    user = graphene.Field(UserType)
-    organization = graphene.Field(OrganizationType_)
+    user = graphene.Field(TiltUserType)
 
     class Arguments:
-        id = graphene.ID()
+        user_id = graphene.ID()
+        delete_school = graphene.Boolean()
+        email = graphene.String()
         first_name = graphene.String()
         last_name = graphene.String()
-        phone_number = graphene.String()
         preferred_contact_method = graphene.String()
+        phone_number = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
         act_score = graphene.Int()
         sat_math = graphene.Int()
         sat_verbal = graphene.Int()
         efc = graphene.Int()
-        pronouns = graphene.String()
+        high_school_grad_year = graphene.Int()
+
+        # relationship to other models
+        pronoun = graphene.String()
+        source = graphene.List(graphene.String)
         ethnicity = graphene.List(graphene.String)
         user_type = graphene.String()
+        income = graphene.String()
+
+        # for organizations
         place_id = graphene.String()
         place_name = graphene.String()
-        high_school_grad_year = graphene.Int()
-        income_quintile = graphene.String()
-        email = graphene.String()
-        delete_school = graphene.Boolean()
 
     def mutate(
         self,
         info,
-        id,
+        user_id,
+        delete_school=None,
+        email=None,
         first_name=None,
         last_name=None,
-        phone_number=None,
         preferred_contact_method=None,
+        phone_number=None,
         preferred_name=None,
         gpa=None,
         act_score=None,
         sat_math=None,
         sat_verbal=None,
         efc=None,
-        pronouns=None,
+        high_school_grad_year=None,
+
+        # relationship to other models
+        pronoun=None,
+        source=None,
         ethnicity=None,
         user_type=None,
+        income=None,
+
+        # for organizations
         place_id=None,
         place_name=None,
-        high_school_grad_year=None,
-        income_quintile=None,
-        email=None,
-        delete_school=None,
     ):
 
-        user = get_user_model().objects.get(pk=id)
+        user = User.objects.get(pk=user_id)
         # set previous email to send email changed confirmation
         old_email = user.email
 
-        if place_id is not None or place_name is not None:
+        if delete_school:
+            user.organization.clear()
+
+        # save pronoun
+        pronoun_user = user.pronounuser_set.get_queryset()[0]
+        pronoun_user.pronoun = pronoun 
+        pronoun_user.save()
+        
+        # save source
+        sourceuser_set = user.sourceuser_set.get_queryset()
+        for each_source in sourceuser_set:
+            each_source.source = source
+
+        # save ethnicity
+        for background in ethnicity:
+            ethnicity = Ethnicity.objects.get(ethnicity=background)
+            ethnicity_user = EthnicityUser.objects.get(user=user, ethnicity=background)
+            ethnicity_user.ethnicity = ethnicity
+            ethnicity_user.save()
+
+        # get user_type and income
+        user_type = UserType.objects.get(user_type=user_type)
+        income = Income.objects.get(category=income)
+
+        try:
+            organization = Organization.objects.get(place_id=place_id)
+        except:
+            organization = None
+
+        if organization is not None:
             try:
-                organization = Organization.objects.get(place_id=place_id)
+                organization = Organization.objects.get(name=place_name)
             except:
                 organization = None
 
-            if place_name is not None:
-                try:
-                    organization = Organization.objects.get(name=place_name)
-                except:
-                    organization = None
+        # create new organization
+        if organization is None:
+            place_id = ""
+            business_status = ""
+            icon = ""
+            lat = None
+            lng = None
+            address = ""
+            place_phone_number = ""
+            url = ""
+            website = ""
+            types = []
 
-            if organization is None:
-
-                if place_id is not None:
-                    data = search_details(place_id)
-                    results = data.get("result")
-                    lat = results.get("geometry")["location"]["lat"]
-                    lng = results.get("geometry")["location"]["lng"]
-                    place_name = results.get("name")
-                    business_status = results.get("business_status", None)
-                    icon = results.get("icon", None)
-                    address = results.get("formatted_address", None)
-                    place_phone_number = results.get(
+            if place_id:
+                data = search_details(place_id)
+                results = data.get("result", None)
+                place_name = results.get("name")
+                location = results["geometry"]["location"]
+                lat = location.get("lat", None)
+                lng = location.get("lng", None)
+                business_status = results.get("business_status", None)
+                icon = results.get("icon", None)
+                address = results.get("formatted_address", None)
+                place_phone_number = results.get(
                         "formatted_phone_number", None)
-                    url = results.get("url", None)
-                    website = results.get("website", None)
-                    types = results.get("types", [])
+                url = results.get("url", None)
+                website = results.get("website", None)
+                types = results.get("types", [])
 
-                else:
-                    results = {}
-                    place_id = None
-                    lat = None
-                    lng = None
-                    business_status = None
-                    icon = None
-                    address = None
-                    place_phone_number = None
-                    url = None
-                    website = None
-                    types = []
+            organization = Organization(
+                place_id=place_id,
+                business_status=business_status,
+                icon=icon,
+                name=place_name,
+                lat=lat,
+                lng=lng,
+                address=address,
+                phone_number=place_phone_number,
+                url=url,
+                website=website,
+                types=types)
+            organization.save()
 
-                organization = Organization(
-                    place_id=place_id,
-                    business_status=business_status,
-                    icon=icon,
-                    name=place_name,
-                    lat=lat,
-                    lng=lng,
-                    address=address,
-                    phone_number=place_phone_number,
-                    url=url,
-                    website=website,
-                    types=types,
-                )
-                organization.save()
-                user.organization.clear()
-                user.organization.add(organization)
-            else:
-                user.organization.clear()
-                user.organization.add(organization)
-        elif delete_school:
-            user.organization.clear()
+        # add organization to user
+        user.organization.clear()
+        user.organization.add(organization)
 
         if user is not None:
             user.first_name = first_name
             user.last_name = last_name
-            user.phone_number = phone_number
             user.preferred_contact_method = preferred_contact_method
+            user.phone_number = phone_number
             user.preferred_name = preferred_name
             user.gpa = gpa
             user.act_score = act_score
             user.sat_math = sat_math
             user.sat_verbal = sat_verbal
             user.efc = efc
-            user.pronouns = pronouns
-            user.ethnicity = ethnicity
-            user.user_type = user_type
             user.high_school_grad_year = high_school_grad_year
-            user.income_quintile = income_quintile
+            user.user_type = user_type
+            user.income = income 
 
             # if email changed send email changed confirmation
             if email != old_email:
@@ -612,12 +720,10 @@ class UpdateUser(graphene.Mutation):
 
             user.save()
             return UpdateUser(user=user)
-        else:
-            raise Exception("User is not logged in")
 
 
 class VerifyEmail(graphene.Mutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(TiltUserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -628,7 +734,7 @@ class VerifyEmail(graphene.Mutation):
                            os.environ.get('SECRET_KEY'),
                            algorithms=['HS256'])['email']
 
-        user = get_user_model().objects.get(email=email)
+        user = User.objects.get(email=email)
 
         if email and not user.is_verified:
             user.is_verified = True

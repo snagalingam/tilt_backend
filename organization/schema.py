@@ -1,6 +1,6 @@
 import graphene
 
-from .models import Organization
+from organization.models import Organization
 from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI
 
@@ -54,23 +54,23 @@ class CreateOrganization(graphene.Mutation):
         url = graphene.String()
         website = graphene.String()
         types = graphene.List(graphene.String)
-        tilt_partnership = graphene.Boolean()
+        partner = graphene.Boolean()
 
     def mutate(
         self,
         info,
-        place_id,
-        business_status,
-        icon,
-        name,
-        lat,
-        lng,
-        address,
-        phone_number,
-        url,
-        website,
-        types,
-        tilt_partnership
+        place_id=None,
+        business_status=None,
+        icon=None,
+        name=None,
+        lat=None,
+        lng=None,
+        address=None,
+        phone_number=None,
+        url=None,
+        website=None,
+        types=None,
+        partner=None,
     ):
 
         try:
@@ -91,7 +91,7 @@ class CreateOrganization(graphene.Mutation):
                 url=url,
                 website=website,
                 types=types,
-                tilt_partnership=tilt_partnership,
+                partner=partner,
             )
             
             organization.save()
@@ -114,7 +114,7 @@ class OrganizationSearch(graphene.Mutation):
         if errors:
             raise errors
 
-        results = data.get("result", None)
+        results = data.get("result")
         place_id = data.get('place_id', "")
         place_name = results.get("name")
         location = results["geometry"]["location"]

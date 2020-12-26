@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-from .models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 from college.models import CollegeStatus
 from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
@@ -170,6 +170,14 @@ class AnalyzeDocuments(graphene.Mutation):
         user = info.context.user
 
         for document_name in documents:
+            # find college_status
+            end_index = document_name.index("_file")
+            college_status_id = int(document_name[3:end_index])
+            college_status = CollegeStatus.objects.get(pk=college_status_id)
+
+            if not college_status.award_uploaded:
+                raise Exception ("Aid letter not uploaded")
+
             # send document for analysis
             words_id = start_words_analysis(document_name)
             tables_id = start_tables_analysis(document_name)
@@ -186,13 +194,6 @@ class AnalyzeDocuments(graphene.Mutation):
                     document_name=document_name, 
                     sent=True
             ))
-
-            # find college_status and update award_uploaded=True
-            end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
-            college_status.award_uploaded = True
-            college_status.save()
 
         # trigger lambda to checkDocuments after 5 minutes
         lambda_handler(documents)
@@ -229,7 +230,7 @@ class CheckDocuments(graphene.Mutation):
         for idx, document_name in enumerate(documents):
             document_result = DocumentResult.objects.get(document_name=document_name)
             end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index]) + 1
+            college_status_id = int(document_name[3:end_index])
 
             # keep track of college_status_id positions
             if idx < last_index:
@@ -494,22 +495,34 @@ class UploadOrDeleteDocument(graphene.Mutation):
 
     class Arguments:
         blob = Upload(required=True)
-        file_name = graphene.String()
+        document_name = graphene.String()
         upload_or_delete = graphene.String()
 
     def mutate(
         self, 
         info, 
         blob=None, 
-        file_name=None,
+        document_name=None,
         upload_or_delete=None
     ):
 
-        if file_name:
+        if document_name:
+            # find college_status
+            end_index = document_name.index("_file")
+            college_status_id = int(document_name[3:end_index])
+            college_status = CollegeStatus.objects.get(pk=college_status_id)
+            
             if upload_or_delete == "upload":
-                success = upload_document(file_name, blob)
+                success = upload_document(document_name, blob)
+                if success:
+                    college_status.award_uploaded = True
+                    college_status.save()
+
             elif upload_or_delete == "delete":
-                success = delete_document(file_name)
+                success = delete_document(document_name)
+                if success:
+                    college_status.award_uploaded = False
+                    college_status.save()
 
             return UploadOrDeleteDocument(success=success)
         raise Exception ('Document file name required')

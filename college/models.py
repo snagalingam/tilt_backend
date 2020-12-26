@@ -88,13 +88,15 @@ class CollegeStatus(models.Model):
         method = self.user.preferred_contact_method
 
         # send user notification about financial aid letter if award_reviewed=True
-        if self.award_reviewed is True and method is not None and self.user_notified is not True:
-            self.user_notified = True
+        if self.award_reviewed and not self.user_notified:
 
             if method == "email":
                 send_notification_email(self.user.email, self.user.first_name)
+                self.user_notified = True
+
             if method == "text":
                 send_notification_sms(self.user.phone_number)
+                self.user_notified = True
 
         return super(CollegeStatus, self).save(*args, **kwargs)
 

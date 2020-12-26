@@ -1,4 +1,4 @@
-from .models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
@@ -54,6 +54,19 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('name', 'amount', 'college_status', 'aid_category',)
 
 
+class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    fieldsets = (
+        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
+    )
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
+    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('college_status',)
+    model = AidSummary
+
+    
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (('Tables'), {'fields': ('tables',)}),
@@ -86,19 +99,6 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         'created',)
     search_fields = ('document_name', 'sent', 'processed', 'pass_fail', 
         'number_of_missing', 'created',)
-
-
-class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    fieldsets = (
-        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
-    )
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
-    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
-    ordering = ('college_status',)
-    model = AidSummary
 
 
 admin.site.register(AidCategory, AidCategoryAdmin)

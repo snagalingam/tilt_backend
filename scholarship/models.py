@@ -5,9 +5,10 @@ from django.utils import timezone
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
-DEFUALT_SCHOLARSHIP_ID = 1
+DEFAULT_SCHOLARSHIP_ID = 1
 DEFAULT_PROVIDER_ID = 1
 DEFAULT_USER_ID = 1
+
 
 class Provider(models.Model):
     organization = models.CharField(max_length=255, unique=True)
@@ -37,6 +38,7 @@ class Scholarship(models.Model):
         default=DEFAULT_PROVIDER_ID,
         on_delete=models.CASCADE
     )
+    college = models.ManyToManyField(College, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(blank=True)
     website = models.TextField(blank=True)
@@ -57,7 +59,6 @@ class Scholarship(models.Model):
     area_of_study_description = models.TextField(blank=True)
     writing_competition = models.BooleanField(null=True, blank=True)
     interest_description = models.CharField(max_length=255, null=True, blank=True)
-    college = models.ManyToManyField(College, blank=True)
     association_requirement = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
@@ -101,7 +102,7 @@ class ScholarshipStatus(models.Model):
     )
     scholarship = models.ForeignKey(
         Scholarship,
-        default=DEFUALT_SCHOLARSHIP_ID,
+        default=DEFAULT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
     status = models.CharField(max_length=255)

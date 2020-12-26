@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
@@ -404,8 +404,8 @@ class CollegeSearch(graphene.Mutation):
         if errors:
             raise errors
 
-        results = data.get("result", None)
-        photos_result = results.get("photos", None)
+        results = data.get("result")
+        photos_result = results.get("photos")
         place_id = data.get('place_id', "")
         place_name = results.get("name")
         location = results["geometry"]["location"]
