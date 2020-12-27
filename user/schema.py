@@ -265,8 +265,8 @@ class OnboardOrUpdateUser(graphene.Mutation):
     class Arguments:
         onboard_or_update = graphene.String()
         new_email = graphene.String()
-        first_name = graphene.String()
-        last_name = graphene.String()
+        new_first_name = graphene.String()
+        new_last_name = graphene.String()
         delete_school = graphene.Boolean()
         preferred_contact_method = graphene.String()
         phone_number = graphene.String()
@@ -294,8 +294,8 @@ class OnboardOrUpdateUser(graphene.Mutation):
         info,
         onboard_or_update=None,
         new_email=None,
-        first_name=None,
-        last_name=None,
+        new_first_name=None,
+        new_last_name=None,
         delete_school=None,
         preferred_contact_method=None,
         phone_number=None,
@@ -323,19 +323,26 @@ class OnboardOrUpdateUser(graphene.Mutation):
         if preferred_name is None:
             preferred_name = ""
 
-        # if update then delete all user attribute sets
+        # update user
         if onboard_or_update == "update":
             user.pronounuser_set.all().delete()
             user.sourceuser_set.all().delete()
             user.ethnicityuser_set.all().delete()
 
-            if new_email and new_email != user.email:
+            if new_email != user.email:
                 old_email = user.email
                 lowercase_email = new_email.lower()
                 new_email = BaseUserManager.normalize_email(lowercase_email)
                 user.email = new_email
-                user.save()
                 send_email_changed(old_email, new_email, user.first_name)
+
+            if new_first_name != user.first_name:
+                old_first_name = user.first_name
+                user.first_name = new_first_name
+            
+            if new_last_name != user.last_name:
+                old_last_name = user.last_name
+                user.last_name = new_last_name
 
         pronoun = Pronoun.objects.get(pronoun=pronoun)
         pronoun_user = PronounUser(
@@ -444,21 +451,20 @@ class OnboardOrUpdateUser(graphene.Mutation):
             # add organization to user
             user.organization.add(organization)
 
-        if user is not None:
-            user.phone_number = phone_number
-            user.preferred_contact_method = preferred_contact_method
-            user.preferred_name = preferred_name
-            user.gpa = gpa
-            user.act_score = act_score
-            user.sat_math = sat_math
-            user.sat_verbal = sat_verbal
-            user.efc = efc
-            user.high_school_grad_year = high_school_grad_year
-            user.is_onboarded = True
-            user.user_type = user_type
-            user.income = income
-            user.save()
-            return OnboardOrUpdateUser(user=user)
+        user.phone_number = phone_number
+        user.preferred_contact_method = preferred_contact_method
+        user.preferred_name = preferred_name
+        user.gpa = gpa
+        user.act_score = act_score
+        user.sat_math = sat_math
+        user.sat_verbal = sat_verbal
+        user.efc = efc
+        user.high_school_grad_year = high_school_grad_year
+        user.is_onboarded = True
+        user.user_type = user_type
+        user.income = income
+        user.save()
+        return OnboardOrUpdateUser(user=user)
 
 
 class ResetPassword(graphene.Mutation):
