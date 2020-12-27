@@ -116,7 +116,7 @@ class OrganizationSearch(graphene.Mutation):
 
         results = data.get("result")
         place_id = data.get('place_id', "")
-        place_name = results.get("name")
+        place_name = results.get("name", "")
         location = results["geometry"]["location"]
         lat = location.get("lat", None)
         lng = location.get("lng", None)

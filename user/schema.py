@@ -404,7 +404,6 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
             # create new organization
             if organization is None:
-                place_id = ""
                 business_status = ""
                 icon = ""
                 lat = None
@@ -415,7 +414,12 @@ class OnboardOrUpdateUser(graphene.Mutation):
                 website = ""
                 types = []
 
-                if place_id:
+                if place_name is None: 
+                    place_name = ""
+
+                if place_id is None: 
+                    place_id = ""    
+                else:
                     data = search_details(place_id)
                     results = data.get("result", "")
                     place_name = results.get("name")

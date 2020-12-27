@@ -405,9 +405,9 @@ class CollegeSearch(graphene.Mutation):
             raise errors
 
         results = data.get("result")
-        photos_result = results.get("photos")
+        photos_result = results.get("photos", "")
         place_id = data.get('place_id', "")
-        place_name = results.get("name")
+        place_name = results.get("name", "")
         location = results["geometry"]["location"]
         lat = location.get("lat", None)
         lng = location.get("lng", None)
