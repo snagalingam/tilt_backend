@@ -323,7 +323,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
         if preferred_name is None:
             preferred_name = ""
 
-        # if update delete user attribute sets
+        # if update then delete all user attribute sets
         if onboard_or_update == "update":
             user.pronounuser_set.all().delete()
             user.sourceuser_set.all().delete()
