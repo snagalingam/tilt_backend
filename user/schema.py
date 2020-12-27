@@ -264,9 +264,9 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
     class Arguments:
         onboard_or_update = graphene.String()
-        new_email = graphene.String()
-        new_first_name = graphene.String()
-        new_last_name = graphene.String()
+        email = graphene.String()
+        first_name = graphene.String()
+        last_name = graphene.String()
         delete_school = graphene.Boolean()
         preferred_contact_method = graphene.String()
         phone_number = graphene.String()
@@ -293,9 +293,9 @@ class OnboardOrUpdateUser(graphene.Mutation):
         self,
         info,
         onboard_or_update=None,
-        new_email=None,
-        new_first_name=None,
-        new_last_name=None,
+        email=None,
+        first_name=None,
+        last_name=None,
         delete_school=None,
         preferred_contact_method=None,
         phone_number=None,
@@ -329,20 +329,18 @@ class OnboardOrUpdateUser(graphene.Mutation):
             user.sourceuser_set.all().delete()
             user.ethnicityuser_set.all().delete()
 
-            if new_email != user.email:
+            if email and email != user.email:
                 old_email = user.email
-                lowercase_email = new_email.lower()
+                lowercase_email = email.lower()
                 new_email = BaseUserManager.normalize_email(lowercase_email)
                 user.email = new_email
                 send_email_changed(old_email, new_email, user.first_name)
 
-            if new_first_name != user.first_name:
-                old_first_name = user.first_name
-                user.first_name = new_first_name
+            if first_name and first_name != user.first_name:
+                user.first_name = first_name
             
-            if new_last_name != user.last_name:
-                old_last_name = user.last_name
-                user.last_name = new_last_name
+            if last_name and last_name != user.last_name:
+                user.last_name = last_name
 
         pronoun = Pronoun.objects.get(pronoun=pronoun)
         pronoun_user = PronounUser(
