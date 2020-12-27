@@ -2,8 +2,8 @@ import datetime
 import graphene
 import math
 
-from .models import Provider, Scholarship, ScholarshipStatus
-from colleges.models import College
+from scholarship.models import Provider, Scholarship, ScholarshipStatus
+from college.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
 from graphene_django import DjangoObjectType
@@ -15,11 +15,13 @@ from graphene_django import DjangoObjectType
 class ScholarshipProviderType(DjangoObjectType):
     class Meta:
         model = Provider
+        fields = "__all__"
 
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
+        fields = "__all__"
 
 
 class ScholarshipPaginationType(graphene.ObjectType):
@@ -31,7 +33,7 @@ class ScholarshipPaginationType(graphene.ObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
-
+        fields = "__all__"
 
 ################################################
 ### Query
@@ -42,10 +44,10 @@ class Query(graphene.ObjectType):
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
 
     # providers
-    providers_by_fields = graphene.List(
+    provider_by_fields = graphene.List(
         ScholarshipProviderType,
         organization=graphene.String(),
-        reference=graphene.String(),
+        addressee=graphene.String(),
         address=graphene.String(),
         city=graphene.String(),
         state=graphene.String(),
@@ -57,7 +59,7 @@ class Query(graphene.ObjectType):
     # scholarships
     scholarship_max_amount = graphene.Int()
 
-    scholarships_by_fields = graphene.List(
+    scholarship_by_fields = graphene.List(
         ScholarshipType,
         name=graphene.String(),
         provider_id=graphene.Int(),
@@ -108,14 +110,14 @@ class Query(graphene.ObjectType):
         status=graphene.String())
 
     # get_all()
-    def resolve_providers(self, info, limit=None):
-        qs = ScholarshipProvider.objects.all()[0:limit]
-        return qs
-
     def resolve_scholarship_max_amount(self, info):
         get_max = Scholarship.objects.aggregate(Max("max_amount"))
         _max = get_max['max_amount__max']
         return _max
+
+    def resolve_providers(self, info, limit=None):
+        qs = Provider.objects.all()[0:limit]
+        return qs
 
     def resolve_scholarships(self, info, limit=None):
         qs = Scholarship.objects.all()[0:limit]
@@ -126,16 +128,12 @@ class Query(graphene.ObjectType):
         return qs
 
     # get_by_fields()
-    def resolve_providers_by_fields(self, info, **fields):
-        qs = ScholarshipProvider.objects.filter(**fields)
+    def resolve_provider_by_fields(self, info, **fields):
+        qs = Provider.objects.filter(**fields)
         return qs
 
-    def resolve_scholarship_max_amount(self, info):
-        get_max = Scholarship.objects.aggregate(Max("max_amount"))
-        max = get_max['max_amount__max']
-        return max
 
-    def resolve_scholarships_by_fields(self, info, **fields):
+    def resolve_scholarship_by_fields(self, info, **fields):
         qs = Scholarship.objects.filter(**fields)
         return qs
 
@@ -145,11 +143,11 @@ class Query(graphene.ObjectType):
 
 
 class CreateProvider(graphene.Mutation):
-    provider = graphene.Field(ProviderType)
+    provider = graphene.Field(ScholarshipProviderType)
 
     class Arguments:
         organization = graphene.String()
-        reference = graphene.String()
+        addressee = graphene.String()
         address = graphene.String()
         city = graphene.String()
         state = graphene.String()
@@ -162,7 +160,7 @@ class CreateProvider(graphene.Mutation):
         self,
         info,
         organization=None,
-        reference=None,
+        addressee=None,
         address=None,
         city=None,
         state=None,
@@ -174,7 +172,7 @@ class CreateProvider(graphene.Mutation):
 
         provider = Provider(
             organization=organization,
-            reference=reference,
+            addressee=addressee,
             address=address,
             city=city,
             state=state,
@@ -193,6 +191,7 @@ class CreateScholarship(graphene.Mutation):
     class Arguments:
         name = graphene.String()
         provider_id = graphene.Int()
+        college_id = graphene.Int()
         description = graphene.String()
         website = graphene.String()
         max_amount = graphene.Int()
@@ -205,7 +204,6 @@ class CreateScholarship(graphene.Mutation):
         area_of_study_description = graphene.String()
         writing_competition = graphene.Boolean()
         interest_description = graphene.String()
-        college_id = graphene.Int()
         association_requirement = graphene.List(graphene.String)
         location = graphene.String()
         state = graphene.String()
@@ -226,6 +224,7 @@ class CreateScholarship(graphene.Mutation):
         info,
         name=None,
         provider_id=None,
+        college_id=None,
         description=None,
         website=None,
         deadline=None,
@@ -238,7 +237,6 @@ class CreateScholarship(graphene.Mutation):
         area_of_study_description=None,
         writing_competition=None,
         interest_description=None,
-        college_id=None,
         association_requirement=None,
         location=None,
         state=None,
@@ -255,12 +253,13 @@ class CreateScholarship(graphene.Mutation):
         financial_need=None,
     ):
 
-        provider = ScholarshipProvider.objects.get(pk=provider_id)
+        provider = Provider.objects.get(pk=provider_id)
         college = College.objects.get(pk=college_id)
 
         scholarship = Scholarship(
             name=name,
             provider=provider,
+            college=college,
             description=description,
             website=website,
             max_amount=max_amount,
@@ -273,7 +272,6 @@ class CreateScholarship(graphene.Mutation):
             area_of_study_description=area_of_study_description,
             writing_competition=writing_competition,
             interest_description=interest_description,
-            college=college,
             association_requirement=association_requirement,
             location=location,
             state=state,

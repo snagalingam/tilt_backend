@@ -1,4 +1,4 @@
-from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 
 from django.contrib import admin
 from django.db import models
@@ -33,11 +33,13 @@ class BudgetAdmin(admin.ModelAdmin):
     ordering = ('college_status',)
     search_fields = ('college_status',)
 
+
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score')}),
         (('College Information'), {
-            'fields': ('name', 'address', 'phone_number', 'website', 'business_status')
+            'fields': ('name', 'address', 'phone_number', 'website', 
+                'business_status')
         }),
         (('Scorcard Information'), {
             'fields': ('unit_id', 'ope_id')
@@ -97,7 +99,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         'award_reviewed',
         'user_notified',
     ]
-    list_editable = ['award_reviewed',]
+    list_editable = ['award_uploaded', 'award_reviewed', 'user_notified',]
     model = CollegeStatus
     ordering = ('status', 'college', 'user',)
     search_fields = ('status', 'college', 'user',)
@@ -112,7 +114,7 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['cip_title', 'college', 'credential_level',]
     model = FieldOfStudy
     ordering = ('college', 'credential_level',)
-    search_fields = ('cip_title', 'college__name', 'credential_level',)
+    search_fields = ('cip_title', 'college', 'credential_level',)
 
 
 class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):

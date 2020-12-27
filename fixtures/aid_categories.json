@@ -1,362 +1,332 @@
 [
   {
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 1,
   "fields": {
     "name": "tuition",
-    "main_category": "cost",
-    "sub_category": "direct",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "direct",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 2,
   "fields": {
     "name": "fees",
-    "main_category": "cost",
-    "sub_category": "direct",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "direct",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 3,
   "fields": {
     "name": "room",
-    "main_category": "cost",
-    "sub_category": "direct",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "direct",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 4,
   "fields": {
     "name": "total direct cost",
-    "main_category": "cost",
-    "sub_category": "direct",
-    "sub_sub_category": "total",
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "direct",
+    "tertiary": "total",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 5,
   "fields": {
     "name": "meals",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 6,
   "fields": {
     "name": "books",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 7,
   "fields": {
     "name": "personal expenses",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 8,
   "fields": {
     "name": "transportation",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 9,
   "fields": {
     "name": "health insurance",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 10,
   "fields": {
     "name": "off campus housing",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 11,
   "fields": {
     "name": "stafford loan fees",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 12,
   "fields": {
     "name": "total indirect cost",
-    "main_category": "cost",
-    "sub_category": "indirect",
-    "sub_sub_category": "total",
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "indirect",
+    "tertiary": "total",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 13,
   "fields": {
     "name": "total cost defined by school",
-    "main_category": "cost",
-    "sub_category": "unknown",
-    "sub_sub_category": "total",
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "unknown",
+    "tertiary": "total",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 14,
   "fields": {
     "name": "total cost",
-    "main_category": "cost",
-    "sub_category": "total",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "cost",
+    "secondary": "total",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 15,
   "fields": {
     "name": "pell",
-    "main_category": "aid",
-    "sub_category": "grant",
-    "sub_sub_category": "federal",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "grant",
+    "tertiary": "federal",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 16,
   "fields": {
     "name": "seog",
-    "main_category": "aid",
-    "sub_category": "grant",
-    "sub_sub_category": "federal",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "grant",
+    "tertiary": "federal",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 17,
   "fields": {
     "name": "il map",
-    "main_category": "aid",
-    "sub_category": "grant",
-    "sub_sub_category": "state",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "grant",
+    "tertiary": "state",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 18,
   "fields": {
     "name": "other grant",
-    "main_category": "aid",
-    "sub_category": "grant",
-    "sub_sub_category": "other",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "grant",
+    "tertiary": "other",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 19,
   "fields": {
     "name": "total grants",
-    "main_category": "aid",
-    "sub_category": "grant",
-    "sub_sub_category": "total",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "grant",
+    "tertiary": "total",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 20,
   "fields": {
     "name": "work study",
-    "main_category": "aid",
-    "sub_category": "work study",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "work study",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 21,
   "fields": {
     "name": "unsubsidized",
-    "main_category": "aid",
-    "sub_category": "loan",
-    "sub_sub_category": "federal",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "loan",
+    "tertiary": "federal",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 22,
   "fields": {
     "name": "subsidized",
-    "main_category": "aid",
-    "sub_category": "loan",
-    "sub_sub_category": "federal",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "loan",
+    "tertiary": "federal",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 23,
   "fields": {
     "name": "plus",
-    "main_category": "aid",
-    "sub_category": "loan",
-    "sub_sub_category": "federal",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "loan",
+    "tertiary": "federal",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 24,
   "fields": {
     "name": "other loan",
-    "main_category": "aid",
-    "sub_category": "loan",
-    "sub_sub_category": "other",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "loan",
+    "tertiary": "other",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 25,
   "fields": {
     "name": "total loans",
-    "main_category": "aid",
-    "sub_category": "loan",
-    "sub_sub_category": "total",
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "loan",
+    "tertiary": "total",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 26,
   "fields": {
     "name": "total aid",
-    "main_category": "aid",
-    "sub_category": "total",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "aid",
+    "secondary": "total",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 27,
   "fields": {
     "name": "net price defined by school",
-    "main_category": "net price",
-    "sub_category": "unknown",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "net price",
+    "secondary": "unknown",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 28,
   "fields": {
     "name": "net price after grants",
-    "main_category": "net price",
-    "sub_category": "scholarships",
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "net price",
+    "secondary": "scholarships",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 29,
   "fields": {
     "name": "net price after grants and loans",
-    "main_category": "net price",
-    "sub_category": "scholarships",
-    "sub_sub_category": "loans",
-    "year": 2021,
+    "primary": "net price",
+    "secondary": "scholarships",
+    "tertiary": "loans",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },
 {
-  "model": "financial_aid.AidCategory",
+  "model": "aid.AidCategory",
   "pk": 30,
   "fields": {
     "name": "uncategorized",
-    "main_category": null,
-    "sub_category": null,
-    "sub_sub_category": null,
-    "year": 2021,
+    "primary": "",
+    "secondary": "",
+    "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }

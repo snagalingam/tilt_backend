@@ -7,7 +7,7 @@ class OrganizationTests(TestCase):
         Organization.objects.create(
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status="OPERATIONAL",
-            icon=None,
+            icon="",
             name="Alabama A&M University",
             lat=34.7827196,
             lng=-86.568614,
@@ -16,7 +16,7 @@ class OrganizationTests(TestCase):
             url="https://maps.google.com/?cid=18245956559700032436",
             website="http://www.aamu.edu/",
             types=["school", "point_of_interest", "establishment"],
-            tilt_partnership=False,
+            partner=False,
         )
 
     def test_create_organization(self):
@@ -24,7 +24,7 @@ class OrganizationTests(TestCase):
 
         self.assertEqual(organization.place_id, "ChIJ91htBQIXYogRtPsg4NGoNv0")
         self.assertEqual(organization.business_status, "OPERATIONAL")
-        self.assertEqual(organization.icon, None)
+        self.assertEqual(organization.icon, "")
         self.assertEqual(organization.name, "Alabama A&M University")
         self.assertEqual(organization.lat, 34.7827196)
         self.assertEqual(organization.lng, -86.568614)
@@ -33,6 +33,6 @@ class OrganizationTests(TestCase):
         self.assertEqual(organization.url, "https://maps.google.com/?cid=18245956559700032436")
         self.assertEqual(organization.website, "http://www.aamu.edu/")
         self.assertEqual(organization.types, ["school", "point_of_interest", "establishment"])
-        self.assertFalse(organization.tilt_partnership)
+        self.assertFalse(organization.partner)
         self.assertIsNotNone(organization.created)
         self.assertIsNotNone(organization.updated)

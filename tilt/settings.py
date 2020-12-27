@@ -5,14 +5,10 @@ import os
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
-ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
-AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS")
-AWS_SECRET_KEY = os.environ.get("AWS_SECRET")
-REGION = os.environ.get("REGION")
-BUCKET = os.environ.get("BUCKET")
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -20,6 +16,21 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 # DEBUG = 1
+
+################################################
+### AWS Variables
+################################################
+AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS")
+AWS_SECRET_KEY = os.environ.get("AWS_SECRET")
+REGION = os.environ.get("REGION")
+BUCKET = os.environ.get("BUCKET")
+
+################################################
+### Twilio Variables
+################################################
+TWILIO_ACCOUNT = os.environ.get("TWILIO_ACCOUNT")
+TWILIO_AUTH = os.environ.get("TWILIO_AUTH")
+TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER")
 
 # Application definition
 

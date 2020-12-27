@@ -1,4 +1,4 @@
-from .models import Category, Data, DocumentData, DocumentResult
+from aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
@@ -9,8 +9,8 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 ################################################
 ### Inline
 ################################################
-class DataInline(admin.TabularInline):
-    model = Data
+class AidDataInline(admin.TabularInline):
+    model = AidData
     extra = 0
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
@@ -20,7 +20,7 @@ class DataInline(admin.TabularInline):
 ################################################
 ### Admin Panel
 ################################################
-class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('name',)}),
         (('Information'), {'fields': ('primary', 'secondary', 'tertiary',)}),
@@ -29,31 +29,44 @@ class CategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    inlines = [DataInline]
+    inlines = [AidDataInline]
     list_display = ['name', 'primary', 'secondary', 'tertiary',]
-    model = Category
+    model = AidCategory
     ordering = ('name',)
 
     def data_count(self, obj):
         return obj.data_set.count()
 
 
-
-class DataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'category',)}),
-        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data',)}),
+        (None, {'fields': ('name', 'college_status', 'aid_category',)}),
+        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 
+            'col_index', 'row_data',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['college_status', 'name', 'amount', 'category',]
-    model = Data
-    ordering = ('name', 'amount', 'college_status', 'category',)
-    search_fields = ('name', 'amount', 'college_status', 'category',)
+    list_display = ['college_status', 'name', 'amount', 'aid_category',]
+    model = AidData
+    ordering = ('name', 'amount', 'college_status', 'aid_category',)
+    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
 
 
+class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    fieldsets = (
+        (None, {'fields': ('college_status', 'total_cost', 'total_aid', 'net_price',)}),
+    )
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
+    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
+    ordering = ('college_status',)
+    model = AidSummary
+
+    
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (('Tables'), {'fields': ('tables',)}),
@@ -79,13 +92,17 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created',]
+    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 
+        'number_of_missing', 'created',]
     model = DocumentResult
-    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 'created',)
-    search_fields = ('document_name', 'pass_fail', 'number_of_missing', 'created',)
+    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 
+        'created',)
+    search_fields = ('document_name', 'sent', 'processed', 'pass_fail', 
+        'number_of_missing', 'created',)
 
 
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Data, DataAdmin)
+admin.site.register(AidCategory, AidCategoryAdmin)
+admin.site.register(AidData, AidDataAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(DocumentResult, DocumentResultAdmin)
+admin.site.register(AidSummary, AidSummaryAdmin)

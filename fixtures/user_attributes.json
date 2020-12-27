@@ -1,0 +1,183 @@
+[
+  {
+  "model": "user.Ethnicity",
+  "pk": 1,
+  "fields": {
+    "ethnicity": "aian",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 2,
+  "fields": {
+    "ethnicity": "asian",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 3,
+  "fields": {
+    "ethnicity": "black",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 4,
+  "fields": {
+    "ethnicity": "latinx",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 5,
+  "fields": {
+    "ethnicity": "nhpi",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 6,
+  "fields": {
+    "ethnicity": "other",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Ethnicity",
+  "pk": 7,
+  "fields": {
+    "ethnicity": "white",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Income",
+  "pk": 1,
+  "fields": {
+    "category": "lo",
+    "description": "$0 - 30,000",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Income",
+  "pk": 2,
+  "fields": {
+    "category": "m1",
+    "description": "$30,001 - $48,000",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Income",
+  "pk": 3,
+  "fields": {
+    "category": "m2",
+    "description": "$48,001 - $75,000",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Income",
+  "pk": 4,
+  "fields": {
+    "category": "h1",
+    "description": "$75,001 - $110,000",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Income",
+  "pk": 5,
+  "fields": {
+    "category": "h2",
+    "description": "$110,000+",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Pronoun",
+  "pk": 1,
+  "fields": {
+    "pronoun": "he",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Pronoun",
+  "pk": 2,
+  "fields": {
+    "pronoun": "she",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Pronoun",
+  "pk": 3,
+  "fields": {
+    "pronoun": "they",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Pronoun",
+  "pk": 4,
+  "fields": {
+    "pronoun": "other",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 1,
+  "fields": {
+    "source": "instagram",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 2,
+  "fields": {
+    "source": "facebook",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 3,
+  "fields": {
+    "source": "parent",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 4,
+  "fields": {
+    "source": "school or district staff",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 5,
+  "fields": {
+    "source": "friend",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "user.Source",
+  "pk": 6,
+  "fields": {
+    "source": "other",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+}]

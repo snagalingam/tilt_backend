@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
@@ -13,20 +13,26 @@ from services.google_api.google_places import extract_photo_urls, GooglePlacesAP
 from services.helpers.fav_finder import get_favicon
 from services.helpers.nearby_coordinates import check_by_city, check_by_coordinates, check_by_zipcode, check_distance
 
-
-CustomUser = get_user_model()
+User = get_user_model()
 
 ################################################
 ### Standard Model Definitions
 ################################################
-class BudgetType(DjangoObjectType):
+class CollegeBudgetType(DjangoObjectType):
     class Meta:
         model = Budget
         fields = "__all__"
 
+
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
+        fields = "__all__"
+
+
+class CollegeStatusType(DjangoObjectType):
+    class Meta:
+        model = CollegeStatus
         fields = "__all__"
 
 
@@ -42,10 +48,11 @@ class ScorecardType(DjangoObjectType):
         fields = "__all__"
 
 
-class CollegeStatusType(DjangoObjectType):
+class CollegeCollege(DjangoObjectType):
     class Meta:
-        model = Status
+        model = CollegeStatus
         fields = "__all__"
+
 
 ################################################
 ### Queries
@@ -63,16 +70,16 @@ class NetPriceRangeType(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     # standard model queries
-    budgets = graphene.List(BudgetType, limit=graphene.Int())
+    budgets = graphene.List(CollegeBudgetType, limit=graphene.Int())
     college_status = graphene.List(CollegeStatusType, limit=graphene.Int())
     colleges = graphene.List(CollegeType, limit=graphene.Int())
-    fields_of_study = graphene.List(FieldOfStudyType, limit=graphene.Int())
+    fields_of_study = graphene.List(FieldOfStudyType, college_id=graphene.Int())
     scorecards = graphene.List(ScorecardType, limit=graphene.Int())
 
     # speicfic queries
-    budget_results_by_fields = graphene.List(
-        BudgetType,
-        status_id=graphene.Int(),
+    budget_result_by_fields = graphene.List(
+        CollegeBudgetType,
+        college_status_id=graphene.Int(),
         work_study=graphene.Int(),
         job=graphene.Int(),
         savings=graphene.Int(),
@@ -86,8 +93,14 @@ class Query(graphene.ObjectType):
     )
     cities = graphene.List(ScorecardType, city=graphene.String())
     college_by_id = graphene.Field(CollegeType, id=graphene.Int())
-    college_status_by_college_id = graphene.Field(StatusType, college_id=graphene.Int())
-    college_status_by_user_id = graphene.Field(StatusType, user_id=graphene.Int())
+    college_status_by_college_id = graphene.Field(
+        CollegeStatusType, 
+        college_id=graphene.Int()
+    )
+    college_status_by_user_id = graphene.Field(
+        CollegeStatusType, 
+        user_id=graphene.Int()
+    )
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
@@ -125,12 +138,12 @@ class Query(graphene.ObjectType):
     states = graphene.List(ScorecardType, state=graphene.String())
 
     # standard model queries
-    def resolve_budgets(self, info, limit=None):
+    def resolve_college_budgets(self, info, limit=None):
         qs = Budget.objects.all()[0:limit]
         return qs
 
     def resolve_college_status(self, info, limit=None):
-        qs = Status.objects.all()[0:limit]
+        qs = CollegeStatus.objects.all()[0:limit]
         return qs
 
     def resolve_colleges(self, info, limit=None):
@@ -146,7 +159,7 @@ class Query(graphene.ObjectType):
         return qs
 
     # speicfic queries
-    def resolve_budget_results_by_fields(self, info, **kwargs):
+    def resolve_college_budget_results_by_fields(self, info, **kwargs):
         qs = Budget.objects.filter(**kwargs)
         return qs
 
@@ -158,11 +171,11 @@ class Query(graphene.ObjectType):
         return College.objects.get(pk=id)
 
     def resolve_college_status_by_college_id(root, info, college_id):
-        qs = Status.objects.get(college=college_id)
+        qs = CollegeStatus.objects.get(college=college_id)
         return qs
 
     def resolve_college_status_by_user_id(root, info, user_id):
-        qs = Status.objects.get(user=user_id)
+        qs = CollegeStatus.objects.get(user=user_id)
         return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):
@@ -386,76 +399,76 @@ class CollegeSearch(graphene.Mutation):
     def mutate(self, info, place, location):
         api = GooglePlacesAPI()
         data = api.details(place, location)
+        errors = data.get("errors", None)
+
+        if errors:
+            raise errors
+
+        results = data.get("result")
+        photos_result = results.get("photos", "")
+        place_id = data.get('place_id', "")
+        place_name = results.get("name", "")
+        location = results["geometry"]["location"]
+        lat = location.get("lat", None)
+        lng = location.get("lng", None)
+        business_status = results.get("business_status", "")
+        icon = results.get("icon", "")
+        address = results.get("formatted_address", "")
+        place_phone_number = results.get("formatted_phone_number", "")
+        url = results.get("url", "")
+        types = results.get("types", [])
+        website = results.get("website", "")
+        main_photo = ""                
+        photos = []
+
+        if photos_result:
+            photo_arr = extract_photo_urls(photos_result)
+            main_photo = photo_arr[0]
+            photos = photo_arr
 
         try:
-            if data["errors"] is not None:
-                return ValueError(data["errors"])
-
+            favicon = get_favicon(website)
         except:
-            results = data['result']
+            favicon = None
 
-            photos_result = results.get("photos", "")
-            if photos_result != "":
-                photo_arr = extract_photo_urls(photos_result)
-                main_photo = photo_arr[0]
-                photos = photo_arr
-            else:
-                main_photo = ""
-                photos = []
-
-            website = results.get('website', "")
-            try:
-                favicon = get_favicon(website)
-            except:
-                favicon = ""
-
-            place_id = data['place_id']
-            business_status = results.get('business_status', "")
-            name = results.get('name', "")
-            lat = data["result"]["geometry"]["location"]["lat"]
-            lng = data["result"]["geometry"]["location"]["lng"]
-            address = results.get('formatted_address', "")
-            phone_number = results.get('formatted_phone_number', "")
-            url = results.get('url', "")
-            types = results.get('types', [])
-
-            college = College(
-                place_id=place_id,
-                business_status=business_status,
-                name=name,
-                lat=lat,
-                lng=lng,
-                address=address,
-                phone_number=phone_number,
-                url=url,
-                website=website,
-                favicon=favicon,
-                main_photo=main_photo,
-                photos=photos,
-                types=types)
-            return CollegeSearch(college=college)
+        college = College(
+            place_id=place_id,
+            business_status=business_status,
+            name=place_name,
+            lat=lat,
+            lng=lng,
+            address=address,
+            phone_number=place_phone_number,
+            url=url,
+            website=website,
+            favicon=favicon,
+            main_photo=main_photo,
+            photos=photos,
+            types=types
+        )
+        return CollegeSearch(college=college)
 
 
 class CreateBudget(graphene.Mutation):
-    budget = graphene.Field(BudgetType)
+    budget = graphene.Field(CollegeBudgetType)
 
     class Arguments:
-        status_id=graphene.Int()
-        work_study=graphene.Int()
-        job=graphene.Int()
-        savings=graphene.Int()
-        family=graphene.Int()
-        other_scholarships=graphene.Int()
-        loan_subsidized=graphene.Int()
-        loan_unsubsidized=graphene.Int()
-        loan_plus=graphene.Int()
-        loan_private=graphene.Int()
-        loan_school=graphene.Int()
+        college_status_id = graphene.ID()
+        work_study = graphene.Int()
+        job = graphene.Int()
+        savings = graphene.Int()
+        family = graphene.Int()
+        other_scholarships = graphene.Int()
+        loan_subsidized = graphene.Int()
+        loan_unsubsidized = graphene.Int()
+        loan_plus = graphene.Int()
+        loan_private = graphene.Int()
+        loan_school = graphene.Int()
 
     def mutate(
         self,
         info,
-        status_id=None,
+        college_status_id=None,
         work_study=None,
         job=None,
         savings=None,
@@ -469,7 +482,7 @@ class CreateBudget(graphene.Mutation):
     ):
 
         try:
-            college_status = Status.objects.get(pk=status_id)
+            college_status = CollegeStatus.objects.get(pk=college_status_id)
         except:
             college_status = None
 
@@ -485,7 +498,8 @@ class CreateBudget(graphene.Mutation):
                 loan_unsubsidized=loan_unsubsidized,
                 loan_plus=loan_plus,
                 loan_private=loan_private,
-                loan_school=loan_school)
+                loan_school=loan_school
+            )
             budget.save()
 
             return CreateBudget(budget=budget)
@@ -553,18 +567,19 @@ class CreateCollege(graphene.Mutation):
                 favicon=favicon,
                 main_photo=main_photo,
                 photos=photos,
-                types=types)
+                types=types
+            )
             college.save()
 
             return CreateCollege(college=college)
         raise Exception('College exists')
 
 class CreateStatus(graphene.Mutation):
-    college_status = graphene.Field(StatusType)
+    college_status = graphene.Field(CollegeStatusType)
 
     class Arguments:
-        user_id = graphene.Int()
-        college_id = graphene.Int()
+        user_id = graphene.ID()
+        college_id = graphene.ID()
         status = graphene.String()
         net_price = graphene.Int()
         award_uploaded = graphene.Boolean()
@@ -593,11 +608,11 @@ class CreateStatus(graphene.Mutation):
                        "waitlisted",
                        "not accepted")
 
-        user = CustomUser.objects.get(pk=user_id)
+        user = User.objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
 
         try:
-            college_status = Status.objects.get(user=user, college=college)
+            college_status = CollegeStatus.objects.get(user=user, college=college)
         except:
             college_status = None
 
@@ -606,7 +621,7 @@ class CreateStatus(graphene.Mutation):
                 college.popularity_score += 1
                 college.save()
 
-            college_status = Status(
+            college_status = CollegeStatus(
                 user=user,
                 college=college,
                 status=status,
@@ -615,7 +630,8 @@ class CreateStatus(graphene.Mutation):
                 award_reviewed=award_reviewed,
                 user_notified=user_notified,
                 residency=residency,
-                in_state_tuition=in_state_tuition)
+                in_state_tuition=in_state_tuition
+            )
             college_status.save()
 
             return CreateStatus(college_status=college_status)
@@ -623,25 +639,25 @@ class CreateStatus(graphene.Mutation):
 
 
 class UpdateBudget(graphene.Mutation):
-    budget = graphene.Field(BudgetType)
+    budget = graphene.Field(CollegeBudgetType)
 
     class Arguments:
-        pk=graphene.ID()
-        work_study=graphene.Int()
-        job=graphene.Int()
-        savings=graphene.Int()
-        family=graphene.Int()
-        other_scholarships=graphene.Int()
-        loan_subsidized=graphene.Int()
-        loan_unsubsidized=graphene.Int()
-        loan_plus=graphene.Int()
-        loan_private=graphene.Int()
-        loan_school=graphene.Int()
+        budget_id = graphene.ID()
+        work_study = graphene.Int()
+        job = graphene.Int()
+        savings = graphene.Int()
+        family = graphene.Int()
+        other_scholarships = graphene.Int()
+        loan_subsidized = graphene.Int()
+        loan_unsubsidized = graphene.Int()
+        loan_plus = graphene.Int()
+        loan_private = graphene.Int()
+        loan_school = graphene.Int()
 
     def mutate(
         self,
         info,
-        pk=None,
+        budget_id=None,
         work_study=None,
         job=None,
         savings=None,
@@ -654,7 +670,7 @@ class UpdateBudget(graphene.Mutation):
         loan_school=None,
     ):
         try:
-            budget = Budget.objects.get(pk=pk)
+            budget = Budget.objects.get(pk=budget_id)
         except:
             budget = None
 
@@ -676,11 +692,11 @@ class UpdateBudget(graphene.Mutation):
 
 
 class UpdateStatus(graphene.Mutation):
-    college_status = graphene.Field(StatusType)
+    college_status = graphene.Field(CollegeType)
 
     class Arguments:
-        user_id = graphene.Int()
-        college_id = graphene.Int()
+        user_id = graphene.ID()
+        college_id = graphene.ID()
         status = graphene.String()
         net_price = graphene.Int()
         award_uploaded = graphene.Boolean()
@@ -709,11 +725,11 @@ class UpdateStatus(graphene.Mutation):
                        "waitlisted",
                        "not accepted")
 
-        user = CustomUser.objects.get(pk=user_id)
+        user = User.objects.get(pk=user_id)
         college = College.objects.get(pk=college_id)
 
         try:
-            college_status = Status.objects.get(user=user, college=college)
+            college_status = CollegeStatus.objects.get(user=user, college=college)
         except:
             college_status = None
 

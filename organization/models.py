@@ -2,19 +2,43 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
+DEFAULT_CHAR_TEXT = ""
+
+
 class Organization(models.Model):
-    name = models.CharField(max_length=255)
-    place_id = models.CharField(max_length=255, blank=True)
-    business_status = models.CharField(max_length=255, blank=True)
-    icon = models.CharField(max_length=255, blank=True)
-    address = models.CharField(max_length=255, blank=True)
-    phone_number = models.CharField(max_length=255, blank=True)
-    lat = models.DecimalField(blank=True, decimal_places=16, max_digits=22, null=True)
-    lng = models.DecimalField(blank=True, decimal_places=16, max_digits=22, null=True)
-    url = models.TextField(blank=True)
-    website = models.TextField(blank=True)
+    name = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    place_id = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    business_status = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    icon = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    address = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    phone_number = models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    )
+    lat = models.FloatField(blank=True, null=True)
+    lng = models.FloatField(blank=True, null=True)
+    url = models.TextField(default=DEFAULT_CHAR_TEXT)
+    website = models.TextField(default=DEFAULT_CHAR_TEXT)
     types = ArrayField(
-        models.CharField(max_length=255, blank=True),
+        models.CharField(
+        max_length=255,
+        default=DEFAULT_CHAR_TEXT
+    ),
         null=True, blank=True, default=None
     )
     partner = models.BooleanField(default=False)

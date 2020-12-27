@@ -1,8 +1,6 @@
-from .models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-
-
 User = get_user_model()
 
 class CollegeTests(TestCase):
@@ -12,9 +10,8 @@ class CollegeTests(TestCase):
             email="demouser@tiltaccess.com",
             password = "gWzupKiX5c",
             first_name="Demo",
-            last_name="Testuser",
+            last_name="Testuser"
         )
-
         college = College.objects.create(
             popularity_score=1,
             unit_id=100654,
@@ -31,22 +28,19 @@ class CollegeTests(TestCase):
             favicon="https://www.aamu.edu/_resources/img/icons/favicon-196x196.png",
             description="Alabama A&M University is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.",
             main_photo="https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-            photos=[
-                "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-                "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
-                "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
-                "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
-                "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
-                "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
-                "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
-                "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
-                "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"
-            ],
+            photos=["https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+            "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
+            "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
+            "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
+            "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
+            "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
+            "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
+            "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
+            "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
+            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
             types=["university", "point_of_interest", "establishment"]
         )
-
-        Status.objects.create(
+        CollegeStatus.objects.create(
             user=user,
             college=college,
             status="interested",
@@ -75,8 +69,7 @@ class CollegeTests(TestCase):
             favicon="https://www.uab.edu/styles/5.0/images/favicons/favicon-196x196.png",
             description="University of Alabama at Birmingham is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.",
             main_photo="https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-            photos=[
-                "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+            photos=["https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
                 "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
                 "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
                 "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
@@ -85,11 +78,9 @@ class CollegeTests(TestCase):
                 "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
                 "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
                 "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"
-            ],
+                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
             types=["university", "point_of_interest", "establishment"]
         )
-
         self.assertEqual(college.popularity_score, 2)
         self.assertEqual(college.unit_id, 100663)
         self.assertEqual(college.ope_id, "00105200")
@@ -105,116 +96,17 @@ class CollegeTests(TestCase):
         self.assertEqual(college.favicon, "https://www.uab.edu/styles/5.0/images/favicons/favicon-196x196.png")
         self.assertEqual(college.description, "University of Alabama at Birmingham is a top ranked public university offering associates, undergraduate, graduate and doctoral degrees.")
         self.assertEqual(college.main_photo, "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048")
-        self.assertEqual(college.photos, [
-            "https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
-            "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
-            "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
-            "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
-            "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
-            "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
-            "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"
-        ])
+        self.assertEqual(college.photos, ["https://lh3.googleusercontent.com/places/ABKp1IqGVoROLCDDU3dwiyAzaDk4Ky6buHubwqLCNODTriSPwPVyYARWxVsQiqDqzrPt_ZvWzKc-rCrIWaNWRGrk4olZE5N1mwO-gug=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IqVV9NSRdkeVV4eDiGEySagrugrK2ryXcrzpzGN-IzNftQ37xqUx7OQcgUkjnsd32cPDQcfsO1RAbgfredazdmk9zyeZTuuutQ=s1600-w2560",
+                "https://lh3.googleusercontent.com/places/ABKp1IqlYDobf55GX0Y6pPVnISOO6ZBfsCtM9Z_1_AL8VakFdHnoAcjU1cYT83Lzdoh-FjH0cBF43U_cCzSfjp28SwI1CjKXyYtTbEM=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IoWIutn-aNT33reyZv9QmvmHrSJ4V_BoC8paCJeEfXeOZcfKi3ZFgbRagHKxQhQOiNXJOI2bZLtMy9iWT8CxUWJk2L2ZHaRpdg=s1600-w1536",
+                "https://lh3.googleusercontent.com/places/ABKp1IotKWni5j2Ac5ZZANdOqpmVagiwnvzO7mQy1C-KNURivHWF6Ui6SllbzTp8AOdiReqiFXZOJvscLVDSCgwqr6APEVDz7zUTguI=s1600-w3264",
+                "https://lh3.googleusercontent.com/places/ABKp1IqRn6d9T0Dw2vsaP2b08DNLXrWUUz9VjuUTPOnPY7T1pzjFG4CjdsqZgrENLVya3zSBxGyjUdjjJFX5GesV3MA7nEbijf8DAfs=s1600-w1695",
+                "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
+                "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
+                "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
+                "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"])
         self.assertEqual(college.types, ["university", "point_of_interest", "establishment"])
-        self.assertIsNotNone(college.created)
-        self.assertIsNotNone(college.updated)
-
-    def test_create_college_status(self):
-        user = User.objects.get(email="demouser@tiltaccess.com")
-        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
-        college_status = Status.objects.create(
-            user=user,
-            college=college,
-            status="interested",
-            net_price=25000,
-            award_uploaded=True,
-            award_reviewed=False,
-            user_notified=False,
-            residency="NY",
-            in_state_tuition="NY"
-        )
-
-        self.assertEqual(college_status.user, user)
-        self.assertEqual(college_status.college, college)
-        self.assertEqual(college_status.status, "interested")
-        self.assertEqual(college_status.net_price, 25000)
-        self.assertEqual(college_status.award_uploaded, True)
-        self.assertEqual(college_status.award_reviewed, False)
-        self.assertEqual(college_status.user_notified, False)
-        self.assertEqual(college_status.residency, "NY")
-        self.assertEqual(college_status.in_state_tuition, "NY")
-        self.assertIsNotNone(college_status.created)
-        self.assertIsNotNone(college_status.updated)
-        # test user college_status_set
-        self.assertEqual(user.status_set.get_queryset()[0], college_status)
-
-    def test_create_budget(self):
-        college_status = Status.objects.get(user__email="demouser@tiltaccess.com")
-        college_budget = Budget.objects.create(
-            college_status=college_status,
-            work_study=10000,
-            job=10000,
-            savings=10000,
-            family=10000,
-            other_scholarships=10000,
-            loan_subsidized=10000,
-            loan_unsubsidized=10000,
-            loan_plus=10000,
-            loan_private=10000,
-            loan_school=10000
-        )
-
-        self.assertEqual(college_budget.college_status, college_status)
-        self.assertEqual(college_budget.work_study, 10000)
-        self.assertEqual(college_budget.job, 10000)
-        self.assertEqual(college_budget.savings, 10000)
-        self.assertEqual(college_budget.family, 10000)
-        self.assertEqual(college_budget.other_scholarships, 10000)
-        self.assertEqual(college_budget.loan_subsidized, 10000)
-        self.assertEqual(college_budget.loan_unsubsidized, 10000)
-        self.assertEqual(college_budget.loan_plus, 10000)
-        self.assertEqual(college_budget.loan_private, 10000)
-        self.assertEqual(college_budget.loan_school, 10000)
-        self.assertIsNotNone(college_budget.created)
-        self.assertIsNotNone(college_budget.updated)
-        # test user budget_set
-        self.assertEqual(college_status.budget_set.get_queryset()[0], college_budget)
-
-    def test_create_field_of_study(self):
-        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
-        field_of_study = FieldOfStudy.objects.create(
-            college=college,
-            cip_code="1313",
-            cip_title="Teacher Education and Professional Development, Specific Subject Areas.",
-            credential_level="Bachelor’s Degree",
-            credential_title="Bachelors Degree",
-            num_students_debt=46,
-            median_debt=31505,
-            monthly_debt_payment=327,
-            mean_debt=33085,
-            num_students_titleiv=32,
-            num_students_earnings=25400,
-            median_earnings=25400,
-            num_students_ipeds_awards1=24,
-            num_students_ipeds_awards2=33
-        )
-
-        self.assertEqual(field_of_study.college, college)
-        self.assertEqual(field_of_study.cip_code, "1313")
-        self.assertEqual(field_of_study.cip_title, "Teacher Education and Professional Development, Specific Subject Areas.")
-        self.assertEqual(field_of_study.credential_level, "Bachelor’s Degree")
-        self.assertEqual(field_of_study.credential_title, "Bachelors Degree")
-        self.assertEqual(field_of_study.num_students_debt, 46)
-        self.assertEqual(field_of_study.median_debt, 31505)
-        self.assertEqual(field_of_study.monthly_debt_payment, 327)
-        self.assertEqual(field_of_study.mean_debt, 33085)
-        self.assertEqual(field_of_study.num_students_titleiv, 32)
-        self.assertEqual(field_of_study.num_students_earnings,  25400)
-        self.assertEqual(field_of_study.median_earnings, 25400)
-        self.assertEqual(field_of_study.num_students_ipeds_awards1, 24)
-        self.assertEqual(field_of_study.num_students_ipeds_awards2, 33)
         self.assertIsNotNone(college.created)
         self.assertIsNotNone(college.updated)
 
@@ -397,7 +289,7 @@ class CollegeTests(TestCase):
             program_percentage_multidiscipline=0.0,
             program_percentage_mechanic_repair_technology=0.0
         )
-
+        
         self.assertEqual(scorecard.college, college)
         self.assertEqual(scorecard.unit_id, 100654)
         self.assertEqual(scorecard.ope_id, "00100200")
@@ -575,3 +467,101 @@ class CollegeTests(TestCase):
         self.assertEqual(scorecard.program_percentage_mechanic_repair_technology, 0.0)
         self.assertIsNotNone(scorecard.created)
         self.assertIsNotNone(scorecard.updated)
+
+    def test_create_field_of_study(self):
+        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+        field_of_study = FieldOfStudy.objects.create(
+            college=college,
+            cip_code="1313",
+            cip_title="Teacher Education and Professional Development, Specific Subject Areas.",
+            credential_level="Bachelor’s Degree",
+            credential_title="Bachelors Degree",
+            num_students_debt=46,
+            median_debt=31505,
+            monthly_debt_payment=327,
+            mean_debt=33085,
+            num_students_titleiv=32,
+            num_students_earnings=25400,
+            median_earnings=25400,
+            num_students_ipeds_awards1=24,
+            num_students_ipeds_awards2=33
+        )
+        self.assertEqual(field_of_study.college, college)
+        self.assertEqual(field_of_study.cip_code, "1313")
+        self.assertEqual(field_of_study.cip_title, "Teacher Education and Professional Development, Specific Subject Areas.")
+        self.assertEqual(field_of_study.credential_level, "Bachelor’s Degree")
+        self.assertEqual(field_of_study.credential_title, "Bachelors Degree")
+        self.assertEqual(field_of_study.num_students_debt, 46)
+        self.assertEqual(field_of_study.median_debt, 31505)
+        self.assertEqual(field_of_study.monthly_debt_payment, 327)
+        self.assertEqual(field_of_study.mean_debt, 33085)
+        self.assertEqual(field_of_study.num_students_titleiv, 32)
+        self.assertEqual(field_of_study.num_students_earnings,  25400)
+        self.assertEqual(field_of_study.median_earnings, 25400)
+        self.assertEqual(field_of_study.num_students_ipeds_awards1, 24)
+        self.assertEqual(field_of_study.num_students_ipeds_awards2, 33)
+        self.assertIsNotNone(college.created)
+        self.assertIsNotNone(college.updated)
+
+    def test_create_college_status(self):
+        user = User.objects.get(email="demouser@tiltaccess.com")
+        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+
+        college_status = CollegeStatus.objects.create(
+            user=user,
+            college=college,
+            status="interested",
+            net_price=25000,
+            award_uploaded=True,
+            award_reviewed=False,
+            user_notified=False,
+            residency="NY",
+            in_state_tuition="NY")
+
+        self.assertEqual(college_status.user, user)
+        self.assertEqual(college_status.college, college)
+        self.assertEqual(college_status.status, "interested")
+        self.assertEqual(college_status.net_price, 25000)
+        self.assertEqual(college_status.award_uploaded, True)
+        self.assertEqual(college_status.award_reviewed, False)
+        self.assertEqual(college_status.user_notified, False)
+        self.assertEqual(college_status.residency, "NY")
+        self.assertEqual(college_status.in_state_tuition, "NY")
+        self.assertIsNotNone(college_status.created)
+        self.assertIsNotNone(college_status.updated)
+
+        # test user college_status_set
+        self.assertEqual(user.collegestatus_set.get_queryset()[1], college_status)
+
+    def test_create_budget(self):
+        college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
+
+        college_budget = Budget.objects.create(
+            college_status=college_status,
+            work_study=10000,
+            job=10000,
+            savings=10000,
+            family=10000,
+            other_scholarships=10000,
+            loan_subsidized=10000,
+            loan_unsubsidized=10000,
+            loan_plus=10000,
+            loan_private=10000,
+            loan_school=10000
+        )
+        self.assertEqual(college_budget.college_status, college_status)
+        self.assertEqual(college_budget.work_study, 10000)
+        self.assertEqual(college_budget.job, 10000)
+        self.assertEqual(college_budget.savings, 10000)
+        self.assertEqual(college_budget.family, 10000)
+        self.assertEqual(college_budget.other_scholarships, 10000)
+        self.assertEqual(college_budget.loan_subsidized, 10000)
+        self.assertEqual(college_budget.loan_unsubsidized, 10000)
+        self.assertEqual(college_budget.loan_plus, 10000)
+        self.assertEqual(college_budget.loan_private, 10000)
+        self.assertEqual(college_budget.loan_school, 10000)
+        self.assertIsNotNone(college_budget.created)
+        self.assertIsNotNone(college_budget.updated)
+
+        # test user budget_set
+        self.assertEqual(college_status.budget_set.get_queryset()[0], college_budget)

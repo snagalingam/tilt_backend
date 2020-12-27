@@ -1,4 +1,4 @@
-from .models import Provider, Scholarship, ScholarshipStatus
+from scholarship.models import Provider, Scholarship, ScholarshipStatus
 from django.contrib import admin
 from django.db import models
 from django.forms import TextInput, Textarea
@@ -9,7 +9,8 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('organization', 'addressee', 'email', )}),
-        (('Details'), {'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext',)}),
+        (('Details'), {'fields': ('address', 'city', 'state', 'zipcode', 
+            'phone_number', 'phone_number_ext',)}),
     )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},

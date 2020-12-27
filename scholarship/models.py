@@ -5,9 +5,10 @@ from django.utils import timezone
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
-DEFUALT_SCHOLARSHIP_ID = 1
+DEFAULT_SCHOLARSHIP_ID = 1
 DEFAULT_PROVIDER_ID = 1
 DEFAULT_USER_ID = 1
+
 
 class Provider(models.Model):
     organization = models.CharField(max_length=255, unique=True)
@@ -37,9 +38,10 @@ class Scholarship(models.Model):
         default=DEFAULT_PROVIDER_ID,
         on_delete=models.CASCADE
     )
+    college = models.ManyToManyField(College, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    website = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True)
+    website = models.TextField(blank=True)
     deadline = models.DateField(null=True, blank=True)
     date_added = models.DateTimeField(default=timezone.now)
     max_amount = models.IntegerField(null=True, blank=True)
@@ -49,20 +51,19 @@ class Scholarship(models.Model):
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
     )
-    education_requirements = models.TextField(null=True, blank=True)
+    education_requirements = models.TextField(blank=True)
     area_of_study = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
     )
-    area_of_study_description = models.TextField(null=True, blank=True)
+    area_of_study_description = models.TextField(blank=True)
     writing_competition = models.BooleanField(null=True, blank=True)
     interest_description = models.CharField(max_length=255, null=True, blank=True)
-    college = models.ManyToManyField(College, blank=True)
     association_requirement = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
     )
-    location = models.TextField(null=True, blank=True)
+    location = models.TextField(blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
     ethnicity = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
@@ -73,8 +74,8 @@ class Scholarship(models.Model):
     max_gpa = models.FloatField(null=True, blank=True)
     min_act = models.IntegerField(null=True, blank=True)
     min_sat = models.IntegerField(null=True, blank=True)
-    disability = models.TextField(null=True, blank=True)
-    military = models.TextField(null=True, blank=True)
+    disability = models.TextField(blank=True)
+    military = models.TextField(blank=True)
     citizenship = ArrayField(
         models.CharField(max_length=255, null=True, blank=True),
         null=True, blank=True,
@@ -91,7 +92,7 @@ class Scholarship(models.Model):
         verbose_name_plural = 'scholarships'
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 class ScholarshipStatus(models.Model):
     user = models.ForeignKey(
@@ -101,7 +102,7 @@ class ScholarshipStatus(models.Model):
     )
     scholarship = models.ForeignKey(
         Scholarship,
-        default=DEFUALT_SCHOLARSHIP_ID,
+        default=DEFAULT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
     status = models.CharField(max_length=255)
@@ -115,4 +116,4 @@ class ScholarshipStatus(models.Model):
         verbose_name_plural = 'scholarship status'
 
     def __str__(self):
-        return str(self.status)
+        return self.status

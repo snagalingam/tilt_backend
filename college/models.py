@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 from services.sendgrid_api.send_email import send_notification_email
-
+from services.twilio_api.sms_methods import send_notification_sms
 
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
@@ -13,10 +13,10 @@ DEFAULT_USER_ID = 1
 class College(models.Model):
     # college scorecard info
     unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(max_length=255, blank=True, null=True)
+    ope_id = models.CharField(max_length=255, blank=True)
 
     # google api inputted
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=True)
 
     # popularity_score
     popularity_score = models.IntegerField(
@@ -26,10 +26,10 @@ class College(models.Model):
     )
 
     # google api inputted continued
-    place_id = models.CharField(max_length=255, blank=True, null=True)
-    business_status = models.CharField(max_length=255, blank=True, null=True)
+    place_id = models.CharField(max_length=255, blank=True)
+    business_status = models.CharField(max_length=255, blank=True)
     description = models.TextField(null=True, blank=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
@@ -52,7 +52,6 @@ class College(models.Model):
     # other
     favicon = models.TextField(null=True, blank=True)
 
-
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
@@ -72,13 +71,14 @@ class CollegeStatus(models.Model):
         default=DEFAULT_COLLEGE_ID,
         on_delete=models.CASCADE
     )
-    status = models.CharField(max_length=255, blank=True, null=True)
+
+    status = models.CharField(max_length=255, blank=True)
     net_price = models.IntegerField(blank=True, null=True)
     award_uploaded = models.BooleanField(default=False)
     award_reviewed = models.BooleanField(default=False)
     user_notified = models.BooleanField(default=False)
-    residency = models.CharField(max_length=255, blank=True, null=True)
-    in_state_tuition = models.CharField(max_length=255, blank=True, null=True)
+    residency = models.CharField(max_length=255, blank=True)
+    in_state_tuition = models.CharField(max_length=255, blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -88,13 +88,15 @@ class CollegeStatus(models.Model):
         method = self.user.preferred_contact_method
 
         # send user notification about financial aid letter if award_reviewed=True
-        if self.award_reviewed is True and method is not None and self.user_notified is not True:
-            self.user_notified = True
+        if self.award_reviewed and not self.user_notified:
 
             if method == "email":
                 send_notification_email(self.user.email, self.user.first_name)
+                self.user_notified = True
+
             if method == "text":
-                print('--------------> text user with twilio (not yet integrated')
+                send_notification_sms(self.user.phone_number)
+                self.user_notified = True
 
         return super(CollegeStatus, self).save(*args, **kwargs)
 
@@ -113,10 +115,10 @@ class FieldOfStudy(models.Model):
         on_delete=models.CASCADE,
         default=DEFAULT_COLLEGE_ID
     )
-    cip_code = models.CharField(max_length=255, blank=True, null=True)
-    cip_title = models.CharField(max_length=255, blank=True, null=True)
-    credential_level = models.CharField(max_length=255, blank=True, null=True)
-    credential_title = models.CharField(max_length=255, blank=True, null=True)
+    cip_code = models.CharField(max_length=255, blank=True)
+    cip_title = models.CharField(max_length=255, blank=True)
+    credential_level = models.CharField(max_length=255, blank=True)
+    credential_title = models.CharField(max_length=255, blank=True)
     num_students_debt = models.IntegerField(blank=True, null=True)
     median_debt = models.IntegerField(blank=True, null=True)
     monthly_debt_payment = models.IntegerField(blank=True, null=True)
@@ -132,7 +134,8 @@ class FieldOfStudy(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'Fields of study'
+        verbose_name = 'field of study'
+        verbose_name_plural = 'fields of study'
 
     def __str__(self):
         return self.cip_title
@@ -144,14 +147,14 @@ class Scorecard(models.Model):
 
     # school info fields
     unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(max_length=255, blank=True, null=True)
-    ope6_id = models.CharField(max_length=255, blank=True, null=True)
-    name = models.CharField(max_length=255, blank=True, null=True)
-    city = models.CharField(max_length=255, blank=True, null=True)
-    state = models.CharField(max_length=255, blank=True, null=True)
-    zipcode = models.CharField(max_length=255, blank=True, null=True)
-    accreditor = models.CharField(max_length=255, blank=True, null=True)
-    school_url = models.CharField(max_length=255, blank=True, null=True)
+    ope_id = models.CharField(max_length=255, blank=True)
+    ope6_id = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    zipcode = models.CharField(max_length=255, blank=True)
+    accreditor = models.CharField(max_length=255, blank=True)
+    school_url = models.CharField(max_length=255, blank=True)
     price_calculator_url = models.CharField(
         max_length=255,
         blank=True,
@@ -162,24 +165,25 @@ class Scorecard(models.Model):
         blank=True,
         null=True
     )
+
     under_investigation = models.BooleanField(blank=True, null=True, default=False)
     main_campus = models.BooleanField(blank=True, null=True, default=False)
     branches = models.IntegerField(blank=True, null=True)
     predominant_degree_awarded = models.CharField(
         max_length=255, blank=True, null=True)
-    highest_degree_awarded = models.CharField(max_length=255, blank=True, null=True)
-    ownership = models.CharField(max_length=255, blank=True, null=True)
-    state_fips = models.CharField(max_length=255, blank=True, null=True)
-    region = models.CharField(max_length=255, blank=True, null=True)
-    locale = models.CharField(max_length=255, blank=True, null=True)
-    locale_updated = models.CharField(max_length=255, blank=True, null=True)
+    highest_degree_awarded = models.CharField(max_length=255, blank=True)
+    ownership = models.CharField(max_length=255, blank=True)
+    state_fips = models.CharField(max_length=255, blank=True)
+    region = models.CharField(max_length=255, blank=True)
+    locale = models.CharField(max_length=255, blank=True)
+    locale_updated = models.CharField(max_length=255, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    carnegie_basic = models.CharField(max_length=255, blank=True, null=True)
-    carnegie_undergrad = models.CharField(max_length=255, blank=True, null=True)
-    carnegie_size_setting = models.CharField(max_length=255, blank=True, null=True)
-    carnegie_size_setting_size = models.CharField(max_length=255, blank=True, null=True)
-    carnegie_size_setting_residential = models.CharField(max_length=255, blank=True, null=True)
+    carnegie_basic = models.CharField(max_length=255, blank=True)
+    carnegie_undergrad = models.CharField(max_length=255, blank=True)
+    carnegie_size_setting = models.CharField(max_length=255, blank=True)
+    carnegie_size_setting_size = models.CharField(max_length=255, blank=True)
+    carnegie_size_setting_residential = models.CharField(max_length=255, blank=True)
 
     # diversity fields
     minority_serving_historically_black  = models.BooleanField(blank=True, null=True, default=False)
@@ -270,7 +274,7 @@ class Scorecard(models.Model):
     age_entry = models.IntegerField(blank=True, null=True)
     veteran = models.FloatField(null=True, blank=True)
     first_generation = models.FloatField(null=True, blank=True)
-    alias = models.TextField(blank=True, null=True)
+    alias = models.TextField(blank=True)
 
 
     # graduation rate fields
@@ -445,6 +449,10 @@ class Scorecard(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
+    class Meta:
+        verbose_name = 'scorecard'
+        verbose_name_plural = 'scorecards'
+
     def __str__(self):
         return self.name
 
@@ -455,6 +463,7 @@ class Budget(models.Model):
         default=DEFAULT_COLLEGE_STATUS_ID,
         on_delete=models.CASCADE
     )
+
     work_study = models.IntegerField(blank=True, null=True)
     job = models.IntegerField(blank=True, null=True)
     savings = models.IntegerField(blank=True, null=True)
@@ -469,6 +478,9 @@ class Budget(models.Model):
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
+    class Meta:
+        verbose_name = 'budget'
+        verbose_name_plural = 'budgets'
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)

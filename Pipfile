@@ -30,6 +30,8 @@ django-better-admin-arrayfield = "*"
 uszipcode = "*"
 boto3 = "*"
 selenium = "*"
+graphene-file-upload = "*"
+twilio = "*"
 
 [requires]
 python_version = "3.8"

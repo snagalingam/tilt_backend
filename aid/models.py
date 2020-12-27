@@ -8,8 +8,10 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 
 DEFAULT_COLLEGE_STATUS = 1
 DEFAULT_CATEGORY = 1
+DEFAULT_CHAR_TEXT = ""
 
-class Category(models.Model):
+
+class AidCategory(models.Model):
     name = models.CharField(max_length=255)
     primary = models.CharField(max_length=255)
     secondary = models.CharField(max_length=255)
@@ -18,29 +20,35 @@ class Category(models.Model):
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
     class Meta:
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
+        verbose_name = 'aid category'
+        verbose_name_plural = 'aid categories'
 
     def __str__(self):
         return self.name
 
 
-class Data(models.Model):
+class AidData(models.Model):
     college_status = models.ForeignKey(
         CollegeStatus,
         default=DEFAULT_COLLEGE_STATUS,
         on_delete=models.CASCADE
     )
-    category = models.ForeignKey(
-        Category,
+    aid_category = models.ForeignKey(
+        AidCategory,
         default=DEFAULT_CATEGORY,
         on_delete=models.CASCADE
     )
     name = models.TextField()
     amount = models.PositiveIntegerField()
-    row_data = ArrayField(models.TextField(blank=True), blank=True, null=True)
+    row_data = ArrayField(
+        models.TextField(
+            default=DEFAULT_CHAR_TEXT,
+            blank=True
+        ), 
+        blank=True, 
+        null=True
+    )
     table_number = models.PositiveIntegerField(blank=True, null=True)
     row_index = models.PositiveIntegerField(blank=True, null=True)
     col_index = models.PositiveIntegerField(blank=True, null=True)
@@ -50,21 +58,27 @@ class Data(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'data'
-        verbose_name_plural = 'data'
+        verbose_name = 'aid data'
+        verbose_name_plural = 'aid data'
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 
 class DocumentData(models.Model):
     document_name = models.CharField(max_length=255, unique=True)
     words = ArrayField(
-        models.CharField(max_length=255, blank=True),
+        models.CharField(
+            default=DEFAULT_CHAR_TEXT,
+            max_length=255, blank=True
+        ),
         blank=True,
         null=True
     )
-    tables = models.TextField(null=True, blank=True)
+    tables = models.TextField(
+        default=DEFAULT_CHAR_TEXT,
+        blank=True
+    )
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
@@ -75,7 +89,7 @@ class DocumentData(models.Model):
         verbose_name_plural = 'document data'
 
     def __str__(self):
-        return self.name
+        return self.document_name
 
 
 class DocumentResult(models.Model):
@@ -87,7 +101,10 @@ class DocumentResult(models.Model):
     pass_fail = models.CharField(max_length=255, blank=True)
     number_of_missing = models.PositiveIntegerField(blank=True, null=True)
     missing_amounts = ArrayField(
-        models.CharField(max_length=255, blank=True),
+        models.CharField(
+            default=DEFAULT_CHAR_TEXT,
+            max_length=255, 
+            blank=True),
         blank=True,
         null=True
     )
@@ -101,4 +118,27 @@ class DocumentResult(models.Model):
         verbose_name_plural = 'document results'
 
     def __str__(self):
-        return self.name
+        return self.document_name
+
+
+class AidSummary(models.Model):
+    college_status = models.ForeignKey(
+        CollegeStatus,
+        default=DEFAULT_COLLEGE_STATUS,
+        on_delete=models.CASCADE
+    )
+
+    total_cost = models.IntegerField(blank=True, null=True)
+    total_aid = models.IntegerField(blank=True, null=True)
+    net_price = models.IntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name = 'aid summary'
+        verbose_name_plural = 'aid summaries'
+
+    def __str__(self):
+        return str(self.pk)
