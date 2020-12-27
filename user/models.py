@@ -93,7 +93,7 @@ class EthnicityUser(models.Model):
         verbose_name_plural = 'ethnicity users'
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class Income(models.Model):
@@ -156,11 +156,11 @@ class PronounUser(models.Model):
         verbose_name_plural = 'pronoun users'
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class Source(models.Model):
-    # instagram, facebook, parent, school staff, friend, other
+    # instagram, facebook, parent, school or district staff, friend, other
     source = models.CharField(max_length=255, blank=True)
 
     # automatically added
@@ -201,7 +201,7 @@ class SourceUser(models.Model):
         verbose_name_plural = 'source users'
 
     def __str__(self):
-        return self.source
+        return str(self.user)
 
 
 class UserType(models.Model):
