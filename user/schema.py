@@ -329,18 +329,18 @@ class OnboardOrUpdateUser(graphene.Mutation):
             user.sourceuser_set.all().delete()
             user.ethnicityuser_set.all().delete()
 
+            if first_name and first_name != user.first_name:
+                user.first_name = first_name
+            
+            if last_name and last_name != user.last_name:
+                user.last_name = last_name
+
             if email and email != user.email:
                 old_email = user.email
                 lowercase_email = email.lower()
                 new_email = BaseUserManager.normalize_email(lowercase_email)
                 user.email = new_email
                 send_email_changed(old_email, new_email, user.first_name)
-
-            if first_name and first_name != user.first_name:
-                user.first_name = first_name
-            
-            if last_name and last_name != user.last_name:
-                user.last_name = last_name
 
         pronoun = Pronoun.objects.get(pronoun=pronoun)
         pronoun_user = PronounUser(
