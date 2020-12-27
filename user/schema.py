@@ -420,8 +420,8 @@ class OnboardOrUpdateUser(graphene.Mutation):
                     results = data.get("result", "")
                     place_name = results.get("name")
                     location = results["geometry"]["location"]
-                    lat = location.get("lat", "")
-                    lng = location.get("lng", "")
+                    lat = location.get("lat", None)
+                    lng = location.get("lng", None)
                     business_status = results.get("business_status", "")
                     icon = results.get("icon", "")
                     address = results.get("formatted_address", "")
