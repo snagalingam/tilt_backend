@@ -1,6 +1,8 @@
 from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+
+
 User = get_user_model()
 
 class CollegeTests(TestCase):
@@ -531,7 +533,7 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_status.updated)
 
         # test user college_status_set
-        self.assertEqual(user.collegestatus_set.get_queryset()[1], college_status)
+        self.assertEqual(user.collegestatus_set.get_queryset()[0], college_status)
 
     def test_create_budget(self):
         college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
