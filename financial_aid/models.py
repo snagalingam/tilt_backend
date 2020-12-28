@@ -1,4 +1,4 @@
-from college.models import CollegeStatus
+from colleges.models import CollegeStatus
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -45,8 +45,8 @@ class AidData(models.Model):
         models.TextField(
             default=DEFAULT_CHAR_TEXT,
             blank=True
-        ), 
-        blank=True, 
+        ),
+        blank=True,
         null=True
     )
     table_number = models.PositiveIntegerField(blank=True, null=True)
@@ -103,7 +103,7 @@ class DocumentResult(models.Model):
     missing_amounts = ArrayField(
         models.CharField(
             default=DEFAULT_CHAR_TEXT,
-            max_length=255, 
+            max_length=255,
             blank=True),
         blank=True,
         null=True

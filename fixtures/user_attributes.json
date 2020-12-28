@@ -1,6 +1,6 @@
 [
   {
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 1,
   "fields": {
     "ethnicity": "aian",
@@ -8,7 +8,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 2,
   "fields": {
     "ethnicity": "asian",
@@ -16,7 +16,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 3,
   "fields": {
     "ethnicity": "black",
@@ -24,7 +24,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 4,
   "fields": {
     "ethnicity": "latinx",
@@ -32,7 +32,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 5,
   "fields": {
     "ethnicity": "nhpi",
@@ -40,7 +40,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 6,
   "fields": {
     "ethnicity": "other",
@@ -48,7 +48,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Ethnicity",
+  "model": "users.Ethnicity",
   "pk": 7,
   "fields": {
     "ethnicity": "white",
@@ -56,7 +56,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Income",
+  "model": "users.Income",
   "pk": 1,
   "fields": {
     "category": "lo",
@@ -65,7 +65,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Income",
+  "model": "users.Income",
   "pk": 2,
   "fields": {
     "category": "m1",
@@ -74,7 +74,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Income",
+  "model": "users.Income",
   "pk": 3,
   "fields": {
     "category": "m2",
@@ -83,7 +83,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Income",
+  "model": "users.Income",
   "pk": 4,
   "fields": {
     "category": "h1",
@@ -92,7 +92,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Income",
+  "model": "users.Income",
   "pk": 5,
   "fields": {
     "category": "h2",
@@ -101,7 +101,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Pronoun",
+  "model": "users.Pronoun",
   "pk": 1,
   "fields": {
     "pronoun": "he",
@@ -109,7 +109,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Pronoun",
+  "model": "users.Pronoun",
   "pk": 2,
   "fields": {
     "pronoun": "she",
@@ -117,7 +117,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Pronoun",
+  "model": "users.Pronoun",
   "pk": 3,
   "fields": {
     "pronoun": "they",
@@ -125,7 +125,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Pronoun",
+  "model": "users.Pronoun",
   "pk": 4,
   "fields": {
     "pronoun": "other",
@@ -133,7 +133,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 1,
   "fields": {
     "source": "instagram",
@@ -141,7 +141,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 2,
   "fields": {
     "source": "facebook",
@@ -149,7 +149,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 3,
   "fields": {
     "source": "parent",
@@ -157,7 +157,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 4,
   "fields": {
     "source": "school or district staff",
@@ -165,7 +165,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 5,
   "fields": {
     "source": "friend",
@@ -173,7 +173,7 @@
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
 },{
-  "model": "user.Source",
+  "model": "users.Source",
   "pk": 6,
   "fields": {
     "source": "other",

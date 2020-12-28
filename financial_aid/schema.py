@@ -3,8 +3,8 @@ import json
 import os
 import time
 
-from aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
-from college.models import CollegeStatus
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from colleges.models import CollegeStatus
 from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
 from graphene_file_upload.scalars import Upload
@@ -191,7 +191,7 @@ class AnalyzeDocuments(graphene.Mutation):
             document_result.save()
             sent_list.append(
                 AnalyzedResultType(
-                    document_name=document_name, 
+                    document_name=document_name,
                     sent=True
             ))
 
@@ -361,7 +361,7 @@ class CheckDocuments(graphene.Mutation):
                                     aid_category=aid_category
                                 )
                                 aid_data.save()
-                            
+
                             # for return results
                             aid_data_list.append(aid_data)
 
@@ -499,9 +499,9 @@ class UploadOrDeleteDocument(graphene.Mutation):
         upload_or_delete = graphene.String()
 
     def mutate(
-        self, 
-        info, 
-        blob=None, 
+        self,
+        info,
+        blob=None,
         document_name=None,
         upload_or_delete=None
     ):
@@ -511,7 +511,7 @@ class UploadOrDeleteDocument(graphene.Mutation):
             end_index = document_name.index("_file")
             college_status_id = int(document_name[3:end_index])
             college_status = CollegeStatus.objects.get(pk=college_status_id)
-            
+
             if upload_or_delete == "upload":
                 success = upload_document(document_name, blob)
                 if success:

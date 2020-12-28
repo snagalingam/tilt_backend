@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from organization.models import Organization
-from user.models import DeletedAccount, Action, Pronoun, PronounUser, Source, SourceUser, UserType, Income, Ethnicity, EthnicityUser
+from organizations.models import Organization
+from users.models import DeletedAccount, Action, Pronoun, PronounUser, Source, SourceUser, UserType, Income, Ethnicity, EthnicityUser
 from services.helpers.actions import create_action, create_timestamp, create_date
 User = get_user_model()
 
@@ -60,7 +60,7 @@ class UserTests(TestCase):
 
     def test_create_superuser(self):
         superuser = User.objects.get(email="admin@tiltaccess.com")
-        
+
         self.assertEqual(superuser.email, "admin@tiltaccess.com")
         self.assertEqual(superuser.first_name, "Admin")
         self.assertEqual(superuser.last_name, "Testuser")
@@ -109,7 +109,7 @@ class UserTests(TestCase):
         source = Source.objects.get(source="instagram")
         user_type = UserType.objects.get(user_type="parent")
         income = Income.objects.get(category="h2", description="$110,000+")
-        ethnicity = Ethnicity.objects.get(ethnicity="aian") 
+        ethnicity = Ethnicity.objects.get(ethnicity="aian")
 
         onboard_user.is_verified = True
         onboard_user.is_onboarded = True
@@ -160,7 +160,7 @@ class UserTests(TestCase):
         source = Source.objects.get(source="instagram")
         user_type = UserType.objects.get(user_type="parent")
         income = Income.objects.get(category="h2", description="$110,000+")
-        ethnicity = Ethnicity.objects.get(ethnicity="aian") 
+        ethnicity = Ethnicity.objects.get(ethnicity="aian")
 
         onboard_user1.is_verified = True
         onboard_user1.is_onboarded = True
@@ -201,7 +201,7 @@ class UserTests(TestCase):
         onboard_user2.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 2)
-        
+
         onboard_user3.is_verified = True
         onboard_user3.is_onboarded = True
         onboard_user3.preferred_contact_method= "email"
@@ -248,8 +248,8 @@ class UserTests(TestCase):
         user = User.objects.get(email="demouser@tiltaccess.com")
 
         action = Action.objects.create(
-            user=user, 
-            description="Testing Actions", 
+            user=user,
+            description="Testing Actions",
             timestamp=timestamp
         )
         self.assertEqual(action.user, user)

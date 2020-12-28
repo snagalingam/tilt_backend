@@ -14,6 +14,9 @@ services:
       - DATABASE_USER=postgres
       - DEBUG=1
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
+      - TWILIO_ACCOUNT=AC98b578e279bfd3dd82729b5743603aa6
+      - TWILIO_AUTH=88f465a9722cd42d8545be2d997e9f65
+      - TWILIO_NUMBER=+15625125600
     ports:
       - 8000:8000
     volumes:

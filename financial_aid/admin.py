@@ -1,4 +1,4 @@
-from aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
@@ -41,7 +41,7 @@ class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
 class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('name', 'college_status', 'aid_category',)}),
-        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index', 
+        (('Table Details'), {'fields': ('amount', 'table_number', 'row_index',
             'col_index', 'row_data',)}),
     )
     formfield_overrides = {
@@ -66,7 +66,7 @@ class AidSummaryAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('college_status',)
     model = AidSummary
 
-    
+
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (('Tables'), {'fields': ('tables',)}),
@@ -92,12 +92,12 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['document_name', 'sent', 'processed', 'pass_fail', 
+    list_display = ['document_name', 'sent', 'processed', 'pass_fail',
         'number_of_missing', 'created',]
     model = DocumentResult
-    ordering = ('document_name', 'sent', 'processed', 'number_of_missing', 
+    ordering = ('document_name', 'sent', 'processed', 'number_of_missing',
         'created',)
-    search_fields = ('document_name', 'sent', 'processed', 'pass_fail', 
+    search_fields = ('document_name', 'sent', 'processed', 'pass_fail',
         'number_of_missing', 'created',)
 
 

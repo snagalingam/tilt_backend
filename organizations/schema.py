@@ -1,6 +1,6 @@
 import graphene
 
-from organization.models import Organization
+from organizations.models import Organization
 from graphene_django import DjangoObjectType
 from services.google_api.google_places import GooglePlacesAPI
 
@@ -93,7 +93,7 @@ class CreateOrganization(graphene.Mutation):
                 types=types,
                 partner=partner,
             )
-            
+
             organization.save()
             return CreateOrganization(organization=organization)
         raise Exception('Organization already exists')

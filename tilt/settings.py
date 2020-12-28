@@ -20,17 +20,17 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 ################################################
 ### AWS Variables
 ################################################
-AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS")
-AWS_SECRET_KEY = os.environ.get("AWS_SECRET")
-REGION = os.environ.get("REGION")
-BUCKET = os.environ.get("BUCKET")
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS', default='none')
+AWS_SECRET_KEY = os.environ.get('AWS_SECRET', default='none')
+REGION = os.environ.get('REGION', default='none')
+BUCKET = os.environ.get('BUCKET', default='none')
 
 ################################################
 ### Twilio Variables
 ################################################
-TWILIO_ACCOUNT = os.environ.get("TWILIO_ACCOUNT")
-TWILIO_AUTH = os.environ.get("TWILIO_AUTH")
-TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER")
+TWILIO_ACCOUNT = os.environ.get('TWILIO_ACCOUNT', default='none')
+TWILIO_AUTH = os.environ.get('TWILIO_AUTH', default='none')
+TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER', default='none')
 
 # Application definition
 
@@ -51,11 +51,11 @@ INSTALLED_APPS = [
     'django_better_admin_arrayfield',
 
     # local
-    'aid.apps.AidConfig',
-    'college.apps.CollegeConfig',
-    'organization.apps.OrganizationConfig',
-    'scholarship.apps.ScholarshipConfig',
-    'user.apps.UserConfig',
+    'financial_aid.apps.FinancialAidConfig',
+    'colleges.apps.CollegesConfig',
+    'organizations.apps.OrganizationsConfig',
+    'scholarships.apps.ScholarshipsConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -170,7 +170,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
 ]
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'users.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 

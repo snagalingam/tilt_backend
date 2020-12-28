@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 import datetime
-from scholarship.models import Scholarship, Provider, ScholarshipStatus
-from college.models import College
+from scholarships.models import Scholarship, Provider, ScholarshipStatus
+from colleges.models import College
 User = get_user_model()
 
 class ScholarshipTests(TestCase):

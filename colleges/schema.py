@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
@@ -94,11 +94,11 @@ class Query(graphene.ObjectType):
     cities = graphene.List(ScorecardType, city=graphene.String())
     college_by_id = graphene.Field(CollegeType, id=graphene.Int())
     college_status_by_college_id = graphene.Field(
-        CollegeStatusType, 
+        CollegeStatusType,
         college_id=graphene.Int()
     )
     college_status_by_user_id = graphene.Field(
-        CollegeStatusType, 
+        CollegeStatusType,
         user_id=graphene.Int()
     )
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
@@ -418,7 +418,7 @@ class CollegeSearch(graphene.Mutation):
         url = results.get("url", "")
         types = results.get("types", [])
         website = results.get("website", "")
-        main_photo = ""                
+        main_photo = ""
         photos = []
 
         if photos_result:

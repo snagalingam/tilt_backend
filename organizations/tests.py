@@ -1,5 +1,5 @@
 from django.test import TestCase
-from organization.models import Organization
+from organizations.models import Organization
 
 class OrganizationTests(TestCase):
 

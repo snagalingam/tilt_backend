@@ -10,7 +10,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.models.fields import ArrayField
-from organization.models import Organization
+from organizations.models import Organization
 
 
 DEFAULT_CHAR_TEXT = ""
@@ -24,7 +24,7 @@ DEFAULT_USER_TYPE_ID = 1
 
 class Action(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
         on_delete=models.CASCADE
     )
@@ -69,17 +69,17 @@ class Ethnicity(models.Model):
 
 class EthnicityUser(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
         on_delete=models.CASCADE
     )
     ethnicity = models.ForeignKey(
-        Ethnicity, 
+        Ethnicity,
         default=DEFAULT_ETHNICITY_ID,
         on_delete=models.CASCADE
     )
     other_value = models.CharField(
-        max_length=255, 
+        max_length=255,
         default=DEFAULT_CHAR_TEXT,
         blank=True
     )
@@ -132,17 +132,17 @@ class Pronoun(models.Model):
 
 class PronounUser(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
         on_delete=models.CASCADE
     )
     pronoun = models.ForeignKey(
-        Pronoun, 
+        Pronoun,
         default=DEFAULT_PRONOUN_ID,
         on_delete=models.CASCADE
     )
     other_value = models.CharField(
-        max_length=255, 
+        max_length=255,
         default=DEFAULT_CHAR_TEXT,
         blank=True
     )
@@ -182,12 +182,12 @@ class SourceUser(models.Model):
         on_delete=models.CASCADE
     )
     source = models.ForeignKey(
-        Source, 
+        Source,
         default=DEFAULT_SOURCE_ID,
         on_delete=models.CASCADE
     )
     other_value = models.CharField(
-        max_length=255, 
+        max_length=255,
         default=DEFAULT_CHAR_TEXT,
         blank=True
     )
@@ -289,8 +289,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=15
     )
     preferred_name = models.CharField(_("preferred name"),
-        default=DEFAULT_CHAR_TEXT, 
-        max_length=255, 
+        default=DEFAULT_CHAR_TEXT,
+        max_length=255,
         blank=True
     )
     gpa = models.DecimalField(
@@ -300,20 +300,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_digits=5,
         null=True
     )
-    act_score = models.PositiveSmallIntegerField(_("ACT score"), 
-        blank=True, 
+    act_score = models.PositiveSmallIntegerField(_("ACT score"),
+        blank=True,
         null=True
     )
-    sat_math = models.PositiveSmallIntegerField(_("SAT math"), 
-        blank=True, 
+    sat_math = models.PositiveSmallIntegerField(_("SAT math"),
+        blank=True,
         null=True
     )
-    sat_verbal = models.PositiveSmallIntegerField(_("SAT verbal"), 
-        blank=True, 
+    sat_verbal = models.PositiveSmallIntegerField(_("SAT verbal"),
+        blank=True,
         null=True
     )
-    efc = models.PositiveIntegerField(_("Expected Family Contribution"), 
-        blank=True, 
+    efc = models.PositiveIntegerField(_("Expected Family Contribution"),
+        blank=True,
         null=True
     )
     high_school_grad_year = models.PositiveIntegerField(_("high school graduation year"),
@@ -339,10 +339,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
 
-    # foreign key fields 
+    # foreign key fields
     # null=True or will error when creating user during signup
     income = models.ForeignKey(
-        Income, 
+        Income,
         on_delete=models.CASCADE,
         null=True
     )

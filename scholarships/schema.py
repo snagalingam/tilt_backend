@@ -2,8 +2,8 @@ import datetime
 import graphene
 import math
 
-from scholarship.models import Provider, Scholarship, ScholarshipStatus
-from college.models import College
+from scholarships.models import Provider, Scholarship, ScholarshipStatus
+from colleges.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
 from graphene_django import DjangoObjectType

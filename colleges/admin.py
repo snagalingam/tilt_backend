@@ -1,4 +1,4 @@
-from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 
 from django.contrib import admin
 from django.db import models
@@ -38,7 +38,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (None, {'fields': ('description', 'popularity_score')}),
         (('College Information'), {
-            'fields': ('name', 'address', 'phone_number', 'website', 
+            'fields': ('name', 'address', 'phone_number', 'website',
                 'business_status')
         }),
         (('Scorcard Information'), {

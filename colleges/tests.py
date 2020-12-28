@@ -1,4 +1,4 @@
-from college.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 User = get_user_model()
@@ -37,7 +37,7 @@ class CollegeTests(TestCase):
             "https://lh3.googleusercontent.com/places/ABKp1IqBUtkqITPk0zKctRz6dwgWema8bvUjZGO-E3rtzRwBrvle-GIUvgRDeSMUwX8tJdG1fLLydYJ2bJuEFYNMjna9O0zk3GhsPfo=s1600-w6016",
             "https://lh3.googleusercontent.com/places/ABKp1IqvT48dPKMA5OsHpBdLElYVgGb_HDFoTXPqo_cM_mVCHFLvPWvjphwVSCbHw3tZdeQi5O67HT0-peLQiTOg29WYfHOVIuLEjVM=s1600-w4032",
             "https://lh3.googleusercontent.com/places/ABKp1IoPkQjJ1uvn9JvjougnKvWlUppDe6OZis_7rRSX2Z0EBfdRXN0iLu9B8WYAvnBke-wckEOY_V5xUnJs-FLm_8Gvo3fse54_Rag=s1600-w2048",
-            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"], 
+            "https://lh3.googleusercontent.com/places/ABKp1IpvJcp40b6PKpaNfkgc9jJu6NN8nneLkfSropV-N1DZmuNJBoAD3a9FM5grPGv9Qw_hw-PVDETm47ywkggYztJagMm44pxqNS0=s1600-w2048"],
             types=["university", "point_of_interest", "establishment"]
         )
         CollegeStatus.objects.create(
@@ -289,7 +289,7 @@ class CollegeTests(TestCase):
             program_percentage_multidiscipline=0.0,
             program_percentage_mechanic_repair_technology=0.0
         )
-        
+
         self.assertEqual(scorecard.college, college)
         self.assertEqual(scorecard.unit_id, 100654)
         self.assertEqual(scorecard.ope_id, "00100200")

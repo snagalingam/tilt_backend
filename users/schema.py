@@ -8,12 +8,12 @@ from django.contrib.auth import get_user_model, authenticate, login, logout, pas
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
 from graphene_django import DjangoObjectType
-from organization.models import Organization
-from organization.schema import OrganizationType
+from organizations.models import Organization
+from organizations.schema import OrganizationType
 from services.sendgrid_api.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from user.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserType
+from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserType
 
 
 User = get_user_model()
@@ -314,7 +314,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
         place_id=None,
         place_name=None,
     ):
-    
+
         user = info.context.user
 
         if not user.is_authenticated:
@@ -331,7 +331,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
             if first_name and first_name != user.first_name:
                 user.first_name = first_name
-            
+
             if last_name and last_name != user.last_name:
                 user.last_name = last_name
 
@@ -344,7 +344,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
         pronoun = Pronoun.objects.get(pronoun=pronoun)
         pronoun_user = PronounUser(
-            user=user, 
+            user=user,
             pronoun=pronoun
         )
         pronoun_user.save()
@@ -360,7 +360,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
                 )
             else:
                 source_user = SourceUser(
-                    user=user, 
+                    user=user,
                     source=source
                 )
             source_user.save()
@@ -371,13 +371,13 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
             if ethnicity.ethnicity == "other":
                 ethnicity_user = EthnicityUser(
-                    user=user, 
+                    user=user,
                     ethnicity=ethnicity,
                     other_value=background
                 )
-            else: 
+            else:
                 ethnicity_user = EthnicityUser(
-                    user=user, 
+                    user=user,
                     ethnicity=ethnicity
                 )
             ethnicity_user.save()
@@ -386,7 +386,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
         user_type = UserType.objects.get(user_type=user_type)
         income = Income.objects.get(category=income)
 
-        # delete schools 
+        # delete schools
         if delete_school:
             user.organization.clear()
         else:
@@ -414,11 +414,11 @@ class OnboardOrUpdateUser(graphene.Mutation):
                 website = ""
                 types = []
 
-                if place_name is None: 
+                if place_name is None:
                     place_name = ""
 
-                if place_id is None: 
-                    place_id = ""    
+                if place_id is None:
+                    place_id = ""
                 else:
                     data = search_details(place_id)
                     results = data.get("result", "")
