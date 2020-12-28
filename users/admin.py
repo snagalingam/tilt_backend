@@ -142,6 +142,12 @@ class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 class UserAdmin(UserAdmin, DynamicArrayMixin):
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2',),
+        }),
+    )
     fieldsets = (
         (('Contact Information'), {'fields': (
             'email',
