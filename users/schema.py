@@ -13,7 +13,7 @@ from organizations.schema import OrganizationType
 from services.sendgrid_api.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserType
+from users.models import AccountType, Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser
 
 
 User = get_user_model()
@@ -22,6 +22,11 @@ User = get_user_model()
 ################################################
 ### Standard Model Definitions
 ################################################
+class AccountType(DjangoObjectType):
+    class Meta:
+        model = AccountType
+        fields = "__all__"
+
 class ActionType(DjangoObjectType):
     class Meta:
         model = Action
@@ -70,13 +75,7 @@ class SourceUserType(DjangoObjectType):
         fields = "__all__"
 
 
-class UserAccountType(DjangoObjectType):
-    class Meta:
-        model = UserType
-        fields = "__all__"
-
-
-class TiltUserType(DjangoObjectType):
+class UserType(DjangoObjectType):
     class Meta:
         model = User
 
@@ -383,7 +382,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
             ethnicity_user.save()
 
         # get user_type and income
-        user_type = UserType.objects.get(user_type=user_type)
+        account_type = AccountType.objects.get(user_type=user_type)
         income = Income.objects.get(category=income)
 
         # delete schools
