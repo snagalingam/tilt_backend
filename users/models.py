@@ -217,7 +217,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         on_delete=models.CASCADE
     )
-    created = models.DateTimeField(_("Date Joined"), auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
@@ -277,6 +277,7 @@ class DeletedAccount(models.Model):
 
 class Ethnicity(models.Model):
     ethnicity = models.CharField(max_length=255, unique=True)
+    description = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

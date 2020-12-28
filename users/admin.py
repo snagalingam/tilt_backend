@@ -45,7 +45,7 @@ class AccountTypeAdmin(admin.ModelAdmin, DynamicArrayMixin):
         return obj.user_set.count()
 
     fieldsets = (
-        (None, {'fields': ('type',)}),
+        (None, {'fields': ('type', 'created', 'updated',)}),
     )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
@@ -53,6 +53,7 @@ class AccountTypeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['type', 'account_type_count']
     model = AccountType
     ordering = ('type',)
+    readonly_fields = ('created', 'updated',)
     search_fields = ('type',)
 
 
@@ -82,13 +83,16 @@ class EthnicityAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def ethnicity_user_count(self, obj):
         return obj.ethnicityuser_set.count()
 
-    fieldsets = ((None, {'fields': ('ethnicity',)}),)
+    fieldsets = (
+        (None, {'fields': ('ethnicity', 'description', 'created', 'updated')}),
+    )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    list_display = ['ethnicity', 'ethnicity_user_count']
+    list_display = ['ethnicity', 'description', 'ethnicity_user_count']
     model = Ethnicity
-    ordering = ('ethnicity', )
+    ordering = ('ethnicity',)
+    readonly_fields = ('created', 'updated')
     search_fields = ('ethnicity',)
 
 
@@ -96,13 +100,14 @@ class IncomeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def user_income_count(self, obj):
         return obj.user_set.count()
 
-    fieldsets = ((None, {'fields': ('category', 'description',)}),)
+    fieldsets = ((None, {'fields': ('category', 'description', 'created', 'updated',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
     list_display = ['category', 'description', 'user_income_count']
     model = Income
     ordering = ('category',)
+    readonly_fields = ('created', 'updated',)
     search_fields = ('category', 'description',)
 
 
@@ -110,28 +115,29 @@ class PronounAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def pronoun_user_count(self, obj):
         return obj.pronounuser_set.count()
 
-    fieldsets = ((None, {'fields': ('pronoun',)}),)
+    fieldsets = ((None, {'fields': ('pronoun', 'created', 'updated',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
     list_display = ['pronoun', 'pronoun_user_count']
     model = Pronoun
     ordering = ('pronoun',)
+    readonly_fields = ('created', 'updated',)
     search_fields = ('pronoun',)
-
 
 
 class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def source_user_count(self, obj):
         return obj.sourceuser_set.count()
 
-    fieldsets = ((None, {'fields': ('source',)}),)
+    fieldsets = ((None, {'fields': ('source', 'created', 'updated')}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
     list_display = ['source', 'source_user_count']
     model = Source
     ordering = ('source',)
+    readonly_fields = ('created', 'updated',)
     search_fields = ('source',)
 
 
@@ -163,6 +169,8 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
             'sat_verbal',
             'efc',
             'income',
+            'created',
+            'updated',
         )}),
     )
     filter_horizontal = ('organization',)
@@ -183,6 +191,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
         'is_superuser',
     ]
     model = User
+    readonly_fields = ('created', 'updated',)
     search_fields = (
         'email',
         'first_name',

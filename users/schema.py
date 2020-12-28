@@ -84,8 +84,8 @@ class UserType(DjangoObjectType):
 ### Query
 ################################################
 class Query(graphene.ObjectType):
-    me = graphene.Field(TiltUserType)
-    users = graphene.List(TiltUserType)
+    me = graphene.Field(UserType)
+    users = graphene.List(UserType)
 
     def resolve_users(self, info):
         user = info.context.user
@@ -118,7 +118,7 @@ class Query(graphene.ObjectType):
 ### Mutations
 ################################################
 class AddSubscriber(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -150,7 +150,7 @@ class CreateAction(graphene.Mutation):
 
 
 class CreateUser(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
 
     class Arguments:
         email = graphene.String()
@@ -189,7 +189,7 @@ class CreateUser(graphene.Mutation):
 
 
 class DeleteUser(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     is_deleted = graphene.Boolean()
 
     def mutate(self, info):
@@ -223,7 +223,7 @@ class DeleteUser(graphene.Mutation):
 
 
 class LoginUser(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     is_authenticated = graphene.Boolean()
 
     class Arguments:
@@ -247,7 +247,7 @@ class LoginUser(graphene.Mutation):
 
 
 class LogoutUser(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     is_logged_out = graphene.Boolean()
 
     def mutate(self, info):
@@ -259,7 +259,7 @@ class LogoutUser(graphene.Mutation):
 
 
 class OnboardOrUpdateUser(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
 
     class Arguments:
         onboard_or_update = graphene.String()
@@ -469,7 +469,7 @@ class OnboardOrUpdateUser(graphene.Mutation):
 
 
 class ResetPassword(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -494,7 +494,7 @@ class ResetPassword(graphene.Mutation):
 
 
 class SendForgotEmail(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -516,7 +516,7 @@ class SendForgotEmail(graphene.Mutation):
 
 
 class SendSubscriptionVerification(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -530,7 +530,7 @@ class SendSubscriptionVerification(graphene.Mutation):
 
 
 class SendVerificationEmail(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -557,7 +557,7 @@ class SendVerificationEmail(graphene.Mutation):
 
 
 class UpdatePassword(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
@@ -594,7 +594,7 @@ class UpdatePassword(graphene.Mutation):
 
 
 class VerifyEmail(graphene.Mutation):
-    user = graphene.Field(TiltUserType)
+    user = graphene.Field(UserType)
     success = graphene.Boolean()
 
     class Arguments:
