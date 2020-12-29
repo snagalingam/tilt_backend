@@ -166,10 +166,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     # organizations
-    organization = models.ManyToManyField(
-        Organization,
-        blank=True
-    )
+    organization = models.ManyToManyField(Organization, blank=True)
 
     # academic and test scores
     high_school_grad_year = models.PositiveIntegerField(
@@ -281,7 +278,7 @@ class Ethnicity(models.Model):
         verbose_name_plural = 'ethnicities'
 
     def __str__(self):
-        return self.ethnicity
+        return self.category
 
 
 class EthnicityUser(models.Model):
@@ -317,7 +314,7 @@ class Pronoun(models.Model):
         verbose_name_plural = 'pronouns'
 
     def __str__(self):
-        return self.pronoun
+        return self.category
 
 
 class PronounUser(models.Model):
@@ -353,7 +350,7 @@ class Source(models.Model):
         verbose_name_plural = 'sources'
 
     def __str__(self):
-        return self.source
+        return self.category
 
 
 class SourceUser(models.Model):
