@@ -1,30 +1,30 @@
 import graphene
 import graphql_jwt
 
-import aid.schema
-import college.schema
-import organization.schema
-import scholarship.schema
-import user.schema
+import financial_aid.schema
+import colleges.schema
+import organizations.schema
+import scholarships.schema
+import users.schema
 
 
 class Query(
-    aid.schema.Query,
-    college.schema.Query,
-    organization.schema.Query,
-    scholarship.schema.Query,
-    user.schema.Query,
+    financial_aid.schema.Query,
+    colleges.schema.Query,
+    organizations.schema.Query,
+    scholarships.schema.Query,
+    users.schema.Query,
     graphene.ObjectType
 ):
     pass
 
 
 class Mutation(
-    aid.schema.Mutation,
-    college.schema.Mutation,
-    organization.schema.Mutation,
-    scholarship.schema.Mutation,
-    user.schema.Mutation,
+    financial_aid.schema.Mutation,
+    colleges.schema.Mutation,
+    organizations.schema.Mutation,
+    scholarships.schema.Mutation,
+    users.schema.Mutation,
     graphene.ObjectType
 ):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
