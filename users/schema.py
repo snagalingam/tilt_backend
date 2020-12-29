@@ -18,7 +18,7 @@ from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Incom
 
 
 User = get_user_model()
-
+DEFAULT_NULL_TEXT = ""
 
 ################################################
 ### Standard Model Definitions
@@ -318,7 +318,7 @@ class UpdateUser(graphene.Mutation):
             if act_score is not None:
                 user.act_score = act_score
 
-            if delete_school is not None:
+            if delete_school is True:
                 user.organization.clear()
 
             if efc is not None:
@@ -371,20 +371,26 @@ class UpdateUser(graphene.Mutation):
                 user.phone_number = re.sub("[^0-9]", "", phone_number)
 
             if place_id is not None or place_name is not None:
+                # get the place if it already exists
                 if place_id is not None:
                     try:
                         organization = Organization.objects.get(place_id=place_id)
                     except ObjectDoesNotExist:
-                        organization = None
+                        if place_name is not None:
+                            try:
+                                organization = Organization.objects.get(name=place_name)
+                            except ObjectDoesNotExist:
+                                None
 
-                if organization is None and place_name is not None:
+                else:
                     try:
                         organization = Organization.objects.get(name=place_name)
                     except ObjectDoesNotExist:
-                        organization = None
+                        None
 
-                if organization is None:
-                    if place_id is not None:
+                # if it doesn't exist, try to search for it
+                if place_id is not None:
+                    try:
                         data = search_details(place_id)
                         results = data.get("result")
 
@@ -393,41 +399,40 @@ class UpdateUser(graphene.Mutation):
                         icon = results.get("icon", None)
                         lat = results.get("geometry")["location"]["lat"]
                         lng = results.get("geometry")["location"]["lng"]
-                        place_name = results.get("name")
                         place_phone_number = results.get("formatted_phone_number", None)
+                        place_name = results.get("name")
                         types = results.get("types", [])
                         url = results.get("url", None)
                         website = results.get("website", None)
 
-                    else:
-                        address = None
-                        business_status = None
-                        icon = None
-                        lat = None
-                        lng = None
-                        place_phone_number = None
-                        types = []
-                        url = None
-                        website = None
+                        organization = Organization(
+                            address=address,
+                            business_status=business_status,
+                            icon=icon,
+                            lat=lat,
+                            lng=lng,
+                            name=place_name,
+                            phone_number=place_phone_number,
+                            place_id=place_id,
+                            types=types,
+                            url=url,
+                            website=website
+                        )
 
-                    organization = Organization(
-                        address=address,
-                        business_status=business_status,
-                        icon=icon,
-                        lat=lat,
-                        lng=lng,
-                        place_id=place_id,
-                        place_name=place_name,
-                        place_phone_number=place_phone_number,
-                        types=types,
-                        url=url,
-                        website=website
-                    )
-                    organization.save()
-                    user.organization.clear()
-                    user.organization.add(organization)
+                        organization.save()
+                        user.organization.clear()
+                        user.organization.add(organization)
+
+                    except ObjectDoesNotExist:
+                        if place_name is not None:
+                            organization = Organization(name=place_name)
+                            organization.save()
+                            user.organization.clear()
+                            user.organization.add(organization)
 
                 else:
+                    organization = Organization(name=place_name)
+                    organization.save()
                     user.organization.clear()
                     user.organization.add(organization)
 
@@ -640,11 +645,11 @@ class Mutation(graphene.ObjectType):
     delete_user = DeleteUser.Field()
     login_user = LoginUser.Field()
     logout_user = LogoutUser.Field()
-    update_user = UpdateUser.Field()
     reset_password = ResetPassword.Field()
     send_forgot_email = SendForgotEmail.Field()
     send_subscription_verification = SendSubscriptionVerification.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
     update_password = UpdatePassword.Field()
+    update_user = UpdateUser.Field()
     verify_email = VerifyEmail.Field()
