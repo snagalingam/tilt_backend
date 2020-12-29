@@ -247,7 +247,7 @@ class EducationScholarship(models.Model):
         default=DEFAULT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
-    education_level = models.ForeignKey(
+    education_category = models.ForeignKey(
         EducationCategory,
         default=DEFAULT_EDUCATION_CATEGORY_ID,
         on_delete=models.CASCADE
