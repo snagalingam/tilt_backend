@@ -1,5 +1,7 @@
-from users.models import Action
 import datetime
+
+from users.models import Action
+
 
 def create_timestamp():
     d = f'{datetime.datetime.now()}'
@@ -21,11 +23,7 @@ def create_action(user, description):
     timestamp = create_timestamp()
 
     try:
-        Action.objects.get(user=user,
-                description=description,
-                timestamp=timestamp)
+        Action.objects.get(user=user, description=description, timestamp=timestamp)
     except:
-        action = Action(user=user,
-                description=description,
-                timestamp=timestamp)
+        action = Action(user=user, description=description, timestamp=timestamp)
         return action.save()
