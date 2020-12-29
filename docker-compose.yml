@@ -3,7 +3,9 @@ version: '3.7'
 services:
   backend:
     container_name: backend
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
     command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     environment:
       - REGION=us-east-2
@@ -20,15 +22,17 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - .:/app
+      - ./app:/app
     depends_on:
       - db
 
   db:
     container_name: db
-    image: postgres:11
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+    image: postgres:12
+    volumes:
+      - dev_postgres:/var/lib/postgresql/data/
 
   pgadmin:
     image: dpage/pgadmin4
@@ -39,3 +43,6 @@ services:
       - PGADMIN_LISTEN_PORT=5050
     ports:
       - 5050:5050
+
+volumes:
+  dev_postgres:
