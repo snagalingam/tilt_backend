@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from organizations.models import Organization
-from users.models import DeletedAccount, Action, Pronoun, PronounUser, Source, SourceUser, UserType, Income, Ethnicity, EthnicityUser
 from services.helpers.actions import create_action, create_timestamp, create_date
+from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser,  Income, Pronoun, PronounUser, Source, SourceUser, UserCategory
 
 
 User = get_user_model()
@@ -56,7 +56,7 @@ class UserTests(TestCase):
         )
         Pronoun.objects.create(pronoun="she")
         Source.objects.create(source="instagram")
-        UserType.objects.create(user_type="parent")
+        UserCategory.objects.create(category="parent")
         Income.objects.create(category="h2", description="$110,000+")
         Ethnicity.objects.create(ethnicity="aian")
 
@@ -109,7 +109,7 @@ class UserTests(TestCase):
         onboard_user = User.objects.get(email="demouser@tiltaccess.com")
         pronoun = Pronoun.objects.get(pronoun="she")
         source = Source.objects.get(source="instagram")
-        user_type = UserType.objects.get(user_type="parent")
+        user_category = UserCategory.objects.get(category="parent")
         income = Income.objects.get(category="h2", description="$110,000+")
         ethnicity = Ethnicity.objects.get(ethnicity="aian")
 
@@ -125,7 +125,7 @@ class UserTests(TestCase):
         onboard_user.efc = 1
         onboard_user.pronouns = pronoun
         onboard_user.ethnicity = ethnicity
-        onboard_user.user_type = user_type
+        onboard_user.user_category = user_category
         onboard_user.high_school_grad_year = 2020
         onboard_user.income = income
         onboard_user.organization.add(organization)
@@ -146,7 +146,7 @@ class UserTests(TestCase):
         self.assertEqual(onboard_user.efc, 1)
         self.assertEqual(onboard_user.pronouns, pronoun)
         self.assertEqual(onboard_user.ethnicity, ethnicity)
-        self.assertEqual(onboard_user.user_type, user_type)
+        self.assertEqual(onboard_user.user_category, user_category)
         self.assertEqual(onboard_user.high_school_grad_year, 2020)
         self.assertEqual(onboard_user.income, income)
         self.assertEqual(onboard_user.organization.get_queryset()[0], organization)
@@ -160,7 +160,7 @@ class UserTests(TestCase):
         onboard_user3 = User.objects.get(email="demouser3@tiltaccess.com")
         pronoun = Pronoun.objects.get(pronoun="she")
         source = Source.objects.get(source="instagram")
-        user_type = UserType.objects.get(user_type="parent")
+        user_category = UserCategory.objects.get(category="parent")
         income = Income.objects.get(category="h2", description="$110,000+")
         ethnicity = Ethnicity.objects.get(ethnicity="aian")
 
@@ -176,7 +176,7 @@ class UserTests(TestCase):
         onboard_user1.efc = 1
         onboard_user1.pronouns = income
         onboard_user1.ethnicity = ethnicity
-        onboard_user1.user_type = user_type
+        onboard_user1.user_category = user_category
         onboard_user1.high_school_grad_year = 2020
         onboard_user1.income = income
         onboard_user1.organization.add(organization)
@@ -196,7 +196,7 @@ class UserTests(TestCase):
         onboard_user2.efc = 1
         onboard_user2.pronouns = income
         onboard_user2.ethnicity = ethnicity
-        onboard_user2.user_type = user_type
+        onboard_user2.user_category = user_category
         onboard_user2.high_school_grad_year = 2020
         onboard_user2.income = income
         onboard_user2.organization.add(organization)
@@ -216,7 +216,7 @@ class UserTests(TestCase):
         onboard_user3.efc = 1
         onboard_user3.pronouns = income
         onboard_user3.ethnicity = ethnicity
-        onboard_user3.user_type = user_type
+        onboard_user3.user_category = user_category
         onboard_user3.high_school_grad_year = 2020
         onboard_user3.income = income
         onboard_user3.organization.add(organization)
@@ -304,12 +304,12 @@ class UserTests(TestCase):
         self.assertIsNotNone(source_user.updated)
         self.assertEqual(user.sourceuser_set.get_queryset()[0], source_user)
 
-    def test_create_type(self):
-        user_type = UserType.objects.create(user_type="student")
+    def test_create_user_category(self):
+        user_category = UserCategory.objects.create(category="student")
 
-        self.assertEqual(user_type.user_type, "student")
-        self.assertIsNotNone(user_type.created)
-        self.assertIsNotNone(user_type.updated)
+        self.assertEqual(user_category.category, "student")
+        self.assertIsNotNone(user_category.created)
+        self.assertIsNotNone(user_category.updated)
 
     def test_create_income(self):
         income = Income.objects.create(category="lo", description="$0 - 30,000")

@@ -6,7 +6,7 @@ from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-from users.models import AccountType, Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser
+from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserCategory
 
 
 User = get_user_model()
@@ -40,23 +40,6 @@ class SourceUserInline(admin.StackedInline):
 ################################################
 ### Objects on Admin Panel
 ################################################
-class AccountTypeAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    def account_type_count(self, obj):
-        return obj.user_set.count()
-
-    fieldsets = (
-        (None, {'fields': ('type', 'created', 'updated',)}),
-    )
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
-    }
-    list_display = ['type', 'account_type_count']
-    model = AccountType
-    ordering = ('type',)
-    readonly_fields = ('created', 'updated',)
-    search_fields = ('type',)
-
-
 class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = ((None, {'fields': ('user', 'description', 'timestamp',)}),)
     formfield_overrides = {
@@ -158,7 +141,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
             'preferred_contact_method',
         )}),
         (('Account Information'), {'fields': (
-            'account_type',
+            'user_category',
             'is_active',
             'is_verified',
             'is_onboarded',
@@ -188,7 +171,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
     inlines = [EthnicityUserInline, PronounUserInline, SourceUserInline,]
     list_display = [
         'email',
-        'account_type',
+        'user_category',
         'is_active',
         'is_verified',
         'is_onboarded',
@@ -203,7 +186,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
         'first_name',
         'preferred_name',
         'last_name',
-        'account_type',
+        'user_category',
         'is_active',
         'is_verified',
         'is_onboarded',
@@ -214,6 +197,23 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
     ordering = ('email',)
 
 
+class UserCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    def user_category_count(self, obj):
+        return obj.user_set.count()
+
+    fieldsets = (
+        (None, {'fields': ('category', 'created', 'updated',)}),
+    )
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '10'})},
+    }
+    list_display = ['category', 'user_category_count']
+    model = UserCategory
+    ordering = ('category',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('category',)
+
+
 admin.site.register(Action, ActionAdmin)
 admin.site.register(DeletedAccount, DeletedAccountAdmin)
 admin.site.register(Ethnicity, EthnicityAdmin)
@@ -221,4 +221,4 @@ admin.site.register(Income, IncomeAdmin)
 admin.site.register(Pronoun, PronounAdmin)
 admin.site.register(Source, SourceAdmin)
 admin.site.register(User, UserAdmin)
-admin.site.register(AccountType, AccountTypeAdmin)
+admin.site.register(UserCategory, UserCategoryAdmin)

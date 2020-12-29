@@ -1,45 +1,45 @@
 [
   {
-    "model": "users.AccountType",
+    "model": "users.UserCategory",
     "pk": 1,
     "fields": {
-      "type": "student",
+      "category": "student",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
   },
   {
-    "model": "users.AccountType",
+    "model": "users.UserCategory",
     "pk": 2,
     "fields": {
-      "type": "transfer",
+      "category": "transfer",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
   },
   {
-    "model": "users.AccountType",
+    "model": "users.UserCategory",
     "pk": 3,
     "fields": {
-      "type": "parent",
+      "category": "parent",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
   },
   {
-    "model": "users.AccountType",
+    "model": "users.UserCategory",
     "pk": 4,
     "fields": {
-      "type": "staff",
+      "category": "staff",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
   },
   {
-    "model": "users.AccountType",
+    "model": "users.UserCategory",
     "pk": 5,
     "fields": {
-      "type": "other",
+      "category": "other",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }

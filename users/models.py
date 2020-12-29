@@ -1,9 +1,7 @@
 import datetime
+
 from django.conf import settings
-from django.contrib.auth.base_user import (
-    AbstractBaseUser,
-    BaseUserManager,
-)
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
@@ -13,13 +11,10 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 from organizations.models import Organization
 
 
-DEFAULT_CHAR_TEXT = ""
 DEFAULT_ETHNICITY_ID = 1
-DEFAULT_INCOME_ID = 1
 DEFAULT_PRONOUN_ID = 1
 DEFAULT_SOURCE_ID = 1
 DEFAULT_USER_ID = 1
-DEFAULT_USER_TYPE_ID = 1
 
 
 ################################################
@@ -39,17 +34,17 @@ class Income(models.Model):
         return self.category
 
 
-class AccountType(models.Model):
-    type = models.CharField(max_length=255, unique=True)
+class UserCategory(models.Model):
+    category = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "account type"
-        verbose_name_plural = "account types"
+        verbose_name = "user category"
+        verbose_name_plural = "user categories"
 
     def __str__(self):
-        return self.type
+        return self.category
 
 
 ################################################
@@ -126,8 +121,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     # account information
-    account_type = models.ForeignKey(
-        AccountType,
+    user_category = models.ForeignKey(
+        UserCategory,
         blank=True,
         null=True,
         on_delete=models.CASCADE
