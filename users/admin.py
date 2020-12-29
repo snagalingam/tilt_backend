@@ -5,7 +5,6 @@ from django.contrib.auth.models import Group
 from django.forms import TextInput, Textarea
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserCategory
 
 
@@ -29,6 +28,7 @@ class PronounUserInline(admin.StackedInline):
     }
     model = PronounUser
 
+
 class SourceUserInline(admin.StackedInline):
     extra = 0
     formfield_overrides = {
@@ -40,7 +40,7 @@ class SourceUserInline(admin.StackedInline):
 ################################################
 ### Objects on Admin Panel
 ################################################
-class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class ActionAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('user', 'description', 'timestamp',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
@@ -51,7 +51,7 @@ class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('user__email', 'description', 'timestamp',)
 
 
-class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class DeletedAccountAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('date', 'accounts',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
@@ -62,7 +62,7 @@ class DeletedAccountAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('date', 'accounts',)
 
 
-class EthnicityAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class EthnicityAdmin(admin.ModelAdmin):
     def ethnicity_user_count(self, obj):
         return obj.ethnicityuser_set.count()
 
@@ -79,7 +79,7 @@ class EthnicityAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('category',)
 
 
-class IncomeAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class IncomeAdmin(admin.ModelAdmin):
     def user_income_count(self, obj):
         return obj.user_set.count()
 
@@ -94,7 +94,7 @@ class IncomeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('category', 'description',)
 
 
-class PronounAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class PronounAdmin(admin.ModelAdmin):
     def pronoun_user_count(self, obj):
         return obj.pronounuser_set.count()
 
@@ -109,7 +109,7 @@ class PronounAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('category',)
 
 
-class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class SourceAdmin(admin.ModelAdmin):
     def source_user_count(self, obj):
         return obj.sourceuser_set.count()
 
@@ -124,7 +124,7 @@ class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('category',)
 
 
-class UserAdmin(UserAdmin, DynamicArrayMixin):
+class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -197,7 +197,7 @@ class UserAdmin(UserAdmin, DynamicArrayMixin):
     ordering = ('email',)
 
 
-class UserCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class UserCategoryAdmin(admin.ModelAdmin):
     def user_category_count(self, obj):
         return obj.user_set.count()
 
@@ -222,3 +222,4 @@ admin.site.register(Pronoun, PronounAdmin)
 admin.site.register(Source, SourceAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserCategory, UserCategoryAdmin)
+admin.site.unregister(Group)
