@@ -5,7 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.prod
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     container_name: backend
     depends_on:
       - db

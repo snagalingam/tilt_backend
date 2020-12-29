@@ -22,7 +22,7 @@ COPY . $APP_HOME/
 # SECRET_KEY is only included here to avoid raising an error when generating static files.
 # Be sure to add a real SECRET_KEY config variable in deployment.
 RUN SECRET_KEY=somethingsupersecret \
-  python $APP_HOME/manage.py collectstatic --noinput
+  python manage.py collectstatic --noinput
 
 # Chown all the files to the app user
 RUN chown -R app:app $APP_HOME
@@ -31,4 +31,4 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 # Run entrypoint.sh that verifies that Postgres is healthy before applying the migrations
-ENTRYPOINT ["sh", "/entrypoint.prod.sh"]
+ENTRYPOINT ["sh", "entrypoint.prod.sh"]
