@@ -14,72 +14,88 @@ from organizations.schema import OrganizationType
 from services.sendgrid_api.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
 from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
-from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, UserCategory
+from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, User, UserCategory
 
-
-User = get_user_model()
-DEFAULT_NULL_TEXT = ""
 
 ################################################
-### Standard Model Definitions
+### Object Definitions
 ################################################
-class ActionType(DjangoObjectType):
-    class Meta:
-        model = Action
-        fields = "__all__"
-
-
 class EthnicityType(DjangoObjectType):
     class Meta:
         model = Ethnicity
-        fields = "__all__"
+        fields = ('id', 'category', 'description')
 
 
 class EthnicityUserType(DjangoObjectType):
     class Meta:
         model = EthnicityUser
-        fields = "__all__"
+        fields = ('id', 'ethnicity', 'other_value', 'user')
 
 
 class IncomeType(DjangoObjectType):
     class Meta:
         model = Income
-        fields = "__all__"
+        fields = ('id', 'category', 'description')
 
 
 class PronounType(DjangoObjectType):
     class Meta:
         model = Pronoun
-        fields = "__all__"
+        fields = ('id', 'category')
 
 
 class PronounUserType(DjangoObjectType):
     class Meta:
         model = PronounUser
-        fields = "__all__"
+        fields = ('id', 'pronoun', 'user')
 
 
 class SourceType(DjangoObjectType):
     class Meta:
         model = Source
-        fields = "__all__"
+        fields = ('id', 'category')
 
 
 class SourceUserType(DjangoObjectType):
     class Meta:
         model = SourceUser
-        fields = "__all__"
+        fields = ('id', 'other_value', 'source', 'user')
 
 
 class UserType(DjangoObjectType):
     class Meta:
+        convert_choices_to_enum = False
+        fields = (
+            "act_score",
+            "efc",
+            "email",
+            "ethnicityuser_set",
+            "first_name",
+            "gpa",
+            "high_school_grad_year",
+            "id",
+            "income",
+            "last_name",
+            "organization",
+            "phone_number",
+            "preferred_contact_method",
+            "preferred_name",
+            "pronounuser_set",
+            "sat_math",
+            "sat_verbal",
+            "sourceuser_set",
+            "user_category",
+            "is_onboarded",
+            "is_superuser",
+            "is_verified"
+        )
         model = User
 
 
 class UserCategoryType(DjangoObjectType):
     class Meta:
         model = UserCategory
-        fields = '__all__'
+        fields = ('id', 'category')
 
 
 ################################################
@@ -91,7 +107,7 @@ class Query(graphene.ObjectType):
 
     def resolve_users(self, info):
         user = info.context.user
-        if user.is_staff:
+        if user.is_superuser:
             return User.objects.all()
         raise Exception('User not authorized please contact admin')
 
@@ -336,14 +352,14 @@ class UpdateUser(graphene.Mutation):
 
                 for input in ethnicity:
                     try:
-                        standard_value = Ethnicity.objects.get(ethnicity=input)
+                        standard_value = Ethnicity.objects.get(category=input)
                         ethnicity_user = EthnicityUser(
                             ethnicity=standard_value,
                             user=user
                         )
 
                     except ObjectDoesNotExist:
-                        standard_value = Ethnicity.objects.get(ethnicity="other")
+                        standard_value = Ethnicity.objects.get(category="other")
                         ethnicity_user = EthnicityUser(
                             ethnicity=standard_value,
                             other_value=input,
@@ -446,14 +462,14 @@ class UpdateUser(graphene.Mutation):
                 user.pronounuser_set.all().delete()
 
                 try:
-                    standard_value = Pronoun.objects.get(pronoun=pronoun)
+                    standard_value = Pronoun.objects.get(category=pronoun)
                     pronoun_user = PronounUser(
                         pronoun=standard_value,
                         user=user
                     )
 
                 except ObjectDoesNotExist:
-                    standard_value = Pronoun.objects.get(pronoun=pronoun)
+                    standard_value = Pronoun.objects.get(category=pronoun)
                     pronoun_user = PronounUser(
                         other_value=input,
                         pronoun=standard_value,
@@ -473,14 +489,14 @@ class UpdateUser(graphene.Mutation):
 
                 for input in source:
                     try:
-                        standard_value = Source.objects.get(source=input)
+                        standard_value = Source.objects.get(category=input)
                         source_user = SourceUser(
                             user=user,
                             source=standard_value
                         )
 
                     except ObjectDoesNotExist:
-                        standard_value = Source.objects.get(source="other")
+                        standard_value = Source.objects.get(category="other")
                         source_user = SourceUser(
                             user=user,
                             other_value=input,

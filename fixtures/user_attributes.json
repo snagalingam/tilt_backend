@@ -48,7 +48,7 @@
     "model": "users.Ethnicity",
     "pk": 1,
     "fields": {
-      "ethnicity": "aian",
+      "category": "aian",
       "description": "american indian or alaska native",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -58,7 +58,7 @@
     "model": "users.Ethnicity",
     "pk": 2,
     "fields": {
-      "ethnicity": "asian",
+      "category": "asian",
       "description": "asian",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -68,7 +68,7 @@
     "model": "users.Ethnicity",
     "pk": 3,
     "fields": {
-      "ethnicity": "black",
+      "category": "black",
       "description": "black or african",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -78,7 +78,7 @@
     "model": "users.Ethnicity",
     "pk": 4,
     "fields": {
-      "ethnicity": "latinx",
+      "category": "latinx",
       "description": "hispanic or latinx",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -88,7 +88,7 @@
     "model": "users.Ethnicity",
     "pk": 5,
     "fields": {
-      "ethnicity": "nhpi",
+      "category": "nhpi",
       "description": "native hawaiian or other pacific islander",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -98,7 +98,7 @@
     "model": "users.Ethnicity",
     "pk": 6,
     "fields": {
-      "ethnicity": "other",
+      "category": "other",
       "description": "other",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -108,7 +108,7 @@
     "model": "users.Ethnicity",
     "pk": 7,
     "fields": {
-      "ethnicity": "white",
+      "category": "white",
       "description": "white",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -168,7 +168,7 @@
     "model": "users.Pronoun",
     "pk": 1,
     "fields": {
-      "pronoun": "he",
+      "category": "he",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -177,7 +177,7 @@
     "model": "users.Pronoun",
     "pk": 2,
     "fields": {
-      "pronoun": "she",
+      "category": "she",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -186,7 +186,7 @@
     "model": "users.Pronoun",
     "pk": 3,
     "fields": {
-      "pronoun": "they",
+      "category": "they",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -195,7 +195,7 @@
     "model": "users.Pronoun",
     "pk": 4,
     "fields": {
-      "pronoun": "other",
+      "category": "other",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -204,7 +204,7 @@
     "model": "users.Source",
     "pk": 1,
     "fields": {
-      "source": "instagram",
+      "category": "instagram",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -213,7 +213,7 @@
     "model": "users.Source",
     "pk": 2,
     "fields": {
-      "source": "facebook",
+      "category": "facebook",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -222,7 +222,7 @@
     "model": "users.Source",
     "pk": 3,
     "fields": {
-      "source": "parent",
+      "category": "parent",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -231,7 +231,7 @@
     "model": "users.Source",
     "pk": 4,
     "fields": {
-      "source": "school or district staff",
+      "category": "school or district staff",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -240,7 +240,7 @@
     "model": "users.Source",
     "pk": 5,
     "fields": {
-      "source": "friend",
+      "category": "friend",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
@@ -249,7 +249,7 @@
     "model": "users.Source",
     "pk": 6,
     "fields": {
-      "source": "other",
+      "category": "other",
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }

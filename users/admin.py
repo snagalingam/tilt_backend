@@ -67,16 +67,16 @@ class EthnicityAdmin(admin.ModelAdmin, DynamicArrayMixin):
         return obj.ethnicityuser_set.count()
 
     fieldsets = (
-        (None, {'fields': ('ethnicity', 'description', 'created', 'updated')}),
+        (None, {'fields': ('category', 'description', 'created', 'updated')}),
     )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    list_display = ['ethnicity', 'description', 'ethnicity_user_count']
+    list_display = ['category', 'description', 'ethnicity_user_count']
     model = Ethnicity
-    ordering = ('ethnicity',)
+    ordering = ('category',)
     readonly_fields = ('created', 'updated')
-    search_fields = ('ethnicity',)
+    search_fields = ('category',)
 
 
 class IncomeAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -98,30 +98,30 @@ class PronounAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def pronoun_user_count(self, obj):
         return obj.pronounuser_set.count()
 
-    fieldsets = ((None, {'fields': ('pronoun', 'created', 'updated',)}),)
+    fieldsets = ((None, {'fields': ('category', 'created', 'updated',)}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    list_display = ['pronoun', 'pronoun_user_count']
+    list_display = ['category', 'pronoun_user_count']
     model = Pronoun
-    ordering = ('pronoun',)
+    ordering = ('category',)
     readonly_fields = ('created', 'updated',)
-    search_fields = ('pronoun',)
+    search_fields = ('category',)
 
 
 class SourceAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def source_user_count(self, obj):
         return obj.sourceuser_set.count()
 
-    fieldsets = ((None, {'fields': ('source', 'created', 'updated')}),)
+    fieldsets = ((None, {'fields': ('category', 'created', 'updated')}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '10'})},
     }
-    list_display = ['source', 'source_user_count']
+    list_display = ['category', 'source_user_count']
     model = Source
-    ordering = ('source',)
+    ordering = ('category',)
     readonly_fields = ('created', 'updated',)
-    search_fields = ('source',)
+    search_fields = ('category',)
 
 
 class UserAdmin(UserAdmin, DynamicArrayMixin):

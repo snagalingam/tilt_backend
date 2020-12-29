@@ -271,7 +271,7 @@ class DeletedAccount(models.Model):
 
 
 class Ethnicity(models.Model):
-    ethnicity = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=255, unique=True)
     description = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -308,7 +308,7 @@ class EthnicityUser(models.Model):
 
 
 class Pronoun(models.Model):
-    pronoun = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -344,7 +344,7 @@ class PronounUser(models.Model):
 
 
 class Source(models.Model):
-    source = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
