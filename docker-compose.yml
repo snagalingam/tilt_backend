@@ -6,7 +6,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.dev
-    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
       - REGION=us-east-2
       - ENVIRONMENT=development
