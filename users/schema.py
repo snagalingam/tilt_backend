@@ -47,7 +47,7 @@ class PronounType(DjangoObjectType):
 class PronounUserType(DjangoObjectType):
     class Meta:
         model = PronounUser
-        fields = ('id', 'pronoun', 'user')
+        fields = ('id', 'other_value', 'pronoun', 'user')
 
 
 class SourceType(DjangoObjectType):
