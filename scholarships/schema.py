@@ -311,22 +311,19 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
 
     scholarship_status = graphene.Field(ScholarshipStatusType)
 
-    def mutate(self,info, scholarship_id=None, status=None, user_id=None):
+    def mutate(self, info, scholarship_id=None, status=None):
         user = info.context.user
         scholarship = Scholarship.objects.get(pk=scholarship_id)
-        scholarshipStatus = ScholarshipStatus.objects.filter(user=user, scholarship=scholarship)
+        scholarship_status = ScholarshipStatus.objects.get(user=user, scholarship=scholarship)
 
-        if scholarshipStatus.count() > 0:
-            scholarshipStatus = scholarshipStatus.get(user=user)
-            scholarshipStatus.status = status
-            scholarshipStatus.save()
-        else:
-            scholarshipStatus = ScholarshipStatus.objects.create(status=status)
-            scholarshipStatus.user.add(user)
-            scholarshipStatus.scholarship.add(scholarship)
-            scholarshipStatus.save()
+        if scholarship_status is None:
+            scholarship_status = ScholarshipStatus.objects.create(user=user)
+            scholarship_status.scholarship = scholarship
 
-        return CreateOrUpdateScholarshipStatus(scholarship_status=scholarshipStatus)
+        scholarship_status.status = status
+        scholarship_status.save()
+
+        return CreateOrUpdateScholarshipStatus(scholarship_status=scholarship_status)
 
 class Mutation(graphene.ObjectType):
     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()

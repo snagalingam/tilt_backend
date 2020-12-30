@@ -16,14 +16,12 @@ class CollegeTests(TestCase):
         )
         college = College.objects.create(
             popularity_score=1,
-            unit_id=100654,
-            ope_id="00100200",
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",
             address="Huntsville, AL 35811, USA",
             phone_number="(256) 372-5000",
-            lat=34.7827196,
+            lat=34.782719,
             lng=-86.568614,
             url="https://maps.google.com/?cid=18245956559700032436",
             website="http://www.aamu.edu/",
@@ -57,8 +55,6 @@ class CollegeTests(TestCase):
     def test_create_college(self):
         college = College.objects.create(
             popularity_score=2,
-            unit_id=100663,
-            ope_id="00105200",
             place_id="ChIJRxq4YekbiYgRS7BbCPlZxlE",
             business_status= "OPERATIONAL",
             name="University of Alabama at Birmingham",
@@ -84,8 +80,6 @@ class CollegeTests(TestCase):
             types=["university", "point_of_interest", "establishment"]
         )
         self.assertEqual(college.popularity_score, 2)
-        self.assertEqual(college.unit_id, 100663)
-        self.assertEqual(college.ope_id, "00105200")
         self.assertEqual(college.place_id, "ChIJRxq4YekbiYgRS7BbCPlZxlE")
         self.assertEqual(college.business_status, "OPERATIONAL")
         self.assertEqual(college.name, "University of Alabama at Birmingham")
@@ -514,9 +508,7 @@ class CollegeTests(TestCase):
             college=college,
             status="interested",
             net_price=25000,
-            award_uploaded=True,
-            award_reviewed=False,
-            user_notified=False,
+            award_status="user notified",
             residency="NY",
             in_state_tuition="NY")
 
@@ -524,9 +516,7 @@ class CollegeTests(TestCase):
         self.assertEqual(college_status.college, college)
         self.assertEqual(college_status.status, "interested")
         self.assertEqual(college_status.net_price, 25000)
-        self.assertEqual(college_status.award_uploaded, True)
-        self.assertEqual(college_status.award_reviewed, False)
-        self.assertEqual(college_status.user_notified, False)
+        self.assertEqual(college_status.award_status, "user notified")
         self.assertEqual(college_status.residency, "NY")
         self.assertEqual(college_status.in_state_tuition, "NY")
         self.assertIsNotNone(college_status.created)

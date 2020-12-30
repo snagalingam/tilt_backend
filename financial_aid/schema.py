@@ -76,7 +76,7 @@ class Query(graphene.ObjectType):
         row_index=graphene.Int(),
     )
     aid_summaries_by_fields = graphene.List(
-        AidDocumentResultType,
+        AidSummaryType,
         college_status_id=graphene.ID(),
         net_price=graphene.Int(),
         total_aid=graphene.Int(),

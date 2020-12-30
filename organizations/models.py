@@ -15,8 +15,8 @@ class Organization(models.Model):
     address = models.CharField(blank=True, max_length=255)
     business_status = models.CharField(blank=True, max_length=255)
     icon = models.CharField(blank=True, max_length=255)
-    lat = models.FloatField(blank=True, null=True)
-    lng = models.FloatField(blank=True, null=True)
+    lat = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
+    lng = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
     phone_number = models.CharField(blank=True, max_length=255)
     types = ArrayField(
         models.CharField(blank=True, max_length=255),

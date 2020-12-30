@@ -469,7 +469,7 @@ class UpdateUser(graphene.Mutation):
                     )
 
                 except ObjectDoesNotExist:
-                    standard_value = Pronoun.objects.get(category=pronoun)
+                    standard_value = Pronoun.objects.get(category="other")
                     pronoun_user = PronounUser(
                         other_value=input,
                         pronoun=standard_value,

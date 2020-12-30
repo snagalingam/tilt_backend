@@ -188,7 +188,7 @@ class Scholarship(models.Model):
     min_act = models.IntegerField(blank=True, null=True)
     min_sat = models.IntegerField(blank=True, null=True)
     min_gpa = models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)
-    max_gpa = models.FloatField(blank=True, null=True)
+    max_gpa = models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)
     writing = models.BooleanField(default=False)
     # relationships to other models
     association = models.ManyToManyField(Association, blank=True)
