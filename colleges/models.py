@@ -61,6 +61,30 @@ class College(models.Model):
 ### College Status
 ################################################
 class CollegeStatus(models.Model):
+    AWARD_STATUS_CHOICES = (
+        ("uploaded", "uploaded"),
+        ("reviewed", "reviewed"),
+        ("user notified", "user notified"),
+    )
+    IN_STATE_TUITION_CHOICES = (
+        ("yes", "yes"),
+        ("no", "no"),
+        ("unsure", "unsure"),
+    )
+    RESIDENCY_CHOICES = (
+        ("oncampus", "oncampus"),
+        ("offcampus with rent", "offcampus with rent"),
+        ("offcampus no rent", "offcampus no rent",)
+    )
+    STATUS_CHOICES = (
+        ("not interested", "not interested"),
+        ("interested", "interested"),
+        ("applied", "applied"),
+        ("waitlisted", "waitlisted"),
+        ("accepted", "accepted"),
+        ("not accepted", "not accepted"),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
@@ -71,10 +95,22 @@ class CollegeStatus(models.Model):
         default=DEFAULT_COLLEGE_ID,
         on_delete=models.CASCADE
     )
-    status = models.CharField(max_length=255)
-    award_status = models.CharField(blank=True, max_length=255)
-    in_state_tuition = models.CharField(blank=True, max_length=255)
-    residency = models.CharField(blank=True, max_length=255)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=255)
+    award_status = models.CharField(
+        blank=True,
+        choices=AWARD_STATUS_CHOICES,
+        max_length=255
+    )
+    in_state_tuition = models.CharField(
+        blank=True,
+        choices=IN_STATE_TUITION_CHOICES,
+        max_length=255
+    )
+    residency = models.CharField(
+        blank=True,
+        choices=RESIDENCY_CHOICES,
+        max_length=255
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

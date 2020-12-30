@@ -356,6 +356,14 @@ class LocationScholarship(models.Model):
 
 
 class ScholarshipStatus(models.Model):
+    SCHOLARSHIP_STATUS_CHOICES = (
+        ("not interested","not interestd"),
+        ("interested", "interested"),
+        ("applied", "applied"),
+        ("awarded", "awarded"),
+        ("not awarded", "not awarded"),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
@@ -366,7 +374,7 @@ class ScholarshipStatus(models.Model):
         default=DEFAULT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
-    status = models.CharField(max_length=255)
+    status = models.CharField(choices=SCHOLARSHIP_STATUS_CHOICES, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
