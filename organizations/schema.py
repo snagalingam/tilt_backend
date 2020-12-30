@@ -48,11 +48,19 @@ class Query(graphene.ObjectType):
         qs = Organization.objects.all()
         return qs
 
-    def resolve_organizations_by_fields(self, info, **fields):
-        qs = Organization.objects.filter(**fields)
+    def resolve_organizations_by_fields(self, info, **kwargs):
+        qs = Organization.objects.filter(**kwargs)
         return qs
 
 
 ################################################
 ### Mutations
 ################################################
+class MutateOrganization(graphene.Mutation):
+    organization = graphene.Field(OrganizationType)
+
+    def mutate(self, info):
+        return "hi"
+
+class Mutation(graphene.ObjectType):
+    mutate_organization = MutateOrganization.Field()
