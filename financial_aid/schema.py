@@ -23,32 +23,19 @@ from services.sendgrid_api.send_email import send_notification_email, send_repor
 class AidCategoryType(DjangoObjectType):
     class Meta:
         model = AidCategory
-        fields = "__all__"
+        fields = ('id', 'name', 'primary', 'secondary', 'tertiary')
 
 
 class AidDataType(DjangoObjectType):
     class Meta:
         model = AidData
-        fields = "__all__"
-
-
-class AidDocumentDataType(DjangoObjectType):
-    class Meta:
-        model = DocumentData
-        fields = "__all__"
-
-
-class AidDocumentResultType(DjangoObjectType):
-    class Meta:
-        model = DocumentResult
-        fields = "__all__"
+        fields = ('id', 'aid_category', 'amount', 'college_status', 'name')
 
 
 class AidSummaryType(DjangoObjectType):
     class Meta:
         model = AidSummary
-        fields = "__all__"
-
+        fields = ('id', 'college_status', 'net_price', 'total_cost', 'total_aid')
 
 ################################################
 ### Query
@@ -69,11 +56,9 @@ class CheckedResultType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
     aid_data = graphene.List(AidDataType, limit=graphene.Int())
-    aid_document_data = graphene.List(AidDocumentDataType, limit=graphene.Int())
-    aid_document_results = graphene.List(AidDocumentResultType, limit=graphene.Int())
     aid_summaries = graphene.List(AidSummaryType, limit=graphene.Int())
 
-    aid_category_by_fields = graphene.List(
+    aid_categories_by_fields = graphene.List(
         AidCategoryType,
         name=graphene.String(),
         primary=graphene.String(),
@@ -90,18 +75,7 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
-    aid_document_data_by_fields = graphene.List(
-        AidDocumentDataType,
-        document_name=graphene.String()
-    )
-    aid_document_result_by_fields = graphene.List(
-        AidDocumentResultType,
-        document_name=graphene.String(),
-        pass_fail=graphene.Boolean(),
-        processed=graphene.Boolean(),
-        sent=graphene.Boolean()
-    )
-    aid_summary_by_fields = graphene.List(
+    aid_summaries_by_fields = graphene.List(
         AidDocumentResultType,
         college_status_id=graphene.ID(),
         net_price=graphene.Int(),
@@ -118,42 +92,26 @@ class Query(graphene.ObjectType):
         qs = AidData.objects.all()[0:limit]
         return qs
 
-    def resolve_aid_document_data(self, info, limit=None):
-        qs = DocumentData.objects.all()[0:limit]
-        return qs
-
-    def resolve_aid_document_results(self, info, limit=None):
-        qs = DocumentResult.objects.all()[0:limit]
-        return qs
-
     def resolve_aid_summaries(self, info, limit=None):
         qs = AidSummary.objects.all()[0:limit]
         return qs
 
     # get_by_fields()
-    def resolve_aid_category_by_fields(self, info, **fields):
-        qs = AidCategory.objects.filter(**fields)
+    def resolve_aid_categories_by_fields(self, info, **kwargs):
+        qs = AidCategory.objects.filter(**kwargs)
         return qs
 
-    def resolve_aid_data_by_fields(self, info, **fields):
-        qs = AidData.objects.filter(**fields)
+    def resolve_aid_data_by_fields(self, info, **kwargs):
+        qs = AidData.objects.filter(**kwargs)
         return qs
 
-    def resolve_aid_document_result_by_fields(self, info, **fields):
-        qs = DocumentResult.objects.filter(**fields)
-        return qs
-
-    def resolve_aid_document_data_by_fields(self, info, **fields):
-        qs = DocumentData.objects.filter(**fields)
-        return qs
-
-    def resolve_aid_summaries(self, info, **fields):
-        qs = AidSummary.objects.filter()(**fields)
+    def resolve_aid_summaries_by_fields(self, info, **kwargs):
+        qs = AidSummary.objects.filter()(**kwargs)
         return qs
 
 
 ################################################
-### Mutation
+### Mutations
 ################################################
 class AnalyzeDocuments(graphene.Mutation):
     sent_list = graphene.List(AnalyzedResultType)
@@ -454,57 +412,15 @@ class CheckDocuments(graphene.Mutation):
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
 
-class CreateAidCategory(graphene.Mutation):
-    aid_category = graphene.Field(AidCategoryType)
-    success = graphene.Boolean()
-
-    class Arguments:
-        name = graphene.String()
-        primary = graphene.String()
-        secondary = graphene.String()
-        tertiary = graphene.String()
-
-    def mutate(
-        self,
-        info,
-        name=None,
-        primary=None,
-        secondary=None,
-        tertiary=None
-    ):
-        try:
-            aid_category = AidCategory.objects.get(name=name)
-        except:
-            aid_category = None
-
-        if aid_category is None:
-            aid_category = AidCategory(
-                name=name,
-                primary=primary,
-                secondary=secondary,
-                tertiary=tertiary
-            )
-            aid_category.save()
-
-            return CreateAidCategory(aid_category=aid_category, success=True)
-        raise Exception ('Aid category already exists')
-
-
 class UploadOrDeleteDocument(graphene.Mutation):
-    success = graphene.Boolean()
-
     class Arguments:
         blob = Upload(required=True)
         document_name = graphene.String()
         upload_or_delete = graphene.String()
 
-    def mutate(
-        self,
-        info,
-        blob=None,
-        document_name=None,
-        upload_or_delete=None
-    ):
+    success = graphene.Boolean()
+
+    def mutate(self, info, blob=None, document_name=None, delete=False):
 
         if document_name:
             # find college_status
@@ -512,13 +428,13 @@ class UploadOrDeleteDocument(graphene.Mutation):
             college_status_id = int(document_name[3:end_index])
             college_status = CollegeStatus.objects.get(pk=college_status_id)
 
-            if upload_or_delete == "upload":
+            if delete is False:
                 success = upload_document(document_name, blob)
                 if success:
                     college_status.award_uploaded = True
                     college_status.save()
 
-            elif upload_or_delete == "delete":
+            elif delete is True:
                 success = delete_document(document_name)
                 if success:
                     college_status.award_uploaded = False
@@ -531,5 +447,4 @@ class UploadOrDeleteDocument(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
-    create_aid_category = CreateAidCategory.Field()
     upload_or_delete_document = UploadOrDeleteDocument.Field()
