@@ -23,8 +23,8 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 ################################################
 AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS', default='none')
 AWS_SECRET_KEY = os.environ.get('AWS_SECRET', default='none')
-REGION = os.environ.get('REGION', default='none')
-BUCKET = os.environ.get('BUCKET', default='none')
+AWS_REGION = os.environ.get('AWS_REGION', default='none')
+AWS_BUCKET = os.environ.get('AWS_BUCKET', default='none')
 
 ################################################
 ### Twilio Variables
