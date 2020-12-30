@@ -18,8 +18,6 @@ class AidTests(TestCase):
 
         college = College.objects.create(
             popularity_score=1,
-            unit_id=100654,
-            ope_id="00100200",
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",
@@ -51,10 +49,7 @@ class AidTests(TestCase):
             user=user,
             college=college,
             status="interested",
-            net_price=25000,
-            award_uploaded=True,
-            award_reviewed=False,
-            user_notified=False,
+            award_status="uploaded",
             residency="NY",
             in_state_tuition="NY"
         )

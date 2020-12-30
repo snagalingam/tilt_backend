@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.test import TestCase
 from organizations.models import Organization
 
@@ -26,8 +27,8 @@ class OrganizationTests(TestCase):
         self.assertEqual(organization.business_status, "OPERATIONAL")
         self.assertEqual(organization.icon, "")
         self.assertEqual(organization.name, "Alabama A&M University")
-        self.assertEqual(organization.lat, 34.782719)
-        self.assertEqual(organization.lng, -86.568614)
+        self.assertEqual(organization.lat, Decimal('34.782719'))
+        self.assertEqual(organization.lng, Decimal('-86.568614'))
         self.assertEqual(organization.address, "Huntsville, AL 35811, USA")
         self.assertEqual(organization.phone_number, "(256) 372-5000")
         self.assertEqual(organization.url, "https://maps.google.com/?cid=18245956559700032436")

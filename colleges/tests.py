@@ -44,10 +44,7 @@ class CollegeTests(TestCase):
             user=user,
             college=college,
             status="interested",
-            net_price=25000,
-            award_uploaded=True,
-            award_reviewed=False,
-            user_notified=False,
+            award_status="uploaded",
             residency="NY",
             in_state_tuition="NY"
         )
@@ -147,7 +144,7 @@ class CollegeTests(TestCase):
             minority_serving_nant=False,
             men_only=False,
             women_only=False,
-            religious_affiliation=None,
+            religious_affiliation="",
             admissions_rate=0.8986,
             sat_reading_25th_percentile=430.0,
             sat_reading_75th_percentile=520.0,
@@ -206,7 +203,6 @@ class CollegeTests(TestCase):
             median_debt_completers_num_students=1068,
             median_debt_noncompleters_num_students=2270,
             monthly_loan_payments=358.0516353,
-            students_with_any_loan=None,
             students_with_pell_grant=0.852793471,
             age_entry=20,
             veteran=0.003138732,
@@ -228,18 +224,18 @@ class CollegeTests(TestCase):
             graduation_rate_150_asian=None,
             graduation_rate_150_aian=None,
             graduation_rate_150_nhpi=None,
-            graduate_rate_150_2ormore=0.25,
-            graduate_rate_150_nra=None,
-            graduate_rate_150_unknown=0.375,
+            graduation_rate_150_2ormore=0.25,
+            graduation_rate_150_nra=None,
+            graduation_rate_150_unknown=0.375,
             graduation_rate_150_white_num_students=8,
             graduation_rate_150_black_num_students=731,
             graduation_rate_150_hispanic_num_students=4,
             graduation_rate_150_asian_num_students=None,
             graduation_rate_150_aian_num_students=None,
             graduation_rate_150_nhpi_num_students=1,
-            graduate_rate_150_2ormore_num_students=4,
-            graduate_rate_150_nra_num_students=None,
-            graduate_rate_150_unknown_num_students=8,
+            graduation_rate_150_2ormore_num_students=4,
+            graduation_rate_150_nra_num_students=None,
+            graduation_rate_150_unknown_num_students=8,
             first_time_full_time_pell_grant_rate=0.7057,
             first_time_full_time_federal_loan_rate=0.7143,
             first_time_full_time_num_students=1288,
@@ -324,7 +320,7 @@ class CollegeTests(TestCase):
         self.assertEqual(scorecard.minority_serving_nant, False)
         self.assertEqual(scorecard.men_only, False)
         self.assertEqual(scorecard.women_only, False)
-        self.assertEqual(scorecard.religious_affiliation, None)
+        self.assertEqual(scorecard.religious_affiliation, "")
         self.assertEqual(scorecard.admissions_rate, 0.8986)
         self.assertEqual(scorecard.sat_reading_25th_percentile, 430.0)
         self.assertEqual(scorecard.sat_reading_75th_percentile, 520.0)
@@ -383,7 +379,6 @@ class CollegeTests(TestCase):
         self.assertEqual(scorecard.median_debt_completers_num_students, 1068)
         self.assertEqual(scorecard.median_debt_noncompleters_num_students, 2270)
         self.assertEqual(scorecard.monthly_loan_payments, 358.0516353)
-        self.assertEqual(scorecard.students_with_any_loan, None)
         self.assertEqual(scorecard.students_with_pell_grant, 0.852793471)
         self.assertEqual(scorecard.age_entry, 20)
         self.assertEqual(scorecard.veteran, 0.003138732)
@@ -405,18 +400,18 @@ class CollegeTests(TestCase):
         self.assertEqual(scorecard.graduation_rate_150_asian, None)
         self.assertEqual(scorecard.graduation_rate_150_aian, None)
         self.assertEqual(scorecard.graduation_rate_150_nhpi, None)
-        self.assertEqual(scorecard.graduate_rate_150_2ormore, 0.25)
-        self.assertEqual(scorecard.graduate_rate_150_nra, None)
-        self.assertEqual(scorecard.graduate_rate_150_unknown, 0.375)
+        self.assertEqual(scorecard.graduation_rate_150_2ormore, 0.25)
+        self.assertEqual(scorecard.graduation_rate_150_nra, None)
+        self.assertEqual(scorecard.graduation_rate_150_unknown, 0.375)
         self.assertEqual(scorecard.graduation_rate_150_white_num_students, 8)
         self.assertEqual(scorecard.graduation_rate_150_black_num_students, 731)
         self.assertEqual(scorecard.graduation_rate_150_hispanic_num_students, 4)
         self.assertEqual(scorecard.graduation_rate_150_asian_num_students, None)
         self.assertEqual(scorecard.graduation_rate_150_aian_num_students, None)
         self.assertEqual(scorecard.graduation_rate_150_nhpi_num_students, 1)
-        self.assertEqual(scorecard.graduate_rate_150_2ormore_num_students, 4)
-        self.assertEqual(scorecard.graduate_rate_150_nra_num_students, None)
-        self.assertEqual(scorecard.graduate_rate_150_unknown_num_students, 8)
+        self.assertEqual(scorecard.graduation_rate_150_2ormore_num_students, 4)
+        self.assertEqual(scorecard.graduation_rate_150_nra_num_students, None)
+        self.assertEqual(scorecard.graduation_rate_150_unknown_num_students, 8)
         self.assertEqual(scorecard.first_time_full_time_pell_grant_rate, 0.7057)
         self.assertEqual(scorecard.first_time_full_time_federal_loan_rate, 0.7143)
         self.assertEqual(scorecard.first_time_full_time_num_students, 1288)
@@ -507,7 +502,6 @@ class CollegeTests(TestCase):
             user=user,
             college=college,
             status="interested",
-            net_price=25000,
             award_status="user notified",
             residency="NY",
             in_state_tuition="NY")
@@ -515,15 +509,11 @@ class CollegeTests(TestCase):
         self.assertEqual(college_status.user, user)
         self.assertEqual(college_status.college, college)
         self.assertEqual(college_status.status, "interested")
-        self.assertEqual(college_status.net_price, 25000)
         self.assertEqual(college_status.award_status, "user notified")
         self.assertEqual(college_status.residency, "NY")
         self.assertEqual(college_status.in_state_tuition, "NY")
         self.assertIsNotNone(college_status.created)
         self.assertIsNotNone(college_status.updated)
-
-        # test user college_status_set
-        self.assertEqual(user.collegestatus_set.get_queryset()[1], college_status)
 
     def test_create_budget(self):
         college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
@@ -556,4 +546,4 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_budget.updated)
 
         # test user budget_set
-        self.assertEqual(college_status.budget_set.get_queryset()[0], college_budget)
+        self.assertEqual(college_status.budget, college_budget)

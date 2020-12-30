@@ -372,7 +372,7 @@ class ScholarshipStatus(models.Model):
 
     class Meta:
         verbose_name = 'scholarhip status'
-        verbose_name_plural = 'scholarship status'
+        verbose_name_plural = 'scholarship statuses'
 
     def __str__(self):
         return str(self.user)
