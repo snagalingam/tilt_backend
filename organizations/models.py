@@ -15,9 +15,15 @@ class Organization(models.Model):
     address = models.CharField(blank=True, max_length=255)
     business_status = models.CharField(blank=True, max_length=255)
     icon = models.CharField(blank=True, max_length=255)
+<<<<<<< HEAD
     lat = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
     lng = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
     phone_number = models.CharField(blank=True, max_length=50)
+=======
+    lat = models.FloatField(blank=True, null=True)
+    lng = models.FloatField(blank=True, null=True)
+    phone_number = models.CharField(blank=True, max_length=255)
+>>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     types = ArrayField(
         models.CharField(blank=True, max_length=100),
         blank=True,

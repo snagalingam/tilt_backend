@@ -60,7 +60,11 @@ class MutateOrganization(graphene.Mutation):
     organization = graphene.Field(OrganizationType)
 
     def mutate(self, info):
+<<<<<<< HEAD
         return "don't need a mutation. use user mutations"
+=======
+        return "hi"
+>>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
 
 class Mutation(graphene.ObjectType):
     mutate_organization = MutateOrganization.Field()
