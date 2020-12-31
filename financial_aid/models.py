@@ -9,17 +9,10 @@ DEFAULT_CHAR_TEXT = ""
 
 
 class AidCategory(models.Model):
-<<<<<<< HEAD
     name = models.CharField(max_length=50)
     primary = models.CharField(max_length=50)
     secondary = models.CharField(max_length=50)
     tertiary = models.CharField(max_length=50, blank=True)
-=======
-    name = models.CharField(max_length=255)
-    primary = models.CharField(max_length=255)
-    secondary = models.CharField(max_length=255)
-    tertiary = models.CharField(max_length=255, blank=True)
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -40,24 +33,14 @@ class AidData(models.Model):
     aid_category = models.ForeignKey(
         AidCategory,
         default=DEFAULT_AID_CATEGORY_ID,
-<<<<<<< HEAD
         on_delete=models.PROTECT
-=======
-        on_delete=models.CASCADE
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     )
     name = models.CharField(max_length=255)
     amount = models.PositiveIntegerField()
     row_text = models.TextField(blank=True)
-<<<<<<< HEAD
     table = models.PositiveSmallIntegerField(blank=True, null=True)
     row_index = models.PositiveSmallIntegerField(blank=True, null=True)
     col_index = models.PositiveSmallIntegerField(blank=True, null=True)
-=======
-    table = models.PositiveIntegerField(blank=True, null=True)
-    row_index = models.PositiveIntegerField(blank=True, null=True)
-    col_index = models.PositiveIntegerField(blank=True, null=True)
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -118,13 +101,8 @@ class AidSummary(models.Model):
         default=DEFAULT_COLLEGE_STATUS_ID,
         on_delete=models.CASCADE
     )
-<<<<<<< HEAD
     total_cost = models.PositiveIntegerField()
     total_aid = models.PositiveIntegerField()
-=======
-    total_cost = models.IntegerField()
-    total_aid = models.IntegerField()
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     net_price = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

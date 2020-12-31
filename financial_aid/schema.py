@@ -76,11 +76,7 @@ class Query(graphene.ObjectType):
         row_index=graphene.Int(),
     )
     aid_summaries_by_fields = graphene.List(
-<<<<<<< HEAD
         AidSummaryType,
-=======
-        AidDocumentResultType,
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
         college_status_id=graphene.ID(),
         net_price=graphene.Int(),
         total_aid=graphene.Int(),
@@ -103,21 +99,12 @@ class Query(graphene.ObjectType):
     # get_by_fields()
     def resolve_aid_categories_by_fields(self, info, **kwargs):
         qs = AidCategory.objects.filter(**kwargs)
-<<<<<<< HEAD
         return qs
 
     def resolve_aid_data_by_fields(self, info, **kwargs):
         qs = AidData.objects.filter(**kwargs)
         return qs
 
-=======
-        return qs
-
-    def resolve_aid_data_by_fields(self, info, **kwargs):
-        qs = AidData.objects.filter(**kwargs)
-        return qs
-
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
     def resolve_aid_summaries_by_fields(self, info, **kwargs):
         qs = AidSummary.objects.filter()(**kwargs)
         return qs
@@ -425,11 +412,6 @@ class CheckDocuments(graphene.Mutation):
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
 
-<<<<<<< HEAD
-class Mutation(graphene.ObjectType):
-    analyze_documents = AnalyzeDocuments.Field()
-    check_documents = CheckDocuments.Field()
-=======
 class UploadOrDeleteDocument(graphene.Mutation):
     class Arguments:
         blob = Upload(required=True)
@@ -466,4 +448,3 @@ class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
     upload_or_delete_document = UploadOrDeleteDocument.Field()
->>>>>>> 9dfee81478b2b9686ff03c3e7ce57a540c750483
