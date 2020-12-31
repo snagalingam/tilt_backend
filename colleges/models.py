@@ -18,7 +18,7 @@ class College(models.Model):
     # google api inputted (otherwise scorecard)
     name = models.CharField(blank=True, max_length=255)
 
-    popularity_score = models.PositiveIntegerField(default=DEFAULT_POPULARITY_SCORE)
+    popularity_score = models.IntegerField(default=DEFAULT_POPULARITY_SCORE)
 
     # google api inputted continued
     place_id = models.CharField(blank=True, max_length=255)
@@ -93,7 +93,7 @@ class CollegeStatus(models.Model):
     college = models.ForeignKey(
         College,
         default=DEFAULT_COLLEGE_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     status = models.CharField(choices=STATUS_CHOICES, max_length=255)
     award_status = models.CharField(
@@ -119,15 +119,15 @@ class CollegeStatus(models.Model):
         method = self.user.preferred_contact_method
 
         # send user notification about financial aid letter if award_reviewed=True
-        if self.award_status == 'reviewed':
+        if self.award_status == "reviewed":
 
             if method == "text":
                 send_notification_sms(self.user.phone_number)
-                self.award_status = 'user notified'
+                self.award_status = "user notified"
 
             else:
                 send_notification_email(self.user.email, self.user.first_name)
-                self.award_status = 'user notified'
+                self.award_status = "user notified"
 
         return super(CollegeStatus, self).save(*args, **kwargs)
 

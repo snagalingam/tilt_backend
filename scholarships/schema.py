@@ -314,7 +314,11 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     def mutate(self, info, scholarship_id=None, status=None):
         user = info.context.user
         scholarship = Scholarship.objects.get(pk=scholarship_id)
-        scholarship_status = ScholarshipStatus.objects.get(user=user, scholarship=scholarship)
+
+        try:
+            scholarship_status = ScholarshipStatus.objects.get(user=user, scholarship=scholarship)
+        except:
+            scholarship_status = None
 
         if scholarship_status is None:
             scholarship_status = ScholarshipStatus.objects.create(user=user)

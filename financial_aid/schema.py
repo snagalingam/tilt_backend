@@ -412,39 +412,6 @@ class CheckDocuments(graphene.Mutation):
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
 
-class UploadOrDeleteDocument(graphene.Mutation):
-    class Arguments:
-        blob = Upload(required=True)
-        document_name = graphene.String()
-        upload_or_delete = graphene.String()
-
-    success = graphene.Boolean()
-
-    def mutate(self, info, blob=None, document_name=None, delete=False):
-
-        if document_name:
-            # find college_status
-            end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
-
-            if delete is False:
-                success = upload_document(document_name, blob)
-                if success:
-                    college_status.award_uploaded = True
-                    college_status.save()
-
-            elif delete is True:
-                success = delete_document(document_name)
-                if success:
-                    college_status.award_uploaded = False
-                    college_status.save()
-
-            return UploadOrDeleteDocument(success=success)
-        raise Exception ('Document file name required')
-
-
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
-    upload_or_delete_document = UploadOrDeleteDocument.Field()

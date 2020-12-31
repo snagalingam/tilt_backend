@@ -38,14 +38,14 @@ class State(models.Model):
 ################################################
 class Provider(models.Model):
     organization = models.CharField(max_length=255, unique=True)
-    addressee = models.CharField(max_length=255, blank=True)
-    email = models.CharField(max_length=255, blank=True)
+    addressee = models.CharField(max_length=100, blank=True)
+    email = models.CharField(max_length=100, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
     phone_number_ext = models.CharField(max_length=10, blank=True)
-    street = models.CharField(max_length=255, blank=True)
+    street = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=50, blank=True)
-    state = models.ForeignKey(State, null=True, blank=True, on_delete=models.CASCADE)
-    zipcode = models.CharField(max_length=255, blank=True)
+    state = models.ForeignKey(State, null=True, blank=True, on_delete=models.PROTECT)
+    zipcode = models.CharField(max_length=10, blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)
@@ -63,7 +63,7 @@ class Provider(models.Model):
 ### Foreign Key Fields in Scholarship
 ################################################
 class Association(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -76,7 +76,7 @@ class Association(models.Model):
 
 
 class Citizenship(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -89,7 +89,7 @@ class Citizenship(models.Model):
 
 
 class Degree(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -102,7 +102,7 @@ class Degree(models.Model):
 
 
 class Disability(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -115,7 +115,7 @@ class Disability(models.Model):
 
 
 class Gender(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -127,7 +127,7 @@ class Gender(models.Model):
         return self.category
 
 class Heritage(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -139,7 +139,7 @@ class Heritage(models.Model):
         return self.category
 
 class Interest(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -152,7 +152,7 @@ class Interest(models.Model):
 
 
 class Military(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -178,7 +178,7 @@ class Scholarship(models.Model):
     deadline = models.DateField(blank=True, null=True)
     description = models.TextField(blank=True)
     max_amount = models.PositiveIntegerField(blank=True, null=True)
-    number_awards = models.PositiveIntegerField(blank=True, null=True)
+    number_awards = models.PositiveSmallIntegerField(blank=True, null=True)
     renewable = models.BooleanField(default=False)
     website = models.TextField(blank=True)
 
@@ -187,8 +187,8 @@ class Scholarship(models.Model):
     first_generation = models.BooleanField(default=False)
     min_act = models.IntegerField(blank=True, null=True)
     min_sat = models.IntegerField(blank=True, null=True)
-    min_gpa = models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)
-    max_gpa = models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)
+    min_gpa = models.DecimalField(blank=True, decimal_places=3, max_digits=5, null=True)
+    max_gpa = models.DecimalField(blank=True, decimal_places=3, max_digits=5, null=True)
     writing = models.BooleanField(default=False)
     # relationships to other models
     association = models.ManyToManyField(Association, blank=True)
@@ -216,7 +216,7 @@ class Scholarship(models.Model):
 ### Scholarship Dependent Models
 ################################################
 class EducationCategory(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=100, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -250,12 +250,12 @@ class EducationScholarship(models.Model):
     education_category = models.ForeignKey(
         EducationCategory,
         default=DEFAULT_EDUCATION_CATEGORY_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     education_detail = models.ForeignKey(
         EducationDetail,
         default=DEFAULT_EDUCATION_DETAIL_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
 
     class Meta:
@@ -267,7 +267,7 @@ class EducationScholarship(models.Model):
 
 
 class FieldCategory(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -301,12 +301,12 @@ class FieldScholarship(models.Model):
     field_category = models.ForeignKey(
         FieldCategory,
         default=DEFAULT_FIELD_CATEGORY_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     field_detail = models.ForeignKey(
         FieldDetail,
         default=DEFAULT_FIELD_DETAIL_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
 
     class Meta:
@@ -339,12 +339,12 @@ class LocationScholarship(models.Model):
     state = models.ForeignKey(
         State,
         default=DEFAULT_STATE_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     location_detail = models.ForeignKey(
         LocationDetail,
         default=DEFAULT_LOCATION_DETAIL_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
 
     class Meta:
@@ -374,7 +374,7 @@ class ScholarshipStatus(models.Model):
         default=DEFAULT_SCHOLARSHIP_ID,
         on_delete=models.CASCADE
     )
-    status = models.CharField(choices=SCHOLARSHIP_STATUS_CHOICES, max_length=255)
+    status = models.CharField(choices=SCHOLARSHIP_STATUS_CHOICES, max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

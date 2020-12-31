@@ -9,10 +9,10 @@ DEFAULT_CHAR_TEXT = ""
 
 
 class AidCategory(models.Model):
-    name = models.CharField(max_length=255)
-    primary = models.CharField(max_length=255)
-    secondary = models.CharField(max_length=255)
-    tertiary = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=50)
+    primary = models.CharField(max_length=50)
+    secondary = models.CharField(max_length=50)
+    tertiary = models.CharField(max_length=50, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -33,14 +33,14 @@ class AidData(models.Model):
     aid_category = models.ForeignKey(
         AidCategory,
         default=DEFAULT_AID_CATEGORY_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
-    name = models.TextField()
+    name = models.CharField(max_length=255)
     amount = models.PositiveIntegerField()
     row_text = models.TextField(blank=True)
-    table = models.PositiveIntegerField(blank=True, null=True)
-    row_index = models.PositiveIntegerField(blank=True, null=True)
-    col_index = models.PositiveIntegerField(blank=True, null=True)
+    table = models.PositiveSmallIntegerField(blank=True, null=True)
+    row_index = models.PositiveSmallIntegerField(blank=True, null=True)
+    col_index = models.PositiveSmallIntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -101,8 +101,8 @@ class AidSummary(models.Model):
         default=DEFAULT_COLLEGE_STATUS_ID,
         on_delete=models.CASCADE
     )
-    total_cost = models.IntegerField()
-    total_aid = models.IntegerField()
+    total_cost = models.PositiveIntegerField()
+    total_aid = models.PositiveIntegerField()
     net_price = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

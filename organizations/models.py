@@ -17,9 +17,9 @@ class Organization(models.Model):
     icon = models.CharField(blank=True, max_length=255)
     lat = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
     lng = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
-    phone_number = models.CharField(blank=True, max_length=255)
+    phone_number = models.CharField(blank=True, max_length=50)
     types = ArrayField(
-        models.CharField(blank=True, max_length=255),
+        models.CharField(blank=True, max_length=100),
         blank=True,
         null=True
     )
