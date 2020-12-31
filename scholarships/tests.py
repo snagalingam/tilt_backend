@@ -36,8 +36,6 @@ class ScholarshipTests(TestCase):
         # colleges
         college1 = College.objects.create(
             popularity_score=1,
-            unit_id=100654,
-            ope_id="00100200",
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",

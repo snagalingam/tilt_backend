@@ -6,22 +6,25 @@ DEFAULT_CHAR_TEXT = ""
 
 
 class Organization(models.Model):
+    # main information
     name = models.CharField(max_length=255)
     place_id = models.CharField(blank=True, max_length=255)
+    partner = models.BooleanField(default=False)
+
+    # additional fields
+    address = models.CharField(blank=True, max_length=255)
     business_status = models.CharField(blank=True, max_length=255)
     icon = models.CharField(blank=True, max_length=255)
-    address = models.CharField(blank=True, max_length=255)
-    phone_number = models.CharField(blank=True, max_length=255)
-    lat = models.FloatField(blank=True, null=True)
-    lng = models.FloatField(blank=True, null=True)
-    url = models.TextField(blank=True)
-    website = models.TextField(blank=True)
+    lat = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
+    lng = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
+    phone_number = models.CharField(blank=True, max_length=50)
     types = ArrayField(
-        models.CharField(blank=True, max_length=255),
+        models.CharField(blank=True, max_length=100),
         blank=True,
         null=True
     )
-    partner = models.BooleanField(default=False)
+    url = models.TextField(blank=True)
+    website = models.TextField(blank=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True)

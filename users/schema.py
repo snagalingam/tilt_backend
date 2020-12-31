@@ -47,7 +47,7 @@ class PronounType(DjangoObjectType):
 class PronounUserType(DjangoObjectType):
     class Meta:
         model = PronounUser
-        fields = ('id', 'pronoun', 'user')
+        fields = ('id', 'other_value', 'pronoun', 'user')
 
 
 class SourceType(DjangoObjectType):
@@ -104,12 +104,6 @@ class UserCategoryType(DjangoObjectType):
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
     users = graphene.List(UserType)
-
-    def resolve_users(self, info):
-        user = info.context.user
-        if user.is_superuser:
-            return User.objects.all()
-        raise Exception('User not authorized please contact admin')
 
     def resolve_me(self, info):
         user = info.context.user
@@ -469,7 +463,7 @@ class UpdateUser(graphene.Mutation):
                     )
 
                 except ObjectDoesNotExist:
-                    standard_value = Pronoun.objects.get(category=pronoun)
+                    standard_value = Pronoun.objects.get(category="other")
                     pronoun_user = PronounUser(
                         other_value=input,
                         pronoun=standard_value,

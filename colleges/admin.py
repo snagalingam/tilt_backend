@@ -9,7 +9,7 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class BudgetAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {
+        (('Information'), {
             'fields': (
                 'college_status',
                 'work_study',
@@ -22,34 +22,37 @@ class BudgetAdmin(admin.ModelAdmin):
                 'loan_plus',
                 'loan_private',
                 'loan_school',
+                'created',
+                'updated'
             )
         }),
     )
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-    }
+    formfield_overrides = {models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},}
     list_display = ['college_status']
     model = Budget
     ordering = ('college_status',)
+    readonly_fields = ('created', 'updated')
     search_fields = ('college_status',)
 
 
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (None, {'fields': ('description', 'popularity_score')}),
-        (('College Information'), {
-            'fields': ('name', 'address', 'phone_number', 'website',
-                'business_status')
-        }),
-        (('Scorcard Information'), {
-            'fields': ('unit_id', 'ope_id')
-        }),
-        (('Google Places Information'), {
-            'fields': ('place_id', 'lat', 'lng', 'url', 'favicon')
-        }),
-        (('Other Information'), {
-            'fields': ('types', 'main_photo', 'photos')
-        }),
+        (('College Information'), {'fields': ('name', 'popularity_score',)}),
+        (('Google Places Information'), {'fields': (
+            'place_id',
+            'address',
+            'business_status',
+            'description',
+            'lat',
+            'lng',
+            'main_photo',
+            'phone_number',
+            'photos',
+            'types',
+            'url',
+            'website',
+        )}),
+        (('Other Information'), {'fields': ('favicon','created', 'updated',)}),
     )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -60,6 +63,7 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_editable = ['description',]
     model = College
     ordering = ('name',)
+    readonly_fields = ('created', 'updated')
     search_fields = (
         'name',
         'unit_id',
@@ -76,13 +80,14 @@ class CollegeStatusAdmin(admin.ModelAdmin):
     fieldsets = (
         (('College Status Information'), {
             'fields': (
-                'status',
-                'college',
                 'user',
-                'net_price',
-                'award_uploaded',
-                'award_reviewed',
-                'user_notified',
+                'college',
+                'status',
+                'award_status',
+                'in_state_tuition',
+                'residency',
+                'created',
+                'updated'
             )
         }),
     )
@@ -91,17 +96,14 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
     list_display = [
-        'status',
-        'college',
         'user',
-        'net_price',
-        'award_uploaded',
-        'award_reviewed',
-        'user_notified',
+        'college',
+        'status',
+        'award_status',
     ]
-    list_editable = ['award_uploaded', 'award_reviewed', 'user_notified',]
     model = CollegeStatus
     ordering = ('status', 'college', 'user',)
+    readonly_fields = ('created', 'updated')
     search_fields = ('status', 'college', 'user',)
 
 

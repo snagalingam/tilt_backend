@@ -8,13 +8,13 @@ from django.conf import settings
 
 resource = boto3.resource(
     's3',
-    region_name=settings.REGION,
+    region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 client = boto3.client(
     's3',
-    region_name=settings.REGION,
+    region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
@@ -32,7 +32,7 @@ NUMBERS = {
 }
 
 
-# -------------- Format Money String 
+# -------------- Format Money String
 
 def format_money(word):
     if word.count("$") > 1 and word[1] != "$":
@@ -59,14 +59,14 @@ def format_money(word):
             formatted_money.replace(" ", "")
         else:
           formatted_money = formatted_money[0:idx]
-    
+
     if "/" in formatted_money:
         idx = formatted_money.index("/")
         formatted_money = formatted_money[0:idx]
 
     if formatted_money[-1] == ",":
         formatted_money = formatted_money[0:-1]
-    
+
     if formatted_money[-1] == ".":
         formatted_money = formatted_money[0:-1]
 
@@ -103,12 +103,12 @@ def table_list(source):
         if line[0:13] == "Table: Table_":
             continue
         else:
-            if len(line) > 0: 
+            if len(line) > 0:
                 table_arr = line.split(",\n")
 
                 for each_row in table_arr:
                     row_arr = each_row.split('","')
-                    for word in row_arr: 
+                    for word in row_arr:
                         table_list.append(word.replace('"', ""))
 
     return table_list
@@ -129,13 +129,13 @@ def check_tables(tables_words, all_document_words):
         data = {
             "number_of_missing": len(money_list),
             "missing_amounts" : money_list,
-            "pass_fail": "Failed" 
+            "pass_fail": "Failed"
         }
     else:
         data = {
             "number_of_missing": len(money_list),
             "missing_amounts" : money_list,
-            "pass_fail": "Passed" 
+            "pass_fail": "Passed"
         }
 
     return data
@@ -146,12 +146,11 @@ def start_document_check(all_document_words, csv_table):
     tables_words = table_list(csv_table)
     check = check_tables(tables_words, all_document_words)
 
-    if check["pass_fail"] == "Passed": 
+    if check["pass_fail"] == "Passed":
         # Green True
         print(f"=====> CHECK: \033[92m{check}\033[0m")
-    else: 
+    else:
         # Red False
         print(f"=====> CHECK: \033[91m{check}\033[0m")
 
     return check
-

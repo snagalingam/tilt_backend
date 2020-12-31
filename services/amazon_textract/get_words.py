@@ -7,7 +7,7 @@ from django.conf import settings
 
 textract = boto3.client(
     "textract",
-    region_name=settings.REGION,
+    region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
@@ -15,7 +15,7 @@ def start_job(file_name):
     response = textract.start_document_text_detection(
         DocumentLocation={
             "S3Object": {
-                "Bucket": settings.BUCKET,
+                "Bucket": settings.AWS_BUCKET,
                 "Name": file_name
         }})
     return response["JobId"]
@@ -25,7 +25,7 @@ def start_words_analysis(document):
     print(f"====> Document: \033[94m{document}\033[0m")
     print(f"====> Start Words Analysis with ID: \033[93m{job_id}\033[0m")
     return job_id
-    
+
 def get_result(job_id):
     pages = []
     response = textract.get_document_text_detection(JobId=job_id)

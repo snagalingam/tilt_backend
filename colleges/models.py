@@ -10,57 +10,81 @@ DEFAULT_COLLEGE_STATUS_ID= 1
 DEFAULT_POPULARITY_SCORE = 0
 DEFAULT_USER_ID = 1
 
+
+################################################
+### College Model
+################################################
 class College(models.Model):
-    # college scorecard info
-    unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(max_length=255, blank=True)
+    # google api inputted (otherwise scorecard)
+    name = models.CharField(blank=True, max_length=255)
 
-    # google api inputted
-    name = models.CharField(max_length=255, blank=True)
-
-    # popularity_score
-    popularity_score = models.IntegerField(
-        blank=True,
-        default=DEFAULT_POPULARITY_SCORE,
-        null=True
-    )
+    popularity_score = models.IntegerField(default=DEFAULT_POPULARITY_SCORE)
 
     # google api inputted continued
-    place_id = models.CharField(max_length=255, blank=True)
-    business_status = models.CharField(max_length=255, blank=True)
-    description = models.TextField(null=True, blank=True)
-    address = models.CharField(max_length=255, blank=True)
-    phone_number = models.CharField(max_length=255, null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
-    lng = models.FloatField(null=True, blank=True)
-    url = models.TextField(null=True, blank=True)
-    website = models.TextField(null=True, blank=True)
-    types = ArrayField(
-        models.CharField(max_length=255, null=True, blank=True),
-        null=True,
-        blank=True,
-        default=None
-    )
-    main_photo = models.TextField(null=True, blank=True)
+    place_id = models.CharField(blank=True, max_length=255)
+    address = models.CharField(blank=True, max_length=255)
+    business_status = models.CharField(blank=True, max_length=255)
+    description = models.TextField(blank=True, null=True)
+    lat = models.DecimalField(blank=True, decimal_places=7, max_digits=10, null=True)
+    lng = models.DecimalField(blank=True, decimal_places=7, max_digits=10, null=True)
+    main_photo = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(blank=True, max_length=255)
     photos = ArrayField(
-        models.TextField(null=True, blank=True),
+        models.TextField(blank=True, null=True),
         null=True,
         blank=True,
         default=None
     )
+    types = ArrayField(
+        models.CharField(blank=True, max_length=255),
+        blank=True,
+        null=True
+    )
+    url = models.TextField(blank=True)
+    website = models.TextField(blank=True)
 
-    # other
-    favicon = models.TextField(null=True, blank=True)
+    # web search
+    favicon = models.TextField(blank=True, null=True)
 
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "college"
+        verbose_name_plural = "colleges"
 
     def __str__(self):
         return self.name
 
 
+################################################
+### College Status
+################################################
 class CollegeStatus(models.Model):
+    AWARD_STATUS_CHOICES = (
+        ("uploaded", "uploaded"),
+        ("reviewed", "reviewed"),
+        ("user notified", "user notified"),
+    )
+    IN_STATE_TUITION_CHOICES = (
+        ("yes", "yes"),
+        ("no", "no"),
+        ("unsure", "unsure"),
+    )
+    RESIDENCY_CHOICES = (
+        ("oncampus", "oncampus"),
+        ("offcampus with rent", "offcampus with rent"),
+        ("offcampus no rent", "offcampus no rent",)
+    )
+    STATUS_CHOICES = (
+        ("not interested", "not interested"),
+        ("interested", "interested"),
+        ("applied", "applied"),
+        ("waitlisted", "waitlisted"),
+        ("accepted", "accepted"),
+        ("not accepted", "not accepted"),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=DEFAULT_USER_ID,
@@ -69,73 +93,108 @@ class CollegeStatus(models.Model):
     college = models.ForeignKey(
         College,
         default=DEFAULT_COLLEGE_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
+    )
+    status = models.CharField(choices=STATUS_CHOICES, max_length=255)
+    award_status = models.CharField(
+        blank=True,
+        choices=AWARD_STATUS_CHOICES,
+        max_length=255
+    )
+    in_state_tuition = models.CharField(
+        blank=True,
+        choices=IN_STATE_TUITION_CHOICES,
+        max_length=255
+    )
+    residency = models.CharField(
+        blank=True,
+        choices=RESIDENCY_CHOICES,
+        max_length=255
     )
 
-    status = models.CharField(max_length=255, blank=True)
-    net_price = models.IntegerField(blank=True, null=True)
-    award_uploaded = models.BooleanField(default=False)
-    award_reviewed = models.BooleanField(default=False)
-    user_notified = models.BooleanField(default=False)
-    residency = models.CharField(max_length=255, blank=True)
-    in_state_tuition = models.CharField(max_length=255, blank=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         method = self.user.preferred_contact_method
 
         # send user notification about financial aid letter if award_reviewed=True
-        if self.award_reviewed and not self.user_notified:
-
-            if method == "email":
-                send_notification_email(self.user.email, self.user.first_name)
-                self.user_notified = True
+        if self.award_status == "reviewed":
 
             if method == "text":
                 send_notification_sms(self.user.phone_number)
-                self.user_notified = True
+                self.award_status = "user notified"
+
+            else:
+                send_notification_email(self.user.email, self.user.first_name)
+                self.award_status = "user notified"
 
         return super(CollegeStatus, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'college status'
-        verbose_name_plural = 'college status'
+        verbose_name_plural = 'college statuses'
+
+    def __str__(self):
+        return str(self.pk)
+
+
+################################################
+### Other Models
+################################################
+class Budget(models.Model):
+    college_status = models.OneToOneField(
+        CollegeStatus,
+        default=DEFAULT_COLLEGE_STATUS_ID,
+        on_delete=models.CASCADE
+    )
+    family = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    work_study = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'budget'
+        verbose_name_plural = 'budgets'
 
     def __str__(self):
         return str(self.pk)
 
 
 class FieldOfStudy(models.Model):
-    # college model
     college = models.ForeignKey(
         College,
         on_delete=models.CASCADE,
         default=DEFAULT_COLLEGE_ID
     )
-    cip_code = models.CharField(max_length=255, blank=True)
-    cip_title = models.CharField(max_length=255, blank=True)
-    credential_level = models.CharField(max_length=255, blank=True)
-    credential_title = models.CharField(max_length=255, blank=True)
-    num_students_debt = models.IntegerField(blank=True, null=True)
-    median_debt = models.IntegerField(blank=True, null=True)
-    monthly_debt_payment = models.IntegerField(blank=True, null=True)
+    cip_code = models.CharField(blank=True, max_length=255)
+    cip_title = models.CharField(blank=True, max_length=255)
+    credential_level = models.CharField(blank=True, max_length=255)
+    credential_title = models.CharField(blank=True, max_length=255)
     mean_debt = models.IntegerField(blank=True, null=True)
-    num_students_titleiv = models.IntegerField(blank=True, null=True)
-    num_students_earnings = models.IntegerField(blank=True, null=True)
+    median_debt = models.IntegerField(blank=True, null=True)
     median_earnings = models.IntegerField(blank=True, null=True)
+    monthly_debt_payment = models.IntegerField(blank=True, null=True)
+    num_students_debt = models.IntegerField(blank=True, null=True)
+    num_students_earnings = models.IntegerField(blank=True, null=True)
     num_students_ipeds_awards1 = models.IntegerField(blank=True, null=True)
     num_students_ipeds_awards2 = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
+    num_students_titleiv = models.IntegerField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'field of study'
-        verbose_name_plural = 'fields of study'
+        verbose_name_plural = 'fields of studies'
 
     def __str__(self):
         return self.cip_title
@@ -143,105 +202,110 @@ class FieldOfStudy(models.Model):
 
 class Scorecard(models.Model):
     # college model
-    college = models.OneToOneField(College, on_delete=models.CASCADE)
+    college = models.OneToOneField(
+        College,
+        default=DEFAULT_COLLEGE_ID,
+        on_delete=models.CASCADE
+    )
 
     # school info fields
+    name = models.CharField(blank=True, max_length=255)
+
+    # id fields
     unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(max_length=255, blank=True)
-    ope6_id = models.CharField(max_length=255, blank=True)
-    name = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zipcode = models.CharField(max_length=255, blank=True)
-    accreditor = models.CharField(max_length=255, blank=True)
-    school_url = models.CharField(max_length=255, blank=True)
-    price_calculator_url = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
-    predominant_degree_awarded_recoded = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
+    ope_id = models.CharField(blank=True, max_length=255)
+    ope6_id = models.CharField(blank=True, max_length=255)
 
-    under_investigation = models.BooleanField(blank=True, null=True, default=False)
-    main_campus = models.BooleanField(blank=True, null=True, default=False)
+    # location
+    city = models.CharField(blank=True, max_length=255)
+    latitude = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
+    longitude = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
+    state = models.CharField(blank=True, max_length=255)
+    state_fips = models.CharField(blank=True, max_length=255)
+    zipcode = models.CharField(blank=True, max_length=255)
+
+    # general Information
+    alias = models.TextField(blank=True)
+    accreditor = models.CharField(blank=True, max_length=255)
     branches = models.IntegerField(blank=True, null=True)
-    predominant_degree_awarded = models.CharField(
-        max_length=255, blank=True, null=True)
-    highest_degree_awarded = models.CharField(max_length=255, blank=True)
-    ownership = models.CharField(max_length=255, blank=True)
-    state_fips = models.CharField(max_length=255, blank=True)
-    region = models.CharField(max_length=255, blank=True)
-    locale = models.CharField(max_length=255, blank=True)
-    locale_updated = models.CharField(max_length=255, blank=True)
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
-    carnegie_basic = models.CharField(max_length=255, blank=True)
-    carnegie_undergrad = models.CharField(max_length=255, blank=True)
-    carnegie_size_setting = models.CharField(max_length=255, blank=True)
-    carnegie_size_setting_size = models.CharField(max_length=255, blank=True)
-    carnegie_size_setting_residential = models.CharField(max_length=255, blank=True)
+    carnegie_basic = models.CharField(blank=True, max_length=255)
+    carnegie_size_setting = models.CharField(blank=True, max_length=255)
+    carnegie_size_setting_size = models.CharField(blank=True, max_length=255)
+    carnegie_size_setting_residential = models.CharField(blank=True, max_length=255)
+    carnegie_undergrad = models.CharField(blank=True, max_length=255)
+    highest_degree_awarded = models.CharField(blank=True, max_length=255)
+    institutional_level = models.CharField(max_length=255, blank=True)
+    locale = models.CharField(blank=True, max_length=255)
+    locale_updated = models.CharField(blank=True, max_length=255)
+    main_campus = models.BooleanField(default=False)
+    online_only = models.BooleanField(default=False)
+    operating = models.BooleanField(default=False)
+    ownership = models.CharField(blank=True, max_length=255)
+    predominant_degree_awarded = models.CharField(blank=True, max_length=255)
+    predominant_degree_awarded_recoded = models.CharField(blank=True, max_length=255)
+    price_calculator_url = models.CharField(blank=True, max_length=255)
+    region = models.CharField(blank=True, max_length=255)
+    school_url = models.CharField(blank=True, max_length=255)
+    under_investigation = models.BooleanField(blank=True, null=True, default=False)
 
-    # diversity fields
-    minority_serving_historically_black  = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_predominantly_black  = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_annh = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_tribal = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_aanipi = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_hispanic = models.BooleanField(blank=True, null=True, default=False)
-    minority_serving_nant = models.BooleanField(blank=True, null=True, default=False)
-    men_only = models.BooleanField(blank=True, null=True, default=False)
-    women_only = models.BooleanField(blank=True, null=True, default=False)
-    religious_affiliation = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
+    # institution types
+    minority_serving_aanipi = models.BooleanField(default=False)
+    minority_serving_annh = models.BooleanField(default=False)
+    minority_serving_hispanic = models.BooleanField(default=False)
+    minority_serving_historically_black  = models.BooleanField(default=False)
+    minority_serving_nant = models.BooleanField(default=False)
+    minority_serving_predominantly_black  = models.BooleanField(default=False)
+    minority_serving_tribal = models.BooleanField(default=False)
+    men_only = models.BooleanField(default=False)
+    women_only = models.BooleanField(default=False)
+    religious_affiliation = models.CharField(blank=True, max_length=255)
 
     # admission fields
-    admissions_rate = models.FloatField(null=True, blank=True)
-    sat_reading_25th_percentile = models.FloatField(null=True, blank=True)
-    sat_reading_75th_percentile = models.FloatField(null=True, blank=True)
-    sat_math_25th_percentile = models.FloatField(null=True, blank=True)
-    sat_math_75th_percentile = models.FloatField(null=True, blank=True)
-    sat_writing_25th_percentile = models.FloatField(null=True, blank=True)
-    sat_writing_75th_percentile = models.FloatField(null=True, blank=True)
-    sat_reading_midpoint = models.FloatField(null=True, blank=True)
-    sat_math_midpoint = models.FloatField(null=True, blank=True)
-    sat_writing_midpoint = models.FloatField(null=True, blank=True)
-    act_cumulative_25th_percentile = models.FloatField(null=True, blank=True)
-    act_cumulative_75th_percentile = models.FloatField(null=True, blank=True)
-    act_english_25th_percentile = models.FloatField(null=True, blank=True)
-    act_english_75th_percentile = models.FloatField(null=True, blank=True)
-    act_math_25th_percentile = models.FloatField(null=True, blank=True)
-    act_math_75th_percentile = models.FloatField(null=True, blank=True)
-    act_writing_25th_percentile = models.FloatField(null=True, blank=True)
-    act_writing_75th_percentile = models.FloatField(null=True, blank=True)
-    act_cumulative_midpoint = models.FloatField(null=True, blank=True)
-    act_english_midpoint = models.FloatField(null=True, blank=True)
-    act_math_midpoint = models.FloatField(null=True, blank=True)
-    act_writing_midpoint = models.FloatField(null=True, blank=True)
-    sat_average = models.FloatField(null=True, blank=True)
-    online_only = models.BooleanField(blank=True, null=True, default=False)
+    admissions_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=7, null=True)
+    open_admissions = models.BooleanField(default=False)
+    sat_average = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    act_cumulative_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_cumulative_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_cumulative_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    act_english_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_english_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_english_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    act_math_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_math_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_math_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    act_writing_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_writing_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    act_writing_midpoint = models.PositiveIntegerField(blank=True, null=True)
 
-    # undergraduate fields
-    undergraduate_students = models.FloatField(null=True, blank=True)
-    undergraduate_students_white = models.FloatField(null=True, blank=True)
-    undergraduate_students_black = models.FloatField(null=True, blank=True)
-    undergraduate_students_hispanic = models.FloatField(null=True, blank=True)
-    undergraduate_students_asian = models.FloatField(null=True, blank=True)
-    undergraduate_students_aian = models.FloatField(null=True, blank=True)
-    undergraduate_students_nhpi = models.FloatField(null=True, blank=True)
-    undergraduate_students_2ormore = models.FloatField(null=True, blank=True)
-    undergraduate_students_nra = models.FloatField(null=True, blank=True)
-    undergraduate_students_unknown = models.FloatField(null=True, blank=True)
-    undergraduate_students_parttime = models.FloatField(null=True, blank=True)
-    operating = models.BooleanField(blank=True, null=True, default=False)
+    # undergraduate students description
+    undergraduate_students = models.PositiveIntegerField(blank=True, null=True)
+    undergraduate_students_2ormore = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_aian = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_asian = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_black = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_hispanic = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_nhpi = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_nra = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_unknown = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_white = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_parttime = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_men = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    undergraduate_students_women = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    age_entry = models.PositiveIntegerField(blank=True, null=True)
+    first_generation = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    share_25_older = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    veteran = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
 
-    # net pricing fields
+    # cost and net price fields
     avg_net_price = models.IntegerField(blank=True, null=True)
     avg_net_price_lo = models.IntegerField(blank=True, null=True)
     avg_net_price_m1 = models.IntegerField(blank=True, null=True)
@@ -252,198 +316,96 @@ class Scorecard(models.Model):
     tuition_in_state = models.IntegerField(blank=True, null=True)
     tuition_out_of_state = models.IntegerField(blank=True, null=True)
     tuition_program_year = models.IntegerField(blank=True, null=True)
-    pell_grant_rate = models.FloatField(null=True, blank=True)
 
-    # loan fields
-    federal_loan_rate = models.FloatField(null=True, blank=True)
-    share_25_older = models.FloatField(null=True, blank=True)
-    default_rate_2yr = models.FloatField(null=True, blank=True)
-    default_rate_3yr = models.FloatField(null=True, blank=True)
-    median_debt = models.FloatField(null=True, blank=True)
-    median_debt_completers = models.FloatField(null=True, blank=True)
-    median_debt_noncompleters = models.FloatField(null=True, blank=True)
-    median_debt_num_students = models.IntegerField(blank=True, null=True)
-    median_debt_completers_num_students = models.IntegerField(blank=True, null=True)
-    median_debt_noncompleters_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
-    monthly_loan_payments = models.FloatField(null=True, blank=True)
-    students_with_any_loan = models.FloatField(null=True, blank=True)
-    students_with_pell_grant = models.FloatField(null=True, blank=True)
-    age_entry = models.IntegerField(blank=True, null=True)
-    veteran = models.FloatField(null=True, blank=True)
-    first_generation = models.FloatField(null=True, blank=True)
-    alias = models.TextField(blank=True)
-
+    # loan and grant fields
+    default_rate_2yr = models.DecimalField(blank=True, decimal_places=3, max_digits=4, null=True)
+    default_rate_2yr_num_students = models.PositiveIntegerField(blank=True, null=True)
+    default_rate_3yr = models.DecimalField(blank=True, decimal_places=3, max_digits=4, null=True)
+    default_rate_3yr_num_students = models.PositiveIntegerField(blank=True, null=True)
+    federal_loan_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    median_debt = models.PositiveIntegerField(blank=True, null=True)
+    median_debt_num_students = models.PositiveIntegerField(blank=True, null=True)
+    median_debt_completers = models.PositiveIntegerField(blank=True, null=True)
+    median_debt_completers_num_students = models.PositiveIntegerField(blank=True, null=True)
+    median_debt_noncompleters = models.PositiveIntegerField(blank=True, null=True)
+    median_debt_noncompleters_num_students = models.PositiveIntegerField(blank=True, null=True)
+    monthly_loan_payments = models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)
+    pell_grant_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    students_with_pell_grant = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
 
     # graduation rate fields
-    graduation_rate_100 = models.FloatField(null=True, blank=True)
-    graduation_rate_100_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
+    graduation_rate_100 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_100_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_2ormore = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_2ormore_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_aian = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_aian_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_asian = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_asian_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_black = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_black_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_hispanic = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_hispanic_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_nhpi = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_nhpi_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_nra = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_nra_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_unknown = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_unknown_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_150_white = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_white_num_students = models.PositiveIntegerField(blank=True, null=True)
+    graduation_rate_200 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
 
-    institutional_level = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
-    undergraduate_students_men = models.FloatField(null=True, blank=True)
-    undergraduate_students_women = models.FloatField(null=True, blank=True)
-    default_rate_2yr_num_students = models.IntegerField(blank=True, null=True)
-    default_rate_3yr_num_students = models.IntegerField(blank=True, null=True)
-    open_admissions = models.BooleanField(blank=True, null=True, default=False)
-    graduation_rate_150 = models.FloatField(null=True, blank=True)
-    first_time_full_time = models.FloatField(null=True, blank=True)
-    graduation_rate_150_white = models.FloatField(null=True, blank=True)
-    graduation_rate_150_black = models.FloatField(null=True, blank=True)
-    graduation_rate_150_hispanic = models.FloatField(null=True, blank=True)
-    graduation_rate_150_asian = models.FloatField(null=True, blank=True)
-    graduation_rate_150_aian = models.FloatField(null=True, blank=True)
-    graduation_rate_150_nhpi = models.FloatField(null=True, blank=True)
-    graduate_rate_150_2ormore = models.FloatField(null=True, blank=True)
-    graduate_rate_150_nra = models.FloatField(null=True, blank=True)
-    graduate_rate_150_unknown = models.FloatField(null=True, blank=True)
-    graduation_rate_150_white_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
-    graduation_rate_150_black_num_students = models.IntegerField(blank=True, null=True)
-    graduation_rate_150_hispanic_num_students = models.IntegerField(blank=True, null=True)
-    graduation_rate_150_asian_num_students = models.IntegerField(blank=True, null=True)
-    graduation_rate_150_aian_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
-    graduation_rate_150_nhpi_num_students = models.IntegerField(blank=True, null=True)
-    graduate_rate_150_2ormore_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
-    graduate_rate_150_nra_num_students = models.IntegerField(blank=True, null=True)
-    graduate_rate_150_unknown_num_students = models.IntegerField(
-        blank=True,
-        null=True
-    )
-    first_time_full_time_pell_grant_rate = models.FloatField(
-        null=True,
-        blank=True
-    )
-    first_time_full_time_federal_loan_rate = models.FloatField(
-        null=True,
-        blank=True
-    )
-    first_time_full_time_num_students = models.FloatField(
-        null=True,
-        blank=True
-    )
-    graduation_rate_200 = models.FloatField(null=True, blank=True)
-    retention_rate_full_time = models.FloatField(null=True, blank=True)
-    retention_rate_part_time = models.FloatField(null=True, blank=True)
+    # first time full time fields
+    first_time_full_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    first_time_full_time_pell_grant_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    first_time_full_time_federal_loan_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    first_time_full_time_num_students = models.PositiveIntegerField(blank=True, null=True)
 
-    # program_percentage_degrees
-    program_percentage_education = models.FloatField(null=True, blank=True)
-    program_percentage_mathematics = models.FloatField(null=True, blank=True)
-    program_percentage_business_marketing = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_communications_technology = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_language = models.FloatField(null=True, blank=True)
-    program_percentage_visual_performing = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_engineering_technology = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_parks_recreation_fitness = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_agriculture = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_security_law_enforcement = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_computer = models.FloatField(null=True, blank=True)
-    program_percentage_precision_production = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_humanities = models.FloatField(null=True, blank=True)
-    program_percentage_library = models.FloatField(null=True, blank=True)
-    program_percentage_psychology = models.FloatField(null=True, blank=True)
-    program_percentage_social_science = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_legal = models.FloatField(null=True, blank=True)
-    program_percentage_english = models.FloatField(null=True, blank=True)
-    program_percentage_construction = models.FloatField(null=True, blank=True)
-    program_percentage_military = models.FloatField(null=True, blank=True)
-    program_percentage_communication = models.FloatField(null=True, blank=True)
-    program_percentage_public_administration_social_service = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_architecture = models.FloatField(null=True, blank=True)
-    program_percentage_ethnic_cultural_gender = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_resources = models.FloatField(null=True, blank=True)
-    program_percentage_health = models.FloatField(null=True, blank=True)
-    program_percentage_engineering = models.FloatField(null=True, blank=True)
-    program_percentage_history = models.FloatField(null=True, blank=True)
-    program_percentage_theology_religious_vocation = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_transportation = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_physical_science = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_science_technology = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_biological = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_family_consumer_science = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_philosophy_religious = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_personal_culinary = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_multidiscipline = models.FloatField(
-        null=True,
-        blank=True
-    )
-    program_percentage_mechanic_repair_technology = models.FloatField(
-        null=True,
-        blank=True
-    )
+    # retention rate fields
+    retention_rate_full_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    retention_rate_part_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+
+    # program percentages
+    program_percentage_agriculture = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_architecture = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_biological = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_business_marketing = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_communication = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_communications_technology = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_computer = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_construction = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_education = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_engineering = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_engineering_technology = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_english = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_ethnic_cultural_gender = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_family_consumer_science = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_health = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_history = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_humanities = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_language = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_legal = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_library = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_mathematics = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_mechanic_repair_technology = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_military = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_multidiscipline = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_parks_recreation_fitness = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_personal_culinary = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_philosophy_religious = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_physical_science = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_precision_production = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_psychology = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_public_administration_social_service = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_resources = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_science_technology = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_security_law_enforcement = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_social_science = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_theology_religious_vocation = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_transportation = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    program_percentage_visual_performing = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
 
     # automatically added
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -455,32 +417,3 @@ class Scorecard(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Budget(models.Model):
-    college_status = models.ForeignKey(
-        CollegeStatus,
-        default=DEFAULT_COLLEGE_STATUS_ID,
-        on_delete=models.CASCADE
-    )
-
-    work_study = models.IntegerField(blank=True, null=True)
-    job = models.IntegerField(blank=True, null=True)
-    savings = models.IntegerField(blank=True, null=True)
-    family = models.IntegerField(blank=True, null=True)
-    other_scholarships = models.IntegerField(blank=True, null=True)
-    loan_subsidized = models.IntegerField(blank=True, null=True)
-    loan_unsubsidized = models.IntegerField(blank=True, null=True)
-    loan_plus = models.IntegerField(blank=True, null=True)
-    loan_private = models.IntegerField(blank=True, null=True)
-    loan_school = models.IntegerField(blank=True, null=True)
-
-    # automatically added
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True, null=True)
-    class Meta:
-        verbose_name = 'budget'
-        verbose_name_plural = 'budgets'
-
-    def __str__(self):
-        return str(self.pk)

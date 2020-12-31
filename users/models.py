@@ -21,8 +21,8 @@ DEFAULT_USER_ID = 1
 ### Foreign Key Fields in User
 ################################################
 class Income(models.Model):
-    category = models.CharField(max_length=255, unique=True)
-    description = models.CharField(max_length=255)
+    category = models.CharField(max_length=5, unique=True)
+    description = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -35,7 +35,7 @@ class Income(models.Model):
 
 
 class UserCategory(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -86,13 +86,13 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """ User model that extends AbstractBaseUser and PermissionsMixin """
 
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
     CONTACT_METHOD_CHOICES = (
         ("text", "text"),
         ("email", "email")
     )
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+    USERNAME_FIELD = "email"
 
     # contact information
     email = models.EmailField(_("Email Address"),
@@ -117,7 +117,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         _("Preferred Contact Method"),
         blank=True,
         choices=CONTACT_METHOD_CHOICES,
-        max_length=255,
+        max_length=10,
     )
 
     # account information
@@ -125,7 +125,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         UserCategory,
         blank=True,
         null=True,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     is_active = models.BooleanField(
         _("Active Status"),
@@ -169,7 +169,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     organization = models.ManyToManyField(Organization, blank=True)
 
     # academic and test scores
-    high_school_grad_year = models.PositiveIntegerField(
+    high_school_grad_year = models.PositiveSmallIntegerField(
         _("High School Graduation Year"),
         blank=True,
         null=True,
@@ -177,7 +177,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     gpa = models.DecimalField(
         _("GPA"),
         blank=True,
-        decimal_places=2,
+        decimal_places=3,
         max_digits=5,
         null=True
     )
@@ -207,7 +207,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Income,
         blank=True,
         null=True,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -268,8 +268,8 @@ class DeletedAccount(models.Model):
 
 
 class Ethnicity(models.Model):
-    category = models.CharField(max_length=255, unique=True)
-    description = models.CharField(blank=True, max_length=255)
+    category = models.CharField(max_length=20, unique=True)
+    description = models.CharField(blank=True, max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -290,7 +290,7 @@ class EthnicityUser(models.Model):
     ethnicity = models.ForeignKey(
         Ethnicity,
         default=DEFAULT_ETHNICITY_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     other_value = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
@@ -305,7 +305,7 @@ class EthnicityUser(models.Model):
 
 
 class Pronoun(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=20, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -326,7 +326,7 @@ class PronounUser(models.Model):
     pronoun = models.ForeignKey(
         Pronoun,
         default=DEFAULT_PRONOUN_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     other_value = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
@@ -341,7 +341,7 @@ class PronounUser(models.Model):
 
 
 class Source(models.Model):
-    category = models.CharField(max_length=255, unique=True)
+    category = models.CharField(max_length=100, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -362,7 +362,7 @@ class SourceUser(models.Model):
     source = models.ForeignKey(
         Source,
         default=DEFAULT_SOURCE_ID,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     other_value = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
