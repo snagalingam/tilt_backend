@@ -54,6 +54,7 @@ class CollegeType(DjangoObjectType):
             'photos',
             'place_id',
             'popularity_score',
+            'scorecard_unit_id',
             'types',
             'url',
             'website'
@@ -84,15 +85,11 @@ class CollegeFieldOfStudyType(DjangoObjectType):
             'college',
             'credential_level',
             'credential_title',
-            'mean_debt',
-            'median_debt',
-            'median_earnings',
-            'monthly_debt_payment',
-            'num_students_debt',
-            'num_students_earnings',
-            'num_students_ipeds_awards1',
-            'num_students_ipeds_awards2',
-            'num_students_titleiv'
+            'debt_num_students',
+            'debt_mean',
+            'debt_median',
+            'debt_monthly_payment',
+            'earnings_2yr_median_earnings',
         )
 
 
@@ -419,18 +416,15 @@ class Query(graphene.ObjectType):
             return NetPriceRangeType(min=0, max=0)
 
     def resolve_religious_affiliation(self, info):
-        qs = Scorecard.objects.filter(
-            religious_affiliation__isnull=False).distinct("religious_affiliation")
+        qs = Scorecard.objects.filter(religious_affiliation__isnull=False).distinct("religious_affiliation")
         return qs
 
     def resolve_state_fips(self, info, state_fip=""):
-        qs = Scorecard.objects.filter(
-            state_fips__icontains=state_fip).distinct("state_fips")
+        qs = Scorecard.objects.filter(state_fips__icontains=state_fip).distinct("state_fips")
         return qs
 
     def resolve_states(self, info, state=""):
-        qs = Scorecard.objects.filter(
-            state__icontains=state).distinct('state')
+        qs = Scorecard.objects.filter(state__icontains=state).distinct('state')
         return qs
 
 
@@ -572,9 +566,22 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
     ):
         user = info.context.user
         college = College.objects.get(pk=college_id)
-        college_status = CollegeStatus.objects.get(user=user, college=college)
 
-        if college_status is not None:
+        try:
+            college_status = CollegeStatus.objects.get(user=user, college=college)
+
+        except:
+            college_status = None
+
+        if college_status is None:
+            if status != "not interested":
+                college.popularity_score += 1
+                college.save()
+
+            college_status = CollegeStatus.objects.create(user=user)
+            college_status.college = college
+
+        else:
             # increase popularity score if change to interested
             if college_status.status == "not interested":
                 if status != "not interested":
@@ -586,14 +593,6 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
                 if status == "not interested":
                     college.popularity_score -= 1
                     college.save()
-
-        else:
-            if status != "not interested":
-                college.popularity_score += 1
-                college.save()
-
-            college_status = CollegeStatus.objects.create(user=user)
-            college_status.college = college
 
         if award_status is not None:
             college_status.award_status = award_status
