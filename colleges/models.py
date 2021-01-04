@@ -8,6 +8,7 @@ from services.twilio_api.sms_methods import send_notification_sms
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
 DEFAULT_POPULARITY_SCORE = 0
+DEFAULT_SCORECARD_ID = 1
 DEFAULT_USER_ID = 1
 
 
@@ -17,7 +18,7 @@ DEFAULT_USER_ID = 1
 class College(models.Model):
     # google api inputted (otherwise scorecard)
     name = models.CharField(blank=True, max_length=255)
-
+    scorecard_unit_id = models.IntegerField(null=True)
     popularity_score = models.IntegerField(default=DEFAULT_POPULARITY_SCORE)
 
     # google api inputted continued
@@ -140,7 +141,7 @@ class CollegeStatus(models.Model):
 
 
 ################################################
-### Other Models
+### Budget
 ################################################
 class Budget(models.Model):
     college_status = models.OneToOneField(
@@ -170,36 +171,9 @@ class Budget(models.Model):
         return str(self.pk)
 
 
-class FieldOfStudy(models.Model):
-    college = models.ForeignKey(
-        College,
-        on_delete=models.CASCADE,
-        default=DEFAULT_COLLEGE_ID
-    )
-    cip_code = models.CharField(blank=True, max_length=255)
-    cip_title = models.CharField(blank=True, max_length=255)
-    credential_level = models.CharField(blank=True, max_length=255)
-    credential_title = models.CharField(blank=True, max_length=255)
-    mean_debt = models.IntegerField(blank=True, null=True)
-    median_debt = models.IntegerField(blank=True, null=True)
-    median_earnings = models.IntegerField(blank=True, null=True)
-    monthly_debt_payment = models.IntegerField(blank=True, null=True)
-    num_students_debt = models.IntegerField(blank=True, null=True)
-    num_students_earnings = models.IntegerField(blank=True, null=True)
-    num_students_ipeds_awards1 = models.IntegerField(blank=True, null=True)
-    num_students_ipeds_awards2 = models.IntegerField(blank=True, null=True)
-    num_students_titleiv = models.IntegerField(blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'field of study'
-        verbose_name_plural = 'fields of studies'
-
-    def __str__(self):
-        return self.cip_title
-
-
+################################################
+### Scorecard
+################################################
 class Scorecard(models.Model):
     # college model
     college = models.OneToOneField(
@@ -208,25 +182,23 @@ class Scorecard(models.Model):
         on_delete=models.CASCADE
     )
 
-    # school info fields
-    name = models.CharField(blank=True, max_length=255)
-
-    # id fields
-    unit_id = models.IntegerField(blank=True, null=True)
-    ope_id = models.CharField(blank=True, max_length=255)
-    ope6_id = models.CharField(blank=True, max_length=255)
+    # basic info
+    name = models.CharField(max_length=255)
+    unit_id = models.IntegerField(null=True)
+    ope_id = models.CharField(max_length=20)
+    ope6_id = models.CharField(max_length=20)
 
     # location
-    city = models.CharField(blank=True, max_length=255)
-    latitude = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
-    longitude = models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)
-    state = models.CharField(blank=True, max_length=255)
-    state_fips = models.CharField(blank=True, max_length=255)
-    zipcode = models.CharField(blank=True, max_length=255)
+    city = models.CharField(max_length=255)
+    latitude = models.DecimalField(decimal_places=6, max_digits=9, null=True)
+    longitude = models.DecimalField(decimal_places=6, max_digits=9, null=True)
+    state = models.CharField(max_length=255)
+    state_fips = models.CharField(max_length=255)
+    zipcode = models.CharField(max_length=255)
 
-    # general Information
-    alias = models.TextField(blank=True)
-    accreditor = models.CharField(blank=True, max_length=255)
+    # general information
+    alias = models.CharField(blank=True, max_length=255)
+    accreditor = models.CharField(max_length=255)
     branches = models.IntegerField(blank=True, null=True)
     carnegie_basic = models.CharField(blank=True, max_length=255)
     carnegie_size_setting = models.CharField(blank=True, max_length=255)
@@ -240,7 +212,7 @@ class Scorecard(models.Model):
     main_campus = models.BooleanField(default=False)
     online_only = models.BooleanField(default=False)
     operating = models.BooleanField(default=False)
-    ownership = models.CharField(blank=True, max_length=255)
+    ownership = models.CharField(max_length=255)
     predominant_degree_awarded = models.CharField(blank=True, max_length=255)
     predominant_degree_awarded_recoded = models.CharField(blank=True, max_length=255)
     price_calculator_url = models.CharField(blank=True, max_length=255)
@@ -260,19 +232,9 @@ class Scorecard(models.Model):
     women_only = models.BooleanField(default=False)
     religious_affiliation = models.CharField(blank=True, max_length=255)
 
-    # admission fields
+    # admissions
     admissions_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=7, null=True)
     open_admissions = models.BooleanField(default=False)
-    sat_average = models.PositiveIntegerField(blank=True, null=True)
-    sat_math_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_math_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_math_midpoint = models.PositiveIntegerField(blank=True, null=True)
-    sat_reading_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_reading_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_reading_midpoint = models.PositiveIntegerField(blank=True, null=True)
-    sat_writing_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_writing_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
-    sat_writing_midpoint = models.PositiveIntegerField(blank=True, null=True)
     act_cumulative_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
     act_cumulative_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
     act_cumulative_midpoint = models.PositiveIntegerField(blank=True, null=True)
@@ -285,6 +247,16 @@ class Scorecard(models.Model):
     act_writing_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
     act_writing_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
     act_writing_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    sat_average = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_math_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_reading_midpoint = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_25th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_75th_percentile = models.PositiveIntegerField(blank=True, null=True)
+    sat_writing_midpoint = models.PositiveIntegerField(blank=True, null=True)
 
     # undergraduate students description
     undergraduate_students = models.PositiveIntegerField(blank=True, null=True)
@@ -317,7 +289,7 @@ class Scorecard(models.Model):
     tuition_out_of_state = models.IntegerField(blank=True, null=True)
     tuition_program_year = models.IntegerField(blank=True, null=True)
 
-    # loan and grant fields
+    # loan, grant, and earnings fields
     default_rate_2yr = models.DecimalField(blank=True, decimal_places=3, max_digits=4, null=True)
     default_rate_2yr_num_students = models.PositiveIntegerField(blank=True, null=True)
     default_rate_3yr = models.DecimalField(blank=True, decimal_places=3, max_digits=4, null=True)
@@ -330,13 +302,24 @@ class Scorecard(models.Model):
     median_debt_noncompleters = models.PositiveIntegerField(blank=True, null=True)
     median_debt_noncompleters_num_students = models.PositiveIntegerField(blank=True, null=True)
     monthly_loan_payments = models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)
+    plus_loan_median_debt = models.PositiveIntegerField(blank=True, null=True)
+    plus_loan_median_debt_num_students = models.PositiveIntegerField(blank=True, null=True)
+    plus_loan_pct_lower = models.PositiveIntegerField(blank=True, null=True)
+    plus_loan_pct_upper = models.PositiveIntegerField(blank=True, null=True)
     pell_grant_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    students_with_any_loan  = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     students_with_pell_grant = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+
+    # earnings
+    not_working_not_enrolled_3yr_num_students = models.PositiveIntegerField(blank=True, null=True)
+    working_not_enrolled_3yr_num_students = models.PositiveIntegerField(blank=True, null=True)
+    over_poverty_line_3yr_num_students = models.PositiveIntegerField(blank=True, null=True)
 
     # graduation rate fields
     graduation_rate_100 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     graduation_rate_100_num_students = models.PositiveIntegerField(blank=True, null=True)
     graduation_rate_150 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_150_num_students = models.PositiveIntegerField(blank=True, null=True)
     graduation_rate_150_2ormore = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     graduation_rate_150_2ormore_num_students = models.PositiveIntegerField(blank=True, null=True)
     graduation_rate_150_aian = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
@@ -356,14 +339,15 @@ class Scorecard(models.Model):
     graduation_rate_150_white = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     graduation_rate_150_white_num_students = models.PositiveIntegerField(blank=True, null=True)
     graduation_rate_200 = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    graduation_rate_200_num_students = models.PositiveIntegerField(blank=True, null=True)
 
-    # first time full time fields
+    # first time full time
     first_time_full_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
-    first_time_full_time_pell_grant_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     first_time_full_time_federal_loan_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
+    first_time_full_time_pell_grant_rate = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     first_time_full_time_num_students = models.PositiveIntegerField(blank=True, null=True)
 
-    # retention rate fields
+    # retention rate
     retention_rate_full_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
     retention_rate_part_time = models.DecimalField(blank=True, decimal_places=4, max_digits=5, null=True)
 
@@ -417,3 +401,57 @@ class Scorecard(models.Model):
 
     def __str__(self):
         return self.name
+
+
+################################################
+### Field of Study
+################################################
+class FieldOfStudy(models.Model):
+    college = models.ForeignKey(
+        College,
+        on_delete=models.CASCADE,
+        default=DEFAULT_COLLEGE_ID
+    )
+    scorecard = models.ForeignKey(
+        Scorecard,
+        on_delete=models.CASCADE,
+        default=DEFAULT_SCORECARD_ID,
+    )
+    cip_code = models.CharField(blank=True, max_length=255)
+    cip_title = models.CharField(blank=True, max_length=255)
+    credential_level = models.CharField(blank=True, max_length=255)
+    credential_title = models.CharField(blank=True, max_length=255)
+
+    # debt
+    debt_num_students = models.PositiveIntegerField(blank=True, null=True)
+    debt_mean = models.PositiveIntegerField(blank=True, null=True)
+    debt_median = models.PositiveIntegerField(blank=True, null=True)
+    debt_monthly_payment = models.PositiveIntegerField(blank=True, null=True)
+    plus_debt_num_students = models.PositiveIntegerField(blank=True, null=True)
+    plus_debt_mean = models.PositiveIntegerField(blank=True, null=True)
+    plus_debt_median = models.PositiveIntegerField(blank=True, null=True)
+    plus_debt_monthly_payment = models.PositiveIntegerField(blank=True, null=True)
+
+    # earnings
+    earnings_1yr_median_earnings = models.PositiveIntegerField(blank=True, null=True)
+    earnings_1yr_not_working_not_enrolled_num_students = models.PositiveIntegerField(blank=True, null=True)
+    earnings_1yr_over_poverty_line_num_students = models.PositiveIntegerField(blank=True, null=True)
+    earnings_1yr_working_not_enrolled_num_students = models.PositiveIntegerField(blank=True, null=True)
+    earnings_2yr_median_earnings = models.PositiveIntegerField(blank=True, null=True)
+    earnings_2yr_not_working_not_enrolled_num_students = models.PositiveIntegerField(blank=True, null=True)
+    earnings_2yr_over_poverty_line_num_students = models.PositiveIntegerField(blank=True, null=True)
+    earnings_2yr_working_not_enrolled_num_students = models.PositiveIntegerField(blank=True, null=True)
+
+    # ipeds awards
+    ipeds_awards1_num_students = models.IntegerField(blank=True, null=True)
+    ipeds_awards2_num_students = models.IntegerField(blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'field of study'
+        verbose_name_plural = 'fields of studies'
+
+    def __str__(self):
+        return self.cip_title
