@@ -570,7 +570,7 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
         try:
             college_status = CollegeStatus.objects.get(user=user, college=college)
 
-        except CollegeStatus:
+        except:
             college_status = None
 
         if college_status is None:

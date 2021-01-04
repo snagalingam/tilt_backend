@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "032b6147a8282e7b1ee1e7fb2d8036db73d6bbf8e3e81e643497a415bb44ede9"
+            "sha256": "c193cb1575b9acb35b28f4eb8cc31ccdb2c12397050776c4c3f5a03c55919a0a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -100,18 +100,18 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:0bb2c3159b9f5e0df50430bf06a155bd7f27f480825b6374dde807d42360a668",
-                "sha256:a49b3ab4bfa2f6394ba60165cfc468410797dd410f32eed47e22f61451ee986e"
+                "sha256:05796ba6c65f79214ea61becae5126d5c924eed8a11874bc5536d611deabbe47",
+                "sha256:50c2475cc6c38f7ff24c3e0ca8f7eaf787ce740499198043e05e6f13ac2e919f"
             ],
             "index": "pypi",
-            "version": "==1.16.43"
+            "version": "==1.16.47"
         },
         "botocore": {
             "hashes": [
-                "sha256:7398c900dbd4e3d61647269215396ea3e8082f494f3e7b65d9b6aca049c1d463",
-                "sha256:795a67338cadb0c3a45014a6c81659da6af623a4e973812f87a6f9d9fb7712e9"
+                "sha256:15584a86d6cb1f94ea785e8d3c98faeff8ddd0105356e1c106118d9ac12fa891",
+                "sha256:4989ff6ca4104f641d966f6bb2f3c4207f1a7a8d879b2e21224c7713dd9dc9b8"
             ],
-            "version": "==1.19.43"
+            "version": "==1.19.47"
         },
         "certifi": {
             "hashes": [
@@ -276,6 +276,13 @@
             "index": "pypi",
             "version": "==0.0.3"
         },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:0209bafcb7b5010fdfec784034f059d512256424de2a0f084cb82b096d6dd6a7"
+            ],
+            "markers": "python_version >= '3.5'",
+            "version": "==3.12.2"
+        },
         "favicon": {
             "hashes": [
                 "sha256:6d6b5a78de2a0d0084589f687f384b2ecd6a6527093fec564403b1a30605d7a8",
@@ -305,6 +312,14 @@
             ],
             "index": "pypi",
             "version": "==2.9.0"
+        },
+        "graphene-django-extras": {
+            "hashes": [
+                "sha256:db6d6a5d16dd3eb9acf68c0b8a5418536df73c6a211fbe40ec09d1271787cdfc",
+                "sha256:e13d750946de71a9fdae87b07d224be9d3a6cd51711c50180dbb74119ef71fb0"
+            ],
+            "index": "pypi",
+            "version": "==0.4.9"
         },
         "graphene-file-upload": {
             "hashes": [
@@ -481,10 +496,10 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:3e6b7dd2d1e0a59084bcee14a17af60c5c562cdc16d828e8eba2e683d3a7e268",
-                "sha256:5c55e189b682d420be27c6995ba6edce0c0a77dd67bfbe2ae6607134d5851ffd"
+                "sha256:16962c5fb8db4a8f63a26646d8886e9d769b6c511543557bc84e9569fb9a9cb4",
+                "sha256:180befebb1927b16f6b57101720075a984c019ac16b1b7575673bea42c6c3da5"
             ],
-            "version": "==2020.4"
+            "version": "==2020.5"
         },
         "requests": {
             "hashes": [
