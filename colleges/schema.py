@@ -90,6 +90,9 @@ class CollegeFieldOfStudyType(DjangoObjectType):
             'debt_median',
             'debt_monthly_payment',
             'earnings_2yr_median_earnings',
+            'earnings_2yr_working_not_enrollend_num_students',
+            'ipeds_awards1_num_students',
+            'ipeds_awards2_num_students'
         )
 
 
@@ -114,19 +117,13 @@ class NetPriceRangeType(graphene.ObjectType):
 
 
 class Query(graphene.ObjectType):
-    # standard model queries
-    college_budgets = graphene.List(CollegeBudgetType, limit=graphene.Int())
-    college_statuses = graphene.List(CollegeStatusType, limit=graphene.Int())
-    colleges = graphene.List(CollegeType, limit=graphene.Int())
-    college_fields_of_studies = graphene.List(CollegeFieldOfStudyType, college=graphene.ID())
-    college_scorecards = graphene.List(CollegeScorecardType, limit=graphene.Int())
-
-    # speicfic queries
-    college_budgets_by_fields = graphene.List(
+    # standard queries
+    college_budgets = graphene.List(
         CollegeBudgetType,
-        college_status=graphene.ID(),
+        college_id=graphene.Int(),
         family=graphene.Int(),
         job=graphene.Int(),
+        limit=graphene.Int(),
         loan_plus=graphene.Int(),
         loan_private=graphene.Int(),
         loan_school=graphene.Int(),
@@ -136,16 +133,18 @@ class Query(graphene.ObjectType):
         savings=graphene.Int(),
         work_study=graphene.Int()
     )
+    college_statuses = graphene.List(
+        CollegeStatusType,
+        college_id=graphene.Int(),
+        user_id=graphene.Int(),
+        limit=graphene.Int()
+    )
+    colleges = graphene.List(CollegeType, id=graphene.Int(), limit=graphene.Int())
+    college_fields_of_study = graphene.List(CollegeFieldOfStudyType, college_id=graphene.Int())
+    college_scorecards = graphene.List(CollegeScorecardType, limit=graphene.Int())
+
+    # speicfic queries
     cities = graphene.List(CollegeScorecardType, city=graphene.String())
-    college_by_id = graphene.Field(CollegeType, id=graphene.Int())
-    college_statuses_by_college_id = graphene.Field(
-        CollegeStatusType,
-        college=graphene.ID()
-    )
-    college_statuses_by_user_id = graphene.Field(
-        CollegeStatusType,
-        user=graphene.ID()
-    )
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
@@ -183,48 +182,34 @@ class Query(graphene.ObjectType):
     states = graphene.List(CollegeScorecardType, state=graphene.String())
 
     # standard model queries
-    def resolve_college_budgets(self, info, limit=None):
-        qs = Budget.objects.all()[0:limit]
+    def resolve_college_budgets(self, info, limit=None, **kwargs):
+        qs = Budget.objects.filter(**kwargs)[0:limit]
         return qs
 
-    def resolve_college_statuses(self, info, limit=None):
-        qs = CollegeStatus.objects.all()[0:limit]
+    def resolve_college_statuses(self, info, limit=None, **kwargs):
+        qs = CollegeStatus.objects.filter(**kwargs)[0:limit]
         return qs
 
-    def resolve_colleges(self, info, limit=None):
-        qs = College.objects.all()[0:limit]
+    def resolve_colleges(self, info, limit=None, **kwargs):
+        qs = College.objects.filter(show=True, **kwargs)[0:limit]
         return qs
 
-    def resolve_college_fields_of_studies(self, info, college_id):
-        qs = FieldOfStudy.objects.filter(college=college_id, num_students_ipeds_awards2__isnull=False)
+    def resolve_college_fields_of_study(self, info, **kwargs):
+        qs = FieldOfStudy.objects.filter(show=True, **kwargs)
         return qs
 
     def resolve_college_scorecards(self, info, limit=None):
-        qs = Scorecard.objects.all()[0:limit]
+        qs = Scorecard.objects.filter(show=True)[0:limit]
         return qs
 
     # speicfic queries
-    def resolve_college_budgets_by_fields(self, info, **kwargs):
-        qs = Budget.objects.filter(**kwargs)
-        return qs
-
     def resolve_cities(self, info, city=""):
-        qs = Scorecard.objects.filter(city__icontains=city)
-        return qs
-
-    def resolve_college_by_id(self, info, id):
-        return College.objects.get(pk=id)
-
-    def resolve_college_statuses_by_college_id(root, info, college_id):
-        qs = CollegeStatus.objects.get(college=college_id)
-        return qs
-
-    def resolve_college_statuses_by_user_id(root, info, user_id):
-        qs = CollegeStatus.objects.get(user=user_id)
+        qs = Scorecard.objects.filter(show=True, city__icontains=city)
         return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):
-        qs = College.objects.order_by('-popularity_score')[0:limit]
+        qs = College.objects.filter(show=True)
+        qs = qs.order_by('-popularity_score')[0:limit]
         return qs
 
     def resolve_filter_colleges(
@@ -249,7 +234,7 @@ class Query(graphene.ObjectType):
             state=None,
             state_fips=None
     ):
-        qs = College.objects.all()
+        qs = College.objects.filter(show=True)
         user = info.context.user
         income_quintile = user.income_quintile
         if name:
@@ -373,6 +358,7 @@ class Query(graphene.ObjectType):
 
         # filter by state and degree
         qs = College.objects.filter(
+            show=True,
             address__contains=state,
             scorecard__predominant_degree_awarded=degree)
         nearby_colleges = []
@@ -416,81 +402,21 @@ class Query(graphene.ObjectType):
             return NetPriceRangeType(min=0, max=0)
 
     def resolve_religious_affiliation(self, info):
-        qs = Scorecard.objects.filter(religious_affiliation__isnull=False).distinct("religious_affiliation")
+        qs = Scorecard.objects.filter(show=True, religious_affiliation__isnull=False).distinct("religious_affiliation")
         return qs
 
     def resolve_state_fips(self, info, state_fip=""):
-        qs = Scorecard.objects.filter(state_fips__icontains=state_fip).distinct("state_fips")
+        qs = Scorecard.objects.filter(show=True, state_fips__icontains=state_fip).distinct("state_fips")
         return qs
 
     def resolve_states(self, info, state=""):
-        qs = Scorecard.objects.filter(state__icontains=state).distinct('state')
+        qs = Scorecard.objects.filter(show=True, state__icontains=state).distinct('state')
         return qs
 
 
 ################################################
 ### Mutations
 ################################################
-class CollegeSearch(graphene.Mutation):
-    college = graphene.Field(CollegeType)
-
-    class Arguments:
-        place = graphene.String()
-        location = graphene.String()
-
-    def mutate(self, info, place, location):
-        api = GooglePlacesAPI()
-        data = api.details(place, location)
-        errors = data.get("errors", None)
-
-        if errors:
-            raise errors
-
-        results = data.get("result")
-        photos_result = results.get("photos", "")
-        place_id = data.get('place_id', "")
-        place_name = results.get("name", "")
-        location = results["geometry"]["location"]
-        lat = location.get("lat", None)
-        lng = location.get("lng", None)
-        business_status = results.get("business_status", "")
-        icon = results.get("icon", "")
-        address = results.get("formatted_address", "")
-        place_phone_number = results.get("formatted_phone_number", "")
-        url = results.get("url", "")
-        types = results.get("types", [])
-        website = results.get("website", "")
-        main_photo = ""
-        photos = []
-
-        if photos_result:
-            photo_arr = extract_photo_urls(photos_result)
-            main_photo = photo_arr[0]
-            photos = photo_arr
-
-        try:
-            favicon = get_favicon(website)
-        except:
-            favicon = None
-
-        college = College(
-            place_id=place_id,
-            business_status=business_status,
-            name=place_name,
-            lat=lat,
-            lng=lng,
-            address=address,
-            phone_number=place_phone_number,
-            url=url,
-            website=website,
-            favicon=favicon,
-            main_photo=main_photo,
-            photos=photos,
-            types=types
-        )
-        return CollegeSearch(college=college)
-
-
 class CreateOrUpdateCollegeBudget(graphene.Mutation):
     class Arguments:
         college_id = graphene.Int()
@@ -505,7 +431,7 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
         savings = graphene.Int()
         work_study = graphene.Int()
 
-    budget = graphene.Field(CollegeBudgetType)
+    college_budget = graphene.Field(CollegeBudgetType)
 
     def mutate(
         self,
@@ -525,24 +451,28 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
         user = info.context.user
         college = College.objects.get(pk=college_id)
         college_status = CollegeStatus.objects.get(user=user, college=college)
-        budget = Budget.objects.get(college_status=college_status)
 
-        if budget is None:
-            budget = Budget.objects.create(college_status=college_status)
+        try:
+            college_budget = Budget.objects.get(college_status=college_status)
+        except:
+            college_budget = None
 
-        budget.family = family
-        budget.job = job
-        budget.loan_plus = loan_plus
-        budget.loan_private = loan_private
-        budget.loan_school = loan_school
-        budget.loan_subsidized = loan_subsidized
-        budget.loan_unsubsidized = loan_unsubsidized
-        budget.other_scholarships = other_scholarships
-        budget.savings = savings
-        budget.work_study = work_study
-        budget.save()
+        if college_budget is None:
+            college_budget = Budget.objects.create(college_status=college_status)
 
-        return CreateOrUpdateBudget(budget=budget)
+        college_budget.family = family
+        college_budget.job = job
+        college_budget.loan_plus = loan_plus
+        college_budget.loan_private = loan_private
+        college_budget.loan_school = loan_school
+        college_budget.loan_subsidized = loan_subsidized
+        college_budget.loan_unsubsidized = loan_unsubsidized
+        college_budget.other_scholarships = other_scholarships
+        college_budget.savings = savings
+        college_budget.work_study = work_study
+        college_budget.save()
+
+        return CreateOrUpdateCollegeBudget(college_budget=college_budget)
 
 
 class CreateOrUpdateCollegeStatus(graphene.Mutation):
@@ -611,6 +541,5 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
-    college_search = CollegeSearch.Field()
-    create_or_update_budget = CreateOrUpdateCollegeBudget.Field()
+    create_or_update_college_budget = CreateOrUpdateCollegeBudget.Field()
     create_or_update_college_status = CreateOrUpdateCollegeStatus.Field()

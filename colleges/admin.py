@@ -37,7 +37,7 @@ class BudgetAdmin(admin.ModelAdmin):
 
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
-        (('College Information'), {'fields': ('name', 'popularity_score',)}),
+        (('College Information'), {'fields': ('name', 'scorecard_unit_id', 'show', 'popularity_score',)}),
         (('Google Places Information'), {'fields': (
             'place_id',
             'address',
@@ -59,20 +59,16 @@ class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'website', 'popularity_score', 'description',]
-    list_editable = ['description',]
+    list_display = ['name', 'show', 'scorecard_unit_id', 'popularity_score', 'website']
+    list_editable = ['show',]
     model = College
     ordering = ('name',)
     readonly_fields = ('created', 'updated')
     search_fields = (
+        'show',
         'name',
-        'unit_id',
-        'ope_id',
-        'website',
         'popularity_score',
-        'description',
-        'favicon',
-        'types',
+        'scorecard_unit_id',
     )
 
 
@@ -113,7 +109,7 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['cip_title', 'college', 'credential_level',]
+    list_display = ['cip_title', 'college', 'credential_level', 'show']
     model = FieldOfStudy
     ordering = ('college', 'credential_level',)
     search_fields = ('cip_title', 'college', 'credential_level',)
