@@ -4,6 +4,7 @@ import graphql_jwt
 import users.schema
 import organizations.schema
 import colleges.schema
+import college_status.schema
 import scholarships.schema
 import financial_aid.schema
 
@@ -12,6 +13,7 @@ class Query(
     users.schema.Query,
     organizations.schema.Query,
     colleges.schema.Query,
+    college_status.schema.Query,
     scholarships.schema.Query,
     financial_aid.schema.Query,
     graphene.ObjectType
@@ -23,6 +25,7 @@ class Mutation(
     users.schema.Mutation,
     organizations.schema.Mutation,
     colleges.schema.Mutation,
+    college_status.schema.Mutation,
     scholarships.schema.Mutation,
     financial_aid.schema.Mutation,
     graphene.ObjectType

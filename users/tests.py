@@ -58,17 +58,16 @@ class CustomUserTests(TestCase):
 
     def test_create_superuser(self):
         superuser = User.objects.get(email="admin@tiltaccess.com")
-
+        
         self.assertEqual(superuser.email, "admin@tiltaccess.com")
         self.assertEqual(superuser.first_name, "Admin")
         self.assertEqual(superuser.last_name, "Testuser")
-        self.assertEqual(superuser.check_password("gWzupKiX5c"), True)
-        self.assertEqual(superuser.is_superuser, True)
-        self.assertEqual(superuser.is_verified, False)
-        self.assertEqual(superuser.is_onboarded, False)
-        self.assertEqual(superuser.is_test_account, False)
-        self.assertEqual(superuser.is_staff, True)
-        self.assertEqual(superuser.is_active, True)
+        self.assertTrue(superuser.check_password("gWzupKiX5c"))
+        self.assertTrue(superuser.is_staff)
+        self.assertTrue(superuser.is_superuser)
+        self.assertFalse(superuser.is_verified)
+        self.assertFalse(superuser.is_onboarded)
+        self.assertTrue(superuser.is_active)
         self.assertIsNotNone(superuser.date_joined)
 
     def test_create_user(self):
@@ -77,39 +76,57 @@ class CustomUserTests(TestCase):
         self.assertEqual(user.email, "demouser@tiltaccess.com")
         self.assertEqual(user.first_name, "Demo")
         self.assertEqual(user.last_name, "Testuser")
-        self.assertEqual(user.check_password("gWzupKiX5c"), True)
-        self.assertEqual(user.is_superuser, False)
-        self.assertEqual(user.is_verified, False)
-        self.assertEqual(user.is_onboarded, False)
-        self.assertEqual(user.is_test_account, False)
-        self.assertEqual(user.is_staff, False)
-        self.assertEqual(user.is_active, True)
+        self.assertTrue(user.check_password("gWzupKiX5c"))
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+        self.assertFalse(user.is_verified)
+        self.assertFalse(user.is_onboarded)
+        self.assertTrue(user.is_active)
         self.assertIsNotNone(user.date_joined)
 
     def test_login_users(self):
-        client = Client()
+        c = Client()
         superuser = User.objects.get(email="admin@tiltaccess.com")
         user = User.objects.get(email="demouser@tiltaccess.com")
-        login_superuser = client.login(
-            username="admin@tiltaccess.com",
-            password="gWzupKiX5c"
-        )
-        login_user = client.login(
-            username="demouser@tiltaccess.com",
-            password="gWzupKiX5c"
-        )
-
+        
+        login_superuser = c.login(
+            username="admin@tiltaccess.com", 
+            password="gWzupKiX5c")
+        login_superuser = c.login(
+            username="demouser@tiltaccess.com", 
+            password="gWzupKiX5c")
+        
         self.assertTrue(login_superuser)
-        self.assertTrue(login_user)
+        self.assertTrue(login_superuser)
+
+    def test_logout_users(self):
+        c = Client()
+        superuser = User.objects.get(email="admin@tiltaccess.com")
+        user = User.objects.get(email="demouser@tiltaccess.com")
+
+        login_superuser = c.login(
+            username="admin@tiltaccess.com", 
+            password="gWzupKiX5c")
+        login_superuser = c.login(
+            username="demouser@tiltaccess.com", 
+            password="gWzupKiX5c")
+
+        logout_superuser = c.login(
+            username="admin@tiltaccess.com", 
+            password="gWzupKiX5c")
+        logout_superuser = c.login(
+            username="demouser@tiltaccess.com", 
+            password="gWzupKiX5c")
+        
+        self.assertTrue(logout_superuser)
+        self.assertTrue(logout_superuser)
 
     def test_onboard_user(self):
         organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
         onboard_user = User.objects.get(email="demouser@tiltaccess.com")
 
-        onboard_user.is_verified = True
-        onboard_user.is_onboarded = True
+        onboard_user.phone_number= 718_555_1234
         onboard_user.preferred_contact_method= "email"
-        onboard_user.phone_number= "7185551234"
         onboard_user.preferred_name = "Preferred"
         onboard_user.gpa = 4.0
         onboard_user.act_score = 35
@@ -122,16 +139,12 @@ class CustomUserTests(TestCase):
         onboard_user.high_school_grad_year = 2020
         onboard_user.income_quintile = "lo"
         onboard_user.found_from = ["instagram"]
+        onboard_user.is_onboarded = True
         onboard_user.organization.add(organization)
         onboard_user.save()
 
-        self.assertEqual(onboard_user.is_verified, True)
-        self.assertEqual(onboard_user.is_onboarded, True)
-        self.assertEqual(onboard_user.is_test_account, False)
-        self.assertEqual(onboard_user.is_staff, False)
-        self.assertEqual(onboard_user.is_superuser, False)
+        self.assertEqual(onboard_user.phone_number, 718_555_1234)
         self.assertEqual(onboard_user.preferred_contact_method, "email")
-        self.assertEqual(onboard_user.phone_number, "7185551234")
         self.assertEqual(onboard_user.preferred_name, "Preferred")
         self.assertEqual(onboard_user.gpa, 4.0)
         self.assertEqual(onboard_user.act_score, 35)
@@ -145,6 +158,7 @@ class CustomUserTests(TestCase):
         self.assertEqual(onboard_user.income_quintile, "lo")
         self.assertEqual(onboard_user.found_from, ["instagram"])
         self.assertEqual(onboard_user.organization.get_queryset()[0], organization)
+        self.assertTrue(onboard_user.is_onboarded)
 
     def test_deleted_accounts(self):
         organization = Organization.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
@@ -153,11 +167,9 @@ class CustomUserTests(TestCase):
         onboard_user1 = User.objects.get(email="demouser1@tiltaccess.com")
         onboard_user2 = User.objects.get(email="demouser2@tiltaccess.com")
         onboard_user3 = User.objects.get(email="demouser3@tiltaccess.com")
-
-        onboard_user1.is_verified = True
-        onboard_user1.is_onboarded = True
+       
+        onboard_user1.phone_number= 718_555_1234
         onboard_user1.preferred_contact_method= "email"
-        onboard_user1.phone_number= "7185559876"
         onboard_user1.preferred_name = "Preferred"
         onboard_user1.gpa = 4.0
         onboard_user1.act_score = 35
@@ -170,15 +182,14 @@ class CustomUserTests(TestCase):
         onboard_user1.high_school_grad_year = 2020
         onboard_user1.income_quintile = "lo"
         onboard_user1.found_from = ["instagram"]
+        onboard_user1.is_onboarded = True
         onboard_user1.organization.add(organization)
         onboard_user1.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 1)
 
-        onboard_user2.is_verified = True
-        onboard_user2.is_onboarded = True
-        onboard_user2.preferred_contact_method= "email"
-        onboard_user2.phone_number= "7185556543"
+        onboard_user2.phone_number= 718_555_6543
+        onboard_user2.preferred_contact_method= "text"
         onboard_user2.preferred_name = "Preferred"
         onboard_user2.gpa = 4.0
         onboard_user2.act_score = 35
@@ -191,15 +202,14 @@ class CustomUserTests(TestCase):
         onboard_user2.high_school_grad_year = 2020
         onboard_user2.income_quintile = "lo"
         onboard_user2.found_from = ["instagram"]
+        onboard_user2.is_onboarded = True
         onboard_user2.organization.add(organization)
         onboard_user2.save()
 
         self.assertEqual(User.objects.filter(is_onboarded=True).count(), 2)
-
-        onboard_user3.is_verified = True
-        onboard_user3.is_onboarded = True
+        
+        onboard_user3.phone_number= 718_555_9876
         onboard_user3.preferred_contact_method= "email"
-        onboard_user3.phone_number= "7185553219"
         onboard_user3.preferred_name = "Preferred"
         onboard_user3.gpa = 4.0
         onboard_user3.act_score = 35
@@ -212,6 +222,7 @@ class CustomUserTests(TestCase):
         onboard_user3.high_school_grad_year = 2020
         onboard_user3.income_quintile = "lo"
         onboard_user3.found_from = ["instagram"]
+        onboard_user3.is_onboarded = True
         onboard_user3.organization.add(organization)
         onboard_user3.save()
 
@@ -223,7 +234,6 @@ class CustomUserTests(TestCase):
             date=date,
             accounts=1
         )
-
         self.assertEqual(get_count.accounts, 1)
         self.assertEqual(User.objects.all().count(), 4)
 
@@ -243,12 +253,13 @@ class CustomUserTests(TestCase):
     def test_create_action(self):
         timestamp = create_timestamp()
         user = User.objects.get(email="demouser@tiltaccess.com")
+
         action = Action.objects.create(
-            user=user,
-            description="Testing Actions",
-            timestamp=timestamp
-        )
+            user=user, 
+            description="Testing Actions", 
+            timestamp=timestamp)
 
         self.assertEqual(action.user, user)
         self.assertEqual(action.description, "Testing Actions")
         self.assertEqual(action.timestamp, timestamp)
+

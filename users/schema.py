@@ -16,19 +16,23 @@ from services.google_api.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
 from users.models import DeletedAccount, Action
 
+
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
+
 
 class ActionType(DjangoObjectType):
     class Meta:
         model = Action
         fields = "__all__"
 
+
 class OrganizationType_(DjangoObjectType):
     class Meta:
         model = Organization
         fields = "__all__"
+
 
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
@@ -150,7 +154,7 @@ class OnboardUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
-        phone_number = graphene.String()
+        phone_number = graphene.Int()
         preferred_contact_method = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()
@@ -251,6 +255,9 @@ class OnboardUser(graphene.Mutation):
 
             # add organization to user after user is onboarded
             user.organization.add(organization)
+
+            # print(f'place_id ==>: {place_id}')
+            # print(f'place_name ==>: {place_name}')
 
         if user is not None:
             user.phone_number = phone_number
@@ -440,7 +447,7 @@ class UpdateUser(graphene.Mutation):
         id = graphene.ID()
         first_name = graphene.String()
         last_name = graphene.String()
-        phone_number = graphene.String()
+        phone_number = graphene.Int()
         preferred_contact_method = graphene.String()
         preferred_name = graphene.String()
         gpa = graphene.Float()

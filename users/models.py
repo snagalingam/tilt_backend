@@ -85,19 +85,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-
-    # text or email
     preferred_contact_method = models.CharField(
         _("preferred contact method"), max_length=255, null=True, blank=True)
-
+        
     first_name = models.CharField(
         _("first name"), max_length=255, null=True, blank=True)
 
     last_name = models.CharField(
         _("last name"), max_length=255, null=True, blank=True)
 
-    phone_number = models.CharField(
-        _("phone number"), max_length=255, null=True, blank=True)
+    phone_number = models.BigIntegerField(
+        _("phone number"), null=True, blank=True)
 
     preferred_name = models.CharField(
         _("preferred name"), max_length=255, null=True, blank=True)
@@ -184,7 +182,8 @@ class DeletedAccount(models.Model):
 class Action(models.Model):
     """
     Create New Action
-        Action(user=user,
+
+        Action(user=user, 
             action='Logged In', (add description)
             timestamp=(check helpers folder for create_timestamp)
     """

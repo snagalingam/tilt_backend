@@ -36,8 +36,8 @@ class ActionAdmin(admin.ModelAdmin, DynamicArrayMixin):
         (None, {'fields': ('user', 'description', 'timestamp',)}),
     )
 
-    search_fields = ('user__email', 'description', 'timestamp',)
-    ordering = ('timestamp',)
+    search_fields = ('description', 'timestamp',)
+    ordering = ('user',)
 
     model = Action
 
@@ -61,7 +61,7 @@ class CustomUserAdmin(UserAdmin, DynamicArrayMixin):
     filter_horizontal = ('organization',) 
     
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'phone_number', 'preferred_contact_method')}),
+        (None, {'fields': ('email', 'password', 'phone_number')}),
         (_('Personal Information'), {
             'fields': ('first_name', 'last_name', 'preferred_name', 'pronouns')
         }),

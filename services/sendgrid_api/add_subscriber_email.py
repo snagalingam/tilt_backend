@@ -34,7 +34,7 @@ def send_subscription_verification(email):
     }
 
     try:
-        sg = SendGridAPIClient(os.environ.get('sendgrid_KEY'))
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
         print(response.status_code)
         print(response.headers)
@@ -45,7 +45,7 @@ def send_subscription_verification(email):
 def add_subscriber(email):
     print('adding subscriber')
     try:
-        sg = SendGridAPIClient(os.environ.get('sendgrid_KEY'))
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.client.asm.groups._(23297).suppressions._(email).delete()
         response2 = sg.client.marketing.contacts.put(request_body=dict(
             list_ids=["4dabef7f-34ee-4c60-a4c8-b4525c8115c5"],

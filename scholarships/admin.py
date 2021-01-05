@@ -1,25 +1,10 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Provider, Scholarship, ScholarshipStatus
+from .models import Scholarship, Contact
 
 from django.forms import TextInput, Textarea
 from django.db import models
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-
-class ProviderAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['organization', 'reference', 'email', 'state', ]
-    fieldsets = (
-        (None, {'fields': ('organization', 'reference', 'email', )}),
-        (_('Details'), {
-            'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
-        }),
-    )
-    search_fields = ('organization', 'reference', 'email', 'state',)
-    ordering = ('organization', 'reference',)
-    model = Provider
 
 class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
@@ -27,10 +12,11 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'provider', 'deadline', 'max_amount',]
-    filter_horizontal = ('college',)
+    list_display = ['name', 'contact', 'deadline', 'max_amount',]
+    filter_horizontal = ('college',) 
+
     fieldsets = (
-        (None, {'fields': ('provider', )}),
+        (None, {'fields': ('organization', 'contact', )}),
         (_('College'), {
             'fields': ('college',),
         }),
@@ -47,22 +33,26 @@ class ScholarshipAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'fields': ('writing_competition', 'location', 'state', 'disability', 'military', 'ethnicity', 'gender', 'min_gpa', 'max_gpa', 'min_act', 'min_sat', 'first_generation', 'financial_need',)
         }),
     )
-    search_fields = ('name', 'provider', 'deadline', 'max_amount',)
-    ordering = ('name', 'provider',)
+
+    search_fields = ('name', 'contact', 'deadline', 'max_amount',)
+    ordering = ('name', 'contact',)
     model = Scholarship
 
-class ScholarshipStatusAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class ContactAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'scholarship', 'user']
+    list_display = ['name', 'email', 'state', ]
     fieldsets = (
-        (None, {'fields': ('user', 'scholarship', 'status', )}),
+        (None, {'fields': ('name', 'email', )}),
+        (_('Details'), {
+            'fields': ('address', 'city', 'state', 'zipcode', 'phone_number', 'phone_number_ext', )
+        }),
     )
-    search_fields = ('user', 'scholarship', 'status',)
-    ordering = ('user', 'scholarship',)
-    model = ScholarshipStatus
 
-admin.site.register(Provider, ProviderAdmin)
+    search_fields = ('name', 'email', 'state',)
+    ordering = ('name',)
+    model = Contact
+
 admin.site.register(Scholarship, ScholarshipAdmin)
-admin.site.register(ScholarshipStatus, ScholarshipStatusAdmin)
+admin.site.register(Contact, ContactAdmin)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, AidCategory, AidData
+from .models import DocumentResult, DocumentData, BucketResult, BucketCheck
 
 from django.forms import TextInput, Textarea
 from django.db import models
@@ -8,33 +8,33 @@ from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '75'})},
     }
-    list_display = ['name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created']
-
+    list_display = ['name', 'pass_fail', 'processed', 'expired', 'start_date']
+    list_editable = ['expired',]
     fieldsets = (
-        (None, {
-            'fields':('sent', 'processed', 'pass_fail',)
+        (None, {'fields': ('pass_fail',)}),
+        (_('Results'), {
+            'fields': ('sent', 'processed', 'expired')
         }),
-        (_('Details'), {
-            'fields': ('name', 'words_id', 'tables_id')
-        }),
-        (_('Missing'), {
-            'fields': ('number_of_missing', 'missing_amounts',)
+        (_('Details'), {'fields': ('name', 'words_id', 'tables_id')}),
+        (_('Dates'), {
+            'fields': ('start_date',)
         }),
     )
 
-    search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
-    ordering = ('name', 'sent', 'processed', 'number_of_missing','created',)
+    search_fields = ('name', 'pass_fail', 'expired', 'start_date',)
+    ordering = ('name',)
     model = DocumentResult
+
+admin.site.register(DocumentResult, DocumentResultAdmin)
 
 class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
     }
-    list_display = ['name', ]
+    list_display = ['name',]
     fieldsets = (
         (_('Tables'), {'fields': ('tables',)}),
         (_('Words'), {'fields': ('words',)}),
@@ -44,50 +44,40 @@ class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ordering = ('name',)
     model = DocumentData
 
-class AidDataInline(admin.TabularInline):
-    model = AidData
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
-    }
-    extra = 0
-
-class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    def aid_data_count(self, obj):
-        return obj.aiddata_set.count()
-
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
-    fieldsets = (
-        (None, {'fields': ('name',)}),
-        (_('Information'), {
-            'fields': ('year', 'main_category', 'sub_category', 'sub_sub_category')
-        }),
-    )
-    inlines = [AidDataInline]
-    search_fields = ('name', 'main_category', 'sub_category',)
-    ordering = ('name', 'year')
-    model = AidCategory
-
-class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['college_status', 'name', 'amount', 'aid_category',]
-    fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'aid_category')}),
-        (_('Table Details'), {
-            'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')
-        }),
-    )
-    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
-    ordering = ('name', 'amount', 'college_status', 'aid_category',)
-    model = AidData
-
-admin.site.register(DocumentResult, DocumentResultAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
-admin.site.register(AidCategory, AidCategoryAdmin)
-admin.site.register(AidData, AidDataAdmin)
+
+class BucketCheckAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 50, 'cols': 100})},
+    }
+    list_display = ['bucket', 'date']
+    fieldsets = (
+        (_('Result'), {'fields': ('job_dict',)}),
+        (_('Date'), {'fields': ('date',)}),
+
+    )
+
+    search_fields = ('bucket', 'date')
+    ordering = ('bucket', 'date')
+    model = BucketCheck
+
+admin.site.register(BucketCheck, BucketCheckAdmin)
+
+class BucketResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '75'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
+    }
+    list_display = ['bucket', 'total_documents', 'passed_count', 'failed_count']
+    fieldsets = (
+        (_('Information'), {'fields': ('bucket', 'total_documents')}),
+        (_('Results'), {
+            'fields': ('passed_count', 'passed_list', 'failed_count', 'failed_list')
+        }),
+    )
+
+    search_fields = ('bucket',)
+    ordering = ('bucket',)
+    model = BucketResult
+
+admin.site.register(BucketResult, BucketResultAdmin)

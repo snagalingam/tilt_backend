@@ -26,9 +26,9 @@ def create_list_json(source, target):
             # if limit == stop:
             #     break
 
-            # with open(f'{target}.json', 'w') as new_file:
-            #     data = json.dumps(_list, indent=2)
-            #     new_file.write(data)
+            with open(f'{target}.json', 'w') as new_file:
+                data = json.dumps(_list, indent=2)
+                new_file.write(data)
 
     return print(f'''
     
@@ -112,9 +112,9 @@ def check_colleges_data(action, key):
         return print(count)
 
     elif action == 'list':
-        # with open(f'list_of_{key}s.json', 'w') as f:
-        #     data = json.dumps(_list, indent=2)
-        #     f.write(data)
+        with open(f'list_of_{key}s.json', 'w') as f:
+            data = json.dumps(_list, indent=2)
+            f.write(data)
         return print(f'''
 
         list_of_{key}s.json => CREATED
@@ -138,9 +138,9 @@ def check_single_file(source, target, key):
     
     # print(ids)
 
-    # with open(f'check_{key}s.json', 'w') as f:
-    #     data = json.dumps(_list, indent=2)
-    #     f.write(data)
+    with open(f'check_{key}s.json', 'w') as f:
+        data = json.dumps(_list, indent=2)
+        f.write(data)
 
     return print(f'''
 
@@ -205,9 +205,9 @@ def convert_to_json(csv_file):
             print(counter)
                 # print(each)
 
-        # with open(f'{csv_file}s.json', 'w') as f:
-        #     data = json.dumps(arr, indent=2)
-        #     f.write(data)
+        with open(f'{csv_file}s.json', 'w') as f:
+            data = json.dumps(arr, indent=2)
+            f.write(data)
 
 
 # convert_to_json('csv_files/colleges_info')
@@ -307,9 +307,9 @@ def get_google_info(file_name, location):
                     scorcards.append(scorcard)
 
                     # increment num
-                    # with open(f'colleges_seed_{nums}.json', 'w') as new_file:
-                    #         data = json.dumps(scorcards, indent=2)
-                    #         new_file.write(data)
+                    with open(f'colleges_seed_{nums}.json', 'w') as new_file:
+                            data = json.dumps(scorcards, indent=2)
+                            new_file.write(data)
 
                 except:
                     print(f'FAILED => {data}')

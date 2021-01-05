@@ -10,7 +10,7 @@
 
 # Run Backend with Virtual Environment
 
-## Set up backend environment
+## Set up backend locally
 1. Install virtualenv to work with virtual environments:
       - RUN `pip install virtualenv`
 2. Create virtual envrionment in any directory
@@ -21,20 +21,16 @@
       - RUN `pipenv install`
 
 ## Setup local database instance:
-Create local db instance using postgres. Easiest way: https://postgresapp.com/
+1. Create local db instance using postgres. Easiest way: https://postgresapp.com/
+2. Update `DATABASE` variable in `backend/tilt/project/settings.py` with the name, user, pass, etc. of your local instance.
+      - Remember to not commit these changes
+3. Execute `python3 manage.py migrate` to run the migrations on your local database instance.
 
 ## To run local development mode, run following commands in terminal:
 1. `export ENVIRONMENT="development"`
 2. `export DEBUG=1`
 3. `export SECRET_KEY={'<any_random_string>'}`
-4. `export REGION="us-east-2"`
-5. `export DATABASE_HOST="{local db host}"``
-6. `export DATABASE_NAME="{local db name}"`
-7. `export DATABASE_PASSWORD="{local db password}"`
-8. `export DATABASE_USER="{local db user}"`
 
-## Update local database
-Execute `python3 manage.py migrate` to run the migrations on your local database instance.
+## Start Server
 
-## Start server
 RUN `python3 manage.py runserver`

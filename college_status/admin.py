@@ -10,17 +10,15 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified',]
-    list_editable = ['reviewed', ]
-
+    list_display = ['status', 'college', 'user', ]
     fieldsets = (
         (_('College Status Information'), {
-            'fields': ('status', 'college', 'user', 'net_price', 'award_uploaded', 'reviewed', 'user_notified')
+            'fields': ('status', 'college', 'user', 'net_price')
         }),
     )
 
     search_fields = ('status', 'college', 'user',)
-    ordering = ('status', 'college', 'user',)
+    ordering = ('status',)
     model = CollegeStatus
 
 admin.site.register(CollegeStatus, CollegeStatusAdmin)

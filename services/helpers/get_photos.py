@@ -22,7 +22,7 @@ def get_photo_url(file_name):
                 main_photo_url = response.url
             except Exception as e:
                 print(e)
-                
+                breakpoint()
         else:
             main_photo_url = main_photo
 
@@ -39,10 +39,10 @@ def get_photo_url(file_name):
             'photos': photo_urls,
         }
 
-        # print(f'  ==> pk: {pk} / name: {name}')
-        # with open(f'photo_urls.json', 'a+') as f:
-        #     scorecard_data = json.dumps(data, indent=2, ensure_ascii=False)
-        #     f.write(scorecard_data + ',')
+        print(f'  ==> pk: {pk} / name: {name}')
+        with open(f'photo_urls.json', 'a+') as f:
+            scorecard_data = json.dumps(data, indent=2, ensure_ascii=False)
+            f.write(scorecard_data + ',')
 
     return print(f'  ==> FINISHED: {file_name}')
 
@@ -68,9 +68,9 @@ def replace_photos(file_1, file_2):
                 c['fields']['main_photo'] = p_main
                 c['fields']['photos'] = p_photos
 
-                # with open(f'new_colleges.json', 'a+') as f:
-                #     data = json.dumps(c, indent=2, ensure_ascii=False)
-                #     f.write(data + ',')
-                # break
+                with open(f'new_colleges.json', 'a+') as f:
+                    data = json.dumps(c, indent=2, ensure_ascii=False)
+                    f.write(data + ',')
+                break
         
     return print(f'  ==> FINISHED: {file_1} + {file_2}')
