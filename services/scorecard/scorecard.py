@@ -5,8 +5,8 @@ import requests
 import sys
 
 from datetime import datetime
+from django.conf import settings
 from math import ceil
-
 from scorecard_constants import (
     CARNEGIE_BASIC_DICT,
     CARNEGIE_SIZE_SETTING_DICT,
@@ -26,6 +26,8 @@ from scorecard_constants import (
     STATE_FIPS_DICT,
 )
 
+
+FIXTURES_DIR = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")), "fixtures/")
 SCORECARD_API = "https://api.data.gov/ed/collegescorecard/v1/schools.json"
 SCORECARD_KEY = "JTaStgE4XxpTtLtySKUihVrrhLKJuXgHYtvG180h"
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -34,7 +36,7 @@ SCRIPT_DIR = os.path.dirname(__file__)
 # Scorecard API returns data as a set of pages. This function helps find the
 # total number of pages given per_page constraints.
 ################################################################################
-def scorecard_find_number_pages(per_page):
+def find_total_number_of_scorecard_pages(per_page):
     # get the data
     fields = "id"
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&fields={fields}&per_page={per_page}"
@@ -49,17 +51,18 @@ def scorecard_find_number_pages(per_page):
 ################################################################################
 # Returns a list of all the unit ids available through the Scorecard API
 ################################################################################
-def scorecard_list_all_unit_ids():
+def list_all_scorecard_unit_ids():
     # find the total number of pages
     per_page = 100
-    total_pages = scorecard_find_number_pages(per_page=per_page)
-    print(f"Total of {total_pages + 1} pages to retrieve")
+    fields = "id"
+    total_pages = find_total_number_of_scorecard_pages(per_page=per_page)
+    print(f"STATUS => Total of {total_pages + 1} pages to retrieve")
 
     unit_ids = []
 
     # add ids to file
     for i in range(total_pages + 1):
-        print(f"Loading page {i} from scorecard")
+        print(f"STATUS => Loading page {i + 1} from scorecard")
         url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&fields={fields}&per_page={per_page}&page={i}"
         data = requests.get(url).json()
         results = data['results']
@@ -68,17 +71,18 @@ def scorecard_list_all_unit_ids():
             unit_ids.append(item['id'])
 
     unit_ids.sort()
-    print(f"Retrieved a total of {len(unit_ids)} unit ids")
+    print(f"STATUS => Retrieved a total of {len(unit_ids)} unit ids")
 
     with open('scorecard_unit_ids.json', 'w') as outfile:
-         json.dump(unit_ids, outfile, indent=4, sort_keys=True)
+         json.dump(unit_ids, outfile, indent=2, sort_keys=True)
 
     return(unit_ids)
 
+
 ################################################################################
-# Goes through the list and pulls all the data for each college
+# Pulls the scorecard data for one college and saves it
 ################################################################################
-def scorecard_get_college_data_by_unit_id(pk, unit_id):
+def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
     print(f"STATUS => pulling the scorecard data for {unit_id}")
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
     request = requests.get(url).json()
@@ -527,9 +531,19 @@ def scorecard_get_college_data_by_unit_id(pk, unit_id):
         date = datetime.now(pytz.timezone('America/Los_Angeles')).isoformat()
 
         ########################################################################
+        # Calculate whether we should show college or not
+        # College must be operating, have more than 0 undergrad students, and award
+        # predominantly associate or bachelor's degrees
+        ########################################################################
+        if operating and undergraduate_students > 0 and predominant_degree_awarded_data < 4:
+            show_scorecard = True
+
+        else:
+            show_scorecard = False
+
+        ########################################################################
         # Saves the data
         ########################################################################
-        scorecard_list = []
         scorecard_seed = {
             "model": "colleges.Scorecard",
             "pk": pk,
@@ -540,6 +554,7 @@ def scorecard_get_college_data_by_unit_id(pk, unit_id):
                 # basic info
                 "name": name,
                 "unit_id": unit_id,
+                "show": show_scorecard,
                 "ope_id": ope_id,
                 "ope6_id": ope6_id,
 
@@ -751,12 +766,44 @@ def scorecard_get_college_data_by_unit_id(pk, unit_id):
                 "updated": date,
                 }
         }
+
+    scorecard_filename = os.path.join(FIXTURES_DIR, f'scorecard_{page}.json')
+
+    if not os.path.isfile(scorecard_filename):
+        scorecard_list = []
         scorecard_list.append(scorecard_seed)
 
-    with open(f'seed_data_{unit_id}.json', 'w') as outfile:
-         json.dump(scorecard_list, outfile, ensure_ascii=False, indent=4)
-         # make sure unit_id is integer
-         # hidden field for field of study and scorecard
+        with open(scorecard_filename, mode='w') as outfile:
+            json.dump(scorecard_list, outfile, ensure_ascii=False, indent=2)
+
+    else:
+        # open original file
+        with open(scorecard_filename) as file:
+            scorecard_data = json.load(file)
+
+        # append additional data
+        scorecard_data.append(scorecard_seed)
+
+        # dump all the data back in the file
+        with open(scorecard_filename, mode='w') as outfile:
+            json.dump(scorecard_data, outfile, ensure_ascii=False, indent=2)
+
+    ########################################################################
+    # Save a list of primary keys used for field of study data
+    ########################################################################
+    field_of_study_pks_filename = os.path.join(SCRIPT_DIR, f'field_of_study_pks.json')
+
+    if not os.path.isfile(field_of_study_pks_filename):
+        field_of_study_pks = []
+        field_of_study_pk = 1
+
+    else:
+        # open file
+        with open(field_of_study_pks_filename) as file:
+            field_of_study_pks = json.load(file)
+
+        # get the maximum pk
+        field_of_study_pk = max(field_of_study_pks) + 1
 
     ########################################################################
     # Get and save field of study data
@@ -799,13 +846,27 @@ def scorecard_get_college_data_by_unit_id(pk, unit_id):
         ipeds_awards1_num_students = program.get('counts')['ipeds_awards1']
         ipeds_awards2_num_students = program.get('counts')['ipeds_awards2']
 
+        ########################################################################
+        # Calculate whether we should show field of study or note
+        # shows anything less than post-baccalaureate
+        ########################################################################
+        if credential_level_data < 4 and ipeds_awards2_num_students is not None:
+            show_field_of_study = True
+
+        else:
+            show_field_of_study = False
+
+        ########################################################################
+        # Saves the data
+        ########################################################################
         field_of_study_seed = {
             "model": "colleges.FieldOfStudy",
-            "pk": 1,
+            "pk": field_of_study_pk,
             "fields": {
                 # standard fields
                 "college": pk,
                 "scorecard": pk,
+                "show": show_field_of_study,
                 "created": date,
                 "updated": date,
 
@@ -842,28 +903,59 @@ def scorecard_get_college_data_by_unit_id(pk, unit_id):
         }
         field_of_study_list.append(field_of_study_seed)
 
-    filename = f'field_of_study_{unit_id}.json'
+        # add the pk to the list and add one to the counter
+        field_of_study_pks.append(field_of_study_pk)
+        field_of_study_pk += 1
 
-    if not os.path.isfile(filename):
-        with open(filename, mode='w') as outfile:
-            json.dump(field_of_study_list, outfile, ensure_ascii=False, indent=4)
+    field_of_study_filename = os.path.join(FIXTURES_DIR, f'field_of_study_{page}.json')
+
+    if not os.path.isfile(field_of_study_filename):
+        with open(field_of_study_filename, mode='w') as outfile:
+            json.dump(field_of_study_list, outfile, ensure_ascii=False, indent=2)
 
     else:
-        with open(filename) as file:
-            data = json.load(file)
+        # open original file
+        with open(field_of_study_filename) as file:
+            field_of_study_data = json.load(file)
 
-        data.append(field_of_study_list)
-        with open(filename, mode='w') as outfile:
-            json.dump(field_of_study_list, outfile, ensure_ascii=False, indent=4)
+        # append additional data
+        for seed in field_of_study_list:
+            field_of_study_data.append(seed)
+
+        # dump all the data back in the file
+        with open(field_of_study_filename, mode='w') as outfile:
+            json.dump(field_of_study_data, outfile, ensure_ascii=False, indent=2)
+
+    ############################################################################
+    # Saves the field of study primary keys
+    ############################################################################
+    with open(field_of_study_pks_filename, mode='w') as outfile:
+        json.dump(field_of_study_pks, outfile, ensure_ascii=False, indent=2)
 
 
-def scorecard_get_all_college_data():
+################################################################################
+# Pulls the data defined by the page number
+# Can only make 1000 api calls per hour. This formula pulls 990 colleges per page
+################################################################################
+def get_scorecard_data(page):
+    # find the total number of pages
     with open(os.path.join(SCRIPT_DIR, "scorecard_unit_ids.json")) as file:
         data = json.load(file)
 
-    pk = 1
-    for i in data[:5]:
-        scorecard_get_college_data_by_unit_id(pk=pk, unit_id=i)
+    total_colleges = len(data)
+    start = 5 * (page - 1)
+    end = 5 * (page)
+
+    if end > total_colleges:
+        end = total_colleges
+
+    pk = start + 1
+    for i in data[start:end]:
+        get_college_data_by_scorecard_unit_id(page=page, pk=pk, unit_id=i)
         pk += 1
 
-scorecard_get_all_college_data()
+
+################################################################################
+# Functions to run
+################################################################################
+get_scorecard_data(page=1)

@@ -18,7 +18,10 @@ DEFAULT_USER_ID = 1
 class College(models.Model):
     # google api inputted (otherwise scorecard)
     name = models.CharField(blank=True, max_length=255)
-    scorecard_unit_id = models.IntegerField(null=True)
+    scorecard_unit_id = models.IntegerField()
+
+    # calculated fields
+    show = models.BooleanField(default=False)
     popularity_score = models.IntegerField(default=DEFAULT_POPULARITY_SCORE)
 
     # google api inputted continued
@@ -185,6 +188,7 @@ class Scorecard(models.Model):
     # basic info
     name = models.CharField(max_length=255)
     unit_id = models.IntegerField(null=True)
+    show = models.BooleanField(default=False)
     ope_id = models.CharField(max_length=20)
     ope6_id = models.CharField(max_length=20)
 
@@ -417,6 +421,7 @@ class FieldOfStudy(models.Model):
         on_delete=models.CASCADE,
         default=DEFAULT_SCORECARD_ID,
     )
+    show = models.BooleanField(default=False)
     cip_code = models.CharField(blank=True, max_length=255)
     cip_title = models.CharField(blank=True, max_length=255)
     credential_level = models.CharField(blank=True, max_length=255)
