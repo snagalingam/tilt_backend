@@ -80,9 +80,37 @@ def list_all_scorecard_unit_ids():
 
 
 ################################################################################
-# Pulls the scorecard data for one college and saves it
+# Pulls the raw scorecard data for one college
+# Helps with debugging
 ################################################################################
-def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
+def get_raw_college_data_by_scorecard_unit_id(unit_id):
+    print(f"STATUS => pulling the scorecard data for {unit_id}")
+    url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
+    request = requests.get(url).json()
+    results = request.get('results')
+
+    # print out any errors received during the request
+    try:
+        error = scorecard['error']
+        print(f'ERROR CODE => {error["code"]}')
+        print(f'ERROR MESSAGE => {error["message"]}')
+
+    except:
+        pass
+
+    if results is None:
+        sys.exit(f'ERROR => No results for college {unit_id}')
+
+    else:
+        data = results[0]
+        raw_data_filename = os.path.join(SCRIPT_DIR, f'scorecard_{unit_id}.json')
+
+        with open(raw_data_filename, mode='w') as outfile:
+            json.dump(data, outfile, ensure_ascii=False, indent=2)
+################################################################################
+# Pulls the scorecard data for one college and saves it formatted
+################################################################################
+def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
     print(f"STATUS => pulling the scorecard data for {unit_id}")
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
     request = requests.get(url).json()
@@ -132,8 +160,6 @@ def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
         tuition = cost.get('tuition')
         # earnings
         earnings = latest.get('earnings')
-        # programs
-        programs = latest.get('programs')['cip_4_digit']
         # repayment
         repayment = latest.get('repayment')
         # student
@@ -535,7 +561,10 @@ def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
         # College must be operating, have more than 0 undergrad students, and award
         # predominantly associate or bachelor's degrees
         ########################################################################
-        if operating and undergraduate_students > 0 and predominant_degree_awarded_data < 4:
+        if operating is None or undergraduate_students is None or predominant_degree_awarded is None:
+            show_scorecard = False
+
+        elif operating and undergraduate_students > 0 and predominant_degree_awarded_data < 4:
             show_scorecard = True
 
         else:
@@ -809,103 +838,109 @@ def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
     # Get and save field of study data
     ########################################################################
     field_of_study_list = []
-    for program in programs:
-        # basic information
-        cip_code = program.get('code')
-        cip_title = program.get('title')
+    try:
+        programs = latest.get('programs')['cip_4_digit']
+    except:
+        programs = None
 
-        credential_level_data = program.get('credential')['level']
-        if credential_level_data in CREDENTIAL_LEVEL_DICT:
-            credential_level = CREDENTIAL_LEVEL_DICT[credential_level_data]
-        else:
-            sys.exit(f'ERROR => credential_level code of {credential_level_data} not in CREDENTIAL_LEVEL_DICT')
+    if programs is not None:
+        for program in programs:
+            # basic information
+            cip_code = program.get('code')
+            cip_title = program.get('title')
 
-        credential_title = program.get('credential')['title']
+            credential_level_data = program.get('credential')['level']
+            if credential_level_data in CREDENTIAL_LEVEL_DICT:
+                credential_level = CREDENTIAL_LEVEL_DICT[credential_level_data]
+            else:
+                sys.exit(f'ERROR => credential_level code of {credential_level_data} not in CREDENTIAL_LEVEL_DICT')
 
-        # debt
-        debt_num_students = program.get('debt')['staff_grad_plus']['all']['all_inst']['count']
-        debt_mean = program.get('debt')['staff_grad_plus']['all']['all_inst']['average']
-        debt_median = program.get('debt')['staff_grad_plus']['all']['all_inst']['median']
-        debt_monthly_payment = program.get('debt')['staff_grad_plus']['all']['all_inst']['median_payment']
-        plus_debt_num_students = program.get('debt')['parent_plus']['all']['all_inst']['count']
-        plus_debt_mean = program.get('debt')['parent_plus']['all']['all_inst']['average']
-        plus_debt_median = program.get('debt')['parent_plus']['all']['all_inst']['median']
-        plus_debt_monthly_payment = program.get('debt')['parent_plus']['all']['all_inst']['median_payment']
+            credential_title = program.get('credential')['title']
 
-        # earnings
-        earnings_1yr_median_earnings = program.get('earnings')['highest']['1_yr']['overall_median_earnings']
-        earnings_1yr_not_working_not_enrolled_num_students = program.get('earnings')['highest']['1_yr']['not_working_not_enrolled']['overall_count']
-        earnings_1yr_over_poverty_line_num_students = program.get('earnings')['highest']['1_yr']['overall_count_over_poverty_line']
-        earnings_1yr_working_not_enrolled_num_students = program.get('earnings')['highest']['1_yr']['working_not_enrolled']['overall_count']
-        earnings_2yr_median_earnings = program.get('earnings')['highest']['2_yr']['overall_median_earnings']
-        earnings_2yr_not_working_not_enrolled_num_students = program.get('earnings')['highest']['2_yr']['not_working_not_enrolled']['overall_count']
-        earnings_2yr_over_poverty_line_num_students = program.get('earnings')['highest']['2_yr']['overall_count_over_poverty_line']
-        earnings_2yr_working_not_enrolled_num_students = program.get('earnings')['highest']['2_yr']['working_not_enrolled']['overall_count']
+            # debt
+            debt_num_students = program.get('debt')['staff_grad_plus']['all']['all_inst']['count']
+            debt_mean = program.get('debt')['staff_grad_plus']['all']['all_inst']['average']
+            debt_median = program.get('debt')['staff_grad_plus']['all']['all_inst']['median']
+            debt_monthly_payment = program.get('debt')['staff_grad_plus']['all']['all_inst']['median_payment']
+            plus_debt_num_students = program.get('debt')['parent_plus']['all']['all_inst']['count']
+            plus_debt_mean = program.get('debt')['parent_plus']['all']['all_inst']['average']
+            plus_debt_median = program.get('debt')['parent_plus']['all']['all_inst']['median']
+            plus_debt_monthly_payment = program.get('debt')['parent_plus']['all']['all_inst']['median_payment']
 
-        # ipeds awards
-        ipeds_awards1_num_students = program.get('counts')['ipeds_awards1']
-        ipeds_awards2_num_students = program.get('counts')['ipeds_awards2']
+            # earnings
+            earnings_1yr_median_earnings = program.get('earnings')['highest']['1_yr']['overall_median_earnings']
+            earnings_1yr_not_working_not_enrolled_num_students = program.get('earnings')['highest']['1_yr']['not_working_not_enrolled']['overall_count']
+            earnings_1yr_over_poverty_line_num_students = program.get('earnings')['highest']['1_yr']['overall_count_over_poverty_line']
+            earnings_1yr_working_not_enrolled_num_students = program.get('earnings')['highest']['1_yr']['working_not_enrolled']['overall_count']
+            earnings_2yr_median_earnings = program.get('earnings')['highest']['2_yr']['overall_median_earnings']
+            earnings_2yr_not_working_not_enrolled_num_students = program.get('earnings')['highest']['2_yr']['not_working_not_enrolled']['overall_count']
+            earnings_2yr_over_poverty_line_num_students = program.get('earnings')['highest']['2_yr']['overall_count_over_poverty_line']
+            earnings_2yr_working_not_enrolled_num_students = program.get('earnings')['highest']['2_yr']['working_not_enrolled']['overall_count']
 
-        ########################################################################
-        # Calculate whether we should show field of study or note
-        # shows anything less than post-baccalaureate
-        ########################################################################
-        if credential_level_data < 4 and ipeds_awards2_num_students is not None:
-            show_field_of_study = True
+            # ipeds awards
+            ipeds_awards1_num_students = program.get('counts')['ipeds_awards1']
+            ipeds_awards2_num_students = program.get('counts')['ipeds_awards2']
 
-        else:
-            show_field_of_study = False
+            ########################################################################
+            # Calculate whether we should show field of study or note
+            # shows anything less than post-baccalaureate
+            ########################################################################
+            if credential_level_data < 4 and ipeds_awards2_num_students is not None:
+                show_field_of_study = True
 
-        ########################################################################
-        # Saves the data
-        ########################################################################
-        field_of_study_seed = {
-            "model": "colleges.FieldOfStudy",
-            "pk": field_of_study_pk,
-            "fields": {
-                # standard fields
-                "college": pk,
-                "scorecard": pk,
-                "show": show_field_of_study,
-                "created": date,
-                "updated": date,
+            else:
+                show_field_of_study = False
 
-                # fields from dataset
-                "cip_code": cip_code,
-                "cip_title": cip_title,
-                "credential_level": credential_level,
-                "credential_title": credential_title,
+            ########################################################################
+            # Saves the data
+            ########################################################################
+            field_of_study_seed = {
+                "model": "colleges.FieldOfStudy",
+                "pk": field_of_study_pk,
+                "fields": {
+                    # standard fields
+                    "college": pk,
+                    "scorecard": pk,
+                    "show": show_field_of_study,
+                    "created": date,
+                    "updated": date,
 
-                # debt
-                "debt_num_students": debt_num_students,
-                "debt_mean": debt_mean,
-                "debt_median": debt_median,
-                "debt_monthly_payment": debt_monthly_payment,
-                "plus_debt_num_students": plus_debt_num_students,
-                "plus_debt_mean": plus_debt_mean,
-                "plus_debt_median": plus_debt_median,
-                "plus_debt_monthly_payment": plus_debt_monthly_payment,
+                    # fields from dataset
+                    "cip_code": cip_code,
+                    "cip_title": cip_title,
+                    "credential_level": credential_level,
+                    "credential_title": credential_title,
 
-                # earnings
-                "earnings_1yr_median_earnings": earnings_1yr_median_earnings,
-                "earnings_1yr_not_working_not_enrolled_num_students": earnings_1yr_not_working_not_enrolled_num_students,
-                "earnings_1yr_over_poverty_line_num_students": earnings_1yr_over_poverty_line_num_students,
-                "earnings_1yr_working_not_enrolled_num_students": earnings_1yr_working_not_enrolled_num_students,
-                "earnings_2yr_median_earnings": earnings_2yr_median_earnings,
-                "earnings_2yr_not_working_not_enrolled_num_students": earnings_2yr_not_working_not_enrolled_num_students,
-                "earnings_2yr_over_poverty_line_num_students": earnings_2yr_over_poverty_line_num_students,
-                "earnings_2yr_working_not_enrolled_num_students": earnings_2yr_working_not_enrolled_num_students,
+                    # debt
+                    "debt_num_students": debt_num_students,
+                    "debt_mean": debt_mean,
+                    "debt_median": debt_median,
+                    "debt_monthly_payment": debt_monthly_payment,
+                    "plus_debt_num_students": plus_debt_num_students,
+                    "plus_debt_mean": plus_debt_mean,
+                    "plus_debt_median": plus_debt_median,
+                    "plus_debt_monthly_payment": plus_debt_monthly_payment,
 
-                # ipeds awards
-                "ipeds_awards1_num_students": ipeds_awards1_num_students,
-                "ipeds_awards2_num_students": ipeds_awards2_num_students,
+                    # earnings
+                    "earnings_1yr_median_earnings": earnings_1yr_median_earnings,
+                    "earnings_1yr_not_working_not_enrolled_num_students": earnings_1yr_not_working_not_enrolled_num_students,
+                    "earnings_1yr_over_poverty_line_num_students": earnings_1yr_over_poverty_line_num_students,
+                    "earnings_1yr_working_not_enrolled_num_students": earnings_1yr_working_not_enrolled_num_students,
+                    "earnings_2yr_median_earnings": earnings_2yr_median_earnings,
+                    "earnings_2yr_not_working_not_enrolled_num_students": earnings_2yr_not_working_not_enrolled_num_students,
+                    "earnings_2yr_over_poverty_line_num_students": earnings_2yr_over_poverty_line_num_students,
+                    "earnings_2yr_working_not_enrolled_num_students": earnings_2yr_working_not_enrolled_num_students,
+
+                    # ipeds awards
+                    "ipeds_awards1_num_students": ipeds_awards1_num_students,
+                    "ipeds_awards2_num_students": ipeds_awards2_num_students,
+                }
             }
-        }
-        field_of_study_list.append(field_of_study_seed)
+            field_of_study_list.append(field_of_study_seed)
 
-        # add the pk to the list and add one to the counter
-        field_of_study_pks.append(field_of_study_pk)
-        field_of_study_pk += 1
+            # add the pk to the list and add one to the counter
+            field_of_study_pks.append(field_of_study_pk)
+            field_of_study_pk += 1
 
     field_of_study_filename = os.path.join(FIXTURES_DIR, f'field_of_study_{page}.json')
 
@@ -938,24 +973,37 @@ def get_college_data_by_scorecard_unit_id(page, pk, unit_id):
 # Can only make 1000 api calls per hour. This formula pulls 990 colleges per page
 ################################################################################
 def get_scorecard_data(page):
-    # find the total number of pages
+    ############################################################################
+    # If first page, deletes the following files
+    ############################################################################
+#    if page == 1:
+#        os.remove(os.path.join(SCRIPT_DIR, "field_of_study_pks.json"))
+#        os.remove(os.path.join(FIXTURES_DIR, "field_of_study_1.json"))
+#        os.remove(os.path.join(FIXTURES_DIR, "scorecard_1.json"))
+
+    ############################################################################
+    # Finds the colleges to pull in this page
+    ############################################################################
     with open(os.path.join(SCRIPT_DIR, "scorecard_unit_ids.json")) as file:
         data = json.load(file)
 
     total_colleges = len(data)
-    start = 5 * (page - 1)
-    end = 5 * (page)
+    start = 980 * (page - 1)
+    end = 980 * (page)
 
     if end > total_colleges:
         end = total_colleges
 
     pk = start + 1
     for i in data[start:end]:
-        get_college_data_by_scorecard_unit_id(page=page, pk=pk, unit_id=i)
+        get_formatted_college_data_by_scorecard_unit_id(page=page, pk=pk, unit_id=i)
         pk += 1
+
+    print(f'STATUS => Finished with page {page}!')
 
 
 ################################################################################
 # Functions to run
 ################################################################################
 get_scorecard_data(page=1)
+#get_formatted_college_data_by_scorecard_unit_id(page=2, pk=2, unit_id=110936)
