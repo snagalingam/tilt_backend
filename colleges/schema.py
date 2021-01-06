@@ -54,6 +54,7 @@ class CollegeType(DjangoObjectType):
             'photos',
             'place_id',
             'popularity_score',
+            'scorecard',
             'scorecard_unit_id',
             'types',
             'url',
@@ -68,8 +69,9 @@ class CollegeStatusType(DjangoObjectType):
             'id',
             'award_status',
             'college',
-            'residency',
             'in_state_tuition',
+            'net_price',
+            'residency',
             'status',
             'user'
         )
@@ -477,9 +479,10 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
 
 class CreateOrUpdateCollegeStatus(graphene.Mutation):
     class Arguments:
-        college_id = graphene.Int()
+        college_id = graphene.Int(required=True)
         award_status = graphene.String()
         in_state_tuition = graphene.String()
+        net_price = graphene.Int()
         residency = graphene.String()
         status = graphene.String()
 
@@ -491,6 +494,7 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
         college_id=None,
         award_status=None,
         in_state_tuition=None,
+        net_price=None,
         residency=None,
         status=None
     ):
@@ -529,6 +533,9 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
 
         if in_state_tuition is not None:
             college_status.in_state_tuition = in_state_tuition
+
+        if net_price is not None:
+            college_status.net_price = net_price
 
         if residency is not None:
             college_status.resident = residency

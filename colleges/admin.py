@@ -81,6 +81,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
                 'status',
                 'award_status',
                 'in_state_tuition',
+                'net_price',
                 'residency',
                 'created',
                 'updated'
