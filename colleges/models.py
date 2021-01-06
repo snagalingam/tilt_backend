@@ -110,6 +110,7 @@ class CollegeStatus(models.Model):
         choices=IN_STATE_TUITION_CHOICES,
         max_length=255
     )
+    net_price = models.IntegerField(blank=True, null=True)
     residency = models.CharField(
         blank=True,
         choices=RESIDENCY_CHOICES,
