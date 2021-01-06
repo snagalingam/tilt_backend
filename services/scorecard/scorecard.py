@@ -111,7 +111,7 @@ def get_raw_college_data_by_scorecard_unit_id(unit_id):
 # Pulls the scorecard data for one college and saves it formatted
 ################################################################################
 def get_formatted_college_data_by_scorecard_unit_id(file_num, pk, unit_id):
-    print(f"STATUS => pulling the scorecard data for {unit_id}")
+    print(f"STATUS => Pulling the scorecard data for {unit_id}")
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
     request = requests.get(url).json()
     results = request.get('results')
@@ -196,6 +196,8 @@ def get_formatted_college_data_by_scorecard_unit_id(file_num, pk, unit_id):
             alias = ""
 
         accreditor = school.get('accreditor')
+        if accreditor is None:
+            accreditor = ""
         branches = school.get('branches')
 
         carnegie_basic_data = school.get('carnegie_basic')
@@ -258,6 +260,8 @@ def get_formatted_college_data_by_scorecard_unit_id(file_num, pk, unit_id):
             sys.exit(f'ERROR => predominant_degree_awarded_recoded code of {predominant_degree_awarded_recoded_data} not in PREDOMINANT_DEGREE_AWARDED_DICT')
 
         price_calculator_url = school.get('price_calculator_url')
+        if price_calculator_url is None:
+            price_calculator_url = ""
 
         region_data = school.get('region_id')
         if region_data in REGION_DICT:
@@ -972,9 +976,13 @@ def get_scorecard_data(file_num, starting_unit_id):
     counter = 1
     start = data.index(starting_unit_id)
     end = start + 500
+
     total_colleges = len(data) - 1
     remaining_colleges = total_colleges - start + 1
     print(f'STATUS => There are {remaining_colleges} remaining colleges')
+
+    if end > total_colleges:
+        end = total_colleges
 
     pk = start + 1
     for i in data[start:end]:
@@ -989,4 +997,4 @@ def get_scorecard_data(file_num, starting_unit_id):
 ################################################################################
 # Functions to run
 ################################################################################
-get_scorecard_data(file_num=7, starting_unit_id=214795)
+get_scorecard_data(file_num=16, starting_unit_id=48312405)

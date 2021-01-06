@@ -1,4 +1,5 @@
 CARNEGIE_BASIC_DICT = {
+    None: "",
     -2: "",
     0: "",
     1: "Associate's Colleges: High Transfer-High Traditional",
@@ -37,6 +38,7 @@ CARNEGIE_BASIC_DICT = {
 }
 
 CARNEGIE_SIZE_SETTING_DICT = {
+    None: "",
     -2: "",
     0: "",
     1: "Two-year, very small",
@@ -60,6 +62,7 @@ CARNEGIE_SIZE_SETTING_DICT = {
 }
 
 CARNEGIE_SIZE_SETTING_SIZE_DICT = {
+    None: "",
     -2: "",
     0: "",
     1: "Very Small",
@@ -83,6 +86,7 @@ CARNEGIE_SIZE_SETTING_SIZE_DICT = {
 }
 
 CARNEGIE_SIZE_SETTING_RESIDENTIAL_DICT = {
+    None: "",
     -2: "",
     0: "",
     1: "Commuter",
@@ -106,6 +110,7 @@ CARNEGIE_SIZE_SETTING_RESIDENTIAL_DICT = {
 }
 
 CARNEGIE_UNDERGRAD_DICT = {
+    None: "",
     -2: "",
     0: "",
     1: "Two-year, higher part-time",
@@ -151,6 +156,8 @@ INSTITUTIONAL_LEVEL_DICT = {
 }
 
 LOCALE_DICT = {
+    None: "",
+    -3: "",
     11: "City: Large(population of 250, 000 or more)",
     12: "City: Midsize(population of at least 100, 000 but less than 250, 000)",
     13: "City: Small(population less than 100, 000)",
@@ -166,6 +173,8 @@ LOCALE_DICT = {
 }
 
 LOCALE_UPDATED_DICT = {
+    None: "",
+    -3: "",
     11: "Larce City",
     12: "Midsize City",
     13: "Small City",
@@ -344,6 +353,7 @@ STATE_FIPS_DICT = {
     60: "American Samoa",
     64: "Federated States of Micronesia",
     66: "Guam",
+    68: "Majuro",
     69: "Northern Mariana Islands",
     70: "Palau",
     72: "Puerto Rico",
