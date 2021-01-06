@@ -84,7 +84,7 @@ def list_all_scorecard_unit_ids():
 # Helps with debugging
 ################################################################################
 def get_raw_college_data_by_scorecard_unit_id(unit_id):
-    print(f"STATUS => pulling the scorecard data for {unit_id}")
+    print(f"STATUS => Pulling scorecard data for {unit_id}")
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
     request = requests.get(url).json()
     results = request.get('results')
@@ -110,7 +110,7 @@ def get_raw_college_data_by_scorecard_unit_id(unit_id):
 ################################################################################
 # Pulls the scorecard data for one college and saves it formatted
 ################################################################################
-def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
+def get_formatted_college_data_by_scorecard_unit_id(file_num, pk, unit_id):
     print(f"STATUS => pulling the scorecard data for {unit_id}")
     url = f"{SCORECARD_API}?api_key={SCORECARD_KEY}&id={unit_id}"
     request = requests.get(url).json()
@@ -796,7 +796,7 @@ def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
                 }
         }
 
-    scorecard_filename = os.path.join(FIXTURES_DIR, f'scorecard_{page}.json')
+    scorecard_filename = os.path.join(FIXTURES_DIR, f'scorecard_{file_num}.json')
 
     if not os.path.isfile(scorecard_filename):
         scorecard_list = []
@@ -820,19 +820,16 @@ def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
     ########################################################################
     # Save a list of primary keys used for field of study data
     ########################################################################
-    field_of_study_pks_filename = os.path.join(SCRIPT_DIR, f'field_of_study_pks.json')
+    field_of_study_max_pk_filename = os.path.join(SCRIPT_DIR, f'field_of_study_max_pk.txt')
 
-    if not os.path.isfile(field_of_study_pks_filename):
-        field_of_study_pks = []
+    if not os.path.isfile(field_of_study_max_pk_filename):
         field_of_study_pk = 1
 
     else:
         # open file
-        with open(field_of_study_pks_filename) as file:
-            field_of_study_pks = json.load(file)
+        with open(field_of_study_max_pk_filename, 'r') as file:
+            field_of_study_pk = int(file.read())
 
-        # get the maximum pk
-        field_of_study_pk = max(field_of_study_pks) + 1
 
     ########################################################################
     # Get and save field of study data
@@ -937,12 +934,9 @@ def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
                 }
             }
             field_of_study_list.append(field_of_study_seed)
-
-            # add the pk to the list and add one to the counter
-            field_of_study_pks.append(field_of_study_pk)
             field_of_study_pk += 1
 
-    field_of_study_filename = os.path.join(FIXTURES_DIR, f'field_of_study_{page}.json')
+    field_of_study_filename = os.path.join(FIXTURES_DIR, f'field_of_study_{file_num}.json')
 
     if not os.path.isfile(field_of_study_filename):
         with open(field_of_study_filename, mode='w') as outfile:
@@ -964,46 +958,35 @@ def get_formatted_college_data_by_scorecard_unit_id(page, pk, unit_id):
     ############################################################################
     # Saves the field of study primary keys
     ############################################################################
-    with open(field_of_study_pks_filename, mode='w') as outfile:
-        json.dump(field_of_study_pks, outfile, ensure_ascii=False, indent=2)
+    with open(field_of_study_max_pk_filename, mode='w') as outfile:
+        outfile.write(str(field_of_study_pk))
 
 
 ################################################################################
-# Pulls the data defined by the page number
-# Can only make 1000 api calls per hour. This formula pulls 990 colleges per page
+# Finds the colleges to pull and stores in the given file number
 ################################################################################
-def get_scorecard_data(page):
-    ############################################################################
-    # If first page, deletes the following files
-    ############################################################################
-#    if page == 1:
-#        os.remove(os.path.join(SCRIPT_DIR, "field_of_study_pks.json"))
-#        os.remove(os.path.join(FIXTURES_DIR, "field_of_study_1.json"))
-#        os.remove(os.path.join(FIXTURES_DIR, "scorecard_1.json"))
-
-    ############################################################################
-    # Finds the colleges to pull in this page
-    ############################################################################
+def get_scorecard_data(file_num, starting_unit_id):
     with open(os.path.join(SCRIPT_DIR, "scorecard_unit_ids.json")) as file:
         data = json.load(file)
 
-    total_colleges = len(data)
-    start = 980 * (page - 1)
-    end = 980 * (page)
-
-    if end > total_colleges:
-        end = total_colleges
+    counter = 1
+    start = data.index(starting_unit_id)
+    end = start + 500
+    total_colleges = len(data) - 1
+    remaining_colleges = total_colleges - start + 1
+    print(f'STATUS => There are {remaining_colleges} remaining colleges')
 
     pk = start + 1
     for i in data[start:end]:
-        get_formatted_college_data_by_scorecard_unit_id(page=page, pk=pk, unit_id=i)
+        get_formatted_college_data_by_scorecard_unit_id(file_num=file_num, pk=pk, unit_id=i)
+        print(f'STATUS => Finished pulling data for number {counter}')
         pk += 1
+        counter += 1
 
-    print(f'STATUS => Finished with page {page}!')
+    print(f'STATUS => Finished with file {file_num}!')
 
 
 ################################################################################
 # Functions to run
 ################################################################################
-get_scorecard_data(page=1)
-#get_formatted_college_data_by_scorecard_unit_id(page=2, pk=2, unit_id=110936)
+get_scorecard_data(file_num=7, starting_unit_id=214795)

@@ -285,6 +285,7 @@ RELIGIOUS_AFFILIATION_DICT = {
     105: "General Baptist",
     106: "Muslim",
     107: "Plymouth Brethren",
+    108: ""
 }
 
 
