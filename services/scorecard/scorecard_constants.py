@@ -37,7 +37,7 @@ CARNEGIE_BASIC_DICT = {
 }
 
 CARNEGIE_SIZE_SETTING_DICT = {
-    -1: "",
+    -2: "",
     0: "",
     1: "Two-year, very small",
     2: "Two-year, small",
@@ -181,6 +181,7 @@ LOCALE_UPDATED_DICT = {
 }
 
 OPEN_ADMISSIONS_DICT = {
+    None: False,
     1: True,
     2: False,
     3: False,
@@ -193,6 +194,7 @@ OWNERSHIP_DICT = {
 }
 
 PREDOMINANT_DEGREE_AWARDED_DICT = {
+    None: "",
     0: "Not classified",
     1: "Predominantly certificate-degree granting",
     2: "Predominantly associate's-degree granting",
@@ -283,6 +285,7 @@ RELIGIOUS_AFFILIATION_DICT = {
     105: "General Baptist",
     106: "Muslim",
     107: "Plymouth Brethren",
+    108: ""
 }
 
 

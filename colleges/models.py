@@ -201,8 +201,8 @@ class Scorecard(models.Model):
     zipcode = models.CharField(max_length=255)
 
     # general information
-    alias = models.CharField(blank=True, max_length=255)
-    accreditor = models.CharField(max_length=255)
+    alias = models.TextField(blank=True)
+    accreditor = models.CharField(blank=True, max_length=255)
     branches = models.IntegerField(blank=True, null=True)
     carnegie_basic = models.CharField(blank=True, max_length=255)
     carnegie_size_setting = models.CharField(blank=True, max_length=255)
