@@ -1,38 +1,9 @@
-from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
-
+from colleges.models import College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-
-
-class BudgetAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (('Information'), {
-            'fields': (
-                'college_status',
-                'work_study',
-                'job',
-                'savings',
-                'family',
-                'other_scholarships',
-                'loan_subsidized',
-                'loan_unsubsidized',
-                'loan_plus',
-                'loan_private',
-                'loan_school',
-                'created',
-                'updated'
-            )
-        }),
-    )
-    formfield_overrides = {models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},}
-    list_display = ['college_status']
-    model = Budget
-    ordering = ('college_status',)
-    readonly_fields = ('created', 'updated')
-    search_fields = ('college_status',)
 
 
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
@@ -83,8 +54,26 @@ class CollegeStatusAdmin(admin.ModelAdmin):
                 'in_state_tuition',
                 'net_price',
                 'residency',
+            )
+        }),
+        (('Budget'), {
+            'fields': (
+                'work_study',
+                'job',
+                'savings',
+                'family',
+                'other_scholarships',
+                'loan_subsidized',
+                'loan_unsubsidized',
+                'loan_plus',
+                'loan_private',
+                'loan_school',
+            )
+        }),
+        (('Timestamp Fields'), {
+            'fields': (
                 'created',
-                'updated'
+                'updated',
             )
         }),
     )
@@ -128,7 +117,6 @@ class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('name', 'unit_id', 'ope_id',)
 
 
-admin.site.register(Budget, BudgetAdmin)
 admin.site.register(College, CollegeAdmin)
 admin.site.register(CollegeStatus, CollegeStatusAdmin)
 admin.site.register(FieldOfStudy, FieldOfStudyAdmin)

@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
@@ -18,25 +18,6 @@ User = get_user_model()
 ################################################
 ### Standard Model Definitions
 ################################################
-class CollegeBudgetType(DjangoObjectType):
-    class Meta:
-        model = Budget
-        fields = (
-            'id',
-            'college_status',
-            'family',
-            'job',
-            'loan_plus',
-            'loan_private',
-            'loan_school',
-            'loan_subsidized',
-            'loan_unsubsidized',
-            'other_scholarships',
-            'savings',
-            'work_study'
-        )
-
-
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
@@ -120,21 +101,6 @@ class NetPriceRangeType(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     # standard queries
-    college_budgets = graphene.List(
-        CollegeBudgetType,
-        college_id=graphene.Int(),
-        family=graphene.Int(),
-        job=graphene.Int(),
-        limit=graphene.Int(),
-        loan_plus=graphene.Int(),
-        loan_private=graphene.Int(),
-        loan_school=graphene.Int(),
-        loan_subsidized=graphene.Int(),
-        loan_unsubsidized=graphene.Int(),
-        other_scholarships=graphene.Int(),
-        savings=graphene.Int(),
-        work_study=graphene.Int()
-    )
     college_statuses = graphene.List(
         CollegeStatusType,
         college_id=graphene.Int(),
@@ -184,10 +150,6 @@ class Query(graphene.ObjectType):
     states = graphene.List(CollegeScorecardType, state=graphene.String())
 
     # standard model queries
-    def resolve_college_budgets(self, info, limit=None, **kwargs):
-        qs = Budget.objects.filter(**kwargs)[0:limit]
-        return qs
-
     def resolve_college_statuses(self, info, limit=None, **kwargs):
         qs = CollegeStatus.objects.filter(**kwargs)[0:limit]
         return qs
@@ -420,8 +382,9 @@ class Query(graphene.ObjectType):
 ### Mutations
 ################################################
 class CreateOrUpdateCollegeBudget(graphene.Mutation):
+    # send all fields to update the budget
     class Arguments:
-        college_id = graphene.Int()
+        college_id = graphene.Int(required=True)
         family = graphene.Int()
         job = graphene.Int()
         loan_plus = graphene.Int()
@@ -433,7 +396,7 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
         savings = graphene.Int()
         work_study = graphene.Int()
 
-    college_budget = graphene.Field(CollegeBudgetType)
+    college_status = graphene.Field(CollegeStatusType)
 
     def mutate(
         self,
@@ -452,29 +415,32 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
     ):
         user = info.context.user
         college = College.objects.get(pk=college_id)
-        college_status = CollegeStatus.objects.get(user=user, college=college)
 
         try:
-            college_budget = Budget.objects.get(college_status=college_status)
+            college_status = CollegeStatus.objects.get(college=college, user=user)
         except:
-            college_budget = None
+            college_status = None
 
-        if college_budget is None:
-            college_budget = Budget.objects.create(college_status=college_status)
+        if college_status is None:
+            college_status = CollegeStatus.objects.create(
+                college=college,
+                status="accepted",
+                user=user,
+            )
 
-        college_budget.family = family
-        college_budget.job = job
-        college_budget.loan_plus = loan_plus
-        college_budget.loan_private = loan_private
-        college_budget.loan_school = loan_school
-        college_budget.loan_subsidized = loan_subsidized
-        college_budget.loan_unsubsidized = loan_unsubsidized
-        college_budget.other_scholarships = other_scholarships
-        college_budget.savings = savings
-        college_budget.work_study = work_study
-        college_budget.save()
+        college_status.family = family
+        college_status.job = job
+        college_status.loan_plus = loan_plus
+        college_status.loan_private = loan_private
+        college_status.loan_school = loan_school
+        college_status.loan_subsidized = loan_subsidized
+        college_status.loan_unsubsidized = loan_unsubsidized
+        college_status.other_scholarships = other_scholarships
+        college_status.savings = savings
+        college_status.work_study = work_study
+        college_status.save()
 
-        return CreateOrUpdateCollegeBudget(college_budget=college_budget)
+        return CreateOrUpdateCollegeBudget(college_status=college_status)
 
 
 class CreateOrUpdateCollegeStatus(graphene.Mutation):

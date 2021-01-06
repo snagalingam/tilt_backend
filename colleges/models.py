@@ -117,6 +117,18 @@ class CollegeStatus(models.Model):
         max_length=255
     )
 
+    # budget fields
+    family = models.IntegerField(blank=True, null=True)
+    job = models.IntegerField(blank=True, null=True)
+    other_scholarships = models.IntegerField(blank=True, null=True)
+    savings = models.IntegerField(blank=True, null=True)
+    work_study = models.IntegerField(blank=True, null=True)
+    loan_plus = models.IntegerField(blank=True, null=True)
+    loan_private = models.IntegerField(blank=True, null=True)
+    loan_school = models.IntegerField(blank=True, null=True)
+    loan_subsidized = models.IntegerField(blank=True, null=True)
+    loan_unsubsidized = models.IntegerField(blank=True, null=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -139,37 +151,6 @@ class CollegeStatus(models.Model):
     class Meta:
         verbose_name = 'college status'
         verbose_name_plural = 'college statuses'
-
-    def __str__(self):
-        return str(self.pk)
-
-
-################################################
-### Budget
-################################################
-class Budget(models.Model):
-    college_status = models.OneToOneField(
-        CollegeStatus,
-        default=DEFAULT_COLLEGE_STATUS_ID,
-        on_delete=models.CASCADE
-    )
-    family = models.IntegerField(blank=True, null=True)
-    job = models.IntegerField(blank=True, null=True)
-    other_scholarships = models.IntegerField(blank=True, null=True)
-    savings = models.IntegerField(blank=True, null=True)
-    work_study = models.IntegerField(blank=True, null=True)
-    loan_plus = models.IntegerField(blank=True, null=True)
-    loan_private = models.IntegerField(blank=True, null=True)
-    loan_school = models.IntegerField(blank=True, null=True)
-    loan_subsidized = models.IntegerField(blank=True, null=True)
-    loan_unsubsidized = models.IntegerField(blank=True, null=True)
-
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'budget'
-        verbose_name_plural = 'budgets'
 
     def __str__(self):
         return str(self.pk)
