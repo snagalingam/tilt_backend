@@ -18,6 +18,7 @@ class AidTests(TestCase):
 
         college = College.objects.create(
             popularity_score=1,
+            scorecard_unit_id=100654,
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",
@@ -58,16 +59,6 @@ class AidTests(TestCase):
             primary="aid",
             secondary="grant",
             tertiary="federal"
-        )
-        AidData.objects.create(
-            college_status=college_status,
-            aid_category=aid_category,
-            name="Pell Grant",
-            amount=2000,
-            row_text = "Pell Grant, $1,000, $1,000, $2,000",
-            table=2,
-            row_index=2,
-            col_index=3
         )
 
     def test_create_aid_category(self):
@@ -110,7 +101,6 @@ class AidTests(TestCase):
         self.assertEqual(aid_data.col_index, 3)
         self.assertIsNotNone(aid_data.created)
         self.assertIsNotNone(aid_data.updated)
-        self.assertEqual(college_status.aiddata_set.get_queryset()[1], aid_data)
 
     def test_create_aid_summary(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
