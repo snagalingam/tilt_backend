@@ -4,7 +4,7 @@ services:
   backend:
     container_name: backend
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn tilt_project.wsgi -b 0.0.0.0:8000
     environment:
       - REGION=us-east-2
       - ENVIRONMENT=development
