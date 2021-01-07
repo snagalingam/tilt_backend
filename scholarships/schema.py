@@ -2,21 +2,182 @@ import datetime
 import graphene
 import math
 
-from .models import Provider, Scholarship, ScholarshipStatus
 from colleges.models import College
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Max, Min, F
 from graphene_django import DjangoObjectType
+from scholarships.models import (
+    Association,
+    Citizenship,
+    Degree,
+    Disability,
+    EducationCategory,
+    EducationDetail,
+    EducationScholarship,
+    FieldCategory,
+    FieldDetail,
+    FieldScholarship,
+    Gender,
+    Heritage,
+    Interest,
+    LocationDetail,
+    LocationScholarship,
+    Military,
+    Provider,
+    Scholarship,
+    ScholarshipStatus,
+    State
+)
 
 
-class ProviderType(DjangoObjectType):
+################################################
+### Standard Model Definitions
+################################################
+class ScholarshipAssociationType(DjangoObjectType):
+    class Meta:
+        model = Association
+        fields = ('id', 'name')
+
+
+class ScholarshipCitizenshipType(DjangoObjectType):
+    class Meta:
+        model = Citizenship
+        fields = ('id', 'category')
+
+
+class ScholarshipDegreeType(DjangoObjectType):
+    class Meta:
+        model = Degree
+        fields = ('id', 'category')
+
+
+class ScholarshipDisabilityType(DjangoObjectType):
+    class Meta:
+        model = Disability
+        fields = ('id', 'category')
+
+
+class ScholarshipEducationCategoryType(DjangoObjectType):
+    class Meta:
+        model = EducationCategory
+        fields = ('id', 'category')
+
+
+class ScholarshipEducationDetailType(DjangoObjectType):
+    class Meta:
+        model = EducationDetail
+        fields = ('id', 'description')
+
+
+class ScholarshipEducationScholarshipType(DjangoObjectType):
+    class Meta:
+        model = EducationScholarship
+        fields = ('id', 'education_category', 'education_detail', 'scholarship')
+
+
+class ScholarshipFieldCategoryType(DjangoObjectType):
+    class Meta:
+        model = FieldCategory
+        fields = ('id', 'category')
+
+
+class ScholarshipFieldDetailType(DjangoObjectType):
+    class Meta:
+        model = FieldDetail
+        fields = ('id', 'description')
+
+
+class ScholarshipFieldScholarshipType(DjangoObjectType):
+    class Meta:
+        model = FieldScholarship
+        fields = ('id', 'field_category', 'field_detail', 'scholarship')
+
+
+class ScholarshipGenderType(DjangoObjectType):
+    class Meta:
+        model = Gender
+        fields = ('id', 'category')
+
+
+class ScholarshipHeritageType(DjangoObjectType):
+    class Meta:
+        model = Heritage
+        fields = ('id', 'category')
+
+
+class ScholarshipInterestType(DjangoObjectType):
+    class Meta:
+        model = Interest
+        fields = ('id', 'category')
+
+
+class ScholarshipLocationDetailType(DjangoObjectType):
+    class Meta:
+        model = LocationDetail
+        fields = ('id', 'description')
+
+
+class ScholarshipLocationScholarshipType(DjangoObjectType):
+    class Meta:
+        model = LocationScholarship
+        fields = ('id', 'location_detail', 'scholarship', 'state',)
+
+
+class ScholarshipMilitaryType(DjangoObjectType):
+    class Meta:
+        model = Military
+        fields = ('id', 'category')
+
+
+class ScholarshipProviderType(DjangoObjectType):
     class Meta:
         model = Provider
+        fields = (
+            'id',
+            'addressee',
+            'city',
+            'email',
+            'phone_number',
+            'phone_number_ext',
+            'organization',
+            'state',
+            'street',
+            'zipcode'
+        )
 
 
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
+        fields = (
+            # scholarship details
+            'id',
+            'name',
+            'deadline',
+            'description',
+            'max_amount',
+            'number_awards',
+            'provider',
+            'renewable',
+            'website',
+            # requirements
+            'association',
+            'citizenship',
+            'college',
+            'degree',
+            'disability',
+            'financial_need',
+            'first_generation',
+            'gender',
+            'heritage',
+            'interest',
+            'military',
+            'min_act',
+            'min_gpa',
+            'min_sat',
+            'max_gpa',
+            'writing'
+        )
 
 
 class ScholarshipPaginationType(graphene.ObjectType):
@@ -28,88 +189,95 @@ class ScholarshipPaginationType(graphene.ObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
+        fields = ('id', 'user', 'scholarship', 'status')
 
 
+class ScholarshipStateType(DjangoObjectType):
+    class Meta:
+        model = State
+        fields = ('id', 'name', 'abbreviation')
+
+
+################################################
+### Query
+################################################
 class Query(graphene.ObjectType):
-    providers = graphene.List(ProviderType, limit=graphene.Int())
-    scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
+    scholarship_providers = graphene.List(ScholarshipProviderType, limit=graphene.Int())
     scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+    scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
 
     # providers
-    providers_by_fields = graphene.List(
-        ProviderType,
-        organization=graphene.String(),
-        reference=graphene.String(),
-        address=graphene.String(),
+    scholarship_providers_by_fields = graphene.List(
+        ScholarshipProviderType,
+        addressee=graphene.String(),
         city=graphene.String(),
-        state=graphene.String(),
-        zipcode=graphene.String(),
         email=graphene.String(),
+        organization=graphene.String(),
         phone_number=graphene.String(),
-        phone_number_ext=graphene.String())
+        phone_number_ext=graphene.String(),
+        state=graphene.ID(),
+        street=graphene.String(),
+        zipcode=graphene.String()
+    )
 
     # scholarships
-    scholarship_max_amount = graphene.Int()
-
     scholarships_by_fields = graphene.List(
         ScholarshipType,
+        # contact
         name=graphene.String(),
-        provider_id=graphene.Int(),
-        description=graphene.String(),
-        website=graphene.String(),
         deadline=graphene.Date(),
+        description=graphene.String(),
         max_amount=graphene.Int(),
-        renewable=graphene.Boolean(),
         number_awards=graphene.Int(),
-        education_level=graphene.List(graphene.String),
-        education_requirements=graphene.String(),
-        area_of_study=graphene.List(graphene.String),
-        area_of_study_description=graphene.String(),
-        writing_competition=graphene.Boolean(),
-        interest_description=graphene.String(),
-        college_id=graphene.Int(),
-        association_requirement=graphene.List(graphene.String),
-        location=graphene.String(),
-        state=graphene.String(),
-        ethnicity=graphene.List(graphene.String),
-        gender=graphene.String(),
-        min_gpa=graphene.Float(),
-        max_gpa=graphene.Float(),
-        min_act=graphene.Int(),
-        min_sat=graphene.Int(),
-        disability=graphene.String(),
-        military=graphene.String(),
-        citizenship=graphene.List(graphene.String),
+        provider=graphene.ID(),
+        renewable=graphene.Boolean(),
+        website=graphene.String(),
+        association=graphene.ID(),
+        citizenship=graphene.ID(),
+        college=graphene.ID(),
+        degree=graphene.ID(),
+        disability=graphene.ID(),
+        financial_need=graphene.Boolean(),
         first_generation=graphene.Boolean(),
-        financial_need=graphene.Boolean())
-
-    # scholarship_by_user_criteria
+        gender=graphene.ID(),
+        heritage=graphene.ID(),
+        interest=graphene.ID(),
+        military=graphene.ID(),
+        min_act=graphene.Int(),
+        min_gpa=graphene.Float(),
+        min_sat=graphene.Int(),
+        max_gpa=graphene.Float(),
+        writing=graphene.Boolean()
+    )
     scholarships_by_user_criteria = graphene.Field(
         ScholarshipPaginationType,
+        end_deadline=graphene.Date(),
+        max_amount=graphene.List(graphene.Float),
+        page=graphene.Int(),
+        per_page=graphene.Int(),
         name=graphene.String(),
         start_deadline=graphene.Date(),
-        end_deadline=graphene.Date(),
-        status=graphene.String(),
-        max_amount=graphene.List(graphene.Float),
-        per_page=graphene.Int(),
-        page=graphene.Int())
+        status=graphene.String()
+    )
+    scholarship_max_amount = graphene.Int()
 
-    # scholarship_statuses
+    # scholarship status
     scholarship_statuses_by_fields = graphene.List(
         ScholarshipStatusType,
-        user_id=graphene.Int(),
-        scholarship_id=graphene.Int(),
-        status=graphene.String())
+        scholarship=graphene.ID(),
+        status=graphene.String(),
+        user=graphene.ID()
+    )
 
     # get_all()
-    def resolve_providers(self, info, limit=None):
-        qs = Provider.objects.all()[0:limit]
-        return qs
-
     def resolve_scholarship_max_amount(self, info):
         get_max = Scholarship.objects.aggregate(Max("max_amount"))
         _max = get_max['max_amount__max']
         return _max
+
+    def resolve_scholarship_providers(self, info, limit=None):
+        qs = Provider.objects.all()[0:limit]
+        return qs
 
     def resolve_scholarships(self, info, limit=None):
         qs = Scholarship.objects.all()[0:limit]
@@ -120,204 +288,46 @@ class Query(graphene.ObjectType):
         return qs
 
     # get_by_fields()
-    def resolve_providers_by_fields(self, info, **fields):
-        qs = Provider.objects.filter(**fields)
+    def resolve_scholarship_providers_by_fields(self, info, **kwargs):
+        qs = Provider.objects.filter(**kwargs)
         return qs
 
-    def resolve_scholarship_max_amount(self, info):
-        get_max = Scholarship.objects.aggregate(Max("max_amount"))
-        max = get_max['max_amount__max']
-        return max
-
-    def resolve_scholarships_by_fields(self, info, **fields):
-        qs = Scholarship.objects.filter(**fields)
+    def resolve_scholarships_by_fields(self, info, **kwargs):
+        qs = Scholarship.objects.filter(**kwargs)
         return qs
 
-    def resolve_scholarship_statuses_by_fields(self, info, **fields):
-        qs = ScholarshipStatus.objects.filter(**fields)
+    def resolve_scholarship_statuses_by_fields(self, info, **kwargs):
+        qs = ScholarshipStatus.objects.filter(**kwargs)
         return qs
 
 
-class CreateProvider(graphene.Mutation):
-    provider = graphene.Field(ProviderType)
-
-    class Arguments:
-        organization = graphene.String()
-        reference = graphene.String()
-        address = graphene.String()
-        city = graphene.String()
-        state = graphene.String()
-        zipcode = graphene.String()
-        email = graphene.String()
-        phone_number = graphene.String()
-        phone_number_ext = graphene.String()
-
-    def mutate(
-        self,
-        info,
-        organization=None,
-        reference=None,
-        address=None,
-        city=None,
-        state=None,
-        zipcode=None,
-        email=None,
-        phone_number=None,
-        phone_number_ext=None,
-    ):
-
-        provider = Provider(
-            organization=organization,
-            reference=reference,
-            address=address,
-            city=city,
-            state=state,
-            zipcode=zipcode,
-            email=email,
-            phone_number=phone_number,
-            phone_number_ext=phone_number_ext)
-        provider.save()
-
-        return CreateProvider(provider=provider)
-
-
-class CreateScholarship(graphene.Mutation):
-    scholarship = graphene.Field(ScholarshipType)
-
-    class Arguments:
-        name = graphene.String()
-        provider_id = graphene.Int()
-        description = graphene.String()
-        website = graphene.String()
-        max_amount = graphene.Int()
-        deadline = graphene.Date()
-        renewable = graphene.Boolean()
-        number_awards = graphene.Int()
-        education_level = graphene.List(graphene.String)
-        education_requirements = graphene.String()
-        area_of_study = graphene.List(graphene.String)
-        area_of_study_description = graphene.String()
-        writing_competition = graphene.Boolean()
-        interest_description = graphene.String()
-        college_id = graphene.Int()
-        association_requirement = graphene.List(graphene.String)
-        location = graphene.String()
-        state = graphene.String()
-        ethnicity = graphene.List(graphene.String)
-        gender = graphene.String()
-        min_gpa = graphene.Float()
-        max_gpa = graphene.Float()
-        min_act = graphene.Int()
-        min_sat = graphene.Int()
-        disability = graphene.String()
-        military = graphene.String()
-        citizenship = graphene.List(graphene.String)
-        first_generation = graphene.Boolean()
-        financial_need = graphene.Boolean()
-
-    def mutate(
-        self,
-        info,
-        name=None,
-        provider_id=None,
-        description=None,
-        website=None,
-        deadline=None,
-        max_amount=None,
-        renewable=None,
-        number_awards=None,
-        education_level=None,
-        education_requirements=None,
-        area_of_study=None,
-        area_of_study_description=None,
-        writing_competition=None,
-        interest_description=None,
-        college_id=None,
-        association_requirement=None,
-        location=None,
-        state=None,
-        ethnicity=None,
-        gender=None,
-        min_gpa=None,
-        max_gpa=None,
-        min_act=None,
-        min_sat=None,
-        disability=None,
-        military=None,
-        citizenship=None,
-        first_generation=None,
-        financial_need=None,
-    ):
-
-        provider = Provider.objects.get(pk=provider_id)
-        college = College.objects.get(pk=college_id)
-
-        scholarship = Scholarship(
-            name=name,
-            provider=provider,
-            description=description,
-            website=website,
-            max_amount=max_amount,
-            deadline=deadline,
-            renewable=renewable,
-            number_awards=number_awards,
-            education_level=education_level,
-            education_requirements=education_requirements,
-            area_of_study=area_of_study,
-            area_of_study_description=area_of_study_description,
-            writing_competition=writing_competition,
-            interest_description=interest_description,
-            college=college,
-            association_requirement=association_requirement,
-            location=location,
-            state=state,
-            ethnicity=ethnicity,
-            gender=gender,
-            min_gpa=min_gpa,
-            max_gpa=max_gpa,
-            min_act=min_act,
-            min_sat=min_sat,
-            disability=disability,
-            military=military,
-            citizenship=citizenship,
-            first_generation=first_generation,
-            financial_need=financial_need)
-        scholarship.save()
-
-        return CreateScholarship(scholarship=scholarship)
-
+################################################
+### Mutations
+################################################
 class CreateOrUpdateScholarshipStatus(graphene.Mutation):
-    scholarship_status = graphene.Field(ScholarshipStatusType)
-
     class Arguments:
         scholarship_id = graphene.Int()
         status = graphene.String()
 
-    def mutate(
-        self,
-        info,
-        user_id=None,
-        scholarship_id=None,
-        status=None
-    ):
+    scholarship_status = graphene.Field(ScholarshipStatusType)
 
+    def mutate(self, info, scholarship_id=None, status=None):
         user = info.context.user
         scholarship = Scholarship.objects.get(pk=scholarship_id)
-        scholarshipStatus = ScholarshipStatus.objects.filter(user=user, scholarship=scholarship)
 
-        if scholarshipStatus.count() > 0:
-            scholarshipStatus = scholarshipStatus.get(user=user)
-            scholarshipStatus.status = status
-            scholarshipStatus.save()
-        else:
-            scholarshipStatus = ScholarshipStatus.objects.create(status=status)
-            scholarshipStatus.user.add(user)
-            scholarshipStatus.scholarship.add(scholarship)
-            scholarshipStatus.save()
+        try:
+            scholarship_status = ScholarshipStatus.objects.get(user=user, scholarship=scholarship)
+        except:
+            scholarship_status = None
 
-        return CreateOrUpdateScholarshipStatus(scholarship_status=scholarshipStatus)
+        if scholarship_status is None:
+            scholarship_status = ScholarshipStatus.objects.create(user=user)
+            scholarship_status.scholarship = scholarship
+
+        scholarship_status.status = status
+        scholarship_status.save()
+
+        return CreateOrUpdateScholarshipStatus(scholarship_status=scholarship_status)
 
 class Mutation(graphene.ObjectType):
-    create_provider = CreateProvider.Field()
-    create_scholarship = CreateScholarship.Field()
     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()

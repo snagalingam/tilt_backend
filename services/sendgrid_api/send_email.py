@@ -16,6 +16,7 @@ elif ENVIRONMENT == 'production':
 from_email = os.environ.get('FROM_EMAIL')
 sender_name = os.environ.get('SENDER_NAME')
 
+
 def send_email(message):
     try:
         sg = SendGridAPIClient(os.environ.get('sendgrid_KEY'))
@@ -24,6 +25,45 @@ def send_email(message):
         print(response.headers)
     except Exception as e:
         print(e)
+
+
+# -------------- Add Subscriber 
+def add_subscriber(email):
+    print('adding subscriber')
+    try:
+        sg = SendGridAPIClient(os.environ.get('sendgrid_KEY'))
+        response = sg.client.asm.groups._(23297).suppressions._(email).delete()
+        response2 = sg.client.marketing.contacts.put(request_body=dict(
+            list_ids=["4dabef7f-34ee-4c60-a4c8-b4525c8115c5"],
+            contacts=[{'email': email}]
+
+        ))
+        print(response.status_code)
+        print(response.headers)
+        print(response2.status_code)
+        print(response2.headers)
+    except Exception as e:
+        print(e)
+
+
+# -------------- Send Subscription Verification 
+# Template ID: d-829a6f7141724253bc15a8b89289faa4
+
+def send_subscription_verification(email):
+    message = Mail(from_email=(from_email, sender_name),
+                   to_emails=email)
+
+    url = f"{domain}/blog/confirmation?email={email}"
+
+    message.template_id = 'd-829a6f7141724253bc15a8b89289faa4'
+    message.dynamic_template_data = {
+        "email": email,
+        "verification_url": url
+    }
+
+    print(message)
+    return send_email(message)
+
 
 # -------------- To Verify Email Address
 # Template ID: d-274ce0ccdabc445eb7c488c7c98695e6
@@ -48,6 +88,7 @@ def send_verification(email, first_name):
 
     print(message)
     return send_email(message)
+
 
 # -------------- To Reset Password
 # Template ID: d-721a69f0688d484db91503c611d87d1c
@@ -74,6 +115,7 @@ def send_reset_password(email, first_name):
     print(message)
     return send_email(message)
 
+
 # -------------- To Send Password Changed Notification
 # Template ID: d-44fdc9534a574732a7fca8b07238db04
 
@@ -89,6 +131,7 @@ def send_password_changed(email, first_name):
 
     print(message)
     return send_email(message)
+
 
 # -------------- To Send Email Changed Notification
 # Template ID: d-4d2c08403ebc4a8cbd582233aaff3da6

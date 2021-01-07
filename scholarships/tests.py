@@ -1,62 +1,41 @@
+import datetime
+
+from colleges.models import College
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
-import datetime
-from .models import Scholarship, Provider, ScholarshipStatus
-from colleges.models import College
+from scholarships.models import (
+    Association,
+    Citizenship,
+    Degree,
+    Disability,
+    EducationCategory,
+    EducationDetail,
+    EducationScholarship,
+    FieldCategory,
+    FieldDetail,
+    FieldScholarship,
+    Gender,
+    Heritage,
+    Interest,
+    LocationDetail,
+    LocationScholarship,
+    Military,
+    Provider,
+    Scholarship,
+    ScholarshipStatus,
+    State
+)
+
+
 User = get_user_model()
 
 class ScholarshipTests(TestCase):
 
     def setUp(self):
-        user = User.objects.create_user(
-            email="demouser@tiltaccess.com",
-            password = "gWzupKiX5c",
-            first_name="Demo",
-            last_name="Testuser"
-        )
-
-        Provider.objects.create(
-            organization="Tilt",
-            reference="Tilt Scholarship Committee",
-            address= "65 Pine Ave Suite 103",
-            city= "Long Beach",
-            state= "CA",
-            zipcode= "90802",
-            email= "scholarships@tiltaccess.com",
-            phone_number= "224-306-9466",
-            phone_number_ext= 'x1004'
-        )
-
-        Provider.objects.create(
-            organization="Strouthion",
-            reference="Strouthion Scholarship Committee",
-            address= "172 Madison Ave",
-            city= "New York",
-            state= "NY",
-            zipcode= "10016",
-            email= "scholarships@strouthion.com",
-            phone_number= "212-719-2141",
-            phone_number_ext= "x1004"
-        )
-
-        provider = Provider.objects.create(
-            organization="Provider",
-            reference="Provider Scholarship Committee",
-            address= "100 Provider Lane Suite 555",
-            city= "Kansas City",
-            state= "MO",
-            zipcode= "64030",
-            email= "scholarships@fakeprovider.com",
-            phone_number= "816-555-4321",
-            phone_number_ext= 'x4'
-        )
-
-        # create college
-        College.objects.create(
+        # colleges
+        college1 = College.objects.create(
             popularity_score=1,
-            unit_id=100654,
-            ope_id="00100200",
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",
@@ -84,181 +63,159 @@ class ScholarshipTests(TestCase):
             types=["university", "point_of_interest", "establishment"]
         )
 
-        Scholarship.objects.create(
+        # states - referenced by Providers
+        state1 = State.objects.create(name="California", abbreviation="CA")
+        state2 = State.objects.create(name="New York", abbreviation="NY")
+        state3 = State.objects.create(name="Missouri", abbreviation="MO")
+
+        # providers
+        provider1 = Provider.objects.create(
+            addressee="Tilt Scholarship Committee",
+            city="Long Beach",
+            email="scholarships@tiltaccess.com",
+            organization="Tilt",
+            phone_number="2243069466",
+            phone_number_ext="1004",
+            state=state1,
+            street="65 Pine Ave Suite 103",
+            zipcode="90802",
+        )
+        provider2 = Provider.objects.create(
+            addressee="Strouthion Scholarship Committee",
+            city="New York",
+            email="scholarships@strouthion.com",
+            organization="Strouthion",
+            phone_number= "2127192141",
+            phone_number_ext= "1004",
+            state=state2,
+            street= "172 Madison Ave",
+            zipcode= "10016",
+        )
+        provider3 = Provider.objects.create(
+            addressee="Provider Scholarship Committee",
+            city="Kansas City",
+            email="scholarships@fakeprovider.com",
+            organization="Provider",
+            phone_number= "8165554321",
+            phone_number_ext= "4",
+            state=state3,
+            street= "100 Provider Lane Suite 555",
+            zipcode= "64030",
+        )
+
+        # scholarships
+        association1 = Association.objects.create(name="engineering association")
+        citizenship1 = Citizenship.objects.create(category="citizen")
+        degree1 = Degree.objects.create(category="Bachelor's")
+        disability1 = Disability.objects.create(category="handicap")
+        education_category1 = EducationCategory.objects.create(category="college student")
+        education_detail1 = EducationDetail.objects.create(description="computer science class")
+        field_category1 = FieldCategory.objects.create(category="healthcare")
+        field_detail1 = FieldDetail.objects.create(description="nurse")
+        gender1 = Gender.objects.create(category="man")
+        heritage1 = Heritage.objects.create(category="asian")
+        interest1 = Interest.objects.create(category="bicycling")
+        location_detail1 = LocationDetail.objects.create(description="Great Plains")
+        military1 = Military.objects.create(category="active_duty")
+        scholarship1 = Scholarship.objects.create(
             name="Provider Scholarship",
-            provider=provider,
-            description="Money for students who like barbeque.",
-            website="https://fakeprovider.com/bbqscholarship",
             deadline= datetime.date.today(),
-            date_added=timezone.now(),
-            max_amount=100_000,
-            renewable=True,
+            description="Money for students who like barbeque.",
+            max_amount=100000,
             number_awards=1,
-            education_level=["Highschool Seniors", "Highschool Juniors"],
-            education_requirements="Only for highschool seniors and juniors.",
-            area_of_study=["Culinary Arts"],
-            area_of_study_description="Areas of culinary arts.",
-            writing_competition=True,
-            interest_description="Smoked Meats",
-            association_requirement=["Provider"],
-            location="Great Plains",
-            state="MO",
-            ethnicity=["All"],
-            gender="",
-            min_gpa=3.0,
-            max_gpa=4.0,
-            min_act=30,
-            min_sat=1500,
-            disability="None",
-            military="None",
-            citizenship=["USA", "Canada", "Mexico"],
+            provider=provider1,
+            renewable=True,
+            website="https://fakeprovider.com/bbqscholarship",
+            financial_need=True,
             first_generation=False,
-            financial_need=True
+            min_act=30,
+            min_gpa=3.0,
+            min_sat=1500,
+            max_gpa=4.0,
+            writing=True
+        )
+        scholarship1.association.add(association1)
+        scholarship1.citizenship.add(citizenship1)
+        scholarship1.college.add(college1)
+        scholarship1.degree.add(degree1)
+        scholarship1.disability.add(disability1)
+        scholarship1.gender.add(gender1)
+        scholarship1.heritage.add(heritage1)
+        scholarship1.interest.add(interest1)
+        scholarship1.military.add(military1)
+        education_scholarship1 = EducationScholarship.objects.create(
+            education_category=education_category1,
+            education_detail=education_detail1,
+            scholarship=scholarship1
+        )
+        field_scholarship1 = FieldScholarship.objects.create(
+            field_category=field_category1,
+            field_detail=field_detail1,
+            scholarship=scholarship1
+        )
+        location_scholarship1 = LocationScholarship.objects.create(
+            location_detail=location_detail1,
+            scholarship=scholarship1,
+            state=state3
+        )
+
+        # users
+        user = User.objects.create_user(
+            email="demouser@tiltaccess.com",
+            password = "gWzupKiX5c",
+            first_name="Demo",
+            last_name="Testuser"
         )
 
     def test_create_scholarship(self):
-        tilt = Provider.objects.get(organization="Tilt")
-        strouthion = Provider.objects.get(organization="Strouthion")
+        association = Association.objects.get(name="engineering association")
+        citizenship = Citizenship.objects.get(category="citizen")
         college = College.objects.get(name="Alabama A&M University")
+        degree = Degree.objects.get(category="Bachelor's")
+        disability = Disability.objects.get(category="handicap")
+        education_category = EducationCategory.objects.get(category="college student")
+        education_detail = EducationDetail.objects.get(description="computer science class")
+        field_category = FieldCategory.objects.get(category="healthcare")
+        field_detail = FieldDetail.objects.get(description="nurse")
+        gender = Gender.objects.get(category="man")
+        heritage = Heritage.objects.get(category="asian")
+        interest = Interest.objects.get(category="bicycling")
+        location_detail = LocationDetail.objects.get(description="Great Plains")
+        military = Military.objects.get(category="active_duty")
+        provider = Provider.objects.get(organization="Tilt")
+        scholarship = Scholarship.objects.get(name="Provider Scholarship")
 
-        t_scholarship = Scholarship.objects.create(
-            name="Tilt Scholarship",
-            provider=tilt,
-            description="Money for students who like purple.",
-            website="https://tiltaccess.com/purplescholarship",
-            deadline= datetime.date.today(),
-            date_added=timezone.now(),
-            max_amount=1_000_000,
-            renewable=True,
-            number_awards=1,
-            education_level=["Highschool Seniors", "Highschool Juniors"],
-            education_requirements="Only for highschool seniors and juniors.",
-            area_of_study=["Finance"],
-            area_of_study_description="Areas of financial education and bubble tea enthusiasts.",
-            writing_competition=True,
-            interest_description="Bubble Tea",
-            association_requirement=["Tilt"],
-            location="Southern California",
-            state="CA",
-            ethnicity=["All"],
-            gender="Female",
-            min_gpa=3.0,
-            max_gpa=4.0,
-            min_act=30,
-            min_sat=1500,
-            disability="None",
-            military="None",
-            citizenship=["USA", "Canada", "Mexico"],
-            first_generation=False,
-            financial_need=True)
-
-        s_scholarship = Scholarship.objects.create(
-            name="Strouthion Scholarship",
-            provider=strouthion,
-            description="Money for students who like sparrows.",
-            website="https://strouthion.com/sparrowscholarship",
-            deadline= datetime.date.today(),
-            date_added=timezone.now(),
-            max_amount=1_000_000,
-            renewable=False,
-            number_awards=2,
-            education_level=["Highschool Seniors", "Highschool Juniors"],
-            education_requirements="Only for highschool seniors and juniors.",
-            area_of_study=["Ornithology"],
-            area_of_study_description="Areas of sparrow research.",
-            writing_competition=False,
-            interest_description="Birdwatching",
-            association_requirement=["Strouthion"],
-            location="New York City",
-            state="NY",
-            ethnicity=["All"],
-            gender="All",
-            min_gpa=2.0,
-            max_gpa=4.0,
-            min_act=25,
-            min_sat=1250,
-            disability="None",
-            military="None",
-            citizenship=["USA", "Canada"],
-            first_generation=False,
-            financial_need=True)
-
-        t_scholarship.college.add(college)
-        s_scholarship.college.add(college)
-
-        # tilt_scholoarship
-        self.assertEqual(t_scholarship.name, "Tilt Scholarship")
-        self.assertEqual(t_scholarship.provider, tilt)
-        self.assertEqual(t_scholarship.description, "Money for students who like purple.")
-        self.assertEqual(t_scholarship.website, "https://tiltaccess.com/purplescholarship")
-        self.assertIsInstance(t_scholarship.deadline, datetime.date)
-        self.assertIsInstance(s_scholarship.date_added, datetime.date)
-        self.assertEqual(t_scholarship.max_amount, 1_000_000)
-        self.assertEqual(t_scholarship.renewable, True)
-        self.assertEqual(t_scholarship.number_awards, 1)
-        self.assertEqual(t_scholarship.education_level, ["Highschool Seniors", "Highschool Juniors"])
-        self.assertEqual(t_scholarship.education_requirements, "Only for highschool seniors and juniors.")
-        self.assertEqual(t_scholarship.area_of_study, ["Finance"])
-        self.assertEqual(t_scholarship.area_of_study_description, "Areas of financial education and bubble tea enthusiasts.")
-        self.assertEqual(t_scholarship.writing_competition, True)
-        self.assertEqual(t_scholarship.interest_description, "Bubble Tea")
-        self.assertEqual(t_scholarship.college.get_queryset()[0], college)
-        self.assertEqual(t_scholarship.association_requirement, ["Tilt"])
-        self.assertEqual(t_scholarship.location, "Southern California")
-        self.assertEqual(t_scholarship.state, "CA")
-        self.assertEqual(t_scholarship.ethnicity, ["All"])
-        self.assertEqual(t_scholarship.gender, "Female")
-        self.assertEqual(t_scholarship.min_gpa, 3.0)
-        self.assertEqual(t_scholarship.max_gpa, 4.0)
-        self.assertEqual(t_scholarship.min_act, 30)
-        self.assertEqual(t_scholarship.min_sat, 1500)
-        self.assertEqual(t_scholarship.disability, "None")
-        self.assertEqual(t_scholarship.military, "None")
-        self.assertEqual(t_scholarship.citizenship, ["USA", "Canada", "Mexico"])
-        self.assertEqual(t_scholarship.first_generation, False)
-        self.assertEqual(t_scholarship.financial_need, True)
-        self.assertIsNotNone(t_scholarship.created)
-        self.assertIsNotNone(t_scholarship.updated)
-
-        # strouthion_scholoarship
-        self.assertEqual(s_scholarship.name, "Strouthion Scholarship")
-        self.assertEqual(s_scholarship.provider, strouthion)
-        self.assertEqual(s_scholarship.description, "Money for students who like sparrows.")
-        self.assertEqual(s_scholarship.website, "https://strouthion.com/sparrowscholarship")
-        self.assertIsInstance(s_scholarship.deadline, datetime.date)
-        self.assertIsInstance(s_scholarship.date_added, datetime.date)
-        self.assertEqual(s_scholarship.max_amount, 1_000_000)
-        self.assertEqual(s_scholarship.renewable, False)
-        self.assertEqual(s_scholarship.number_awards, 2)
-        self.assertEqual(s_scholarship.education_level, ["Highschool Seniors", "Highschool Juniors"])
-        self.assertEqual(s_scholarship.education_requirements, "Only for highschool seniors and juniors.")
-        self.assertEqual(s_scholarship.area_of_study, ["Ornithology"])
-        self.assertEqual(s_scholarship.area_of_study_description, "Areas of sparrow research.")
-        self.assertEqual(s_scholarship.writing_competition, False)
-        self.assertEqual(s_scholarship.interest_description, "Birdwatching")
-        self.assertEqual(s_scholarship.college.get_queryset()[0], college)
-        self.assertEqual(s_scholarship.association_requirement, ["Strouthion"])
-        self.assertEqual(s_scholarship.location, "New York City")
-        self.assertEqual(s_scholarship.state, "NY")
-        self.assertEqual(s_scholarship.ethnicity, ["All"])
-        self.assertEqual(s_scholarship.gender, "All")
-        self.assertEqual(s_scholarship.min_gpa, 2.0)
-        self.assertEqual(s_scholarship.max_gpa, 4.0)
-        self.assertEqual(s_scholarship.min_act, 25)
-        self.assertEqual(s_scholarship.min_sat, 1250)
-        self.assertEqual(s_scholarship.disability, "None")
-        self.assertEqual(s_scholarship.military, "None")
-        self.assertEqual(s_scholarship.citizenship, ["USA", "Canada"])
-        self.assertEqual(s_scholarship.first_generation, False)
-        self.assertEqual(t_scholarship.financial_need, True)
-        self.assertIsNotNone(s_scholarship.created)
-        self.assertIsNotNone(s_scholarship.updated)
+        self.assertEqual(scholarship.name, "Provider Scholarship")
+        self.assertEqual(scholarship.deadline, datetime.date.today())
+        self.assertEqual(scholarship.description, "Money for students who like barbeque.")
+        self.assertEqual(scholarship.max_amount, 100000)
+        self.assertEqual(scholarship.number_awards, 1)
+        self.assertEqual(scholarship.provider, provider)
+        self.assertEqual(scholarship.renewable, True)
+        self.assertEqual(scholarship.association.get_queryset()[0], association)
+        self.assertEqual(scholarship.citizenship.get_queryset()[0], citizenship)
+        self.assertEqual(scholarship.college.get_queryset()[0], college)
+        self.assertEqual(scholarship.degree.get_queryset()[0], degree)
+        self.assertEqual(scholarship.disability.get_queryset()[0], disability)
+        self.assertEqual(scholarship.financial_need, True)
+        self.assertEqual(scholarship.first_generation, False)
+        self.assertEqual(scholarship.gender.get_queryset()[0], gender)
+        self.assertEqual(scholarship.heritage.get_queryset()[0], heritage)
+        self.assertEqual(scholarship.interest.get_queryset()[0], interest)
+        self.assertEqual(scholarship.military.get_queryset()[0], military)
+        self.assertEqual(scholarship.min_act, 30)
+        self.assertEqual(scholarship.min_gpa, 3.0)
+        self.assertEqual(scholarship.min_sat, 1500)
+        self.assertEqual(scholarship.max_gpa, 4.0)
+        self.assertEqual(scholarship.writing, True)
+        self.assertIsNotNone(scholarship.created)
+        self.assertIsNotNone(scholarship.updated)
 
         # test college scholarship_status_set
         self.assertEqual(college.scholarship_set.get_queryset().filter(
-            name="Tilt Scholarship")[0], t_scholarship)
-        self.assertEqual(college.scholarship_set.get_queryset().filter(
-            name="Strouthion Scholarship")[0], s_scholarship)
+            name="Provider Scholarship")[0],
+            scholarship
+        )
 
     def test_create_scholarship_status(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
@@ -268,7 +225,6 @@ class ScholarshipTests(TestCase):
             user=user,
             status="approved"
         )
-
         self.assertEqual(scholarship_status.user, user)
         self.assertEqual(scholarship_status.scholarship, scholarship)
         self.assertEqual(scholarship_status.status, "approved")

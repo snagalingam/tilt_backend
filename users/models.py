@@ -1,22 +1,57 @@
-from django.contrib.auth.base_user import (
-    AbstractBaseUser,
-    BaseUserManager,
-)
-from django_better_admin_arrayfield.models.fields import ArrayField
-from django.contrib.auth.models import PermissionsMixin
-from django.db import models
+import datetime
 
+from django.conf import settings
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django_better_admin_arrayfield.models.fields import ArrayField
 from organizations.models import Organization
-from datetime import datetime
 
 
+DEFAULT_ETHNICITY_ID = 1
+DEFAULT_PRONOUN_ID = 1
+DEFAULT_SOURCE_ID = 1
+DEFAULT_USER_ID = 1
+
+
+################################################
+### Foreign Key Fields in User
+################################################
+class Income(models.Model):
+    category = models.CharField(max_length=5, unique=True)
+    description = models.CharField(max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'income'
+        verbose_name_plural = 'incomes'
+
+    def __str__(self):
+        return self.category
+
+
+class UserCategory(models.Model):
+    category = models.CharField(max_length=50, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "user category"
+        verbose_name_plural = "user categories"
+
+    def __str__(self):
+        return self.category
+
+
+################################################
+### User Model
+################################################
 class UserManager(BaseUserManager):
-    """
-    User manager for Custom User that allows users to be created
-    """
+    """ User manager for User that allows users to be created """
 
     use_in_migrations = True
 
@@ -48,112 +83,143 @@ class UserManager(BaseUserManager):
         return self._create_user(email, first_name, last_name, password, **extra_fields)
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom user model that extends AbstractBaseUser and PermissionsMixin
-    """
+class User(AbstractBaseUser, PermissionsMixin):
+    """ User model that extends AbstractBaseUser and PermissionsMixin """
 
-    USERNAME_FIELD = "email"
+    CONTACT_METHOD_CHOICES = (
+        ("text", "text"),
+        ("email", "email")
+    )
     EMAIL_FIELD = "email"
-
     REQUIRED_FIELDS = ["first_name", "last_name"]
+    USERNAME_FIELD = "email"
 
-    email = models.EmailField(
-        _("email address"),
+    # contact information
+    email = models.EmailField(_("Email Address"),
         unique=True,
         error_messages={
             "unique": _("A user is already registered with this email address"),
         },
     )
-
-    is_verified = models.BooleanField(default=False)
-    is_onboarded = models.BooleanField(default=False)
-    is_test_account = models.BooleanField(default=False)
-
-    is_staff = models.BooleanField(
-        _("staff status"),
-        default=False,
-        help_text=_(
-            "Designates whether the user can log into this admin site."),
+    first_name = models.CharField(_("First Name"), max_length=255)
+    preferred_name = models.CharField(
+        _("Preferred Name"),
+        blank=True,
+        max_length=255
+    )
+    last_name = models.CharField(_("Last Name"), max_length=255)
+    phone_number = models.CharField(
+        _("Phone Number"),
+        blank=True,
+        max_length=15
+    )
+    preferred_contact_method = models.CharField(
+        _("Preferred Contact Method"),
+        blank=True,
+        choices=CONTACT_METHOD_CHOICES,
+        max_length=10,
     )
 
+    # account information
+    user_category = models.ForeignKey(
+        UserCategory,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT
+    )
     is_active = models.BooleanField(
-        _("active"),
+        _("Active Status"),
         default=True,
         help_text=_(
             "Designates whether this user should be treated as active. "
             "Unselect this instead of deleting accounts."
         ),
     )
+    is_verified = models.BooleanField(
+        _("Verified Email"),
+        default=False,
+        help_text=_("Designates whether the user has verified their email.")
+    )
+    is_onboarded = models.BooleanField(
+        _("Finished Onboarding"),
+        default=False,
+        help_text=_("Designates whether the user has finished onboarding.")
+    )
+    is_test = models.BooleanField(
+        _("Test Account"),
+        default=False,
+        help_text=_(
+            "Designates whether we should count this user in official numbers."
+        )
+    )
+    is_staff = models.BooleanField(
+        _("Staff Status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+    is_superuser = models.BooleanField(
+        _("Superuser Status"),
+        default=False,
+        help_text=_(
+            "Designates that this user has all permissions without explicitly assigning them."
+        )
+    )
 
-    # text or email
-    preferred_contact_method = models.CharField(
-        _("preferred contact method"), max_length=255, null=True, blank=True)
+    # organizations
+    organization = models.ManyToManyField(Organization, blank=True)
 
-    first_name = models.CharField(
-        _("first name"), max_length=255, null=True, blank=True)
-
-    last_name = models.CharField(
-        _("last name"), max_length=255, null=True, blank=True)
-
-    phone_number = models.CharField(
-        _("phone number"), max_length=255, null=True, blank=True)
-
-    preferred_name = models.CharField(
-        _("preferred name"), max_length=255, null=True, blank=True)
-
+    # academic and test scores
+    high_school_grad_year = models.PositiveSmallIntegerField(
+        _("High School Graduation Year"),
+        blank=True,
+        null=True,
+    )
     gpa = models.DecimalField(
-        _("GPA"), max_digits=5, decimal_places=2, null=True, blank=True)
-
+        _("GPA"),
+        blank=True,
+        decimal_places=3,
+        max_digits=5,
+        null=True
+    )
     act_score = models.PositiveSmallIntegerField(
-        _("ACT score"), null=True, blank=True)
-
+        _("ACT Score"),
+        blank=True,
+        null=True
+    )
     sat_math = models.PositiveSmallIntegerField(
-        _("SAT math"), null=True, blank=True)
-
+        _("SAT Math"),
+        blank=True,
+        null=True
+    )
     sat_verbal = models.PositiveSmallIntegerField(
-        _("SAT verbal"), null=True, blank=True)
-
-    efc = models.IntegerField(
-        _("Expected Family Contribution"), null=True, blank=True)
-
-    pronouns = models.CharField(
-        _("pronoun"), max_length=255, default=None, null=True, blank=True)
-
-    ethnicity = ArrayField(
-        models.CharField(_("ethnicity"), max_length=255, null=True, blank=True),
-        null=True, blank=True,
+        _("SAT Verbal"),
+        blank=True,
+        null=True
     )
 
-    user_type = models.CharField(
-        _("user type"), max_length=255, default=None, null=True, blank=True)
-
-    organization = models.ManyToManyField(Organization)
-
-    high_school_grad_year = models.IntegerField(
-        _("high school graduation year"), null=True, blank=True
+    # financial information
+    efc = models.PositiveIntegerField(
+        _("Expected Family Contribution"),
+        blank=True,
+        null=True
     )
-
-    income_quintile = models.CharField(
-        _("income quintile"), max_length=255, null=True, blank=True, default=None)
-
-    found_from = ArrayField(
-        models.CharField(_("found from"), max_length=255, null=True, blank=True),
-        null=True, blank=True,
+    income = models.ForeignKey(
+        Income,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT
     )
-
-    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 
     class Meta:
-        verbose_name = _("user")
-        verbose_name_plural = _("users")
+        verbose_name = "user"
+        verbose_name_plural = "users"
 
     def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
+        """ Return the first_name plus the last_name, with a space in between. """
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
@@ -161,40 +227,150 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         """Return the short name for the user."""
         return self.first_name
 
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
-
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
     def __str__(self):
-        return str(self.email)
+        return self.email
+
+
+################################################
+### User Dependent Models
+################################################
+class Action(models.Model):
+    user = models.ForeignKey(
+        User,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
+    description = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name_plural = 'action'
+        verbose_name_plural = 'actions'
+
+    def __str__(self):
+        return self.description
 
 
 class DeletedAccount(models.Model):
-
     date = models.DateField()
-    accounts = models.IntegerField(null=True, blank=True)
+    accounts = models.IntegerField()
+
+    class Meta:
+        verbose_name_plural = 'deleted account'
+        verbose_name_plural = 'deleted accounts'
 
     def __str__(self):
-        return str(self.date)
+        return self.date
 
-class Action(models.Model):
-    """
-    Create New Action
-        Action(user=user,
-            action='Logged In', (add description)
-            timestamp=(check helpers folder for create_timestamp)
-    """
 
+class Ethnicity(models.Model):
+    category = models.CharField(max_length=20, unique=True)
+    description = models.CharField(blank=True, max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'ethnicity'
+        verbose_name_plural = 'ethnicities'
+
+    def __str__(self):
+        return self.category
+
+
+class EthnicityUser(models.Model):
     user = models.ForeignKey(
-        CustomUser, null=True, blank=True, on_delete=models.CASCADE)
-    description = models.CharField(
-        max_length=255, default=None, null=True, blank=True)
+        User,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
+    ethnicity = models.ForeignKey(
+        Ethnicity,
+        default=DEFAULT_ETHNICITY_ID,
+        on_delete=models.PROTECT
+    )
+    other_value = models.CharField(blank=True, max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
-    timestamp = models.DateTimeField(default=timezone.now)
+    class Meta:
+        verbose_name_plural = 'ethnicity user'
+        verbose_name_plural = 'ethnicity users'
 
     def __str__(self):
-        return str(self.description)
+        return str(self.user)
+
+
+class Pronoun(models.Model):
+    category = models.CharField(max_length=20, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'pronoun'
+        verbose_name_plural = 'pronouns'
+
+    def __str__(self):
+        return self.category
+
+
+class PronounUser(models.Model):
+    user = models.ForeignKey(
+        User,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
+    pronoun = models.ForeignKey(
+        Pronoun,
+        default=DEFAULT_PRONOUN_ID,
+        on_delete=models.PROTECT
+    )
+    other_value = models.CharField(blank=True, max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'pronoun user'
+        verbose_name_plural = 'pronoun users'
+
+    def __str__(self):
+        return str(self.user)
+
+
+class Source(models.Model):
+    category = models.CharField(max_length=100, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'source'
+        verbose_name_plural = 'sources'
+
+    def __str__(self):
+        return self.category
+
+
+class SourceUser(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        default=DEFAULT_USER_ID,
+        on_delete=models.CASCADE
+    )
+    source = models.ForeignKey(
+        Source,
+        default=DEFAULT_SOURCE_ID,
+        on_delete=models.PROTECT
+    )
+    other_value = models.CharField(blank=True, max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'source user'
+        verbose_name_plural = 'source users'
+
+    def __str__(self):
+        return str(self.user)

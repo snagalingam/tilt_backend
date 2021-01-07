@@ -1,35 +1,41 @@
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
-from .models import Organization
-
-from django.forms import TextInput, Textarea
 from django.db import models
-from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+from django.forms import Textarea, TextInput
+from organizations.models import Organization
 
-class OrganizationAdmin(admin.ModelAdmin, DynamicArrayMixin):
+
+class OrganizationAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (('Basic Information'), {'fields': (
+            'name',
+            'place_id',
+            'partner',
+        )}),
+        (('Detailed Information'), {'fields': (
+            'address',
+            'business_status',
+            'icon',
+            'lat',
+            'lng',
+            'phone_number',
+            'types',
+            'url',
+            'website',
+            'created',
+            'updated'
+        )}),
+    )
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    list_display = ['name', 'tilt_partnership', 'address', ]
-    list_editable = ['tilt_partnership', ]
-    
-    fieldsets = (
-        (_('Partnership'), {'fields': ('tilt_partnership',)}),
-        (_('Contact Information'), {
-            'fields': ('name', 'address', 'phone_number',)
-        }),
-        (_('Detailed Information'), {
-            'fields': ('business_status', 'types', 'website',)
-        }),
-        (_('Google Information'), {
-            'fields': ('place_id', 'lat', 'lng', 'url',)
-        })
-    )
-
-    search_fields = ('name', 'tilt_partnership', 'address',)
-    ordering = ('name',)
+    list_display = ['name', 'partner', 'address',]
+    list_editable = ['partner',]
     model = Organization
+    ordering = ('name',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('name', 'partner', 'address',)
+
 
 admin.site.register(Organization, OrganizationAdmin)

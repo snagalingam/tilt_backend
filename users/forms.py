@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 
-class CustomUserChangeForm(forms.ModelForm):
+
+class UserChangeForm(forms.ModelForm):
     """
     A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
@@ -30,7 +31,7 @@ class CustomUserChangeForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial.get("password")
 
-class CustomUserCreationForm(forms.ModelForm):
+class UserCreationForm(forms.ModelForm):
     """
     A form that creates a user, with no privileges, from the given username and
     password.

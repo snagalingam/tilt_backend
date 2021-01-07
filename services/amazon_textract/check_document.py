@@ -8,13 +8,13 @@ from django.conf import settings
 
 resource = boto3.resource(
     's3',
-    region_name=settings.REGION,
+    region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
 client = boto3.client(
     's3',
-    region_name=settings.REGION,
+    region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY)
 
@@ -31,66 +31,69 @@ NUMBERS = {
   "9": True,
 }
 
-# -------------- Format Word To Valid Money Amount
 
-def strip_money_string(word):
+# -------------- Format Money String
+
+def format_money(word):
     if word.count("$") > 1 and word[1] != "$":
         return word
 
     start_index = word.index("$")
-    stripped = word[start_index:].strip()
+    formatted_money = word[start_index:].strip()
 
-    if "*" in stripped:
-        stripped = stripped.replace("*", "")
+    if "*" in formatted_money:
+        formatted_money = formatted_money.replace("*", "")
 
-    if "=" in stripped:
-        stripped = stripped.replace("=", "")
+    if "=" in formatted_money:
+        formatted_money = formatted_money.replace("=", "")
 
-    if "+" in stripped:
-        stripped = stripped.replace("+", "")
+    if "+" in formatted_money:
+        formatted_money = formatted_money.replace("+", "")
 
-    if "-" in stripped:
-        stripped = stripped.replace("-", "")
+    if "-" in formatted_money:
+        formatted_money = formatted_money.replace("-", "")
 
-    if " " in stripped:
-        idx = stripped.index(" ")
-        if stripped[idx + 1] in NUMBERS:
-            stripped.replace(" ", "")
+    if " " in formatted_money:
+        idx = formatted_money.index(" ")
+        if formatted_money[idx + 1] in NUMBERS:
+            formatted_money.replace(" ", "")
         else:
-          stripped = stripped[0:idx]
+          formatted_money = formatted_money[0:idx]
 
-    if "/" in stripped:
-        idx = stripped.index("/")
-        stripped = stripped[0:idx]
+    if "/" in formatted_money:
+        idx = formatted_money.index("/")
+        formatted_money = formatted_money[0:idx]
 
-    if stripped[-1] == ",":
-        stripped = stripped[0:-1]
+    if formatted_money[-1] == ",":
+        formatted_money = formatted_money[0:-1]
 
-    if stripped[-1] == ".":
-        stripped = stripped[0:-1]
+    if formatted_money[-1] == ".":
+        formatted_money = formatted_money[0:-1]
 
-    if stripped[-3:-2] == ".":
-        stripped = stripped[0:-3]
+    if formatted_money[-3:-2] == ".":
+        formatted_money = formatted_money[0:-3]
 
-    if stripped[-3:-2] == ",":
-        stripped = stripped[0:-3]
+    if formatted_money[-3:-2] == ",":
+        formatted_money = formatted_money[0:-3]
 
-    if "." in stripped:
-        stripped = stripped.replace(".", ",")
+    if "." in formatted_money:
+        formatted_money = formatted_money.replace(".", ",")
 
-    return stripped
+    return formatted_money
 
-# -------------- Create A List Of All Money In Document
+# -------------- Create List Of All Money In Document
 
 def document_money_list(all_document_words):
     money_words = []
 
     for word in all_document_words:
         if "$" in word:
-            money = strip_money_string(word)
+            money = format_money(word)
             money_words.append(money)
 
     return money_words
+
+# -------------- Create List Of Words From Table
 
 def table_list(source):
     tables = source.split("\n\n")
@@ -110,7 +113,8 @@ def table_list(source):
 
     return table_list
 
-# -------------- Check If All Words In Documents Are In Tables
+
+# -------------- Create List Of Words From Table
 
 def check_tables(tables_words, all_document_words):
     money_list = document_money_list(all_document_words)
@@ -136,7 +140,7 @@ def check_tables(tables_words, all_document_words):
 
     return data
 
-# -------------- Start Document Check
+# -------------- Check Document Pass/Fail
 
 def start_document_check(all_document_words, csv_table):
     tables_words = table_list(csv_table)

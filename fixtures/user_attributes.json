@@ -1,0 +1,257 @@
+[
+  {
+    "model": "users.UserCategory",
+    "pk": 1,
+    "fields": {
+      "category": "student",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.UserCategory",
+    "pk": 2,
+    "fields": {
+      "category": "transfer",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.UserCategory",
+    "pk": 3,
+    "fields": {
+      "category": "parent",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.UserCategory",
+    "pk": 4,
+    "fields": {
+      "category": "staff",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.UserCategory",
+    "pk": 5,
+    "fields": {
+      "category": "other",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 1,
+    "fields": {
+      "category": "aian",
+      "description": "american indian or alaska native",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 2,
+    "fields": {
+      "category": "asian",
+      "description": "asian",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 3,
+    "fields": {
+      "category": "black",
+      "description": "black or african",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 4,
+    "fields": {
+      "category": "latinx",
+      "description": "hispanic or latinx",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 5,
+    "fields": {
+      "category": "nhpi",
+      "description": "native hawaiian or other pacific islander",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 6,
+    "fields": {
+      "category": "other",
+      "description": "other",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Ethnicity",
+    "pk": 7,
+    "fields": {
+      "category": "white",
+      "description": "white",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Income",
+    "pk": 1,
+    "fields": {
+      "category": "lo",
+      "description": "$0 - 30,000",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Income",
+    "pk": 2,
+    "fields": {
+      "category": "m1",
+      "description": "$30,001 - $48,000",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Income",
+    "pk": 3,
+    "fields": {
+      "category": "m2",
+      "description": "$48,001 - $75,000",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Income",
+    "pk": 4,
+    "fields": {
+      "category": "h1",
+      "description": "$75,001 - $110,000",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Income",
+    "pk": 5,
+    "fields": {
+      "category": "h2",
+      "description": "$110,000+",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Pronoun",
+    "pk": 1,
+    "fields": {
+      "category": "he",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Pronoun",
+    "pk": 2,
+    "fields": {
+      "category": "she",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Pronoun",
+    "pk": 3,
+    "fields": {
+      "category": "they",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Pronoun",
+    "pk": 4,
+    "fields": {
+      "category": "other",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 1,
+    "fields": {
+      "category": "instagram",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 2,
+    "fields": {
+      "category": "facebook",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 3,
+    "fields": {
+      "category": "parent",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 4,
+    "fields": {
+      "category": "school or district staff",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 5,
+    "fields": {
+      "category": "friend",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  },
+  {
+    "model": "users.Source",
+    "pk": 6,
+    "fields": {
+      "category": "other",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  }
+]

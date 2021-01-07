@@ -1,93 +1,150 @@
+from colleges.models import CollegeStatus
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
-from .models import DocumentResult, DocumentData, AidCategory, AidData
-
-from django.forms import TextInput, Textarea
 from django.db import models
-from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+from django.forms import Textarea, TextInput
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
 
-class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
+
+################################################
+### Inline
+################################################
+class AidDataInline(admin.TabularInline):
+    model = AidData
+    extra = 0
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+    }
+
+
+################################################
+### Admin Panel
+################################################
+class AidCategoryAdmin(admin.ModelAdmin):
+    fieldsets = ((('Information'), {'fields': (
+        'name',
+        'primary',
+        'secondary',
+        'tertiary',
+        'created',
+        'updated',
+    )}),)
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['name', 'sent', 'processed', 'pass_fail', 'number_of_missing', 'created']
+    inlines = [AidDataInline]
+    list_display = ['name', 'primary', 'secondary', 'tertiary',]
+    model = AidCategory
+    ordering = ('name',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('name', 'primary', 'secondary', 'tertiary',)
 
+    def data_count(self, obj):
+        return obj.data_set.count()
+
+
+class AidDataAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {
-            'fields':('sent', 'processed', 'pass_fail',)
-        }),
-        (_('Details'), {
-            'fields': ('name', 'words_id', 'tables_id')
-        }),
-        (_('Missing'), {
-            'fields': ('number_of_missing', 'missing_amounts',)
-        }),
+        (('Information'), {'fields': ('name', 'amount', 'college_status', 'aid_category',)}),
+        (('Details'), {'fields': (
+            'row_text',
+            'table',
+            'row_index',
+            'col_index',
+            'created',
+            'updated',
+        )}),
     )
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.IntegerField: {'widget': TextInput(attrs={'size': '30'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
+    }
+    list_display = ['college_status', 'name', 'amount', 'aid_category',]
+    model = AidData
+    ordering = ('name', 'aid_category',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('amount', 'aid_category', 'college_status', 'name')
 
-    search_fields = ('name', 'pass_fail', 'number_of_missing', 'created',)
-    ordering = ('name', 'sent', 'processed', 'number_of_missing','created',)
-    model = DocumentResult
 
-class DocumentDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidSummaryAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (('Information'), {'fields': (
+            'college_status',
+            'total_cost',
+            'total_aid',
+            'net_price',
+            'created',
+            'updated',
+    )}),
+    )
+    formfield_overrides = {
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
+    }
+    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
+    model = AidSummary
+    ordering = ('college_status',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
+
+
+class DocumentDataAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (('Information'), {'fields': ('document_name', 'created', 'updated',)}),
+        (('Tables'), {'fields': ('tables',)}),
+        (('Words'), {'fields': ('words',)}),
+    )
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '75'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 100})},
     }
-    list_display = ['name', ]
-    fieldsets = (
-        (_('Tables'), {'fields': ('tables',)}),
-        (_('Words'), {'fields': ('words',)}),
-    )
-
-    search_fields = ('name',)
-    ordering = ('name',)
+    list_display = ['document_name', 'created']
     model = DocumentData
+    ordering = ('document_name',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('document_name',)
 
-class AidDataInline(admin.TabularInline):
-    model = AidData
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
-    }
-    extra = 0
 
-class AidCategoryAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    def aid_data_count(self, obj):
-        return obj.aiddata_set.count()
-
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['name', 'year', 'main_category', 'sub_category', 'aid_data_count']
+class DocumentResultAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name',)}),
-        (_('Information'), {
-            'fields': ('year', 'main_category', 'sub_category', 'sub_sub_category')
-        }),
+        (('Information'), {'fields': (
+            'document_name',
+            'words_id',
+            'tables_id',
+            'sent',
+            'processed',
+            'pass_fail',
+            'created',
+            'updated',
+        )}),
+        (('Missing'), {'fields': ('number_of_missing', 'missing_amounts',)}),
     )
-    inlines = [AidDataInline]
-    search_fields = ('name', 'main_category', 'sub_category',)
-    ordering = ('name', 'year')
-    model = AidCategory
-
-class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
+        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    list_display = ['college_status', 'name', 'amount', 'aid_category',]
-    fieldsets = (
-        (None, {'fields': ('name', 'college_status', 'aid_category')}),
-        (_('Table Details'), {
-            'fields': ('amount', 'table_number', 'row_index', 'col_index', 'row_data')
-        }),
+    list_display = [
+        'document_name',
+        'sent',
+        'processed',
+        'pass_fail',
+        'number_of_missing',
+        'created',
+    ]
+    model = DocumentResult
+    ordering = ('document_name',)
+    readonly_fields = ('created', 'updated',)
+    search_fields = (
+        'document_name',
+        'sent', 'processed',
+        'pass_fail',
+        'number_of_missing',
+        'created',
     )
-    search_fields = ('name', 'amount', 'college_status', 'aid_category',)
-    ordering = ('name', 'amount', 'college_status', 'aid_category',)
-    model = AidData
 
-admin.site.register(DocumentResult, DocumentResultAdmin)
-admin.site.register(DocumentData, DocumentDataAdmin)
+
 admin.site.register(AidCategory, AidCategoryAdmin)
 admin.site.register(AidData, AidDataAdmin)
+admin.site.register(AidSummary, AidSummaryAdmin)
+admin.site.register(DocumentData, DocumentDataAdmin)
+admin.site.register(DocumentResult, DocumentResultAdmin)
