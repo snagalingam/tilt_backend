@@ -1,7 +1,7 @@
 [
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210138,
+    "pk": 205659,
     "fields": {
       "college": 6321,
       "scorecard": 6321,
@@ -34,7 +34,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210139,
+    "pk": 205660,
     "fields": {
       "college": 6321,
       "scorecard": 6321,
@@ -67,7 +67,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210140,
+    "pk": 205661,
     "fields": {
       "college": 6322,
       "scorecard": 6322,
@@ -100,7 +100,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210141,
+    "pk": 205662,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -133,7 +133,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210142,
+    "pk": 205663,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -166,7 +166,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210143,
+    "pk": 205664,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -199,7 +199,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210144,
+    "pk": 205665,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -232,7 +232,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210145,
+    "pk": 205666,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -265,7 +265,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210146,
+    "pk": 205667,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -298,7 +298,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210147,
+    "pk": 205668,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -331,7 +331,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210148,
+    "pk": 205669,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -364,7 +364,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210149,
+    "pk": 205670,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -397,7 +397,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210150,
+    "pk": 205671,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -430,7 +430,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210151,
+    "pk": 205672,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -463,7 +463,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210152,
+    "pk": 205673,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -496,7 +496,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210153,
+    "pk": 205674,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -529,7 +529,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210154,
+    "pk": 205675,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -562,7 +562,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210155,
+    "pk": 205676,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -595,7 +595,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210156,
+    "pk": 205677,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -628,7 +628,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210157,
+    "pk": 205678,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -661,7 +661,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210158,
+    "pk": 205679,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -694,7 +694,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210159,
+    "pk": 205680,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -727,7 +727,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210160,
+    "pk": 205681,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -760,7 +760,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210161,
+    "pk": 205682,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -793,7 +793,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210162,
+    "pk": 205683,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -826,7 +826,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210163,
+    "pk": 205684,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -859,7 +859,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210164,
+    "pk": 205685,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -892,7 +892,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210165,
+    "pk": 205686,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -925,7 +925,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210166,
+    "pk": 205687,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -958,7 +958,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210167,
+    "pk": 205688,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -991,7 +991,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210168,
+    "pk": 205689,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1024,7 +1024,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210169,
+    "pk": 205690,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1057,7 +1057,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210170,
+    "pk": 205691,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1090,7 +1090,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210171,
+    "pk": 205692,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1123,7 +1123,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210172,
+    "pk": 205693,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1156,7 +1156,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210173,
+    "pk": 205694,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1189,7 +1189,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210174,
+    "pk": 205695,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1222,7 +1222,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210175,
+    "pk": 205696,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1255,7 +1255,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210176,
+    "pk": 205697,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1288,7 +1288,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210177,
+    "pk": 205698,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1321,7 +1321,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210178,
+    "pk": 205699,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1354,7 +1354,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210179,
+    "pk": 205700,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1387,7 +1387,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210180,
+    "pk": 205701,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1420,7 +1420,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210181,
+    "pk": 205702,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1453,7 +1453,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210182,
+    "pk": 205703,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1486,7 +1486,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210183,
+    "pk": 205704,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1519,7 +1519,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210184,
+    "pk": 205705,
     "fields": {
       "college": 6323,
       "scorecard": 6323,
@@ -1552,7 +1552,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210185,
+    "pk": 205706,
     "fields": {
       "college": 6324,
       "scorecard": 6324,
@@ -1585,7 +1585,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210186,
+    "pk": 205707,
     "fields": {
       "college": 6324,
       "scorecard": 6324,
@@ -1618,7 +1618,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210187,
+    "pk": 205708,
     "fields": {
       "college": 6325,
       "scorecard": 6325,
@@ -1651,7 +1651,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210188,
+    "pk": 205709,
     "fields": {
       "college": 6326,
       "scorecard": 6326,
@@ -1684,7 +1684,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210189,
+    "pk": 205710,
     "fields": {
       "college": 6327,
       "scorecard": 6327,
@@ -1717,7 +1717,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210190,
+    "pk": 205711,
     "fields": {
       "college": 6328,
       "scorecard": 6328,
@@ -1750,7 +1750,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210191,
+    "pk": 205712,
     "fields": {
       "college": 6328,
       "scorecard": 6328,
@@ -1783,7 +1783,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210192,
+    "pk": 205713,
     "fields": {
       "college": 6329,
       "scorecard": 6329,
@@ -1816,7 +1816,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210193,
+    "pk": 205714,
     "fields": {
       "college": 6330,
       "scorecard": 6330,
@@ -1849,7 +1849,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210194,
+    "pk": 205715,
     "fields": {
       "college": 6330,
       "scorecard": 6330,
@@ -1882,7 +1882,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210195,
+    "pk": 205716,
     "fields": {
       "college": 6331,
       "scorecard": 6331,
@@ -1915,7 +1915,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210196,
+    "pk": 205717,
     "fields": {
       "college": 6331,
       "scorecard": 6331,
@@ -1948,7 +1948,7 @@
   },
   {
     "model": "colleges.FieldOfStudy",
-    "pk": 210197,
+    "pk": 205718,
     "fields": {
       "college": 6331,
       "scorecard": 6331,

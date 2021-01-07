@@ -17,8 +17,8 @@ DEFAULT_USER_ID = 1
 ################################################
 class College(models.Model):
     # google api inputted (otherwise scorecard)
-    name = models.CharField(blank=True, max_length=255)
-    scorecard_unit_id = models.IntegerField()
+    name = models.CharField(max_length=255)
+    scorecard_unit_id = models.IntegerField(unique=True)
 
     # calculated fields
     show = models.BooleanField(default=False)

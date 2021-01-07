@@ -270,6 +270,8 @@ def get_formatted_college_data_by_scorecard_unit_id(file_num, pk, unit_id):
             sys.exit(f'ERROR => region code of {region_data} not in REGION_DICT')
 
         school_url = school.get('school_url')
+        if school_url is None:
+            school_url = ""
         under_investigation = bool(school.get('under_investigation'))
 
         # institution types
@@ -995,6 +997,239 @@ def get_scorecard_data(file_num, starting_unit_id):
 
 
 ################################################################################
+# Used to make sure we didn't miss any pks
+################################################################################
+def check_to_find_missing_pks(check):
+    pks = []
+    missing_pks = []
+    data = []
+    seen_pks = {}
+    dupe_pks = []
+
+    if check == 'field_of_study':
+        files = [
+            "field_of_study_1.json",
+            "field_of_study_2.json",
+            "field_of_study_3.json",
+            "field_of_study_4.json",
+            "field_of_study_5.json",
+            "field_of_study_6.json",
+            "field_of_study_7.json",
+            "field_of_study_8.json",
+            "field_of_study_9.json",
+            "field_of_study_10.json",
+            "field_of_study_11.json",
+            "field_of_study_12.json",
+            "field_of_study_13.json",
+            "field_of_study_14.json",
+            "field_of_study_15.json",
+            "field_of_study_16.json"
+        ]
+    elif check == 'scorecard':
+        files = [
+            "scorecard_1.json",
+            "scorecard_2.json",
+            "scorecard_3.json",
+            "scorecard_4.json",
+            "scorecard_5.json",
+            "scorecard_6.json",
+            "scorecard_7.json",
+            "scorecard_8.json",
+            "scorecard_9.json",
+            "scorecard_10.json",
+            "scorecard_11.json",
+            "scorecard_12.json",
+            "scorecard_13.json",
+            "scorecard_14.json",
+            "scorecard_15.json",
+            "scorecard_16.json"
+        ]
+
+    elif check == 'colleges':
+        files = ['colleges2.json', 'colleges3.json']
+
+    for file in files:
+        print(f'loading {file}')
+        with open(os.path.join(FIXTURES_DIR, file)) as input:
+            file_data = json.load(input)
+            for college in file_data:
+                pk = college['pk']
+                pks.append(pk)
+
+    pks.sort()
+
+    for num in range(pks[0], pks[-1]+1):
+        if num not in pks:
+            missing_pks.append(num)
+
+        if num not in seen_pks:
+            seen_pks[num] = 1
+        else:
+            if seen_pks[num] == 1:
+                dupe_pks.append(num)
+            seen_pks[num] += 1
+
+    with open(os.path.join(SCRIPT_DIR, 'all_pks.json'), 'w') as outfile:
+        json.dump(pks, outfile, indent=4, sort_keys=True)
+
+    with open(os.path.join(SCRIPT_DIR, 'missing_pks.json'), 'w') as outfile:
+         json.dump(missing_pks, outfile, indent=4, sort_keys=True)
+
+    with open(os.path.join(SCRIPT_DIR, 'dupe_pks.json'), 'w') as outfile:
+         json.dump(dupe_pks, outfile, indent=4, sort_keys=True)
+
+
+################################################################################
+# Rewrite pks
+################################################################################
+def rewrite_pks(check):
+    pk = 1
+
+    if check == 'field_of_study':
+        files = [
+            "field_of_study_1.json",
+            "field_of_study_2.json",
+            "field_of_study_3.json",
+            "field_of_study_4.json",
+            "field_of_study_5.json",
+            "field_of_study_6.json",
+            "field_of_study_7.json",
+            "field_of_study_8.json",
+            "field_of_study_9.json",
+            "field_of_study_10.json",
+            "field_of_study_11.json",
+            "field_of_study_12.json",
+            "field_of_study_13.json",
+            "field_of_study_14.json",
+            "field_of_study_15.json",
+            "field_of_study_16.json"
+        ]
+
+    elif check == 'scorecard':
+        files = [
+            "scorecard_1.json",
+            "scorecard_2.json",
+            "scorecard_3.json",
+            "scorecard_4.json",
+            "scorecard_5.json",
+            "scorecard_6.json",
+            "scorecard_7.json",
+            "scorecard_8.json",
+            "scorecard_9.json",
+            "scorecard_10.json",
+            "scorecard_11.json",
+            "scorecard_12.json",
+            "scorecard_13.json",
+            "scorecard_14.json",
+            "scorecard_15.json",
+            "scorecard_16.json"
+        ]
+
+    for file in files:
+        print(f'loading {file}')
+        with open(os.path.join(FIXTURES_DIR, file)) as input:
+            file_data = json.load(input)
+
+        for college in file_data:
+            college['pk'] = pk
+            pk += 1
+
+        with open(os.path.join(FIXTURES_DIR, file), 'w')  as outfile:
+            json.dump(file_data, outfile, ensure_ascii=False, indent=2)
+
+
+################################################################################
+# Load scorecard pks and match with colleges data
+################################################################################
+def match_colleges_to_scorecard_pks():
+    seen_scorecards = {}
+    scorecard_pks = {}
+    scorecard_name = {}
+    scorecard_show = {}
+
+    # get scorecard data
+    files = [
+        "scorecard_1.json",
+        "scorecard_2.json",
+        "scorecard_3.json",
+        "scorecard_4.json",
+        "scorecard_5.json",
+        "scorecard_6.json",
+        "scorecard_7.json",
+        "scorecard_8.json",
+        "scorecard_9.json",
+        "scorecard_10.json",
+        "scorecard_11.json",
+        "scorecard_12.json",
+        "scorecard_13.json",
+        "scorecard_14.json",
+        "scorecard_15.json",
+        "scorecard_16.json"
+    ]
+
+    for file in files:
+        print(f'loading {file}')
+        with open(os.path.join(FIXTURES_DIR, file)) as input:
+            file_data = json.load(input)
+            for college in file_data:
+                fields = college['fields']
+                unit_id = fields['unit_id']
+                pk = college['pk']
+                name = fields['name']
+                show = fields['show']
+
+                scorecard_pks[unit_id] = pk
+                scorecard_name[unit_id] = name
+                scorecard_show[unit_id] = show
+
+    # dump the file in case its helpful
+    with open(os.path.join(SCRIPT_DIR, 'scorecard_pks.json'), 'w') as outfile:
+         json.dump(scorecard_pks, outfile, indent=2, sort_keys=True)
+
+    # open colleges data
+    with open(os.path.join(FIXTURES_DIR, 'colleges.json')) as file:
+        colleges = json.load(file)
+
+    # update the pk and record the unit_id as seen
+    for college in colleges:
+        fields = college['fields']
+        scorecard_unit_id = fields['scorecard_unit_id']
+        college['pk'] = scorecard_pks[scorecard_unit_id]
+        seen_scorecards[scorecard_unit_id] = 1
+
+    # dump all the data back in the file
+    with open(os.path.join(FIXTURES_DIR, 'colleges2.json'), mode='w') as outfile:
+        json.dump(colleges, outfile, ensure_ascii=False, indent=2)
+
+    seed_list = []
+    for unit_id in scorecard_pks:
+
+        try:
+            seen_scorecards[unit_id]
+
+        except:
+            seed = {
+                "model": "colleges.College",
+                "pk": scorecard_pks[unit_id],
+                "fields": {
+                    "popularity_score": 0,
+                    "scorecard_unit_id": unit_id,
+                    "name": scorecard_name[unit_id],
+                    "created": "2021-01-06T15:33:40.106696-08:00",
+                    "updated": "2021-01-06T15:33:40.106696-08:00",
+                    "show": scorecard_show[unit_id]
+                }
+            }
+            seed_list.append(seed)
+
+    with open(os.path.join(FIXTURES_DIR, 'colleges3.json'), mode='w') as outfile:
+        json.dump(seed_list, outfile, ensure_ascii=False, indent=2)
+
+
+################################################################################
 # Functions to run
 ################################################################################
-get_scorecard_data(file_num=16, starting_unit_id=48312405)
+# get_scorecard_data(file_num=16, starting_unit_id=48312405)
+check_to_find_missing_pks(check='colleges')
+# rewrite_pks(check="field_of_study")
+# match_colleges_to_scorecard_pks()
