@@ -1,4 +1,4 @@
-from colleges.models import Budget, College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import College, CollegeStatus, FieldOfStudy, Scorecard
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
@@ -16,6 +16,7 @@ class CollegeTests(TestCase):
         )
         college = College.objects.create(
             popularity_score=1,
+            scorecard_unit_id=100654,
             place_id="ChIJ91htBQIXYogRtPsg4NGoNv0",
             business_status= "OPERATIONAL",
             name="Alabama A&M University",
@@ -52,6 +53,7 @@ class CollegeTests(TestCase):
     def test_create_college(self):
         college = College.objects.create(
             popularity_score=2,
+            scorecard_unit_id=100663,
             place_id="ChIJRxq4YekbiYgRS7BbCPlZxlE",
             business_status= "OPERATIONAL",
             name="University of Alabama at Birmingham",
@@ -459,40 +461,18 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(scorecard.created)
         self.assertIsNotNone(scorecard.updated)
 
-    def test_create_field_of_study(self):
-        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
         field_of_study = FieldOfStudy.objects.create(
             college=college,
             cip_code="1313",
             cip_title="Teacher Education and Professional Development, Specific Subject Areas.",
             credential_level="Bachelor’s Degree",
             credential_title="Bachelors Degree",
-            num_students_debt=46,
-            median_debt=31505,
-            monthly_debt_payment=327,
-            mean_debt=33085,
-            num_students_titleiv=32,
-            num_students_earnings=25400,
-            median_earnings=25400,
-            num_students_ipeds_awards1=24,
-            num_students_ipeds_awards2=33
         )
         self.assertEqual(field_of_study.college, college)
         self.assertEqual(field_of_study.cip_code, "1313")
         self.assertEqual(field_of_study.cip_title, "Teacher Education and Professional Development, Specific Subject Areas.")
         self.assertEqual(field_of_study.credential_level, "Bachelor’s Degree")
         self.assertEqual(field_of_study.credential_title, "Bachelors Degree")
-        self.assertEqual(field_of_study.num_students_debt, 46)
-        self.assertEqual(field_of_study.median_debt, 31505)
-        self.assertEqual(field_of_study.monthly_debt_payment, 327)
-        self.assertEqual(field_of_study.mean_debt, 33085)
-        self.assertEqual(field_of_study.num_students_titleiv, 32)
-        self.assertEqual(field_of_study.num_students_earnings,  25400)
-        self.assertEqual(field_of_study.median_earnings, 25400)
-        self.assertEqual(field_of_study.num_students_ipeds_awards1, 24)
-        self.assertEqual(field_of_study.num_students_ipeds_awards2, 33)
-        self.assertIsNotNone(college.created)
-        self.assertIsNotNone(college.updated)
 
     def test_create_college_status(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
@@ -504,7 +484,8 @@ class CollegeTests(TestCase):
             status="interested",
             award_status="user notified",
             residency="NY",
-            in_state_tuition="NY")
+            in_state_tuition="NY"
+        )
 
         self.assertEqual(college_status.user, user)
         self.assertEqual(college_status.college, college)
@@ -516,10 +497,12 @@ class CollegeTests(TestCase):
         self.assertIsNotNone(college_status.updated)
 
     def test_create_budget(self):
-        college_status = CollegeStatus.objects.get(user__email="demouser@tiltaccess.com")
-
-        college_budget = Budget.objects.create(
-            college_status=college_status,
+        user = User.objects.get(email="demouser@tiltaccess.com")
+        college = College.objects.get(place_id="ChIJ91htBQIXYogRtPsg4NGoNv0")
+        college_status = CollegeStatus.objects.create(
+            user=user,
+            college=college,
+            status="accepted",
             work_study=10000,
             job=10000,
             savings=10000,
@@ -531,19 +514,16 @@ class CollegeTests(TestCase):
             loan_private=10000,
             loan_school=10000
         )
-        self.assertEqual(college_budget.college_status, college_status)
-        self.assertEqual(college_budget.work_study, 10000)
-        self.assertEqual(college_budget.job, 10000)
-        self.assertEqual(college_budget.savings, 10000)
-        self.assertEqual(college_budget.family, 10000)
-        self.assertEqual(college_budget.other_scholarships, 10000)
-        self.assertEqual(college_budget.loan_subsidized, 10000)
-        self.assertEqual(college_budget.loan_unsubsidized, 10000)
-        self.assertEqual(college_budget.loan_plus, 10000)
-        self.assertEqual(college_budget.loan_private, 10000)
-        self.assertEqual(college_budget.loan_school, 10000)
-        self.assertIsNotNone(college_budget.created)
-        self.assertIsNotNone(college_budget.updated)
 
-        # test user budget_set
-        self.assertEqual(college_status.budget, college_budget)
+        self.assertEqual(college_status.work_study, 10000)
+        self.assertEqual(college_status.job, 10000)
+        self.assertEqual(college_status.savings, 10000)
+        self.assertEqual(college_status.family, 10000)
+        self.assertEqual(college_status.other_scholarships, 10000)
+        self.assertEqual(college_status.loan_subsidized, 10000)
+        self.assertEqual(college_status.loan_unsubsidized, 10000)
+        self.assertEqual(college_status.loan_plus, 10000)
+        self.assertEqual(college_status.loan_private, 10000)
+        self.assertEqual(college_status.loan_school, 10000)
+        self.assertIsNotNone(college_status.created)
+        self.assertIsNotNone(college_status.updated)
