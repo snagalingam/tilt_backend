@@ -18,7 +18,7 @@ from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Incom
 
 
 ################################################
-### Object Definitions
+# Object Definitions
 ################################################
 class EthnicityType(DjangoObjectType):
     class Meta:
@@ -99,7 +99,7 @@ class UserCategoryType(DjangoObjectType):
 
 
 ################################################
-### Query
+# Query
 ################################################
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
@@ -127,7 +127,7 @@ class Query(graphene.ObjectType):
 
 
 ################################################
-### Mutations
+# Mutations
 ################################################
 class AddSubscriber(graphene.Mutation):
     class Arguments:
@@ -322,7 +322,7 @@ class UpdateUser(graphene.Mutation):
         user = info.context.user
 
         if not user.is_authenticated:
-            raise Exception ("User is not logged in")
+            raise Exception("User is not logged in")
 
         else:
             if act_score is not None:
@@ -353,7 +353,8 @@ class UpdateUser(graphene.Mutation):
                         )
 
                     except ObjectDoesNotExist:
-                        standard_value = Ethnicity.objects.get(category="other")
+                        standard_value = Ethnicity.objects.get(
+                            category="other")
                         ethnicity_user = EthnicityUser(
                             ethnicity=standard_value,
                             other_value=input,
@@ -384,17 +385,20 @@ class UpdateUser(graphene.Mutation):
                 # get the place if it already exists
                 if place_id is not None:
                     try:
-                        organization = Organization.objects.get(place_id=place_id)
+                        organization = Organization.objects.get(
+                            place_id=place_id)
                     except ObjectDoesNotExist:
                         if place_name is not None:
                             try:
-                                organization = Organization.objects.get(name=place_name)
+                                organization = Organization.objects.get(
+                                    name=place_name)
                             except ObjectDoesNotExist:
                                 None
 
                 else:
                     try:
-                        organization = Organization.objects.get(name=place_name)
+                        organization = Organization.objects.get(
+                            name=place_name)
                     except ObjectDoesNotExist:
                         None
 
@@ -409,7 +413,8 @@ class UpdateUser(graphene.Mutation):
                         icon = results.get("icon", None)
                         lat = results.get("geometry")["location"]["lat"]
                         lng = results.get("geometry")["location"]["lng"]
-                        place_phone_number = results.get("formatted_phone_number", None)
+                        place_phone_number = results.get(
+                            "formatted_phone_number", None)
                         place_name = results.get("name")
                         types = results.get("types", [])
                         url = results.get("url", None)
@@ -500,8 +505,10 @@ class UpdateUser(graphene.Mutation):
                     source_user.save()
 
             if user_category is not None:
-                user.user_category = UserCategory.objects.get(category=user_category)
+                user.user_category = UserCategory.objects.get(
+                    category=user_category)
 
+            user.is_onboarded = True
             user.save()
             return UpdateUser(user=user)
 
