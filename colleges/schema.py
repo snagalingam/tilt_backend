@@ -16,8 +16,10 @@ from services.helpers.nearby_coordinates import check_by_city, check_by_coordina
 User = get_user_model()
 
 ################################################
-### Standard Model Definitions
+# Standard Model Definitions
 ################################################
+
+
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
@@ -86,7 +88,7 @@ class CollegeScorecardType(DjangoObjectType):
 
 
 ################################################
-### Queries
+# Queries
 ################################################
 class CollegePaginationType(graphene.ObjectType):
     count = graphene.Int()
@@ -107,9 +109,12 @@ class Query(graphene.ObjectType):
         user_id=graphene.Int(),
         limit=graphene.Int()
     )
-    colleges = graphene.List(CollegeType, id=graphene.Int(), limit=graphene.Int())
-    college_fields_of_study = graphene.List(CollegeFieldOfStudyType, college_id=graphene.Int())
-    college_scorecards = graphene.List(CollegeScorecardType, limit=graphene.Int())
+    colleges = graphene.List(
+        CollegeType, id=graphene.Int(), limit=graphene.Int())
+    college_fields_of_study = graphene.List(
+        CollegeFieldOfStudyType, college_id=graphene.Int())
+    college_scorecards = graphene.List(
+        CollegeScorecardType, limit=graphene.Int())
 
     # speicfic queries
     cities = graphene.List(CollegeScorecardType, city=graphene.String())
@@ -144,14 +149,22 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         zipcode=graphene.Int()
     )
-    net_price_range = graphene.Field(NetPriceRangeType, income_quintile=graphene.String())
+    net_price_range = graphene.Field(
+        NetPriceRangeType, income_quintile=graphene.String())
     religious_affiliation = graphene.List(CollegeScorecardType)
-    state_fips = graphene.List(CollegeScorecardType, state_fip=graphene.String())
+    state_fips = graphene.List(
+        CollegeScorecardType, state_fip=graphene.String())
     states = graphene.List(CollegeScorecardType, state=graphene.String())
+    my_colleges = graphene.List(CollegeStatusType)
 
     # standard model queries
     def resolve_college_statuses(self, info, limit=None, **kwargs):
         qs = CollegeStatus.objects.filter(**kwargs)[0:limit]
+        return qs
+
+    def resolve_my_colleges(self, info):
+        user = info.context.user
+        qs = CollegeStatus.objects.filter(user=user)
         return qs
 
     def resolve_colleges(self, info, limit=None, **kwargs):
@@ -366,20 +379,23 @@ class Query(graphene.ObjectType):
             return NetPriceRangeType(min=0, max=0)
 
     def resolve_religious_affiliation(self, info):
-        qs = Scorecard.objects.filter(show=True, religious_affiliation__isnull=False).distinct("religious_affiliation")
+        qs = Scorecard.objects.filter(
+            show=True, religious_affiliation__isnull=False).distinct("religious_affiliation")
         return qs
 
     def resolve_state_fips(self, info, state_fip=""):
-        qs = Scorecard.objects.filter(show=True, state_fips__icontains=state_fip).distinct("state_fips")
+        qs = Scorecard.objects.filter(
+            show=True, state_fips__icontains=state_fip).distinct("state_fips")
         return qs
 
     def resolve_states(self, info, state=""):
-        qs = Scorecard.objects.filter(show=True, state__icontains=state).distinct('state')
+        qs = Scorecard.objects.filter(
+            show=True, state__icontains=state).distinct('state')
         return qs
 
 
 ################################################
-### Mutations
+# Mutations
 ################################################
 class CreateOrUpdateCollegeBudget(graphene.Mutation):
     # send all fields to update the budget
@@ -417,7 +433,8 @@ class CreateOrUpdateCollegeBudget(graphene.Mutation):
         college = College.objects.get(pk=college_id)
 
         try:
-            college_status = CollegeStatus.objects.get(college=college, user=user)
+            college_status = CollegeStatus.objects.get(
+                college=college, user=user)
         except:
             college_status = None
 
@@ -468,7 +485,8 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
         college = College.objects.get(pk=college_id)
 
         try:
-            college_status = CollegeStatus.objects.get(user=user, college=college)
+            college_status = CollegeStatus.objects.get(
+                user=user, college=college)
 
         except:
             college_status = None
