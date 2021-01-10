@@ -126,7 +126,7 @@ class Query(graphene.ObjectType):
         city=graphene.String(),
         ethnicity=graphene.String(),
         gender=graphene.String(),
-        income_quintile=graphene.String(),
+        income=graphene.String(),
         name=graphene.String(),
         net_price=graphene.List(graphene.Float),
         ownership=graphene.List(graphene.String),
@@ -150,7 +150,7 @@ class Query(graphene.ObjectType):
         zipcode=graphene.Int()
     )
     net_price_range = graphene.Field(
-        NetPriceRangeType, income_quintile=graphene.String())
+        NetPriceRangeType, income=graphene.String())
     religious_affiliation = graphene.List(CollegeScorecardType)
     state_fips = graphene.List(
         CollegeScorecardType, state_fip=graphene.String())
@@ -197,7 +197,7 @@ class Query(graphene.ObjectType):
             city=None,
             ethnicity=None,
             gender=None,
-            income_quintile=None,
+            income=None,
             name=None,
             net_price=None,
             ownership=None,
@@ -213,7 +213,7 @@ class Query(graphene.ObjectType):
     ):
         qs = College.objects.filter(show=True)
         user = info.context.user
-        income_quintile = user.income_quintile
+        income = user.income
         if name:
             qs = qs.filter(Q(scorecard__name__icontains=name) | Q(
                 scorecard__alias__icontains=name) | Q(name__icontains=name))
@@ -254,8 +254,8 @@ class Query(graphene.ObjectType):
             qs = qs.filter(
                 scorecard__religious_affiliation__icontains=religious_affiliation)
         if net_price:
-            if (income_quintile):
-                income_filter_type = f'scorecard__avg_net_price_{income_quintile}__range'
+            if (income):
+                income_filter_type = f'scorecard__avg_net_price_{income}__range'
                 qs = qs.filter(Q(scorecard__avg_net_price__range=(net_price[0], net_price[1])) |
                                Q(**{income_filter_type: (net_price[0], net_price[1])}))
             else:
@@ -268,13 +268,13 @@ class Query(graphene.ObjectType):
             qs = qs.order_by('popularity_score' if sort_order ==
                              "asc" else '-popularity_score')
         if sort_by == "net_price":
-            if (income_quintile is not None):
+            if (income is not None):
                 if sort_order == 'asc':
                     qs = qs.annotate(real_net_price=Least('status__net_price',
-                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').asc(nulls_last=True))
+                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income}')).order_by(F('real_net_price').asc(nulls_last=True))
                 else:
                     qs = qs.annotate(real_net_price=Least('status__net_price',
-                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income_quintile}')).order_by(F('real_net_price').desc(nulls_last=True))
+                                                          'scorecard__avg_net_price', f'scorecard__avg_net_price_{income}')).order_by(F('real_net_price').desc(nulls_last=True))
             else:
                 if sort_order == 'asc':
                     qs = qs.annotate(real_net_price=Least('status__net_price',
@@ -357,22 +357,22 @@ class Query(graphene.ObjectType):
 
     def resolve_net_price_range(self, info):
         user = info.context.user
-        income_quintile = user.income_quintile
+        income = user.income
         avg_net_price_min = Scorecard.objects.aggregate(Min("avg_net_price"))
         avg_net_price_max = Scorecard.objects.aggregate(Max("avg_net_price"))
         min = avg_net_price_min["avg_net_price__min"]
         max = avg_net_price_max["avg_net_price__max"]
 
         if min is not None and max is not None:
-            if income_quintile:
+            if income:
                 income_min = Scorecard.objects.aggregate(
-                    Min(f"avg_net_price_{income_quintile}"))
+                    Min(f"avg_net_price_{income}"))
                 income_max = Scorecard.objects.aggregate(
-                    Max(f"avg_net_price_{income_quintile}"))
-                if min > income_min[f"avg_net_price_{income_quintile}__min"]:
-                    min = income_min[f"avg_net_price_{income_quintile}__min"]
-                if max < income_max[f"avg_net_price_{income_quintile}__max"]:
-                    max = income_max[f"avg_net_price_{income_quintile}__max"]
+                    Max(f"avg_net_price_{income}"))
+                if min > income_min[f"avg_net_price_{income}__min"]:
+                    min = income_min[f"avg_net_price_{income}__min"]
+                if max < income_max[f"avg_net_price_{income}__max"]:
+                    max = income_max[f"avg_net_price_{income}__max"]
 
             return NetPriceRangeType(min=min, max=max)
         else:
