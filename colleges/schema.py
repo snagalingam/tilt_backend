@@ -48,6 +48,7 @@ class CollegeType(DjangoObjectType):
 class CollegeStatusType(DjangoObjectType):
     class Meta:
         model = CollegeStatus
+        convert_choices_to_enum = False
         fields = (
             'id',
             'award_status',
@@ -118,6 +119,7 @@ class Query(graphene.ObjectType):
 
     # speicfic queries
     cities = graphene.List(CollegeScorecardType, city=graphene.String())
+    college_by_id = graphene.Field(CollegeType, id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
@@ -182,6 +184,10 @@ class Query(graphene.ObjectType):
     # speicfic queries
     def resolve_cities(self, info, city=""):
         qs = Scorecard.objects.filter(show=True, city__icontains=city)
+        return qs
+
+    def resolve_college_by_id(self, info, id):
+        qs = College.objects.get(pk=id)
         return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):
@@ -522,7 +528,7 @@ class CreateOrUpdateCollegeStatus(graphene.Mutation):
             college_status.net_price = net_price
 
         if residency is not None:
-            college_status.resident = residency
+            college_status.residency = residency
 
         if status is not None:
             college_status.status = status
