@@ -23,26 +23,7 @@ User = get_user_model()
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
-        fields = (
-            'id',
-            'address',
-            'business_status',
-            'description',
-            'favicon',
-            'lat',
-            'lng',
-            'main_photo',
-            'name',
-            'phone_number',
-            'photos',
-            'place_id',
-            'popularity_score',
-            'scorecard',
-            'scorecard_unit_id',
-            'types',
-            'url',
-            'website'
-        )
+        fields = "__all__"
 
 
 class CollegeStatusType(DjangoObjectType):
@@ -57,7 +38,8 @@ class CollegeStatusType(DjangoObjectType):
             'net_price',
             'residency',
             'status',
-            'user'
+            'user',
+            'updated'
         )
 
 
