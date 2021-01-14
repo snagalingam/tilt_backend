@@ -18,7 +18,7 @@ from services.sendgrid_api.send_email import send_notification_email, send_repor
 
 
 ################################################
-### Standard Model Definitions
+# Standard Model Definitions
 ################################################
 class AidCategoryType(DjangoObjectType):
     class Meta:
@@ -35,11 +35,14 @@ class AidDataType(DjangoObjectType):
 class AidSummaryType(DjangoObjectType):
     class Meta:
         model = AidSummary
-        fields = ('id', 'college_status', 'net_price', 'total_cost', 'total_aid')
+        fields = ('id', 'college_status', 'net_price',
+                  'total_cost', 'total_aid')
 
 ################################################
-### Query
+# Query
 ################################################
+
+
 class AnalyzedResultType(graphene.ObjectType):
     document_name = graphene.String()
     sent = graphene.Boolean()
@@ -82,6 +85,7 @@ class Query(graphene.ObjectType):
         total_aid=graphene.Int(),
         total_cost=graphene.Int()
     )
+    my_aid_data = graphene.List(AidDataType)
 
     # get_all()
     def resolve_aid_categories(self, info, limit=None):
@@ -109,9 +113,14 @@ class Query(graphene.ObjectType):
         qs = AidSummary.objects.filter()(**kwargs)
         return qs
 
+    def resolve_my_aid_data(self, info):
+        user = info.context.user
+        qs = AidData.objects.filter(college_status__user__id=user.id)
+        return qs
+
 
 ################################################
-### Mutations
+# Mutations
 ################################################
 class AnalyzeDocuments(graphene.Mutation):
     sent_list = graphene.List(AnalyzedResultType)
@@ -134,7 +143,7 @@ class AnalyzeDocuments(graphene.Mutation):
             college_status = CollegeStatus.objects.get(pk=college_status_id)
 
             if not college_status.award_uploaded:
-                raise Exception ("Aid letter not uploaded")
+                raise Exception("Aid letter not uploaded")
 
             # send document for analysis
             words_id = start_words_analysis(document_name)
@@ -151,7 +160,7 @@ class AnalyzeDocuments(graphene.Mutation):
                 AnalyzedResultType(
                     document_name=document_name,
                     sent=True
-            ))
+                ))
 
         # trigger lambda to checkDocuments after 5 minutes
         lambda_handler(documents)
@@ -186,7 +195,8 @@ class CheckDocuments(graphene.Mutation):
 
         # interate through list
         for idx, document_name in enumerate(documents):
-            document_result = DocumentResult.objects.get(document_name=document_name)
+            document_result = DocumentResult.objects.get(
+                document_name=document_name)
             end_index = document_name.index("_file")
             college_status_id = int(document_name[3:end_index])
 
@@ -274,13 +284,14 @@ class CheckDocuments(graphene.Mutation):
 
                         for each in pos[key]:
                             aid_data_name = each.get("Name")
-                            amount =  each.get("Amount")
+                            amount = each.get("Amount")
                             row_index = each.get("Row Index")
                             col_index = each.get("Col Index")
                             row_data = each.get("Row Data")
 
                             # get college_status_id from document
-                            college_status = CollegeStatus.objects.get(pk=college_status_id)
+                            college_status = CollegeStatus.objects.get(
+                                pk=college_status_id)
 
                             # auto award_reviewed=True if check passed and pos_error=False
                             if check["pass_fail"] == "Passed":
@@ -288,9 +299,11 @@ class CheckDocuments(graphene.Mutation):
                                 college_status.save()
 
                             # filter/match for category
-                            possibilities = find_aid_category(aid_data_name, document_name)
+                            possibilities = find_aid_category(
+                                aid_data_name, document_name)
                             category_name = filter_possibilities(possibilities)
-                            aid_category = AidCategory.objects.get(name=category_name)
+                            aid_category = AidCategory.objects.get(
+                                name=category_name)
 
                             # check for dups
                             try:
@@ -337,7 +350,8 @@ class CheckDocuments(graphene.Mutation):
 
                 # check if document_data exists
                 try:
-                    document_data = DocumentData.objects.get(document_name=document_name)
+                    document_data = DocumentData.objects.get(
+                        document_name=document_name)
                 except:
                     document_data = None
 
@@ -441,7 +455,7 @@ class UploadOrDeleteDocument(graphene.Mutation):
                     college_status.save()
 
             return UploadOrDeleteDocument(success=success)
-        raise Exception ('Document file name required')
+        raise Exception('Document file name required')
 
 
 class Mutation(graphene.ObjectType):
