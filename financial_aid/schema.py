@@ -86,6 +86,8 @@ class Query(graphene.ObjectType):
         total_cost=graphene.Int()
     )
     my_aid_data = graphene.List(AidDataType)
+    aid_data_by_college_status = graphene.List(
+        AidDataType, college_status_id=graphene.Int())
 
     # get_all()
     def resolve_aid_categories(self, info, limit=None):
@@ -116,6 +118,10 @@ class Query(graphene.ObjectType):
     def resolve_my_aid_data(self, info):
         user = info.context.user
         qs = AidData.objects.filter(college_status__user__id=user.id)
+        return qs
+
+    def resolve_aid_data_by_college_status(self, info, college_status_id=None):
+        qs = AidData.objects.filter(college_status__id=college_status_id)
         return qs
 
 
