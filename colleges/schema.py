@@ -30,17 +30,7 @@ class CollegeStatusType(DjangoObjectType):
     class Meta:
         model = CollegeStatus
         convert_choices_to_enum = False
-        fields = (
-            'id',
-            'award_status',
-            'college',
-            'in_state_tuition',
-            'net_price',
-            'residency',
-            'status',
-            'user',
-            'updated'
-        )
+        fields = "__all__"
 
 
 class CollegeFieldOfStudyType(DjangoObjectType):

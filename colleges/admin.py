@@ -56,6 +56,13 @@ class CollegeStatusAdmin(admin.ModelAdmin):
                 'residency',
             )
         }),
+        (('Award Totals'), {
+            'fields': (
+                'award_total_costs',
+                'award_total_grants',
+                'award_net_price',
+            )
+        }),
         (('Budget'), {
             'fields': (
                 'work_study',

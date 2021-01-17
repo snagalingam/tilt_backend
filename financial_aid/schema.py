@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult
 from colleges.models import CollegeStatus
 from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
@@ -32,12 +32,6 @@ class AidDataType(DjangoObjectType):
         fields = ('id', 'aid_category', 'amount', 'college_status', 'name')
 
 
-class AidSummaryType(DjangoObjectType):
-    class Meta:
-        model = AidSummary
-        fields = ('id', 'college_status', 'net_price',
-                  'total_cost', 'total_aid')
-
 ################################################
 # Query
 ################################################
@@ -59,7 +53,6 @@ class CheckedResultType(graphene.ObjectType):
 class Query(graphene.ObjectType):
     aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
     aid_data = graphene.List(AidDataType, limit=graphene.Int())
-    aid_summaries = graphene.List(AidSummaryType, limit=graphene.Int())
 
     aid_categories_by_fields = graphene.List(
         AidCategoryType,
@@ -78,13 +71,6 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
-    aid_summaries_by_fields = graphene.List(
-        AidSummaryType,
-        college_status_id=graphene.ID(),
-        net_price=graphene.Int(),
-        total_aid=graphene.Int(),
-        total_cost=graphene.Int()
-    )
     my_aid_data = graphene.List(AidDataType)
     aid_data_by_college_status = graphene.List(
         AidDataType, college_status_id=graphene.Int())
@@ -98,10 +84,6 @@ class Query(graphene.ObjectType):
         qs = AidData.objects.all()[0:limit]
         return qs
 
-    def resolve_aid_summaries(self, info, limit=None):
-        qs = AidSummary.objects.all()[0:limit]
-        return qs
-
     # get_by_fields()
     def resolve_aid_categories_by_fields(self, info, **kwargs):
         qs = AidCategory.objects.filter(**kwargs)
@@ -109,10 +91,6 @@ class Query(graphene.ObjectType):
 
     def resolve_aid_data_by_fields(self, info, **kwargs):
         qs = AidData.objects.filter(**kwargs)
-        return qs
-
-    def resolve_aid_summaries_by_fields(self, info, **kwargs):
-        qs = AidSummary.objects.filter()(**kwargs)
         return qs
 
     def resolve_my_aid_data(self, info):

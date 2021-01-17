@@ -4,6 +4,9 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
+DEFAULT_AWARD_COST = 0
+DEFAULT_AWARD_AID = 0
+DEFAULT_AWARD_NET_PRICE = 0
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
 DEFAULT_POPULARITY_SCORE = 0
@@ -70,6 +73,10 @@ class CollegeStatus(models.Model):
         ("emailed user", "emailed user"),
         ("texted user", "texted user"),
     )
+    AWARD_SCORECARD_COST_ESTIMATE_CHOICES = (
+        ("in-state tuition", "in-state tuition"),
+        ("out-of-state tuition", "out-of-state tuition"),
+    )
     IN_STATE_TUITION_CHOICES = (
         ("yes", "yes"),
         ("no", "no"),
@@ -115,6 +122,16 @@ class CollegeStatus(models.Model):
         blank=True,
         choices=RESIDENCY_CHOICES,
         max_length=255
+    )
+
+    # award fields
+    award_total_costs = models.PositiveIntegerField(blank=True, null=True)
+    award_total_grants = models.PositiveIntegerField(blank=True, null=True)
+    award_net_price = models.IntegerField(blank=True, null=True)
+    award_scorecard_cost_estimate = models.CharField(
+        choices=AWARD_SCORECARD_COST_ESTIMATE_CHOICES,
+        blank=True,
+        max_length=50
     )
 
     # budget fields
