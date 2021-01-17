@@ -2,8 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
-from services.sendgrid_api.send_email import send_notification_email
-from services.twilio_api.sms_methods import send_notification_sms
+
 
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
@@ -12,9 +11,9 @@ DEFAULT_SCORECARD_ID = 1
 DEFAULT_USER_ID = 1
 
 
-################################################
-### College Model
-################################################
+################################################################################
+# College
+################################################################################
 class College(models.Model):
     # google api inputted (otherwise scorecard)
     name = models.CharField(max_length=255)
@@ -61,14 +60,15 @@ class College(models.Model):
         return self.name
 
 
-################################################
-### College Status
-################################################
+################################################################################
+# College Status
+################################################################################
 class CollegeStatus(models.Model):
     AWARD_STATUS_CHOICES = (
         ("uploaded", "uploaded"),
         ("reviewed", "reviewed"),
-        ("user notified", "user notified"),
+        ("emailed user", "emailed user"),
+        ("texted user", "texted user"),
     )
     IN_STATE_TUITION_CHOICES = (
         ("yes", "yes"),
@@ -132,22 +132,6 @@ class CollegeStatus(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        method = self.user.preferred_contact_method
-
-        # send user notification about financial aid letter if award_reviewed=True
-        if self.award_status == "reviewed":
-
-            if method == "text":
-                send_notification_sms(self.user.phone_number)
-                self.award_status = "user notified"
-
-            else:
-                send_notification_email(self.user.email, self.user.first_name)
-                self.award_status = "user notified"
-
-        return super(CollegeStatus, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = 'college status'
         verbose_name_plural = 'college statuses'
@@ -156,9 +140,9 @@ class CollegeStatus(models.Model):
         return str(self.pk)
 
 
-################################################
-### Scorecard
-################################################
+################################################################################
+# Scorecard
+################################################################################
 class Scorecard(models.Model):
     # college model
     college = models.OneToOneField(
@@ -389,9 +373,9 @@ class Scorecard(models.Model):
         return self.name
 
 
-################################################
-### Field of Study
-################################################
+################################################################################
+# Field of Study
+################################################################################
 class FieldOfStudy(models.Model):
     college = models.ForeignKey(
         College,
@@ -442,3 +426,8 @@ class FieldOfStudy(models.Model):
 
     def __str__(self):
         return self.cip_title
+
+
+################################################
+#
+################################################
