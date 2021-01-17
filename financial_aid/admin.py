@@ -2,7 +2,7 @@ from colleges.models import CollegeStatus
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
-from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult
 
 
 ################################################
@@ -67,27 +67,6 @@ class AidDataAdmin(admin.ModelAdmin):
     search_fields = ('amount', 'aid_category', 'college_status', 'name')
 
 
-class AidSummaryAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (('Information'), {'fields': (
-            'college_status',
-            'total_cost',
-            'total_aid',
-            'net_price',
-            'created',
-            'updated',
-    )}),
-    )
-    formfield_overrides = {
-        models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['college_status', 'total_cost', 'total_aid', 'net_price',]
-    model = AidSummary
-    ordering = ('college_status',)
-    readonly_fields = ('created', 'updated',)
-    search_fields = ('college_status', 'total_cost', 'total_aid', 'net_price',)
-
-
 class DocumentDataAdmin(admin.ModelAdmin):
     fieldsets = (
         (('Information'), {'fields': ('document_name', 'created', 'updated',)}),
@@ -145,6 +124,5 @@ class DocumentResultAdmin(admin.ModelAdmin):
 
 admin.site.register(AidCategory, AidCategoryAdmin)
 admin.site.register(AidData, AidDataAdmin)
-admin.site.register(AidSummary, AidSummaryAdmin)
 admin.site.register(DocumentData, DocumentDataAdmin)
 admin.site.register(DocumentResult, DocumentResultAdmin)

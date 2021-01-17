@@ -93,23 +93,3 @@ class DocumentResult(models.Model):
 
     def __str__(self):
         return self.document_name
-
-
-class AidSummary(models.Model):
-    college_status = models.ForeignKey(
-        CollegeStatus,
-        default=DEFAULT_COLLEGE_STATUS_ID,
-        on_delete=models.CASCADE
-    )
-    total_cost = models.PositiveIntegerField()
-    total_aid = models.PositiveIntegerField()
-    net_price = models.IntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'aid summary'
-        verbose_name_plural = 'aid summaries'
-
-    def __str__(self):
-        return str(self.pk)

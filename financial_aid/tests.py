@@ -1,4 +1,4 @@
-from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult, AidSummary
+from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult
 from colleges.models import College, CollegeStatus
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -101,21 +101,3 @@ class AidTests(TestCase):
         self.assertEqual(aid_data.col_index, 3)
         self.assertIsNotNone(aid_data.created)
         self.assertIsNotNone(aid_data.updated)
-
-    def test_create_aid_summary(self):
-        user = User.objects.get(email="demouser@tiltaccess.com")
-        college_status = CollegeStatus.objects.get(user=user)
-        aid_summary = AidSummary.objects.create(
-            college_status=college_status,
-            total_cost=25000,
-            total_aid=12500,
-            net_price=12500,
-        )
-
-        self.assertEqual(aid_summary.college_status, college_status)
-        self.assertEqual(aid_summary.total_cost, 25000)
-        self.assertEqual(aid_summary.total_aid, 12500)
-        self.assertEqual(aid_summary.net_price, 12500)
-        self.assertIsNotNone(aid_summary.created)
-        self.assertIsNotNone(aid_summary.updated)
-        self.assertEqual(college_status.aidsummary_set.get_queryset()[0], aid_summary)
