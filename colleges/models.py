@@ -4,9 +4,6 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
-DEFAULT_AWARD_COST = 0
-DEFAULT_AWARD_AID = 0
-DEFAULT_AWARD_NET_PRICE = 0
 DEFAULT_COLLEGE_ID = 1
 DEFAULT_COLLEGE_STATUS_ID= 1
 DEFAULT_POPULARITY_SCORE = 0
@@ -443,8 +440,3 @@ class FieldOfStudy(models.Model):
 
     def __str__(self):
         return self.cip_title
-
-
-################################################
-#
-################################################
