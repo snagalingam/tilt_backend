@@ -7,7 +7,10 @@ from django.dispatch import receiver
 @receiver(post_save, sender=AidData, dispatch_uid='calculate_aid_summary')
 def calculate_aid_summary(sender, instance, **kwargs):
     college_status = instance.college_status
+
+    award_scorecard_cost_estimate = ""
     total_aid = 0
+    total_cost = 0
 
     # calculate the total cost amount
     direct_cost_categories = AidCategory.objects.filter(primary="cost", secondary="direct")
@@ -20,21 +23,26 @@ def calculate_aid_summary(sender, instance, **kwargs):
         direct_cost = 0
         for cost in costs:
             direct_cost += cost.amount
-        award_scorecard_cost_estimate = ""
-        
+
     else:
         # get scorecard object for tuition
         scorecard = Scorecard.objects.get(college=college_status.college)
 
         if college_status.in_state_tuition == "yes":
             direct_cost = scorecard.tuition_in_state
-            award_scorecard_cost_estimate = "in-state tuition"
+
+            if direct_cost is not None:
+                award_scorecard_cost_estimate = "in-state tuition"
+
         else:
             direct_cost = scorecard.tuition_out_of_state
-            award_scorecard_cost_estimate = "out-of-state tuition"
+
+            if direct_cost is not None:
+                award_scorecard_cost_estimate = "out-of-state tuition"
 
     # add 5,000 for indirect costs
-    total_cost = direct_cost + 5000
+    if direct_cost is not None:
+        total_cost = direct_cost + 5000
 
     # calculate the total grant amount on the award letter
     grant_categories = AidCategory.objects.filter(primary="grant")
