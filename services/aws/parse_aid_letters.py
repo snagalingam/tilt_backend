@@ -1,5 +1,154 @@
-from .get_tables import get_table_data
-from .check_document import start_document_check, format_money
+NUMBERS = {
+  "0": True,
+  "1": True,
+  "2": True,
+  "3": True,
+  "4": True,
+  "5": True,
+  "6": True,
+  "7": True,
+  "8": True,
+  "9": True,
+}
+
+
+# -------------- Format Money String
+
+def format_money(word):
+    if word.count("$") > 1 and word[1] != "$":
+        return word
+
+    start_index = word.index("$")
+    formatted_money = word[start_index:].strip()
+
+    if "*" in formatted_money:
+        formatted_money = formatted_money.replace("*", "")
+
+    if "=" in formatted_money:
+        formatted_money = formatted_money.replace("=", "")
+
+    if "+" in formatted_money:
+        formatted_money = formatted_money.replace("+", "")
+
+    if "-" in formatted_money:
+        formatted_money = formatted_money.replace("-", "")
+
+    if " " in formatted_money:
+        idx = formatted_money.index(" ")
+        if formatted_money[idx + 1] in NUMBERS:
+            formatted_money.replace(" ", "")
+        else:
+          formatted_money = formatted_money[0:idx]
+
+    if "/" in formatted_money:
+        idx = formatted_money.index("/")
+        formatted_money = formatted_money[0:idx]
+
+    if formatted_money[-1] == ",":
+        formatted_money = formatted_money[0:-1]
+
+    if formatted_money[-1] == ".":
+        formatted_money = formatted_money[0:-1]
+
+    if formatted_money[-3:-2] == ".":
+        formatted_money = formatted_money[0:-3]
+
+    if formatted_money[-3:-2] == ",":
+        formatted_money = formatted_money[0:-3]
+
+    if "." in formatted_money:
+        formatted_money = formatted_money.replace(".", ",")
+
+    return formatted_money
+
+
+################################################
+# Standard Model Definitions
+################################################
+
+def start_document_check(text, tables):
+    # create a list of all money in the document
+    money_words = []
+    for word in text:
+        if "$" in word:
+
+            # what the hell does this do
+            if word.count("$") > 1 and word[1] != "$":
+                return word
+
+            start_index = word.index("$")
+            formatted_money = word[start_index:].strip()
+
+            # remove any of these symbols
+            for letter in "*=+-":
+                if letter in formatted_money:
+                    formatted_money = formatted_money.replace(letter, "")
+
+            if " " in formatted_money:
+                idx = formatted_money.index(" ")
+                if formatted_money[idx + 1] in NUMBERS:
+                    formatted_money.replace(" ", "")
+                else:
+                  formatted_money = formatted_money[0:idx]
+
+            if "/" in formatted_money:
+                idx = formatted_money.index("/")
+                formatted_money = formatted_money[0:idx]
+
+            if formatted_money[-1] == ",":
+                formatted_money = formatted_money[0:-1]
+
+            if formatted_money[-1] == ".":
+                formatted_money = formatted_money[0:-1]
+
+            if formatted_money[-3:-2] == ".":
+                formatted_money = formatted_money[0:-3]
+
+            if formatted_money[-3:-2] == ",":
+                formatted_money = formatted_money[0:-3]
+
+            if "." in formatted_money:
+                formatted_money = formatted_money.replace(".", ",")
+
+            return formatted_money
+
+
+            money_words.append(money)
+
+    # create a list of words from table
+    for table in tables:
+        for row in table:
+            for column in row:
+                if "$" in word:
+                    for amount in money_list:
+                        if amount in word:
+                            money_list.remove(amount)
+
+    if len(money_list) > 0:
+        data = {
+            "number_of_missing": len(money_list),
+            "missing_amounts" : money_list,
+            "pass_fail": "Failed"
+        }
+    else:
+        data = {
+            "number_of_missing": len(money_list),
+            "missing_amounts" : money_list,
+            "pass_fail": "Passed"
+        }
+
+    return data
+
+    if check["pass_fail"] == "Passed":
+        # Green True
+        print(f"=====> CHECK: \033[92m{check}\033[0m")
+    else:
+        # Red False
+        print(f"=====> CHECK: \033[91m{check}\033[0m")
+
+    return check
+
+
 
 # -------------- Change Money to Integer
 
@@ -9,7 +158,7 @@ def change_to_int(word):
 
     money = format_money(word)
     money = money[1:].replace(",", "")
-  
+
     return int(money)
 
 # -------------- Tests For Clean Money
@@ -26,11 +175,11 @@ def get_max_amount(**kwargs):
     max_check = {}
 
     if word:
-        # check for space 
+        # check for space
         try:
             split = word.index(" ")
             arr = word.split(" ")
-        # if no space split on second dollar sign 
+        # if no space split on second dollar sign
         except:
             split = word.rindex("$")
             arr = [word[0:split], word[split:]]
@@ -38,7 +187,7 @@ def get_max_amount(**kwargs):
         for ele in arr:
             if test_money(ele):
                 max_check[change_to_int(ele)] = ele
-                
+
     elif col_data:
         for key in col_data:
             value = col_data[key]
@@ -48,11 +197,11 @@ def get_max_amount(**kwargs):
     # check for blanks
     if len(max_check) < 1:
         return 0
-    
+
     index = max(max_check)
     return max_check[index]
 
-# -------------- Formats Money or Or Returns Non-money words 
+# -------------- Formats Money or Or Returns Non-money words
 
 def check_if_money(word):
     if "$" not in word or len(word) < 3:
@@ -82,12 +231,12 @@ def check_if_money(word):
     # gauranteed to be money past this point
     if money is None:
         return word
-    
+
     # check for dups money in one string
     if word.count("$") > 1:
         money = get_max_amount(word=word)
 
-    # from check_document.py 
+    # from check_document.py
     money = format_money(money)
 
     # for money with only dollar sign
@@ -155,10 +304,10 @@ def parse_tables(source):
 
         # keeps track of row num
         row += 1
-        
+
     return table_dict
 
-# -------------- Format Table Dictionary For Titles And Highest Amounts 
+# -------------- Format Table Dictionary For Titles And Highest Amounts
 
 def format_data_to_max_amounts(table_dict):
     formatted_max = {}
@@ -178,15 +327,15 @@ def format_data_to_max_amounts(table_dict):
             if amount == 0:
                 amount = "$0"
 
-            formatted_max[table_num][row_title] = amount 
-                                                              
+            formatted_max[table_num][row_title] = amount
+
     # return Falase if no formatted_max
     if len(formatted_max) < 1:
-        return False 
+        return False
 
     return formatted_max
 
-# -------------- Track Rows And Cols For Final Object For Database 
+# -------------- Track Rows And Cols For Final Object For Database
 
 def track_position(formatted_max, table_dict):
     seen = []
@@ -221,7 +370,7 @@ def track_position(formatted_max, table_dict):
 
                     for each in table_data[key].values():
                         row_data.append(each)
-                        
+
                     if amount == "$0":
                         amount = 0
 
@@ -275,7 +424,7 @@ def find_aid_category(name, doc_name):
         "campus": "off campus housing",
         "housing": "off campus housing",
         "stafford": "stafford loan fees",
-        "grants": "total grants", 
+        "grants": "total grants",
         "loans": "total loans",
         "grant": "other grant",
         "loan": "other loan",
@@ -289,10 +438,10 @@ def find_aid_category(name, doc_name):
         "award": "other grant",
     }
 
-    try: 
+    try:
         index = name.index(" ")
     except:
-        index = None 
+        index = None
 
     possibility = []
 
@@ -311,12 +460,12 @@ def find_aid_category(name, doc_name):
         if each in categories:
             possibility.append(categories[each])
 
-    # double check 
+    # double check
     if len(possibility) < 1:
         for double_check in categories:
             if double_check in name.lower():
                 possibility.append(categories[double_check])
-    
+
     # set uncategorized as default
     if len(possibility) < 1:
         possibility = ["uncategorized"]
@@ -329,7 +478,7 @@ def find_aid_category(name, doc_name):
 
     return possibilities
 
-# -------------- Method To Format Data To Match Database Aid Categories 
+# -------------- Method To Format Data To Match Database Aid Categories
 
 def filter_possibilities(possibilities):
     name = possibilities.get("name")
@@ -337,7 +486,7 @@ def filter_possibilities(possibilities):
 
     if len(possibilities) < 2:
         return category[0]
-    
+
     if "tuition" in category and "other grant" in category:
         return "other grant"
 
@@ -345,7 +494,7 @@ def filter_possibilities(possibilities):
         if "work" in name.lower():
             return "work study"
         elif "grant" in name.lower():
-            return "total grants"     
+            return "total grants"
         elif "loan" in name.lower():
             return "total loans"
         elif "aid" in name.lower():

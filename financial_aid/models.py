@@ -52,31 +52,25 @@ class AidData(models.Model):
         return self.name
 
 
-class DocumentData(models.Model):
+class DocumentResult(models.Model):
     document_name = models.CharField(max_length=255, unique=True)
-    words = ArrayField(
+    sent = models.BooleanField(default=False)
+
+    # table analysis
+    table_job_id = models.CharField(blank=True, max_length=255)
+    table_succeeded = models.BooleanField(default=False)
+    table_data = models.TextField(blank=True)
+
+    # text analysis
+    text_job_id = models.CharField(blank=True, max_length=255)
+    text_succeeded = models.BooleanField(default=False)
+    text_data = ArrayField(
         models.CharField(blank=True, max_length=255),
         blank=True,
         null=True
     )
-    tables = models.TextField(blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'document data'
-        verbose_name_plural = 'document data'
-
-    def __str__(self):
-        return self.document_name
 
 
-class DocumentResult(models.Model):
-    document_name = models.CharField(max_length=255, unique=True)
-    words_id = models.CharField(max_length=255, blank=True)
-    tables_id = models.CharField(max_length=255, blank=True)
-    sent = models.BooleanField(default=False)
-    processed = models.BooleanField(default=False)
     pass_fail = models.CharField(max_length=255, blank=True)
     number_of_missing = models.PositiveIntegerField(blank=True, null=True)
     missing_amounts = ArrayField(

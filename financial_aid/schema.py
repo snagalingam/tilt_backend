@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult
+from financial_aid.models import AidCategory, AidData, DocumentResult
 from colleges.models import CollegeStatus
 from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
@@ -36,20 +36,6 @@ class AidDataType(DjangoObjectType):
 # Query
 ################################################
 
-
-class AnalyzedResultType(graphene.ObjectType):
-    document_name = graphene.String()
-    sent = graphene.Boolean()
-
-
-class CheckedResultType(graphene.ObjectType):
-    document_name = graphene.String()
-    pass_fail = graphene.String()
-    processed = graphene.Boolean()
-    tables = graphene.String()
-    words = graphene.String()
-
-
 class Query(graphene.ObjectType):
     aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
     aid_data = graphene.List(AidDataType, limit=graphene.Int())
@@ -61,19 +47,21 @@ class Query(graphene.ObjectType):
         secondary=graphene.String(),
         tertiary=graphene.String()
     )
+    aid_data_by_college_status = graphene.List(
+        AidDataType,
+        college_status_id=graphene.Int()
+    )
     aid_data_by_fields = graphene.List(
         AidDataType,
-        aid_category_id=graphene.ID(),
+        aid_category_id=graphene.Int(),
         amount=graphene.Int(),
         col_index=graphene.Int(),
-        college_status_id=graphene.ID(),
+        college_status_id=graphene.Int(),
         name=graphene.String(),
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
     my_aid_data = graphene.List(AidDataType)
-    aid_data_by_college_status = graphene.List(
-        AidDataType, college_status_id=graphene.Int())
 
     # get_all()
     def resolve_aid_categories(self, info, limit=None):
@@ -89,6 +77,10 @@ class Query(graphene.ObjectType):
         qs = AidCategory.objects.filter(**kwargs)
         return qs
 
+    def resolve_aid_data_by_college_status(self, info, college_status_id=None):
+        qs = AidData.objects.filter(college_status__id=college_status_id)
+        return qs
+
     def resolve_aid_data_by_fields(self, info, **kwargs):
         qs = AidData.objects.filter(**kwargs)
         return qs
@@ -98,71 +90,50 @@ class Query(graphene.ObjectType):
         qs = AidData.objects.filter(college_status__user__id=user.id)
         return qs
 
-    def resolve_aid_data_by_college_status(self, info, college_status_id=None):
-        qs = AidData.objects.filter(college_status__id=college_status_id)
-        return qs
-
 
 ################################################
 # Mutations
 ################################################
 class AnalyzeDocuments(graphene.Mutation):
-    sent_list = graphene.List(AnalyzedResultType)
+    success = graphene.Boolean()
 
     class Arguments:
+        college_status_id = graphene.Int()
         documents = graphene.List(graphene.String)
 
-    def mutate(
-        self,
-        info,
-        documents=None,
-    ):
+    def mutate(self, info, college_status_id, documents):
         sent_list = []
         user = info.context.user
 
         for document_name in documents:
             # find college_status
-            end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index])
             college_status = CollegeStatus.objects.get(pk=college_status_id)
-
-            if not college_status.award_uploaded:
-                raise Exception("Aid letter not uploaded")
 
             # send document for analysis
             words_id = start_words_analysis(document_name)
             tables_id = start_tables_analysis(document_name)
 
             # save job_ids to database
-            document_result = DocumentResult(
+            document_result = DocumentResult.objects.create(
                 document_name=document_name,
                 words_id=words_id,
                 tables_id=tables_id,
-                sent=True)
+                sent=True
+            )
             document_result.save()
-            sent_list.append(
-                AnalyzedResultType(
-                    document_name=document_name,
-                    sent=True
-                ))
 
         # trigger lambda to checkDocuments after 5 minutes
         lambda_handler(documents)
-        return AnalyzeDocuments(sent_list=sent_list)
+        return AnalyzeDocuments(success=True)
 
 
 class CheckDocuments(graphene.Mutation):
-    checked_list = graphene.List(CheckedResultType)
     aid_data_list = graphene.List(AidDataType)
 
     class Arguments:
         documents = graphene.List(graphene.String)
 
-    def mutate(
-        self,
-        info,
-        documents=None,
-    ):
+    def mutate(self, info, documents=None):
         check = None
         pos_error = None
         pass_fail = None
@@ -178,66 +149,30 @@ class CheckDocuments(graphene.Mutation):
         aid_data_list = []
 
         # interate through list
-        for idx, document_name in enumerate(documents):
-            document_result = DocumentResult.objects.get(
-                document_name=document_name)
-            end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index])
+        for document_name in documents:
+            document_result = DocumentResult.objects.get(document_name=document_name)
 
-            # keep track of college_status_id positions
-            if idx < last_index:
-                # next_college_status_id = int(documents[idx + 1][3:end_index])
-                next_college_status_id = college_status_id + 1
-            elif idx == last_index:
-                next_college_status_id = -1
-
-            # check if words are processed
+            # check if text processed
             try:
-                words = get_words_data(document_result.words_id)
+                text = get_text_data(document_result.text_job_id)
+                document_result.text_succeeded = True
             except:
-                document_result.processed = False
-                words_failed = True
+                document_result.text_succeeded = False
 
             # check if tables are processed
             try:
                 tables = get_table_data(document_result.tables_id)
+                document_result.table_succeeded = True
             except:
-                document_result.processed = False
-                tables_failed = True
+                document_result.table_succeeded = False
 
-            # if textract analysis fails
-            if words_failed and tables_failed:
-                checked_list.append(
-                    CheckedResultType(
-                        document_name=document_name,
-                        words="Failed",
-                        tables="Failed",
-                        pass_fail="",
-                        processed=False
-                    ))
-            elif words_failed and not tables_failed:
-                checked_list.append(
-                    CheckedResultType(
-                        document_name=document_name,
-                        words="Failed",
-                        tables="",
-                        pass_fail="",
-                        processed=False
-                    ))
-            elif tables_failed and not words_failed:
-                checked_list.append(
-                    CheckedResultType(
-                        document_name=document_name,
-                        words="",
-                        tables="Failed",
-                        pass_fail="",
-                        processed=False
-                    ))
+            # if textract analysis fails save the data
+            if not document_result.text_succeeded or not document_result.table_succeeded:
+                document_result.save()
 
             # if document has words and tables
-            elif not words_failed and not tables_failed:
-                document_result.processed = True
-                check = start_document_check(words, tables)
+            elif document_result.text_succeeded and document_result.table_succeeded:
+                check = start_document_check(text, tables)
 
                 if check["pass_fail"] == "Failed":
                     checked_list.append(
@@ -410,39 +345,6 @@ class CheckDocuments(graphene.Mutation):
         return CheckDocuments(checked_list=checked_list, aid_data_list=aid_data_list)
 
 
-class UploadOrDeleteDocument(graphene.Mutation):
-    class Arguments:
-        blob = Upload(required=True)
-        document_name = graphene.String()
-        upload_or_delete = graphene.String()
-
-    success = graphene.Boolean()
-
-    def mutate(self, info, blob=None, document_name=None, delete=False):
-
-        if document_name:
-            # find college_status
-            end_index = document_name.index("_file")
-            college_status_id = int(document_name[3:end_index])
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
-
-            if delete is False:
-                success = upload_document(document_name, blob)
-                if success:
-                    college_status.award_uploaded = True
-                    college_status.save()
-
-            elif delete is True:
-                success = delete_document(document_name)
-                if success:
-                    college_status.award_uploaded = False
-                    college_status.save()
-
-            return UploadOrDeleteDocument(success=success)
-        raise Exception('Document file name required')
-
-
 class Mutation(graphene.ObjectType):
     analyze_documents = AnalyzeDocuments.Field()
     check_documents = CheckDocuments.Field()
-    upload_or_delete_document = UploadOrDeleteDocument.Field()

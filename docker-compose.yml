@@ -4,10 +4,15 @@ services:
   backend:
     container_name: backend
     build: .
-    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
-      - REGION=us-east-2
+      - AWS_ACCESS_KEY=AKIAY6JQE4YKQOHSVO6F
+      - AWS_BUCKET=financial-letters
+      - AWS_LAMBDA_FUNCTION=TiltGetAnalyzedData
+      - AWS_REGION=us-east-2
+      - AWS_SECRET_KEY=xLmHDvbbxITRhvKrZcn1P6IYMx0ZWixJEkjnMzkn
       - ENVIRONMENT=development
+      - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
       - DATABASE_HOST=db
       - DATABASE_NAME=postgres
       - DATABASE_PASSWORD=postgres

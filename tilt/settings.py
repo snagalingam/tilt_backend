@@ -21,10 +21,12 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 ################################################
 ### AWS Variables
 ################################################
-AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS', default='none')
-AWS_SECRET_KEY = os.environ.get('AWS_SECRET', default='none')
-AWS_REGION = os.environ.get('AWS_REGION', default='none')
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY', default='none')
 AWS_BUCKET = os.environ.get('AWS_BUCKET', default='none')
+AWS_LAMBDA_FUNCTION = os.environ.get('AWS_LAMBDA_FUNCTION', default='none')
+AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
+AWS_REGION = os.environ.get('AWS_REGION', default='none')
+GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
 
 ################################################
 ### Twilio Variables
