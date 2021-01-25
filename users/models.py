@@ -102,13 +102,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
     # allow first name and last name to be blank for Oauth
-    first_name = models.CharField(_("First Name"), blank=True, max_length=255)
+    first_name = models.CharField(_("First Name"), blank=True, max_length=255, null=True)
     preferred_name = models.CharField(
         _("Preferred Name"),
         blank=True,
         max_length=255
     )
-    last_name = models.CharField(_("Last Name"), blank=True, max_length=255)
+    last_name = models.CharField(_("Last Name"), blank=True, max_length=255, null=True)
     phone_number = models.CharField(
         _("Phone Number"),
         blank=True,
