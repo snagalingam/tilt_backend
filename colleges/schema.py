@@ -9,7 +9,7 @@ from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
 from graphene_django import DjangoObjectType
 from itertools import chain
-from services.google_api.google_places import extract_photo_urls, GooglePlacesAPI
+from services.google.google_places import extract_photo_urls, GooglePlacesAPI
 from services.helpers.fav_finder import get_favicon
 from services.helpers.nearby_coordinates import check_by_city, check_by_coordinates, check_by_zipcode, check_distance
 
@@ -48,7 +48,7 @@ class CollegeFieldOfStudyType(DjangoObjectType):
             'debt_median',
             'debt_monthly_payment',
             'earnings_2yr_median_earnings',
-            'earnings_2yr_working_not_enrollend_num_students',
+            'earnings_2yr_working_not_enrolled_num_students',
             'ipeds_awards1_num_students',
             'ipeds_awards2_num_students'
         )

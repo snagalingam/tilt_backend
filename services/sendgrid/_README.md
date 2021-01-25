@@ -8,12 +8,10 @@
 
 ## Sendgrid API Key
 
-1. Ask admin for .env file with api key
-   - RUN `backend/source .env`
+Ask admin for API Key
 
 ## Sendgrid Email Templates
 
-1. Dashboard > Email API > Dynamic Templates
+Dashboard > Email API > Dynamic Templates
    - Create email template
    - Make note of Template ID: `d-23de07b37b2c429480a92926287e2055`
-   - Use case located in `sendgrid_test.py`
