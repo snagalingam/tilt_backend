@@ -101,13 +101,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user is already registered with this email address"),
         },
     )
-    first_name = models.CharField(_("First Name"), max_length=255)
+    # allow first name and last name to be blank for Oauth
+    first_name = models.CharField(_("First Name"), blank=True, max_length=255)
     preferred_name = models.CharField(
         _("Preferred Name"),
         blank=True,
         max_length=255
     )
-    last_name = models.CharField(_("Last Name"), max_length=255)
+    last_name = models.CharField(_("Last Name"), blank=True, max_length=255)
     phone_number = models.CharField(
         _("Phone Number"),
         blank=True,
