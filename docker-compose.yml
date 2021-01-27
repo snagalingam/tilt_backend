@@ -4,13 +4,11 @@ services:
   backend:
     container_name: backend
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     environment:
-      - AWS_ACCESS_KEY=AKIAY6JQE4YKQOHSVO6F
       - AWS_BUCKET=financial-letters
       - AWS_LAMBDA_FUNCTION=TiltGetAnalyzedData
       - AWS_REGION=us-east-2
-      - AWS_SECRET_KEY=xLmHDvbbxITRhvKrZcn1P6IYMx0ZWixJEkjnMzkn
       - ENVIRONMENT=development
       - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
       - DATABASE_HOST=db
@@ -19,9 +17,6 @@ services:
       - DATABASE_USER=postgres
       - DEBUG=1
       - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
-      - TWILIO_ACCOUNT=AC98b578e279bfd3dd82729b5743603aa6
-      - TWILIO_AUTH=88f465a9722cd42d8545be2d997e9f65
-      - TWILIO_NUMBER=+15625125600
     ports:
       - 8000:8000
     volumes:
