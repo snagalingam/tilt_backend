@@ -1,8 +1,8 @@
 from colleges.models import CollegeStatus
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from services.sendgrid_api.send_email import send_notification_email
-from services.twilio_api.sms_methods import send_notification_sms
+from services.sendgrid.send_email import send_notification_email
+from services.twilio.sms_methods import send_notification_sms
 
 
 @receiver(pre_save, sender=CollegeStatus, dispatch_uid='contact_user')

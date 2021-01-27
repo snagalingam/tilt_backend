@@ -1,4 +1,4 @@
-from google_api.google_places import extract_photo_urls, GooglePlacesAPI
+from google.google_places import extract_photo_urls, GooglePlacesAPI
 from fav_finder import get_favicon
 import csv
 import json
@@ -31,7 +31,7 @@ def create_list_json(source, target):
             #     new_file.write(data)
 
     return print(f'''
-    
+
     {target}.json => CREATED
 
     ''')
@@ -60,7 +60,7 @@ def make_modified_csv(source, target, check):
                 zipcode = line[6]
                 each_line = (unit_id, ope_id, name, city, zipcode)
                 # print(each_line)
-                
+
                 # conditional modifications
                 if unit_id in json_data:
                     csv_writer.writerow(each_line)
@@ -70,8 +70,8 @@ def make_modified_csv(source, target, check):
                 #     break
 
         return print(f'''
-    
-        {limit} colleges found 
+
+        {limit} colleges found
 
         ''')
 
@@ -98,7 +98,7 @@ def check_colleges_data(action, key):
         json_data = json.load(open(f'colleges_seed_{nums}.json'))
         limit += 1
 
-        # action condition 
+        # action condition
         if action == 'count':
             file_length = len(json_data)
             count += file_length
@@ -135,7 +135,7 @@ def check_single_file(source, target, key):
             limit += 1
             print(limit)
             _list.append(each)
-    
+
     # print(ids)
 
     # with open(f'check_{key}s.json', 'w') as f:
@@ -199,7 +199,7 @@ def convert_to_json(csv_file):
                 "city": city,
                 "zipcode": zipcode
             }
-            
+
             arr.append(each)
             counter += 1
             print(counter)
@@ -257,14 +257,14 @@ def get_google_info(file_name, location):
                     print('''-----[current]-----: =>''', name, zipcode)
                     data = api.details(name, zipcode)
 
-                # if google_api result is zero print to colleges_zero_results.csv
+                # if google api result is zero print to colleges_zero_results.csv
                 if data is None:
                     with open('colleges_zero_results.csv', 'a') as new_file:
                         csv_writer = csv.writer(new_file)
                         each_line = (unit_id, ope_id, name, city, zipcode)
                         csv_writer.writerow(each_line)
 
-                    # if google_api result is zero pass
+                    # if google api result is zero pass
                 try:
 
                     try:
@@ -324,7 +324,7 @@ def get_google_info(file_name, location):
                 scorcards = []
 
         return print(f'''
-        
+
             get_google_info => DONE
 
         ''')

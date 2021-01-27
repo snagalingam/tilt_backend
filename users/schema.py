@@ -11,8 +11,8 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from graphene_django import DjangoObjectType
 from organizations.models import Organization
 from organizations.schema import OrganizationType
-from services.sendgrid_api.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
-from services.google_api.google_places import search_details
+from services.sendgrid.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
+from services.google.google_places import search_details
 from services.helpers.actions import create_action, create_timestamp, create_date
 from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, User, UserCategory
 

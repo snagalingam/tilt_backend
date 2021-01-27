@@ -2,39 +2,47 @@ import dj_database_url
 import os
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+################################################################################
+# Standard Variables
+################################################################################
 APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+DEBUG = int(os.environ.get('DEBUG', default=0))
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DEBUG', default=0))
-# DEBUG = 1
 
-################################################
-### AWS Variables
-################################################
-AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS', default='none')
-AWS_SECRET_KEY = os.environ.get('AWS_SECRET', default='none')
-AWS_REGION = os.environ.get('AWS_REGION', default='none')
+################################################################################
+# AWS Variables
+################################################################################
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY', default='none')
 AWS_BUCKET = os.environ.get('AWS_BUCKET', default='none')
+AWS_LAMBDA_FUNCTION = os.environ.get('AWS_LAMBDA_FUNCTION', default='none')
+AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
+AWS_REGION = os.environ.get('AWS_REGION', default='none')
+GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
 
-################################################
-### Twilio Variables
-################################################
+
+################################################################################
+# Sendgrid Variables
+################################################################################
+FROM_EMAIL = os.environ.get('FROM_EMAIL', default='hello@tiltaccess.com')
+SENDER_NAME = os.environ.get('SENDER_NAME', default='Tilt')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+SENDGRID_DOMAIN = os.environ.get('SENDGRID_DOMAIN', default='http://localhost:3000')
+
+
+################################################################################
+# Twilio Variables
+################################################################################
 TWILIO_ACCOUNT = os.environ.get('TWILIO_ACCOUNT', default='none')
 TWILIO_AUTH = os.environ.get('TWILIO_AUTH', default='none')
 TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER', default='none')
 
-# Application definition
 
+################################################################################
+# Application definition
+################################################################################
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -93,9 +101,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tilt.wsgi.application'
 
 
+################################################################################
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+################################################################################
 # database for development without SSL
 if ENVIRONMENT == 'development':
     DATABASES = {
@@ -123,10 +131,12 @@ if ENVIRONMENT == 'production':
             }
         }
     }
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
 
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
+################################################################################
+# Password Validation
+################################################################################
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
@@ -152,20 +162,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+################################################################################
 # Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
-
+################################################################################
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/Los_Angeles'
-
 USE_I18N = True
-
 USE_L10N = True
 
-#### Add-ons ####
 
-# authentication
+################################################################################
+# Authentication
+################################################################################
 AUTHENTICATION_BACKENDS = [
     # 'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -240,7 +248,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY', default='')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_SECRET', default='')
 
-# graphene
+################################################################################
+# Graphene
+################################################################################
 GRAPHENE = {
     'SCHEMA': 'tilt.schema.schema',
     'MIDDLEWARE': [
@@ -248,11 +258,10 @@ GRAPHENE = {
     ],
 }
 
-# database
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
 
-# security
+################################################################################
+# Security
+################################################################################
 SESSION_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
 
@@ -292,7 +301,9 @@ if ENVIRONMENT == 'production':
                      '.amazonaws.com',]
 
 
-# static files
+################################################################################
+# Static Files
+################################################################################
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
