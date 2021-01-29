@@ -5,7 +5,7 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 
 DEFAULT_AID_CATEGORY_ID = 1
 DEFAULT_COLLEGE_STATUS_ID = 1
-DEFAULT_DOCUMENT_RESULT_ID = 14
+DEFAULT_DOCUMENT_RESULT_ID = 1
 
 ################################################################################
 # Relied on by other models
