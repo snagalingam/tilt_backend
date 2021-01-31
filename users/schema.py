@@ -12,7 +12,7 @@ from graphene_django import DjangoObjectType
 from organizations.models import Organization
 from organizations.schema import OrganizationType
 from services.sendgrid.send_email import send_subscription_verification, add_subscriber, send_verification, send_reset_password, send_password_changed, send_email_changed
-from services.google.google_places import search_details
+from services.google.google_places import search_place_id
 from services.helpers.actions import create_action, create_timestamp, create_date
 from users.models import Action, DeletedAccount, Ethnicity, EthnicityUser, Income, Pronoun, PronounUser, Source, SourceUser, User, UserCategory
 
@@ -381,71 +381,47 @@ class UpdateUser(graphene.Mutation):
             if phone_number is not None:
                 user.phone_number = re.sub("[^0-9]", "", phone_number)
 
-            if place_id is not None or place_name is not None:
-                # get the place if it already exists
-                if place_id is not None:
-                    try:
-                        organization = Organization.objects.get(
-                            place_id=place_id)
-                    except ObjectDoesNotExist:
-                        if place_name is not None:
-                            try:
-                                organization = Organization.objects.get(
-                                    name=place_name)
-                            except ObjectDoesNotExist:
-                                None
+            if place_id is not None:
+                try:
+                    organization = Organization.objects.get(place_id=place_id)
+                except:
+                    data = search_place_id(place_id=place_id)
+                    results = data.get("result")
 
-                else:
-                    try:
-                        organization = Organization.objects.get(
-                            name=place_name)
-                    except ObjectDoesNotExist:
-                        None
+                    address = results.get("formatted_address", "")
+                    business_status = results.get("business_status", "")
+                    icon = results.get("icon", "")
+                    lat = results.get("geometry")["location"]["lat"]
+                    lng = results.get("geometry")["location"]["lng"]
+                    place_phone_number = results.get("formatted_phone_number", "")
+                    place_name = results.get("name")
+                    types = results.get("types", [])
+                    url = results.get("url", "")
+                    website = results.get("website", "")
 
-                # if it doesn't exist, try to search for it
-                if place_id is not None:
-                    try:
-                        data = search_details(place_id)
-                        results = data.get("result")
+                    organization = Organization(
+                        address=address,
+                        business_status=business_status,
+                        icon=icon,
+                        lat=lat,
+                        lng=lng,
+                        name=place_name,
+                        phone_number=place_phone_number,
+                        place_id=place_id,
+                        types=types,
+                        url=url,
+                        website=website
+                    )
 
-                        address = results.get("formatted_address", None)
-                        business_status = results.get("business_status", None)
-                        icon = results.get("icon", None)
-                        lat = results.get("geometry")["location"]["lat"]
-                        lng = results.get("geometry")["location"]["lng"]
-                        place_phone_number = results.get(
-                            "formatted_phone_number", None)
-                        place_name = results.get("name")
-                        types = results.get("types", [])
-                        url = results.get("url", None)
-                        website = results.get("website", None)
+                    organization.save()
+                    user.organization.clear()
+                    user.organization.add(organization)
 
-                        organization = Organization(
-                            address=address,
-                            business_status=business_status,
-                            icon=icon,
-                            lat=lat,
-                            lng=lng,
-                            name=place_name,
-                            phone_number=place_phone_number,
-                            place_id=place_id,
-                            types=types,
-                            url=url,
-                            website=website
-                        )
-
-                        organization.save()
-                        user.organization.clear()
-                        user.organization.add(organization)
-
-                    except ObjectDoesNotExist:
-                        if place_name is not None:
-                            organization = Organization(name=place_name)
-                            organization.save()
-                            user.organization.clear()
-                            user.organization.add(organization)
-
-                else:
+            # only look at place name if place_id is None
+            if place_name is not None and place_id is None:
+                try:
+                    organization = Organization.objects.get(name=place_name)
+                except:
                     organization = Organization(name=place_name)
                     organization.save()
                     user.organization.clear()
@@ -618,18 +594,23 @@ class UpdatePassword(graphene.Mutation):
         user = info.context.user
 
         if user.is_authenticated:
-            # password validation
-            try:
-                password_validation.validate_password(new_password, user=user)
-            except ValidationError as e:
-                raise e
+            # check if the password is the same
+            if password == new_password:
+                raise Exception("The passwords are the same")
 
-            user.set_password(new_password)
-            user.save()
-            success = True
-            send_password_changed(email, first_name)
+            else:
+                # password validation
+                try:
+                    password_validation.validate_password(new_password, user=user)
+                except ValidationError as e:
+                    raise e
 
-            return UpdatePassword(success=success)
+                user.set_password(new_password)
+                user.save()
+                success = True
+                send_password_changed(email, first_name)
+
+                return UpdatePassword(success=success)
         raise Exception("Incorrect credentials")
 
 
