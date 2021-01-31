@@ -78,7 +78,8 @@ class AidData(models.Model):
     )
     document_result = models.ForeignKey(
         DocumentResult,
-        default=DEFAULT_DOCUMENT_RESULT_ID,
+        blank=True,
+        null=True,
         on_delete=models.CASCADE
     )
     aid_category = models.ForeignKey(
