@@ -1,11 +1,12 @@
-import os
 import json
 import requests
-from urllib.parse import urlencode, urlparse, parse_qsl
+from django.conf import settings
+from urllib.parse import urlencode
 
-# ---------- Results a JSON object of details based place_id -------------------
 
-
+################################################################################
+# Returns photo urls
+################################################################################
 def extract_photo_urls(photos):
     photo_array = []
 
@@ -13,7 +14,7 @@ def extract_photo_urls(photos):
         url = f"https://maps.googleapis.com/maps/api/place/photo"
         maxwidth = f"?maxwidth={photo['width']}"
         reference = f"&photoreference={photo['photo_reference']}"
-        key = f"&key={os.environ.get('GOOGLE_API')}"
+        key = f"&key={settings.GOOGLE_API_KEY}"
 
         photo_url = url + maxwidth + reference + key
         photo_array.append(photo_url)
@@ -21,14 +22,14 @@ def extract_photo_urls(photos):
     return photo_array
 
 
-# ---------- Results a JSON object of details based place_id -------------------
-
-
-def search_details(place_id):
+################################################################################
+# Results a JSON object of details based place_id
+################################################################################
+def search_place_id(place_id):
     base_endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
     fields = "name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
     params = {
-        "key": os.environ.get('GOOGLE_API'),
+        "key": settings.GOOGLE_API_KEY,
         "place_id": place_id,
         "fields": fields
     }
@@ -36,23 +37,18 @@ def search_details(place_id):
     url = f"{base_endpoint}?{params_encoded}"
     r = requests.get(url)
 
-
     return r.json()
 
-# data = search_details('jkgkljh;kj-5j-p-FY')
-# print(json.dumps(data, indent=4))
-# # print(data['result'])
-# print(data)
 
-
-# ---------- Results in a list of searches based on category -------------------
-
+################################################################################
+# Results in a list of searches based on category
+################################################################################
 def search_nearby(category, lat, lng, miles=200):
     base_endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     fields = "place_id,name,formatted_address,formatted_phone_number,geometry,business_status,url,website,icon,types"
     radius = miles * 0.00062137
     params = {
-        "key": os.environ.get('GOOGLE_API'),
+        "key": settings.GOOGLE_API_KEY,
         "keyword": category,
         "fields": fields,
         "radius": radius,
@@ -64,20 +60,16 @@ def search_nearby(category, lat, lng, miles=200):
     print('search_nearby:', r.status_code)
     return r.json()
 
-# data = search_nearby('Highschool', 40.541497834, -74.140166106)
-# print(data)
-# print(data['results'])
-# print(data['status'])
 
-
-# ---------- Results in one location matching name -------------------
-
+################################################################################
+# Results in one location matching name
+################################################################################
 def search_for_place(place, lat, lng, miles=200):
     base_endpoint_places = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
     fields = "place_id,name,formatted_address,geometry,business_status,types"
     radius = miles * 0.00062137
     params = {
-        "key": os.environ.get('GOOGLE_API'),
+        "key": settings.GOOGLE_API_KEY,
         "input": place,
         "inputtype": "textquery",
         "fields": fields,
@@ -92,19 +84,15 @@ def search_for_place(place, lat, lng, miles=200):
     return r.json()
 
 
-# data = search_for_place('Cardozo High School', 40.541497834, -74.140166106)
-# print(json.dumps(data, indent=4))
-# print(data['candidates'][0])
-# print(data['status'])
-
-# ---------- Google Places API with Geocoding API -------------------
-
+################################################################################
+# Google Places API with Geocoding API
+################################################################################
 class GooglePlacesAPI(object):
     lat = None
     lng = None
     data_type = 'json'
     location_query = None
-    api_key = os.environ.get('GOOGLE_API')
+    api_key = settings.GOOGLE_API_KEY
     error = {"errors": {}}
 
     def __init__(self, location=None, *args, **kwargs):

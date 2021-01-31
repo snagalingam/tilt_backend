@@ -2,9 +2,6 @@ from django.db import models
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
-DEFAULT_CHAR_TEXT = ""
-
-
 class Organization(models.Model):
     # main information
     name = models.CharField(max_length=255)
