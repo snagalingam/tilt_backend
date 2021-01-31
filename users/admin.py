@@ -186,7 +186,7 @@ class UserAdmin(UserAdmin):
         'first_name',
         'preferred_name',
         'last_name',
-        'user_category',
+        'user_category__category',
         'is_active',
         'is_verified',
         'is_onboarded',
