@@ -130,6 +130,7 @@ class CollegeStatus(models.Model):
         blank=True,
         max_length=50
     )
+    most_affordable = models.BooleanField(default=False)
 
     # budget fields
     family = models.IntegerField(blank=True, null=True)

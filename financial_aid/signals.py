@@ -64,3 +64,20 @@ def calculate_aid_summary(sender, instance, **kwargs):
     college_status.award_net_price = net_price
     college_status.award_scorecard_cost_estimate = award_scorecard_cost_estimate
     college_status.save()
+
+    # caclulate the most affordable option for the user
+    user = college_status.user
+
+    # get all college statuses
+    college_statuses = CollegeStatus.objects.filter(user=user).order_by('award_net_price')
+
+    # save the first one as the most affordable option
+    counter = 1
+    for record in college_statuses:
+        if counter == 1:
+            record.most_affordable = True
+            record.save()
+        else:
+            record.most_affordable = False
+            record.save()
+        counter += 1
