@@ -82,6 +82,7 @@ class Query(graphene.ObjectType):
         user_id=graphene.Int(),
         limit=graphene.Int()
     )
+    college_statuses_by_id = graphene.Field(CollegeStatusType, id=graphene.Int())
     colleges = graphene.List(
         CollegeType, id=graphene.Int(), limit=graphene.Int())
     college_fields_of_study = graphene.List(
@@ -134,6 +135,10 @@ class Query(graphene.ObjectType):
     # standard model queries
     def resolve_college_statuses(self, info, limit=None, **kwargs):
         qs = CollegeStatus.objects.filter(**kwargs)[0:limit]
+        return qs
+
+    def resolve_college_statuses_by_id(self, info, id):
+        qs = CollegeStatus.objects.get(id=id)
         return qs
 
     def resolve_my_colleges(self, info):
