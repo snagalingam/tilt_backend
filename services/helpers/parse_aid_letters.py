@@ -1,3 +1,9 @@
+import re
+
+
+################################################################################
+# Categories for text
+################################################################################
 TOTAL_VALUES = {
     # total costs (unknown)
     "total cost": "total cost defined by school",
@@ -11,6 +17,7 @@ TOTAL_VALUES = {
     # total aid (grants and loans?)
     "total financial aid": "total aid",
     "total aid": "total aid",
+    "aid year total": "total aid",
     # net price
     "out of pocket": "net price defined by school",
     # total grants
@@ -69,6 +76,7 @@ SECOND_LOOK_VALUES = {
     "loan": "other loan",
 }
 
+
 ################################################################################
 # Compare data received from Textract analysis for text and tables
 ################################################################################
@@ -87,7 +95,6 @@ def compare_tables_and_text(tables, text):
 
                 text_money_list.append(int(float(word)))
 
-    print(text_money_list)
     # create a list of all money in the tables
     for table_index, table_value in tables.items():
         for row_index, row_value in table_value.items():
@@ -101,7 +108,6 @@ def compare_tables_and_text(tables, text):
                             if letter in value:
                                 value = value.replace(letter, "")
 
-                        print(value)
                         if int(float(value)) in text_money_list:
                             text_money_list.remove(int(float(value)))
 
@@ -167,39 +173,61 @@ def parse_data(tables):
                         if int(float(value)) > row_max_amount:
                             row_max_amount = int(value)
 
+                    else:
+                        try:
+                            # remove any additional formatting
+                            for letter in "'$, ":
+                                if letter in value:
+                                    value = value.replace(letter, "")
+
+                            money = int(float(value))
+                            row_contains_money = True
+
+                            # get the greatest dollar amount in each row
+                            if money > row_max_amount:
+                                row_max_amount = money
+
+                        except:
+                            pass
+
             if row_contains_money:
                 aid_category = None
 
                 # lower case the entire string
                 row_text_lower = [string.lower() for string in row_text]
+                row_text_lower_sorted = sorted(row_text_lower, key=len, reverse=True)
 
                 for key, value in TOTAL_VALUES.items():
                     # searches through lower case string for keys
-                    result = [text for text in row_text_lower if key in text]
+                    result = [text for text in row_text_lower_sorted if key in text]
                     if result:
+                        print("hi1")
+                        print(result, row_text_lower)
                         aid_category = value
-                        text_position = row_text_lower.index(text) - 1
-                        name = row_text[text_position]
+                        text_position = row_text_lower.index(result[0])
+                        name = row_text[text_position][0:254]
                         break
 
                 if aid_category is None:
                     for key, value in FIRST_LOOK_VALUES.items():
                         # searches through lower case string for keys
-                        result = [text for text in row_text_lower if key in text]
+                        result = [text for text in row_text_lower_sorted if key in text]
                         if result:
+                            print("hi2")
                             aid_category = value
-                            text_position = row_text_lower.index(text) - 1
-                            name = row_text[text_position]
+                            text_position = row_text_lower.index(result[0])
+                            name = row_text[text_position][0:254]
                             break
 
                 if aid_category is None:
                     for key, value in SECOND_LOOK_VALUES.items():
                         # searches through lower case string for keys
-                        result = [text for text in row_text_lower if key in text]
+                        result = [text for text in row_text_lower_sorted if key in text]
                         if result:
+                            print("hi3")
                             aid_category = value
-                            text_position = row_text_lower.index(text) - 1
-                            name = row_text[text_position]
+                            text_position = row_text_lower.index(result[0])
+                            name = row_text[text_position][0:254]
                             break
 
                 if aid_category is None:

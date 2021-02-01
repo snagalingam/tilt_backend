@@ -25,8 +25,9 @@ def start_table_analysis(document):
     return response["JobId"]
 
 def get_table_data(job_id):
-    pages = []
+    data = {}
     errors = []
+    pages = []
 
     response = textract.get_document_analysis(JobId=job_id)
     status =  response["JobStatus"]
@@ -56,7 +57,6 @@ def get_table_data(job_id):
             })
 
         else:
-            data = {}
             for index, table in enumerate(table_blocks, start=1):
                 # create new table in dictionary
                 data[index] = {}

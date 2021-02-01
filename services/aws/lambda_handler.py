@@ -12,10 +12,12 @@ aws_lambda = boto3.client(
     aws_secret_access_key=settings.AWS_SECRET_KEY
 )
 
-def lambda_handler(documents):
+def lambda_handler(documents, table_job_ids, text_job_ids):
     variables = {
         "graphql_endpoint": settings.GRAPHQL_ENDPOINT,
-        "documents": documents
+        "documents": documents,
+        "table_job_ids": table_job_ids,
+        "text_job_ids": text_job_ids
     }
 
     aws_lambda.invoke(
