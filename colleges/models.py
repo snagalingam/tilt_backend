@@ -81,8 +81,8 @@ class CollegeStatus(models.Model):
     )
     RESIDENCY_CHOICES = (
         ("oncampus", "oncampus"),
-        ("offcampus with rent", "offcampus with rent"),
-        ("offcampus no rent", "offcampus no rent",)
+        ("offcampus not with family", "offcampus not with family"),
+        ("offcampus with family", "offcampus with family",)
     )
     STATUS_CHOICES = (
         ("not interested", "not interested"),
@@ -125,11 +125,7 @@ class CollegeStatus(models.Model):
     award_total_costs = models.PositiveIntegerField(blank=True, null=True)
     award_total_grants = models.PositiveIntegerField(blank=True, null=True)
     award_net_price = models.IntegerField(blank=True, null=True)
-    award_scorecard_cost_estimate = models.CharField(
-        choices=AWARD_SCORECARD_COST_ESTIMATE_CHOICES,
-        blank=True,
-        max_length=50
-    )
+    most_affordable = models.BooleanField(default=False)
 
     # budget fields
     family = models.IntegerField(blank=True, null=True)
@@ -153,6 +149,39 @@ class CollegeStatus(models.Model):
     def __str__(self):
         return str(self.pk)
 
+
+################################################################################
+# Ipeds
+################################################################################
+class Ipeds(models.Model):
+    college = models.OneToOneField(
+        College,
+        default=DEFAULT_COLLEGE_ID,
+        on_delete=models.CASCADE
+    )
+    unit_id = models.PositiveIntegerField(null=True)
+
+    # cost info
+    fees_in_state = models.PositiveIntegerField(blank=True, null=True)
+    fees_out_of_state = models.PositiveIntegerField(blank=True, null=True)
+    other_expenses_off_campus_not_with_family = models.PositiveIntegerField(blank=True, null=True)
+    other_expenses_off_campus_with_family = models.PositiveIntegerField(blank=True, null=True)
+    other_expenses_on_campus = models.PositiveIntegerField(blank=True, null=True)
+    room_on_campus = models.PositiveIntegerField(blank=True, null=True)
+    room_off_campus_not_with_family = models.PositiveIntegerField(blank=True, null=True)
+    tuition_in_state = models.PositiveIntegerField(blank=True, null=True)
+    tuition_out_of_state = models.PositiveIntegerField(blank=True, null=True)
+
+    # automatically added
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        verbose_name = 'ipeds'
+        verbose_name_plural = 'ipeds'
+
+    def __str__(self):
+        return str(self.unit_id)
 
 ################################################################################
 # Scorecard

@@ -22,6 +22,10 @@ AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
 AWS_REGION = os.environ.get('AWS_REGION', default='none')
 GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
 
+################################################################################
+# Google Variables
+################################################################################
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', default='none')
 
 ################################################################################
 # Sendgrid Variables
@@ -35,9 +39,9 @@ SENDGRID_DOMAIN = os.environ.get('SENDGRID_DOMAIN', default='http://localhost:30
 ################################################################################
 # Twilio Variables
 ################################################################################
-TWILIO_ACCOUNT = os.environ.get('TWILIO_ACCOUNT', default='none')
-TWILIO_AUTH = os.environ.get('TWILIO_AUTH', default='none')
-TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER', default='none')
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID', default='none')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN', default='none')
+TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER', default='none')
 
 
 ################################################################################
@@ -147,18 +151,17 @@ PASSWORD_HASHERS = [
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8, }
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'tilt.validators.NumberValidator', },
+    {'NAME': 'tilt.validators.UppercaseValidator', },
+    {'NAME': 'tilt.validators.LowercaseValidator', },
+    {'NAME': 'tilt.validators.SymbolValidator', },
 ]
 
 

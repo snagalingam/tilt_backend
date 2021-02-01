@@ -76,11 +76,6 @@ class AidData(models.Model):
         default=DEFAULT_COLLEGE_STATUS_ID,
         on_delete=models.CASCADE
     )
-    document_result = models.ForeignKey(
-        DocumentResult,
-        default=DEFAULT_DOCUMENT_RESULT_ID,
-        on_delete=models.CASCADE
-    )
     aid_category = models.ForeignKey(
         AidCategory,
         default=DEFAULT_AID_CATEGORY_ID,
@@ -88,6 +83,14 @@ class AidData(models.Model):
     )
     name = models.CharField(max_length=255)
     amount = models.PositiveIntegerField()
+
+    # document result
+    document_result = models.ForeignKey(
+        DocumentResult,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
+    )
     table_num = models.PositiveSmallIntegerField(blank=True, null=True)
     row_num = models.PositiveSmallIntegerField(blank=True, null=True)
     row_text = ArrayField(
@@ -95,6 +98,10 @@ class AidData(models.Model):
         blank=True,
         null=True
     )
+
+    # other source
+    other_source = models.CharField(blank=True, max_length=255)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

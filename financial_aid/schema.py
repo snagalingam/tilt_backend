@@ -105,6 +105,8 @@ class SendDocuments(graphene.Mutation):
 
     def mutate(self, info, college_status_id, documents):
         user = info.context.user
+        table_job_ids = []
+        text_job_ids = []
 
         for document_name in documents:
             college_status = CollegeStatus.objects.get(pk=college_status_id)
@@ -126,8 +128,16 @@ class SendDocuments(graphene.Mutation):
             college_status.award_status = "uploaded"
             college_status.save()
 
+            table_job_ids.append(table_job_id)
+            text_job_ids.append(text_job_id)
+
+
         # triggers lambda function to wait for results
-        lambda_handler(documents)
+        lambda_handler(
+            documents=documents,
+            table_job_ids=table_job_ids,
+            text_job_ids=text_job_ids
+        )
 
         return SendDocuments(success=True)
 
@@ -199,7 +209,6 @@ class ParseDocuments(graphene.Mutation):
                     })
 
                 aid_data, parse_errors = parse_data(tables=tables)
-
                 if parse_errors:
                     errors.append(parse_errors)
 

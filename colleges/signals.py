@@ -2,7 +2,7 @@ from colleges.models import CollegeStatus
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from services.sendgrid.send_email import send_notification_email
-from services.twilio.sms_methods import send_notification_sms
+from services.twilio.sms_methods import send_award_notification_sms
 
 
 @receiver(pre_save, sender=CollegeStatus, dispatch_uid='contact_user')
@@ -14,7 +14,7 @@ def contact_user(sender, instance, **kwargs):
     if instance.award_status == "reviewed":
 
         if contact_method == "text":
-            send_notification_sms(user.phone_number)
+            send_award_notification_sms(phone_number=user.phone_number, college=instance.college.name)
             instance.award_status = "texted user"
 
         else:

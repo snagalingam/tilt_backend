@@ -3,7 +3,7 @@ import json
 import math
 import os
 
-from colleges.models import College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import College, CollegeStatus, FieldOfStudy, Ipeds, Scorecard
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Greatest, Least
@@ -13,13 +13,12 @@ from services.google.google_places import extract_photo_urls, GooglePlacesAPI
 from services.helpers.fav_finder import get_favicon
 from services.helpers.nearby_coordinates import check_by_city, check_by_coordinates, check_by_zipcode, check_distance
 
+
 User = get_user_model()
 
 ################################################
 # Standard Model Definitions
 ################################################
-
-
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
@@ -36,22 +35,13 @@ class CollegeStatusType(DjangoObjectType):
 class CollegeFieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
-        fields = (
-            'id',
-            'cip_code',
-            'cip_title',
-            'college',
-            'credential_level',
-            'credential_title',
-            'debt_num_students',
-            'debt_mean',
-            'debt_median',
-            'debt_monthly_payment',
-            'earnings_2yr_median_earnings',
-            'earnings_2yr_working_not_enrolled_num_students',
-            'ipeds_awards1_num_students',
-            'ipeds_awards2_num_students'
-        )
+        fields  = "__all__"
+
+
+class CollegeIpedsType(DjangoObjectType):
+    class Meta:
+        model = Ipeds
+        fields  = "__all__"
 
 
 class CollegeScorecardType(DjangoObjectType):
@@ -290,7 +280,6 @@ class Query(graphene.ObjectType):
         start = (page - 1) * per_page
         end = start + per_page
         search_results = qs[start:end]
-        # print(search_results.explain(verbose=True, analyze=True))
         return CollegePaginationType(search_results=search_results, pages=pages, count=count)
 
     def resolve_nearby_colleges(
