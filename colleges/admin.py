@@ -1,11 +1,25 @@
-from colleges.models import College, CollegeStatus, FieldOfStudy, Scorecard
+from colleges.models import College, CollegeStatus, FieldOfStudy, Ipeds, Scorecard
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+from financial_aid.models import AidData
 
 
+################################################
+# Inline
+################################################
+class AidData(admin.StackedInline):
+    model = AidData
+    extra = 0
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '100'})},
+    }
+
+################################################
+# Objects on admin panel
+################################################
 class CollegeAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (('College Information'), {'fields': ('name', 'scorecard_unit_id', 'show', 'popularity_score',)}),
@@ -89,6 +103,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
+    inlines = [AidData]
     list_display = [
         'user',
         'college',
@@ -113,6 +128,14 @@ class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     search_fields = ('cip_title', 'college', 'credential_level',)
 
 
+class IpedsAdmin(admin.ModelAdmin):
+    list_display = ['unit_id', 'college', 'updated',]
+    model = Ipeds
+    ordering = ('unit_id',)
+    search_fields = ('unit_id', 'updated')
+    readonly_fields = ('created', 'updated')
+
+
 class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
@@ -128,4 +151,5 @@ class ScorecardAdmin(admin.ModelAdmin, DynamicArrayMixin):
 admin.site.register(College, CollegeAdmin)
 admin.site.register(CollegeStatus, CollegeStatusAdmin)
 admin.site.register(FieldOfStudy, FieldOfStudyAdmin)
+admin.site.register(Ipeds, IpedsAdmin)
 admin.site.register(Scorecard, ScorecardAdmin)
