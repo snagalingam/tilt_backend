@@ -384,6 +384,8 @@ class UpdateUser(graphene.Mutation):
             if place_id is not None:
                 try:
                     organization = Organization.objects.get(place_id=place_id)
+                    user.organization.clear()
+                    user.organization.add(organization)
                 except:
                     data = search_place_id(place_id=place_id)
                     results = data.get("result")
@@ -421,6 +423,8 @@ class UpdateUser(graphene.Mutation):
             if place_name is not None and place_id is None:
                 try:
                     organization = Organization.objects.get(name=place_name)
+                    user.organization.clear()
+                    user.organization.add(organization)
                 except:
                     organization = Organization(name=place_name)
                     organization.save()
