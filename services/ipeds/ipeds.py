@@ -12,11 +12,11 @@ SCRIPT_DIR = os.path.dirname(__file__)
 FIELDS = {
     "fees_in_state": "CHG2AF3",
     "fees_out_of_state": "CHG3AF3",
-    "other_expenses_off_campus_no_rent": "CHG9AY3",
-    "other_expenses_off_campus_with_rent": "CHG8AY3",
+    "other_expenses_off_campus_not_with_family": "CHG8AY3",
+    "other_expenses_off_campus_with_family": "CHG9AY3",
     "other_expenses_on_campus": "CHG6AY3",
     "room_on_campus": "CHG5AY3",
-    "room_off_campus_with_rent": "CHG7AY3",
+    "room_off_campus_not_with_family": "CHG7AY3",
     "tuition_in_state": "CHG2AT3",
     "tuition_out_of_state": "CHG3AT3"
 }
@@ -81,12 +81,12 @@ def format_ipeds_data(file):
             fees_out_of_state = int(row[f'{FIELDS["fees_out_of_state"]}'])
 
         # other expenses
-        # add an extra space because last column
-        if (row[f'X{FIELDS["other_expenses_off_campus_no_rent"]}'] in ACCEPTABLE_OPTIONS):
-            other_expenses_off_campus_no_rent = int(row[f'{FIELDS["other_expenses_off_campus_no_rent"]} '])
+        if (row[f'X{FIELDS["other_expenses_off_campus_not_with_family"]}'] in ACCEPTABLE_OPTIONS):
+            other_expenses_off_campus_not_with_family = int(row[f'{FIELDS["other_expenses_off_campus_not_with_family"]}'])
 
-        if (row[f'X{FIELDS["other_expenses_off_campus_with_rent"]}'] in ACCEPTABLE_OPTIONS):
-            other_expenses_off_campus_with_rent = int(row[f'{FIELDS["other_expenses_off_campus_with_rent"]}'])
+        # add an extra space because last column
+        if (row[f'X{FIELDS["other_expenses_off_campus_with_family"]}'] in ACCEPTABLE_OPTIONS):
+            other_expenses_off_campus_with_family = int(row[f'{FIELDS["other_expenses_off_campus_with_family"]} '])
 
         if (row[f'X{FIELDS["other_expenses_on_campus"]}'] in ACCEPTABLE_OPTIONS):
             other_expenses_on_campus = int(row[f'{FIELDS["other_expenses_on_campus"]}'])
@@ -95,8 +95,8 @@ def format_ipeds_data(file):
         if (row[f'X{FIELDS["room_on_campus"]}'] in ACCEPTABLE_OPTIONS):
             room_on_campus = int(row[f'{FIELDS["room_on_campus"]}'])
 
-        if (row[f'X{FIELDS["room_off_campus_with_rent"]}'] in ACCEPTABLE_OPTIONS):
-            room_off_campus_with_rent = int(row[f'{FIELDS["room_off_campus_with_rent"]}'])
+        if (row[f'X{FIELDS["room_off_campus_not_with_family"]}'] in ACCEPTABLE_OPTIONS):
+            room_off_campus_not_with_family = int(row[f'{FIELDS["room_off_campus_not_with_family"]}'])
 
         # tuition
         if (row[f'X{FIELDS["tuition_in_state"]}'] in ACCEPTABLE_OPTIONS):
@@ -122,11 +122,11 @@ def format_ipeds_data(file):
                     "unit_id": unit_id,
                     "fees_in_state": fees_in_state,
                     "fees_out_of_state": fees_out_of_state,
-                    "other_expenses_off_campus_no_rent": other_expenses_off_campus_no_rent,
-                    "other_expenses_off_campus_with_rent": other_expenses_off_campus_with_rent,
+                    "other_expenses_off_campus_with_family": other_expenses_off_campus_with_family,
+                    "other_expenses_off_campus_not_with_family": other_expenses_off_campus_not_with_family,
                     "other_expenses_on_campus": other_expenses_on_campus,
                     "room_on_campus": room_on_campus,
-                    "room_off_campus_with_rent": room_off_campus_with_rent,
+                    "room_off_campus_not_with_family": room_off_campus_not_with_family,
                     "tuition_in_state": tuition_in_state,
                     "tuition_out_of_state": tuition_out_of_state,
                     "created": date,
