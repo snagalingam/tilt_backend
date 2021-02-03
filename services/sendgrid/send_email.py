@@ -24,17 +24,24 @@ def send_email(message):
 # Add subscriber
 ################################################################################
 def add_subscriber(email):
+    print("hi")
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        print(sg)
         response = sg.client.asm.groups._(23297).suppressions._(email).delete()
+        print(response)
         response2 = sg.client.marketing.contacts.put(
             request_body=dict(
                 list_ids=["4dabef7f-34ee-4c60-a4c8-b4525c8115c5"],
                 contacts=[{'email': email}]
             )
         )
+        print(response2)
     except Exception as e:
         return e
+
+    print("hi")
+    print(response)
 
 
 ################################################################################
@@ -71,7 +78,7 @@ def send_verification(email, first_name):
         settings.SECRET_KEY,
         algorithm='HS256',
         headers={'domain': settings.SENDGRID_DOMAIN}
-    ).decode('utf-8')
+    )
     url = f"{settings.SENDGRID_DOMAIN}/activate/{token}"
     message.template_id = 'd-274ce0ccdabc445eb7c488c7c98695e6'
     message.dynamic_template_data = {
@@ -99,7 +106,8 @@ def send_reset_password(email, first_name):
         settings.SECRET_KEY,
         algorithm='HS256',
         headers={'domain': settings.SENDGRID_DOMAIN}
-    ).decode('utf-8')
+    )
+    print(token)
     url = f"{settings.SENDGRID_DOMAIN}/forgot-password/{token}"
     message.template_id = 'd-721a69f0688d484db91503c611d87d1c'
     message.dynamic_template_data = {
