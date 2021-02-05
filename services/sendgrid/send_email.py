@@ -134,7 +134,7 @@ def send_password_changed(email, first_name):
 def send_email_changed(old_email, new_email, first_name):
     message = Mail(
         from_email=(settings.FROM_EMAIL, settings.SENDER_NAME),
-        to_emails=email
+        to_emails=old_email
     )
     message.template_id = 'd-4d2c08403ebc4a8cbd582233aaff3da6'
     message.dynamic_template_data = {
