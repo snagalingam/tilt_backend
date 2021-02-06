@@ -1,7 +1,7 @@
 import graphene
 
 from colleges.models import CollegeStatus
-from financial_aid.models import AidCategory, AidData, DocumentError, DocumentResult
+from financial_aid.models import AidCategory, AidFinalData, AidRawData, DocumentError, DocumentResult
 from graphene_django import DjangoObjectType
 from services.aws.lambda_handler import lambda_handler
 from services.aws.textract import (
@@ -16,7 +16,6 @@ from services.helpers.parse_aid_letters import (
 )
 from services.sendgrid.send_email import send_notification_email, send_report_email
 
-
 ################################################################################
 # Standard Model Definitions
 ################################################################################
@@ -25,10 +24,9 @@ class AidCategoryType(DjangoObjectType):
         model = AidCategory
         fields = ('id', 'name', 'primary', 'secondary', 'tertiary')
 
-
-class AidDataType(DjangoObjectType):
+class AidFinalDataType(DjangoObjectType):
     class Meta:
-        model = AidData
+        model = AidFinalData
         fields = ('id', 'aid_category', 'amount', 'college_status', 'name')
 
 
@@ -38,7 +36,7 @@ class AidDataType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
-    aid_data = graphene.List(AidDataType, limit=graphene.Int())
+    aid_data = graphene.List(AidFinalDataType, limit=graphene.Int())
 
     aid_categories_by_fields = graphene.List(
         AidCategoryType,
@@ -48,11 +46,11 @@ class Query(graphene.ObjectType):
         tertiary=graphene.String()
     )
     aid_data_by_college_status = graphene.List(
-        AidDataType,
+        AidFinalDataType,
         college_status_id=graphene.Int()
     )
     aid_data_by_fields = graphene.List(
-        AidDataType,
+        AidFinalDataType,
         aid_category_id=graphene.Int(),
         amount=graphene.Int(),
         col_index=graphene.Int(),
@@ -61,7 +59,7 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
-    my_aid_data = graphene.List(AidDataType)
+    my_aid_data = graphene.List(AidFinalDataType)
 
     # get_all()
     def resolve_aid_categories(self, info, limit=None):
@@ -69,7 +67,7 @@ class Query(graphene.ObjectType):
         return qs
 
     def resolve_aid_data(self, info, limit=None):
-        qs = AidData.objects.all()[0:limit]
+        qs = AidFinalData.objects.all()[0:limit]
         return qs
 
     # get_by_fields()
@@ -78,16 +76,16 @@ class Query(graphene.ObjectType):
         return qs
 
     def resolve_aid_data_by_college_status(self, info, college_status_id=None):
-        qs = AidData.objects.filter(college_status__id=college_status_id)
+        qs = AidFinalData.objects.filter(college_status__id=college_status_id)
         return qs
 
     def resolve_aid_data_by_fields(self, info, **kwargs):
-        qs = AidData.objects.filter(**kwargs)
+        qs = AidFinalData.objects.filter(**kwargs)
         return qs
 
     def resolve_my_aid_data(self, info):
         user = info.context.user
-        qs = AidData.objects.filter(college_status__user__id=user.id)
+        qs = AidFinalData.objects.filter(college_status__user__id=user.id)
         return qs
 
 
@@ -154,7 +152,11 @@ class ParseDocuments(graphene.Mutation):
         # before running any analysis, delete aid data for this college status
         first_document = documents[0]
         first_document_result = DocumentResult.objects.get(document_name=first_document)
-        AidData.objects.filter(college_status=first_document_result.college_status).delete()
+
+        aid_data = AidRawData.objects.filter(college_status=first_document_result.college_status)
+        if aid_data.exists():
+            aid_data.delete()
+            AidFinalData.objects.filter(college_status=first_document_result.college_status).delete()
 
         for document in documents:
             errors = []
@@ -173,7 +175,8 @@ class ParseDocuments(graphene.Mutation):
                 document_result.text_succeeded = True
             else:
                 document_result.text_succeeded = False
-                errors.append(text_errors)
+                for error in text_errors:
+                    errors.append(error)
 
             # check if tables are processed
             tables, table_errors = get_table_data(document_result.table_job_id)
@@ -183,11 +186,11 @@ class ParseDocuments(graphene.Mutation):
                 document_result.table_succeeded = True
             else:
                 document_result.table_succeeded = False
-                errors.append(table_errors)
+                for error in table_errors:
+                    errors.append(error)
 
             # if textract analysis fails save the data
             if not document_result.text_succeeded or not document_result.table_succeeded:
-                document_result.save()
                 for error in errors:
                     DocumentError.objects.create(
                         document_result=document_result,
@@ -210,11 +213,12 @@ class ParseDocuments(graphene.Mutation):
 
                 aid_data, parse_errors = parse_data(tables=tables)
                 if parse_errors:
-                    errors.append(parse_errors)
+                    for error in parse_errors:
+                        errors.append(error)
 
                 if aid_data:
                     for aid in aid_data:
-                        AidData.objects.create(
+                        AidRawData.objects.create(
                             college_status=document_result.college_status,
                             document_result=document_result,
                             aid_category=AidCategory.objects.get(name=aid["aid_category"]),
@@ -224,7 +228,7 @@ class ParseDocuments(graphene.Mutation):
                             row_num=aid["row_num"],
                             row_text=aid["row_text"]
                         )
-                document_result.save()
+
 
                 if not errors or comparison["automated_review_succeeded"]:
                     document_result.automated_review_succeeded = True
@@ -234,13 +238,14 @@ class ParseDocuments(graphene.Mutation):
 
                 else:
                     document_result.automated_review_succeeded = False
-                    for error in errors:
-                        DocumentError.objects.create(
-                            document_result=document_result,
-                            type=error["type"],
-                            message=error["message"]
-                        )
-                document_result.save()
+                    if errors is not None:
+                        for error in errors:
+                            print(error)
+                            DocumentError.objects.create(
+                                document_result=document_result,
+                                type=error["type"],
+                                message=error["message"]
+                            )
 
             # create report_data for sendgrid
             sendgrid_document = {
@@ -253,6 +258,7 @@ class ParseDocuments(graphene.Mutation):
                 "aid_data": aid_data
             }
             sendgrid_documents.append(sendgrid_document)
+            document_result.save()
 
         send_report_email(
             documents=sendgrid_documents,

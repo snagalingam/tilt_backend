@@ -1,119 +1,177 @@
 from colleges.models import CollegeStatus, Ipeds
-from financial_aid.models import AidCategory, AidData
+from financial_aid.models import AidCategory, AidFinalData, AidRawData, DocumentResult
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 
-@receiver(post_save, sender=AidData, dispatch_uid='calculate_aid_summary')
+@receiver(post_save, sender=AidRawData, dispatch_uid='calculate_aid_summary')
 def calculate_aid_summary(sender, instance, **kwargs):
-    college_status = instance.college_status
 
+    # set total values to 0
     total_aid = 0
     total_cost = 0
 
-    # calculate the total cost amount
-    direct_cost_categories = AidCategory.objects.filter(primary="cost", secondary="direct")
-    direct_cost_categories_keys = direct_cost_categories.values_list('id', flat=True)
+    # other models
+    college_status = instance.college_status
+    user = college_status.user
 
-    costs = AidData.objects.filter(college_status=college_status, aid_category__in=direct_cost_categories_keys)
+    # aid categories
+    fees_category = AidCategory.objects.get(name="fees")
+    grant_categories = AidCategory.objects.filter(primary="grant")
+    loan_categories = AidCategory.objects.filter(primary="loan")
+    meals_category = AidCategory.objects.get(name="meals")
+    personal_expenses_category = AidCategory.objects.get(name="standard personal expenses")
+    room_category = AidCategory.objects.get(name="room")
+    room_board_category = AidCategory.objects.get(name="room & board")
+    tuition_category = AidCategory.objects.get(name="tuition")
+    tuition_fees_category = AidCategory.objects.get(name="tuition & fees")
+    work_study_category = AidCategory.objects.get(name="work study")
 
-    if costs.exists():
-        direct_cost = 0
-        for cost in costs:
-            direct_cost += cost.amount
+    # get ipeds object for costs
+    ipeds = Ipeds.objects.get(college=college_status.college)
 
+    ################ tuition and fees
+    try:
+        tuition = AidRawData.objects.get(college_status=college_status, aid_category=tuition_category)
+    except:
+        tuition = None
+
+    try:
+        fees = AidRawData.objects.get(college_status=college_status, aid_category=fees_category)
+    except:
+        fees = None
+
+    # use raw data if that exists
+    if tuition is not None:
+        tuition_fees_amount = tuition.amount
+
+        if fees is not None:
+            tuition_fees_amount += fees.amount
+
+    # otherwise, pull the data from ipeds
     else:
-        # get ipeds object for tuition
-        ipeds = Ipeds.objects.get(college=college_status.college)
-
-        # tuition and fees
         if college_status.in_state_tuition == "yes":
             tuition_amount = ipeds.tuition_in_state
-            tuition_name = "in-state tuition"
             fees_amount = ipeds.fees_in_state
-            fees_name = "in-state fees"
 
         else:
             tuition_amount = ipeds.tuition_out_of_state
-            tuition_name = "out-of-state tuition"
             fees_amount = ipeds.fees_out_of_state
-            fees_name = "out-of-state fees"
 
-        AidData.objects.create(
-            aid_category=AidCategory.objects.get(name="tuition"),
-            amount=tuition_amount,
+        tuition_fees_amount = tuition_amount + fees_amount
+
+    # update it if it already exists
+    try:
+        final_tuition_fees = AidFinalData.objects.get(
+            aid_category=tuition_fees_category,
             college_status=college_status,
-            name=tuition_name,
-            other_source="ipeds"
         )
 
-        AidData.objects.create(
-            aid_category=AidCategory.objects.get(name="fees"),
-            amount=fees_amount,
+        if final_tuition_fees.amount != tuition_fees_amount:
+            final_tuition_fees.update(amount=tuition_fees_amount)
+
+    # create a new one if it doesn't
+    except:
+        AidFinalData.objects.create(
+            aid_category=tuition_fees_category,
+            amount=tuition_fees_amount,
             college_status=college_status,
-            name=fees_name,
-            other_source="ipeds"
+            name="tuition & fees"
         )
 
-        # room and board and other expenses
-        if college_status.residency == "oncampus":
-            other_expenses_amount = ipeds.other_expenses_on_campus
-            other_expenses_name = "on-campus other expenses"
-            room_amount = ipeds.room_on_campus
-            room_name = "on campus room & board"
+    ################ room and board
+    try:
+        room = AidRawData.objects.get(college_status=college_status, aid_category=room_category)
+    except:
+        room = None
 
-            AidData.objects.create(
-                aid_category=AidCategory.objects.get(name="room"),
-                amount=room_amount,
-                college_status=college_status,
-                name=room_name,
-                other_source="ipeds"
-            )
+    try:
+        meals = AidRawData.objects.get(college_status=college_status, aid_category=meals_category)
+    except:
+        meals = None
 
-        elif college_status.residency == "offcampus not with family":
-            other_expenses_amount = ipeds.other_expenses_off_campus_not_with_family
-            other_expenses_name = "off-campus not with family other expenses"
-            room_amount = ipeds.room_off_campus_not_with_family
-            room_name = "off-campus not with family room & board"
+    # use raw data if that exists
+    if room is not None:
+        room_meals_name = "room & board"
+        room_meals_amount = room.amount
 
-            AidData.objects.create(
-                aid_category=AidCategory.objects.get(name="off campus housing"),
-                amount=room_amount,
-                college_status=college_status,
-                name=room_name,
-                other_source="ipeds"
-            )
+        if meals is not None:
+            room_meals_amount += meals.amount
+
+    else:
+        if college_status.residency == "offcampus not with family":
+            room_meals_amount = ipeds.room_off_campus_not_with_family
+            room_meals_name = "off-campus not with family room & board"
 
         elif college_status.residency == "offcampus with family":
-            other_expenses_amount = ipeds.other_expenses_off_campus_with_family
-            other_expenses_name = "off-campus with family other expenses"
-            room_amount = 0
+            room_meals_amount = 0
+            room_meals_name = "off campus with family room & board"
 
+        # assume on campus unless otherwise stated
+        else:
+            room_meals_amount = ipeds.room_on_campus
+            room_meals_name = "on campus room & board"
 
-        AidData.objects.create(
-            aid_category=AidCategory.objects.get(name="personal expenses"),
-            amount=other_expenses_amount,
+    # update it if it already exists
+    try:
+        final_room_meals = AidFinalData.objects.get(
+            aid_category=room_board_category,
             college_status=college_status,
-            name=other_expenses_name,
-            other_source="ipeds"
         )
 
-        direct_cost = tuition_amount + fees_amount + room_amount
+        if final_room_meals.amount != room_meals_amount:
+            final_room_meals.update(amount=room_meals_amount)
+
+    # create a new one if it doesn't
+    except:
+        AidFinalData.objects.create(
+            aid_category=room_board_category,
+            amount=room_meals_amount,
+            college_status=college_status,
+            name=room_meals_name
+        )
+
+    direct_cost = tuition_fees_amount + room_meals_amount
+
+    ################ personal expenses
+    # see if it exists
+    try:
+        final_personal_expenses = AidFinalData.objects.get(
+            aid_category=personal_expenses_category,
+            college_status=college_status,
+        )
+
+    # create a new one if it doesn't
+    except:
+        AidFinalData.objects.create(
+            aid_category=personal_expenses_category,
+            amount=5000,
+            college_status=college_status,
+            name="standard personal expenses"
+        )
 
     # add 5,000 for indirect costs
     if direct_cost is not None:
         total_cost = direct_cost + 5000
 
     # calculate the total grant amount on the award letter
-    grant_categories = AidCategory.objects.filter(primary="grant")
     grant_categories_keys = grant_categories.values_list('id', flat=True)
+    grants = AidRawData.objects.filter(college_status=college_status, aid_category__in=grant_categories_keys)
 
-    try:
-        grants = AidData.objects.filter(college_status=college_status, aid_category__in=grant_categories_keys)
+    if grants.exists():
+        final_grants = AidFinalData.objects.filter(college_status=college_status, aid_category__in=grant_categories_keys)
+
+        if final_grants.exists():
+            final_grants.delete()
+
         for grant in grants:
             total_aid += grant.amount
-    except:
-        grants = None
+            AidFinalData.objects.create(
+                aid_category=grant.aid_category,
+                amount=grant.amount,
+                college_status=grant.college_status,
+                name=grant.name
+            )
 
     # calculates net price
     net_price = total_cost - total_aid
@@ -124,8 +182,51 @@ def calculate_aid_summary(sender, instance, **kwargs):
     college_status.award_net_price = net_price
     college_status.save()
 
+    ################ loans
+    loan_categories_keys = loan_categories.values_list('id', flat=True)
+    loans = AidRawData.objects.filter(college_status=college_status, aid_category__in=loan_categories_keys)
+
+    if loans.exists():
+        final_loans = AidFinalData.objects.filter(college_status=college_status, aid_category__in=loan_categories_keys)
+
+        if final_loans.exists():
+            final_loans.delete()
+
+        for loan in loans:
+            AidFinalData.objects.create(
+                aid_category=loan.aid_category,
+                amount=loan.amount,
+                college_status=loan.college_status,
+                name=loan.name
+            )
+
+    ################ work study
+    try:
+        work_study = AidRawData.objects.get(college_status=college_status, aid_category=work_study_category)
+    except:
+        work_study = None
+
+    if work_study is not None:
+        # update it if it already exists
+        try:
+            final_work_study = AidFinalData.objects.get(
+                aid_category=work_study_category,
+                college_status=college_status
+            )
+
+            if final_work_study.amount != work_study.amount:
+                final_work_study.update(amount=work_study.amount)
+
+        # create a new one if it doesn't
+        except:
+            AidFinalData.objects.create(
+                aid_category=work_study_category,
+                amount=work_study.amount,
+                college_status=college_status,
+                name=work_study.name
+            )
+
     # caclulate the most affordable option for the user
-    user = college_status.user
     college_statuses = CollegeStatus.objects.filter(user=user).exclude(award_status="").order_by('award_net_price')
 
     first_record = True
@@ -137,34 +238,3 @@ def calculate_aid_summary(sender, instance, **kwargs):
         else:
             record.most_affordable = False
             record.save()
-
-@receiver(post_delete, sender=AidData, dispatch_uid='update_aid_summary')
-def update_aid_summary(sender, instance, **kwargs):
-    college_status = instance.college_status
-
-    try:
-        aid_data = AidData.objects.filter(college_status=college_status)
-        calculate_aid_summary(sender=AidData, instance=instance)
-
-    # if there is no more Aid Data for this college status, delete everything
-    except:
-        college_status.award_status = ""
-        college_status.award_total_costs = 0
-        college_status.award_total_grants = 0
-        college_status.award_net_price = 0
-        college_status.most_affordable = False
-        college_status.save()
-
-        # update most affordable option
-        user = college_status.user
-        college_statuses = CollegeStatus.objects.filter(user=user).exclude(award_status="").order_by('award_net_price')
-
-        first_record = True
-        for record in college_statuses:
-            if first_record == True and record.award_net_price is not None:
-                record.most_affordable = True
-                record.save()
-                first_record = False
-            else:
-                record.most_affordable = False
-                record.save()
