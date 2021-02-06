@@ -120,7 +120,8 @@ def calculate_aid_summary(sender, instance, **kwargs):
         )
 
         if final_room_meals.amount != room_meals_amount:
-            final_room_meals.update(amount=room_meals_amount)
+            final_room_meals.amount=room_meals_amount
+            final_room_meals.save()
 
     # create a new one if it doesn't
     except:
