@@ -99,13 +99,18 @@ def calculate_aid_summary(sender, instance, **kwargs):
             room_meals_amount += meals.amount
 
     else:
-        if college_status.residency == "oncampus":
-            room_meals_amount = ipeds.room_on_campus
-            room_meals_name = "on campus room & board"
-
-        elif college_status.residency == "offcampus not with family":
+        if college_status.residency == "offcampus not with family":
             room_meals_amount = ipeds.room_off_campus_not_with_family
             room_meals_name = "off-campus not with family room & board"
+
+        elif college_status.residency == "offcampus with family":
+            room_meals_amount = 0
+            room_meals_name = "off campus with family room & board"
+
+        # assume on campus unless otherwise stated
+        else:
+            room_meals_amount = ipeds.room_on_campus
+            room_meals_name = "on campus room & board"
 
     # update it if it already exists
     try:
@@ -199,7 +204,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
     try:
         work_study = AidRawData.objects.get(college_status=college_status, aid_category=work_study_category)
     except:
-        word_study = None
+        work_study = None
 
     if work_study is not None:
         # update it if it already exists

@@ -175,7 +175,8 @@ class ParseDocuments(graphene.Mutation):
                 document_result.text_succeeded = True
             else:
                 document_result.text_succeeded = False
-                errors.append(text_errors)
+                for error in text_errors:
+                    errors.append(error)
 
             # check if tables are processed
             tables, table_errors = get_table_data(document_result.table_job_id)
@@ -185,7 +186,8 @@ class ParseDocuments(graphene.Mutation):
                 document_result.table_succeeded = True
             else:
                 document_result.table_succeeded = False
-                errors.append(table_errors)
+                for error in table_errors:
+                    errors.append(error)
 
             # if textract analysis fails save the data
             if not document_result.text_succeeded or not document_result.table_succeeded:
@@ -211,7 +213,8 @@ class ParseDocuments(graphene.Mutation):
 
                 aid_data, parse_errors = parse_data(tables=tables)
                 if parse_errors:
-                    errors.append(parse_errors)
+                    for error in parse_errors:
+                        errors.append(error)
 
                 if aid_data:
                     for aid in aid_data:
@@ -235,15 +238,14 @@ class ParseDocuments(graphene.Mutation):
 
                 else:
                     document_result.automated_review_succeeded = False
-                    for error in errors:
-                        DocumentError.objects.create(
-                            document_result=document_result,
-                            type=error["type"],
-                            message=error["message"]
-                        )
-            print("hi")
-            print(document_result)
-            document_result.save()
+                    if errors is not None:
+                        for error in errors:
+                            print(error)
+                            DocumentError.objects.create(
+                                document_result=document_result,
+                                type=error["type"],
+                                message=error["message"]
+                            )
 
             # create report_data for sendgrid
             sendgrid_document = {
@@ -256,6 +258,7 @@ class ParseDocuments(graphene.Mutation):
                 "aid_data": aid_data
             }
             sendgrid_documents.append(sendgrid_document)
+            document_result.save()
 
         send_report_email(
             documents=sendgrid_documents,

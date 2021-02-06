@@ -88,11 +88,9 @@ def compare_tables_and_text(tables, text):
         for word in line.split(" "):
             # if there is a money sign in the word
             if "$" in word:
-                # remove any of these symbols
-                for letter in "$,*=+-":
-                    if letter in word:
-                        word = word.replace(letter, "")
 
+                # only keep numbers
+                word = re.sub("[^0-9]","",word)
                 text_money_list.append(int(float(word)))
 
     # create a list of all money in the tables
@@ -135,10 +133,6 @@ def parse_data(tables):
     aid_data = []
     errors= []
     num_tables = len(tables.keys())
-    if num_tables >= 3:
-        del my_dict[num_tables]
-        del my_dict[num_tables - 1]
-
     for table_num, table_value in tables.items():
         for row_num, row_value in table_value.items():
             row_text = []
@@ -165,13 +159,13 @@ def parse_data(tables):
 
                         # checks that the value isn't weirdly low
                         # if so, textract probably recognized a comma as a decimal
-                        if int(float(value)) < 10:
+                        if int(float(value)) < 10 and int(float(value)) > 0:
                             if "." in value:
                                 value = value.replace(".", ",")
 
                         # get the greatest dollar amount in each row
                         if int(float(value)) > row_max_amount:
-                            row_max_amount = int(value)
+                            row_max_amount = int(float(value))
 
                     else:
                         try:
@@ -181,11 +175,12 @@ def parse_data(tables):
                                     value = value.replace(letter, "")
 
                             money = int(float(value))
-                            row_contains_money = True
+                            if money != 2020 and money != 2021 and money != 2022:
+                                row_contains_money = True
 
-                            # get the greatest dollar amount in each row
-                            if money > row_max_amount:
-                                row_max_amount = money
+                                # get the greatest dollar amount in each row
+                                if money > row_max_amount:
+                                    row_max_amount = money
 
                         except:
                             pass
