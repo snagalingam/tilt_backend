@@ -201,8 +201,6 @@ def parse_data(tables):
                     # searches through lower case string for keys
                     result = [text for text in row_text_lower_sorted if key in text]
                     if result:
-                        print("hi1")
-                        print(result, row_text_lower)
                         aid_category = value
                         text_position = row_text_lower.index(result[0])
                         name = row_text[text_position][0:254]
@@ -213,7 +211,6 @@ def parse_data(tables):
                         # searches through lower case string for keys
                         result = [text for text in row_text_lower_sorted if key in text]
                         if result:
-                            print("hi2")
                             aid_category = value
                             text_position = row_text_lower.index(result[0])
                             name = row_text[text_position][0:254]
@@ -224,7 +221,6 @@ def parse_data(tables):
                         # searches through lower case string for keys
                         result = [text for text in row_text_lower_sorted if key in text]
                         if result:
-                            print("hi3")
                             aid_category = value
                             text_position = row_text_lower.index(result[0])
                             name = row_text[text_position][0:254]

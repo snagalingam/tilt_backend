@@ -5,7 +5,7 @@ from django.forms import Textarea, TextInput
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django_better_admin_arrayfield.forms.widgets import DynamicArrayTextareaWidget
-from financial_aid.models import AidCategory, AidData, DocumentError, DocumentResult
+from financial_aid.models import AidCategory, AidFinalData, AidRawData, DocumentError, DocumentResult
 
 
 ################################################
@@ -46,7 +46,28 @@ class AidCategoryAdmin(admin.ModelAdmin):
         return obj.data_set.count()
 
 
-class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class AidFinalDataAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (('Information'), {'fields': (
+            'name',
+            'amount',
+            'college_status',
+            'aid_category',
+            'created',
+            'updated'
+        )}),
+    )
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '100'})},
+        models.IntegerField: {'widget': TextInput(attrs={'size': '30'})},
+    }
+    list_display = ['name', 'amount', 'college_status', 'aid_category',]
+    model = AidFinalData
+    ordering = ('college_status', 'aid_category')
+    readonly_fields = ('created', 'updated',)
+    search_fields = ('college_status__id',)
+
+class AidRawDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
         (('Information'), {'fields': (
             'name',
@@ -54,6 +75,7 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
             'college_status',
             'document_result',
             'aid_category',
+            'other_source'
         )}),
         (('Details'), {'fields': (
             'table_num',
@@ -69,12 +91,11 @@ class AidDataAdmin(admin.ModelAdmin, DynamicArrayMixin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '30'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
     }
-    list_display = ['college_status', 'name', 'amount', 'aid_category',]
-    model = AidData
-    ordering = ('name', 'aid_category',)
+    list_display = ['name', 'amount', 'college_status', 'aid_category', 'document_result', 'other_source']
+    model = AidRawData
+    ordering = ('college_status', 'aid_category')
     readonly_fields = ('created', 'updated',)
-    search_fields = ('amount', 'aid_category', 'college_status', 'name')
-
+    search_fields = ('college_status__id',)
 
 class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
     fieldsets = (
@@ -115,5 +136,6 @@ class DocumentResultAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 admin.site.register(AidCategory, AidCategoryAdmin)
-admin.site.register(AidData, AidDataAdmin)
+admin.site.register(AidFinalData, AidFinalDataAdmin)
+admin.site.register(AidRawData, AidRawDataAdmin)
 admin.site.register(DocumentResult, DocumentResultAdmin)

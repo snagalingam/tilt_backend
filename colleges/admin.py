@@ -4,14 +4,21 @@ from django.db import models
 from django.forms import Textarea, TextInput
 from django.utils.translation import gettext_lazy as _
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
-from financial_aid.models import AidData
+from financial_aid.models import AidFinalData, AidRawData
 
 
 ################################################
 # Inline
 ################################################
-class AidData(admin.StackedInline):
-    model = AidData
+class AidFinalData(admin.StackedInline):
+    model = AidFinalData
+    extra = 0
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '100'})},
+    }
+
+class AidRawData(admin.StackedInline):
+    model = AidRawData
     extra = 0
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '100'})},
@@ -103,7 +110,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         models.IntegerField: {'widget': TextInput(attrs={'size': '50'})},
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
-    inlines = [AidData]
+    inlines = [AidRawData, AidFinalData]
     list_display = [
         'user',
         'college',

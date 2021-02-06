@@ -69,8 +69,31 @@ class AidCategory(models.Model):
     def __str__(self):
         return self.name
 
+class AidFinalData(models.Model):
+    college_status = models.ForeignKey(
+        CollegeStatus,
+        default=DEFAULT_COLLEGE_STATUS_ID,
+        on_delete=models.CASCADE
+    )
+    aid_category = models.ForeignKey(
+        AidCategory,
+        default=DEFAULT_AID_CATEGORY_ID,
+        on_delete=models.PROTECT
+    )
+    name = models.CharField(max_length=255)
+    amount = models.PositiveIntegerField()
 
-class AidData(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'aid final data'
+        verbose_name_plural = 'aid final data'
+
+    def __str__(self):
+        return self.name
+
+class AidRawData(models.Model):
     college_status = models.ForeignKey(
         CollegeStatus,
         default=DEFAULT_COLLEGE_STATUS_ID,
@@ -106,8 +129,8 @@ class AidData(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'aid data'
-        verbose_name_plural = 'aid data'
+        verbose_name = 'aid raw data'
+        verbose_name_plural = 'aid raw data'
 
     def __str__(self):
         return self.name
