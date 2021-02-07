@@ -36,7 +36,7 @@ class AidFinalDataType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
-    aid_data = graphene.List(AidFinalDataType, limit=graphene.Int())
+    aid_final_data = graphene.List(AidFinalDataType, limit=graphene.Int())
 
     aid_categories_by_fields = graphene.List(
         AidCategoryType,
@@ -45,11 +45,11 @@ class Query(graphene.ObjectType):
         secondary=graphene.String(),
         tertiary=graphene.String()
     )
-    aid_data_by_college_status = graphene.List(
+    aid_final_data_by_college_status = graphene.List(
         AidFinalDataType,
         college_status_id=graphene.Int()
     )
-    aid_data_by_fields = graphene.List(
+    aid_final_data_by_fields = graphene.List(
         AidFinalDataType,
         aid_category_id=graphene.Int(),
         amount=graphene.Int(),
@@ -59,14 +59,14 @@ class Query(graphene.ObjectType):
         table_number=graphene.Int(),
         row_index=graphene.Int(),
     )
-    my_aid_data = graphene.List(AidFinalDataType)
+    my_aid_final_data = graphene.List(AidFinalDataType)
 
     # get_all()
     def resolve_aid_categories(self, info, limit=None):
         qs = AidCategory.objects.all()[0:limit]
         return qs
 
-    def resolve_aid_data(self, info, limit=None):
+    def resolve_aid_final_data(self, info, limit=None):
         qs = AidFinalData.objects.all()[0:limit]
         return qs
 
@@ -75,15 +75,15 @@ class Query(graphene.ObjectType):
         qs = AidCategory.objects.filter(**kwargs)
         return qs
 
-    def resolve_aid_data_by_college_status(self, info, college_status_id=None):
+    def resolve_aid_final_data_by_college_status(self, info, college_status_id=None):
         qs = AidFinalData.objects.filter(college_status__id=college_status_id)
         return qs
 
-    def resolve_aid_data_by_fields(self, info, **kwargs):
+    def resolve_aid_final_data_by_fields(self, info, **kwargs):
         qs = AidFinalData.objects.filter(**kwargs)
         return qs
 
-    def resolve_my_aid_data(self, info):
+    def resolve_my_aid_final_data(self, info):
         user = info.context.user
         qs = AidFinalData.objects.filter(college_status__user__id=user.id)
         return qs
@@ -153,9 +153,9 @@ class ParseDocuments(graphene.Mutation):
         first_document = documents[0]
         first_document_result = DocumentResult.objects.get(document_name=first_document)
 
-        aid_data = AidRawData.objects.filter(college_status=first_document_result.college_status)
-        if aid_data.exists():
-            aid_data.delete()
+        aid_raw_data = AidRawData.objects.filter(college_status=first_document_result.college_status)
+        if aid_raw_data.exists():
+            aid_raw_data.delete()
             AidFinalData.objects.filter(college_status=first_document_result.college_status).delete()
 
         for document in documents:
@@ -211,13 +211,13 @@ class ParseDocuments(graphene.Mutation):
                         "message": f"There are {document_result.comparison_missing_num} more dollar amounts in text"
                     })
 
-                aid_data, parse_errors = parse_data(tables=tables)
+                aid_raw_data, parse_errors = parse_data(tables=tables)
                 if parse_errors:
                     for error in parse_errors:
                         errors.append(error)
 
-                if aid_data:
-                    for aid in aid_data:
+                if aid_raw_data:
+                    for aid in aid_raw_data:
                         AidRawData.objects.create(
                             college_status=document_result.college_status,
                             document_result=document_result,
@@ -255,7 +255,7 @@ class ParseDocuments(graphene.Mutation):
                 "text_succeeded": document_result.text_succeeded,
                 "automated_review_succeeded": document_result.automated_review_succeeded,
                 "errors": errors,
-                "aid_data": aid_data
+                "aid_data": aid_raw_data
             }
             sendgrid_documents.append(sendgrid_document)
             document_result.save()
