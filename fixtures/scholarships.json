@@ -1,0 +1,1606 @@
+[
+{
+  "model": "scholarships.state",
+  "pk": 1,
+  "fields": {
+    "name": "Alabama",
+    "abbreviation": "AL",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 2,
+  "fields": {
+    "name": "Alaska",
+    "abbreviation": "AK",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 3,
+  "fields": {
+    "name": "American Samoa",
+    "abbreviation": "AS",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 4,
+  "fields": {
+    "name": "Arizona",
+    "abbreviation": "AZ",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 5,
+  "fields": {
+    "name": "Arkansas",
+    "abbreviation": "AR",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 6,
+  "fields": {
+    "name": "California",
+    "abbreviation": "CA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 7,
+  "fields": {
+    "name": "Colorado",
+    "abbreviation": "CO",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 8,
+  "fields": {
+    "name": "Connecticut",
+    "abbreviation": "CT",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 9,
+  "fields": {
+    "name": "Delaware",
+    "abbreviation": "DE",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 10,
+  "fields": {
+    "name": "District Of Columbia",
+    "abbreviation": "DC",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 11,
+  "fields": {
+    "name": "Federated States Of Micronesia",
+    "abbreviation": "FM",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 12,
+  "fields": {
+    "name": "Florida",
+    "abbreviation": "FL",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 13,
+  "fields": {
+    "name": "Georgia",
+    "abbreviation": "GA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 14,
+  "fields": {
+    "name": "Guam",
+    "abbreviation": "GU",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 15,
+  "fields": {
+    "name": "Hawaii",
+    "abbreviation": "HI",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 16,
+  "fields": {
+    "name": "Idaho",
+    "abbreviation": "ID",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 17,
+  "fields": {
+    "name": "Illinois",
+    "abbreviation": "IL",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 18,
+  "fields": {
+    "name": "Indiana",
+    "abbreviation": "IN",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 19,
+  "fields": {
+    "name": "Iowa",
+    "abbreviation": "IA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 20,
+  "fields": {
+    "name": "Kansas",
+    "abbreviation": "KS",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 21,
+  "fields": {
+    "name": "Kentucky",
+    "abbreviation": "KY",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 22,
+  "fields": {
+    "name": "Louisiana",
+    "abbreviation": "LA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 23,
+  "fields": {
+    "name": "Maine",
+    "abbreviation": "ME",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 24,
+  "fields": {
+    "name": "Marshall Islands",
+    "abbreviation": "MH",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 25,
+  "fields": {
+    "name": "Maryland",
+    "abbreviation": "MD",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 26,
+  "fields": {
+    "name": "Massachusetts",
+    "abbreviation": "MA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 27,
+  "fields": {
+    "name": "Michigan",
+    "abbreviation": "MI",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 28,
+  "fields": {
+    "name": "Minnesota",
+    "abbreviation": "MN",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 29,
+  "fields": {
+    "name": "Mississippi",
+    "abbreviation": "MS",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 30,
+  "fields": {
+    "name": "Missouri",
+    "abbreviation": "MO",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 31,
+  "fields": {
+    "name": "Montana",
+    "abbreviation": "MT",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 32,
+  "fields": {
+    "name": "Nebraska",
+    "abbreviation": "NE",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 33,
+  "fields": {
+    "name": "Nevada",
+    "abbreviation": "NV",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 34,
+  "fields": {
+    "name": "New Hampshire",
+    "abbreviation": "NH",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 35,
+  "fields": {
+    "name": "New Jersey",
+    "abbreviation": "NJ",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 36,
+  "fields": {
+    "name": "New Mexico",
+    "abbreviation": "NM",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 37,
+  "fields": {
+    "name": "New York",
+    "abbreviation": "NY",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 38,
+  "fields": {
+    "name": "North Carolina",
+    "abbreviation": "NC",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 39,
+  "fields": {
+    "name": "North Dakota",
+    "abbreviation": "ND",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 40,
+  "fields": {
+    "name": "Northern Mariana Islands",
+    "abbreviation": "MP",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 41,
+  "fields": {
+    "name": "Ohio",
+    "abbreviation": "OH",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 42,
+  "fields": {
+    "name": "Oklahoma",
+    "abbreviation": "OK",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 43,
+  "fields": {
+    "name": "Oregon",
+    "abbreviation": "OR",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 44,
+  "fields": {
+    "name": "Palau",
+    "abbreviation": "PW",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 45,
+  "fields": {
+    "name": "Pennsylvania",
+    "abbreviation": "PA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 46,
+  "fields": {
+    "name": "Puerto Rico",
+    "abbreviation": "PR",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 47,
+  "fields": {
+    "name": "Rhode Island",
+    "abbreviation": "RI",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 48,
+  "fields": {
+    "name": "South Carolina",
+    "abbreviation": "SC",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 49,
+  "fields": {
+    "name": "South Dakota",
+    "abbreviation": "SD",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 50,
+  "fields": {
+    "name": "Tennessee",
+    "abbreviation": "TN",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 51,
+  "fields": {
+    "name": "Texas",
+    "abbreviation": "TX",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 52,
+  "fields": {
+    "name": "Utah",
+    "abbreviation": "UT",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 53,
+  "fields": {
+    "name": "Vermont",
+    "abbreviation": "VT",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 54,
+  "fields": {
+    "name": "Virgin Islands",
+    "abbreviation": "VI",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 55,
+  "fields": {
+    "name": "Virginia",
+    "abbreviation": "VA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 56,
+  "fields": {
+    "name": "Washington",
+    "abbreviation": "WA",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 57,
+  "fields": {
+    "name": "West Virginia",
+    "abbreviation": "WV",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 58,
+  "fields": {
+    "name": "Wisconsin",
+    "abbreviation": "WI",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.state",
+  "pk": 59,
+  "fields": {
+    "name": "Wyoming",
+    "abbreviation": "WY",
+    "created": "2020-12-10T21:15:15.934",
+    "updated": "2020-12-10T21:15:15.934"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 1,
+  "fields": {
+    "organization": "International Information System Security Certification Consortium (ISC)²",
+    "addressee": "Scholarship Committee",
+    "email": "scholarships@isc2.org",
+    "phone_number": "17274933587",
+    "phone_number_ext": "",
+    "street": "311 Park Place Blvd. Suite 610",
+    "city": "Clearwater",
+    "state": 12,
+    "zipcode": "33759",
+    "created": "2021-02-07T07:35:19.603",
+    "updated": "2021-02-07T07:35:54.767"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 2,
+  "fields": {
+    "organization": "Blue Grass Community Foundation",
+    "addressee": "Kristen Tidwell",
+    "email": "kristen@bgcf.org",
+    "phone_number": "18597212347",
+    "phone_number_ext": "",
+    "street": "499 East High Street Suite 112",
+    "city": "Lexington",
+    "state": 21,
+    "zipcode": "40507",
+    "created": "2021-02-07T07:40:22.548",
+    "updated": "2021-02-07T07:40:22.548"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 3,
+  "fields": {
+    "organization": "4‑H",
+    "addressee": "Scholarship Committee",
+    "email": "YouthinAction@4-H.org",
+    "phone_number": "13019612964",
+    "phone_number_ext": "",
+    "street": "7100 Connecticut Ave.",
+    "city": "Chevy Chase",
+    "state": 25,
+    "zipcode": "20815",
+    "created": "2021-02-07T07:56:03.784",
+    "updated": "2021-02-07T07:56:03.784"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 4,
+  "fields": {
+    "organization": "Lincoln Community Foundation",
+    "addressee": "Scholarship Committee",
+    "email": "",
+    "phone_number": "14024742345",
+    "phone_number_ext": "",
+    "street": "215 Central Mall South Ste 100",
+    "city": "Lincoln",
+    "state": 32,
+    "zipcode": "68508",
+    "created": "2021-02-07T08:00:00.615",
+    "updated": "2021-02-07T08:00:00.615"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 5,
+  "fields": {
+    "organization": "National Restaurant Association Educational Foundation",
+    "addressee": "",
+    "email": "",
+    "phone_number": "",
+    "phone_number_ext": "",
+    "street": "",
+    "city": "",
+    "state": null,
+    "zipcode": "",
+    "created": "2021-02-07T08:07:33.815",
+    "updated": "2021-02-07T08:07:33.815"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 6,
+  "fields": {
+    "organization": "Baton Rouge Area Foundation",
+    "addressee": "",
+    "email": "scholarships@braf.org",
+    "phone_number": "12253876126",
+    "phone_number_ext": "",
+    "street": "100 North Street Suite 900",
+    "city": "Baton Rouge",
+    "state": 22,
+    "zipcode": "70802",
+    "created": "2021-02-07T08:19:09.970",
+    "updated": "2021-02-07T08:19:09.970"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 7,
+  "fields": {
+    "organization": "AAUW Sacramento (CA) Branch",
+    "addressee": "",
+    "email": "aauwsacscholarship@gmail.com",
+    "phone_number": "14102189395",
+    "phone_number_ext": "",
+    "street": "3736 64th St",
+    "city": "Sacramento",
+    "state": 6,
+    "zipcode": "95820",
+    "created": "2021-02-07T08:23:44.177",
+    "updated": "2021-02-07T08:23:44.177"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 8,
+  "fields": {
+    "organization": "Albuquerque Community Foundation",
+    "addressee": "",
+    "email": "foundation@albuquerquefoundation.org",
+    "phone_number": "15058836240",
+    "phone_number_ext": "",
+    "street": "624 Tijeras Ave NW",
+    "city": "Albuquerque",
+    "state": 36,
+    "zipcode": "87102",
+    "created": "2021-02-07T08:29:40.570",
+    "updated": "2021-02-07T08:29:40.570"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 9,
+  "fields": {
+    "organization": "ACLU of Utah",
+    "addressee": "",
+    "email": "scholarship@acluutah.org",
+    "phone_number": "18018710331",
+    "phone_number_ext": "",
+    "street": "355 North 300 West",
+    "city": "Salt Lake City",
+    "state": 52,
+    "zipcode": "84103",
+    "created": "2021-02-07T08:34:20.238",
+    "updated": "2021-02-07T08:34:20.238"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 10,
+  "fields": {
+    "organization": "University of Iowa",
+    "addressee": "",
+    "email": "admissions@uiowa.edu",
+    "phone_number": "13193353847",
+    "phone_number_ext": "",
+    "street": "108 Calvin Hall",
+    "city": "Iowa City",
+    "state": 19,
+    "zipcode": "52242",
+    "created": "2021-02-07T09:19:20.999",
+    "updated": "2021-02-07T09:19:20.999"
+  }
+},
+{
+  "model": "scholarships.provider",
+  "pk": 11,
+  "fields": {
+    "organization": "Association of Food and Drug Officials",
+    "addressee": "",
+    "email": "afdo@afdo.org",
+    "phone_number": "1717757288",
+    "phone_number_ext": "",
+    "street": "155 West Market St., 3rd Floor",
+    "city": "York",
+    "state": 45,
+    "zipcode": "17401",
+    "created": "2021-02-07T09:23:15.976",
+    "updated": "2021-02-07T09:23:15.976"
+  }
+},
+{
+  "model": "scholarships.association",
+  "pk": 1,
+  "fields": {
+    "name": "4-H",
+    "created": "2021-02-07T07:57:56.127",
+    "updated": "2021-02-07T07:57:56.127"
+  }
+},
+{
+  "model": "scholarships.association",
+  "pk": 2,
+  "fields": {
+    "name": "Wood River Rural High School",
+    "created": "2021-02-07T08:17:17.143",
+    "updated": "2021-02-07T08:17:17.143"
+  }
+},
+{
+  "model": "scholarships.association",
+  "pk": 3,
+  "fields": {
+    "name": "Baton Rouge Magnet High School",
+    "created": "2021-02-07T08:20:19.306",
+    "updated": "2021-02-07T08:20:19.306"
+  }
+},
+{
+  "model": "scholarships.association",
+  "pk": 4,
+  "fields": {
+    "name": "Albuquerque High School",
+    "created": "2021-02-07T08:30:34.420",
+    "updated": "2021-02-07T08:30:34.420"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 1,
+  "fields": {
+    "category": "cybersecurity",
+    "created": "2021-02-07T10:39:51.470",
+    "updated": "2021-02-07T10:39:51.470"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 2,
+  "fields": {
+    "category": "dental hygiene",
+    "created": "2021-02-07T10:40:01.520",
+    "updated": "2021-02-07T10:40:01.520"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 3,
+  "fields": {
+    "category": "electrical technology",
+    "created": "2021-02-07T10:40:10.137",
+    "updated": "2021-02-07T10:40:10.137"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 4,
+  "fields": {
+    "category": "engineering",
+    "created": "2021-02-07T10:40:16.817",
+    "updated": "2021-02-07T10:40:16.817"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 5,
+  "fields": {
+    "category": "information assurance",
+    "created": "2021-02-07T10:40:23.050",
+    "updated": "2021-02-07T10:40:23.050"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 6,
+  "fields": {
+    "category": "mathematics",
+    "created": "2021-02-07T10:40:29.670",
+    "updated": "2021-02-07T10:40:29.670"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 7,
+  "fields": {
+    "category": "nursing",
+    "created": "2021-02-07T10:40:35.741",
+    "updated": "2021-02-07T10:40:35.741"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 8,
+  "fields": {
+    "category": "restaurant-related program",
+    "created": "2021-02-07T10:40:43.898",
+    "updated": "2021-02-07T10:45:02.636"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 9,
+  "fields": {
+    "category": "science",
+    "created": "2021-02-07T10:40:50.834",
+    "updated": "2021-02-07T10:40:50.834"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 10,
+  "fields": {
+    "category": "technology",
+    "created": "2021-02-07T10:40:56.545",
+    "updated": "2021-02-07T10:40:56.545"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 11,
+  "fields": {
+    "category": "foodservice",
+    "created": "2021-02-07T10:45:10.142",
+    "updated": "2021-02-07T10:45:10.142"
+  }
+},
+{
+  "model": "scholarships.field",
+  "pk": 12,
+  "fields": {
+    "category": "hospitality",
+    "created": "2021-02-07T10:45:13.109",
+    "updated": "2021-02-07T10:45:13.109"
+  }
+},
+{
+  "model": "scholarships.gender",
+  "pk": 1,
+  "fields": {
+    "category": "women",
+    "created": "2021-02-07T08:24:07.090",
+    "updated": "2021-02-07T08:24:07.090"
+  }
+},
+{
+  "model": "scholarships.interest",
+  "pk": 1,
+  "fields": {
+    "category": "activism",
+    "created": "2021-02-07T08:37:38.159",
+    "updated": "2021-02-07T08:37:38.159"
+  }
+},
+{
+  "model": "scholarships.interest",
+  "pk": 2,
+  "fields": {
+    "category": "foods, drugs or consumer product safety",
+    "created": "2021-02-07T09:24:58.808",
+    "updated": "2021-02-07T09:24:58.808"
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 1,
+  "fields": {
+    "name": "(ISC)² Undergraduate Cybersecurity Scholarship",
+    "provider": 1,
+    "deadline": "2021-03-08",
+    "description": "The (ISC)² Undergraduate Scholarship offers students scholarships from $1,000 to $5,000 per recipient. Must be pursuing, or plan to pursue, a degree with a focus on cybersecurity or information assurance. You may be a senior in high school or an undergraduate student who is currently a junior, freshman, sophomore or senior who will be pursuing an undergraduate degree in the fall. A minimum 3.3. GPA is required. Recipients are notified in June.",
+    "max_amount": 5000,
+    "number_awards": 20,
+    "renewable": false,
+    "website": "https://iamcybersafe.org/s/undergraduate-scholarships",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "3.300",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T07:36:53.620",
+    "updated": "2021-02-07T10:48:13.907",
+    "association": [],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [
+      1,
+      5
+    ],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 2,
+  "fields": {
+    "name": "16th District PTA Scholarship",
+    "provider": 2,
+    "deadline": "2021-03-05",
+    "description": "The objective of the 16th District PTA Scholarship is to give deserving young people the financial means to continue their education. This non-renewable scholarship is awarded to high school seniors attending Fayette County Public Schools. Eligible applicants must have a minimum cumulative GPA of 2.5. Scholarships are awarded based on applicant’s financial need, academic achievement and contribution to the community. The amount of the award varies each year.",
+    "max_amount": null,
+    "number_awards": null,
+    "renewable": false,
+    "website": "https://www.bgcf.org/scholarships/",
+    "financial_need": true,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "2.500",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T07:48:45.285",
+    "updated": "2021-02-07T07:50:12.839",
+    "association": [],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 3,
+  "fields": {
+    "name": "4‑H Youth in Action Awards",
+    "provider": 3,
+    "deadline": "2021-03-29",
+    "description": "The 4‑H Youth in Action Program recognizes four confident young leaders with diverse backgrounds and unique perspectives in our core pillar areas: agriculture, civic engagement, healthy living and STEM. Each year, Pillar Winners will experience an exciting year of telling their 4‑H story and celebrating their leadership. Winners receive: $5,000 higher education scholarship, Promotional video showcasing their 4‑H impact story, All-expenses paid trip to Washington, D.C. for National 4‑H Council’s Legacy Awards, Networking opportunities with 4‑H celebrities and other prominent alumni, and Recognition as the official 4‑H youth spokesperson for their pillar.",
+    "max_amount": 5000,
+    "number_awards": 4,
+    "renewable": false,
+    "website": "https://4-h.org/parents/4-h-youth-in-action-awards/",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": null,
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T07:57:59.236",
+    "updated": "2021-02-07T10:45:51.735",
+    "association": [
+      1
+    ],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 4,
+  "fields": {
+    "name": "A.B. Noel Endowed Scholarship",
+    "provider": 4,
+    "deadline": "2021-03-15",
+    "description": "The A.B. and M.R. Noel Scholarship was established in 2008 to benefit graduates of Wood River Rural High School in Wood River, Nebraska attending Central Community College or Concordia University in Seward, NE. It is also offered to students of nursing attending Central Community College-Grand Island and Concordia University in Seward, Nebraska.",
+    "max_amount": 500,
+    "number_awards": 1,
+    "renewable": false,
+    "website": "https://lcf.academicworks.com",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "3.000",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:05:03.992",
+    "updated": "2021-02-07T10:47:14.512",
+    "association": [
+      2
+    ],
+    "citizenship": [],
+    "college": [
+      1915,
+      1918
+    ],
+    "degree": [],
+    "disability": [],
+    "field": [
+      2,
+      3,
+      7
+    ],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 5,
+  "fields": {
+    "name": "2021 NRAEF Undergraduate Scholarships",
+    "provider": 5,
+    "deadline": "2021-02-15",
+    "description": "The National Restaurant Association Educational Foundation, through the generosity of its donors, provides merit-based scholarships for undergraduate students pursuing degrees related to the restaurant industry.  Scholarship awards range from $1,000 to $10,000.  Applicants complete one NRAEF application and the application system will match them to scholarship funds they are eligible for after completing and submitting the application.",
+    "max_amount": 10000,
+    "number_awards": null,
+    "renewable": false,
+    "website": "https://chooserestaurants.org/Programs-and-Scholarships/Scholarship",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": null,
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:10:58.303",
+    "updated": "2021-02-07T10:45:45.457",
+    "association": [],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [
+      8,
+      11,
+      12
+    ],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 6,
+  "fields": {
+    "name": "Aaron Bernard Murray & Fay Tyler Murray Education Encouragement Award",
+    "provider": 6,
+    "deadline": "2021-03-16",
+    "description": "Applicants of the Aaron Bernard Murray & Fay Tyler Murray Education Encouragement Award must be graduating from Baton Rouge Magnet High School with sound academic achievement and demonstrate good citizenship. Applicant must show leadership qualities within and beyond their peer group and must have taken initiatives in school and/or the broader civic life of the community. Only students nominated by a teacher or school administrator are eligible to apply. In addition, applicants must submit a transcript, an academic resume, recommendation letters, an an essay highlighting your leadership potential as displayed in extracurricular activities, community service, and other achievements or honors",
+    "max_amount": null,
+    "number_awards": null,
+    "renewable": false,
+    "website": "https://www.brafscholarships.org/directory",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": null,
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:20:29.985",
+    "updated": "2021-02-07T10:46:00.808",
+    "association": [
+      3
+    ],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 7,
+  "fields": {
+    "name": "AAUW Sacramento Branch Scholarship",
+    "provider": 7,
+    "deadline": null,
+    "description": "",
+    "max_amount": 2000,
+    "number_awards": 5,
+    "renewable": false,
+    "website": "https://sacramento-ca.aauw.net/programs/scholarships/",
+    "financial_need": true,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "3.000",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:25:36.150",
+    "updated": "2021-02-07T10:46:52.975",
+    "association": [],
+    "citizenship": [],
+    "college": [
+      185,
+      220,
+      272,
+      426,
+      4782
+    ],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [
+      1
+    ],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 8,
+  "fields": {
+    "name": "Barnes W. Rose, Jr. and Eva Rose Nickol Scholarship Program",
+    "provider": 8,
+    "deadline": "2021-04-01",
+    "description": "The Barnes W. Rose, Jr. and Eva Rose Nickol Scholarship Fund was established in 2003 in memory of Mr. Rose and in honor of Eva. Barnes was a 1951 graduate of Albuquerque High School and a 1957 graduate of West Point. Eva is a longtime New Mexico resident. This award is for a Albuquerque High School senior pursuing a bachelor's degree in one of the STEM majors:  Science, Technology, Engineering, Mathematics.",
+    "max_amount": 800,
+    "number_awards": 1,
+    "renewable": false,
+    "website": "https://albuquerquefoundation.org/barnes-w-rose-jr-and-eva-rose-nichol-scholarship-fund-.aspx",
+    "financial_need": true,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "3.600",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:31:55.696",
+    "updated": "2021-02-07T10:48:05.107",
+    "association": [
+      4
+    ],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [
+      4,
+      6,
+      9,
+      10
+    ],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 9,
+  "fields": {
+    "name": "ACLU of Utah's Youth Activist Scholarship",
+    "provider": 9,
+    "deadline": "2021-03-22",
+    "description": "",
+    "max_amount": 3500,
+    "number_awards": 4,
+    "renewable": false,
+    "website": "https://www.acluutah.org/resources/item/559-youth-activist-scholarship",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "2.500",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T08:34:39.106",
+    "updated": "2021-02-07T10:47:23.874",
+    "association": [],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [
+      1
+    ],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 10,
+  "fields": {
+    "name": "Advantage Iowa Award",
+    "provider": 10,
+    "deadline": "2021-03-01",
+    "description": "The Advantage Iowa Award is based on merit (test scores and GPA), contributing criteria also includes students that are from historically underrepresented populations at the University of Iowa or participation in a federally funded Upward Bound program. Eligible nonresident students must apply for the Advantage Iowa Award via their Admissions Profile in MyUI. Submission of the FAFSA by December 1 of the year prior to enrollment is recommended to maximize the available benefits of the Advantage Iowa program. It is renewable up to four years, or until you receive your bachelor’s degree (whichever comes first). You must maintain continuous full-time enrollment at the University of Iowa and maintain a minimum 2.00 cumulative GPA, and meet all additional requirements listed at admissions.uiowa.edu/ai for renewal. Renewal reviews are done at the end of each semester.",
+    "max_amount": null,
+    "number_awards": null,
+    "renewable": true,
+    "website": "https://admissions.uiowa.edu/finances/scholarships-nonres-first-year-students",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": null,
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T09:20:42.938",
+    "updated": "2021-02-07T10:47:33.404",
+    "association": [],
+    "citizenship": [],
+    "college": [
+      1137
+    ],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.scholarship",
+  "pk": 11,
+  "fields": {
+    "name": "AFDO Scholarship Awards",
+    "provider": 11,
+    "deadline": "2021-02-01",
+    "description": "In 1981, AFDO established a scholarship fund with the excess funds from the 75th Anniversary of the Food, Drug and Cosmetic Act celebration. The “George M. Burditt Scholarship” and the “Betsy B. Woodward Scholarship”, both in the amount of $2,500 each will be awarded annually to a worthy recipient who is in their third year of college. A third scholarship, the “Denise C. Rooney Scholarship,”  worth $2,500 was created in June 2008 and will also be awarded annually to a worthy recipient who is in their third year of college.",
+    "max_amount": 2500,
+    "number_awards": 3,
+    "renewable": false,
+    "website": "https://www.afdo.org/grants/afdo-scholarship/",
+    "financial_need": false,
+    "first_generation": false,
+    "min_act": null,
+    "min_sat": null,
+    "min_gpa": "3.000",
+    "max_gpa": null,
+    "writing": false,
+    "created": "2021-02-07T09:24:12.185",
+    "updated": "2021-02-07T10:47:42.950",
+    "association": [],
+    "citizenship": [],
+    "college": [],
+    "degree": [],
+    "disability": [],
+    "field": [],
+    "gender": [],
+    "heritage": [],
+    "interest": [
+      2
+    ],
+    "military": []
+  }
+},
+{
+  "model": "scholarships.educationcategory",
+  "pk": 1,
+  "fields": {
+    "category": "high school senior",
+    "created": "2021-02-07T07:37:19.358",
+    "updated": "2021-02-07T07:37:19.358"
+  }
+},
+{
+  "model": "scholarships.educationcategory",
+  "pk": 2,
+  "fields": {
+    "category": "college freshman",
+    "created": "2021-02-07T07:37:26.031",
+    "updated": "2021-02-07T07:37:26.031"
+  }
+},
+{
+  "model": "scholarships.educationcategory",
+  "pk": 3,
+  "fields": {
+    "category": "college sophomore",
+    "created": "2021-02-07T07:37:30.118",
+    "updated": "2021-02-07T07:37:30.118"
+  }
+},
+{
+  "model": "scholarships.educationcategory",
+  "pk": 4,
+  "fields": {
+    "category": "college junior",
+    "created": "2021-02-07T07:37:33.211",
+    "updated": "2021-02-07T07:37:33.211"
+  }
+},
+{
+  "model": "scholarships.educationcategory",
+  "pk": 5,
+  "fields": {
+    "category": "college senior",
+    "created": "2021-02-07T07:37:36.758",
+    "updated": "2021-02-07T07:37:36.758"
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 1,
+  "fields": {
+    "scholarship": 1,
+    "education_category": 2,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 2,
+  "fields": {
+    "scholarship": 1,
+    "education_category": 3,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 3,
+  "fields": {
+    "scholarship": 1,
+    "education_category": 4,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 4,
+  "fields": {
+    "scholarship": 1,
+    "education_category": 5,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 5,
+  "fields": {
+    "scholarship": 4,
+    "education_category": 2,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 6,
+  "fields": {
+    "scholarship": 4,
+    "education_category": 3,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 7,
+  "fields": {
+    "scholarship": 4,
+    "education_category": 4,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 8,
+  "fields": {
+    "scholarship": 4,
+    "education_category": 5,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 9,
+  "fields": {
+    "scholarship": 6,
+    "education_category": 1,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 10,
+  "fields": {
+    "scholarship": 7,
+    "education_category": 3,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 11,
+  "fields": {
+    "scholarship": 7,
+    "education_category": 4,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 12,
+  "fields": {
+    "scholarship": 7,
+    "education_category": 5,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 13,
+  "fields": {
+    "scholarship": 9,
+    "education_category": 1,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.educationscholarship",
+  "pk": 14,
+  "fields": {
+    "scholarship": 11,
+    "education_category": 4,
+    "education_detail": null
+  }
+},
+{
+  "model": "scholarships.locationdetail",
+  "pk": 1,
+  "fields": {
+    "description": "Fayette County",
+    "created": "2021-02-07T07:48:21.099",
+    "updated": "2021-02-07T07:48:21.099"
+  }
+},
+{
+  "model": "scholarships.locationdetail",
+  "pk": 2,
+  "fields": {
+    "description": "Wood River",
+    "created": "2021-02-07T08:06:01.923",
+    "updated": "2021-02-07T08:06:01.923"
+  }
+},
+{
+  "model": "scholarships.locationdetail",
+  "pk": 3,
+  "fields": {
+    "description": "Baton Rouge",
+    "created": "2021-02-07T08:20:07.371",
+    "updated": "2021-02-07T08:20:07.371"
+  }
+},
+{
+  "model": "scholarships.locationdetail",
+  "pk": 4,
+  "fields": {
+    "description": "Sacramento County",
+    "created": "2021-02-07T08:25:10.381",
+    "updated": "2021-02-07T08:25:10.381"
+  }
+},
+{
+  "model": "scholarships.locationscholarship",
+  "pk": 1,
+  "fields": {
+    "scholarship": 2,
+    "state": 21,
+    "location_detail": 1
+  }
+},
+{
+  "model": "scholarships.locationscholarship",
+  "pk": 2,
+  "fields": {
+    "scholarship": 4,
+    "state": 32,
+    "location_detail": 2
+  }
+},
+{
+  "model": "scholarships.locationscholarship",
+  "pk": 3,
+  "fields": {
+    "scholarship": 6,
+    "state": 22,
+    "location_detail": 3
+  }
+},
+{
+  "model": "scholarships.locationscholarship",
+  "pk": 4,
+  "fields": {
+    "scholarship": 7,
+    "state": 6,
+    "location_detail": 4
+  }
+},
+{
+  "model": "scholarships.locationscholarship",
+  "pk": 5,
+  "fields": {
+    "scholarship": 9,
+    "state": 52,
+    "location_detail": null
+  }
+}
+]

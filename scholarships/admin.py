@@ -9,9 +9,7 @@ from scholarships.models import (
     EducationCategory,
     EducationDetail,
     EducationScholarship,
-    FieldCategory,
-    FieldDetail,
-    FieldScholarship,
+    Field,
     Gender,
     Heritage,
     Interest,
@@ -34,15 +32,6 @@ class EducationScholarshipInline(admin.StackedInline):
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
     model = EducationScholarship
-
-
-class FieldScholarshipInline(admin.StackedInline):
-    extra = 0
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
-    }
-    model = FieldScholarship
-
 
 class LocationScholarshipInline(admin.StackedInline):
     extra = 0
@@ -127,28 +116,16 @@ class EducationDetailAdmin(admin.ModelAdmin):
     search_fields = ('description',)
 
 
-class FieldCategoryAdmin(admin.ModelAdmin):
+class FieldAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('category', 'created', 'updated')}),)
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
     }
     list_display = ['category',]
-    model = FieldCategory
+    model = Field
     ordering = ('category',)
     readonly_fields = ('created', 'updated')
     search_fields = ('category',)
-
-
-class FieldDetailAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': ('description', 'created', 'updated')}),)
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '50'})},
-    }
-    list_display = ['description',]
-    model = FieldDetail
-    ordering = ('description',)
-    readonly_fields = ('created', 'updated')
-    search_fields = ('description',)
 
 
 class GenderAdmin(admin.ModelAdmin):
@@ -264,6 +241,7 @@ class ScholarshipAdmin(admin.ModelAdmin):
             'citizenship',
             'college',
             'degree',
+            'field',
             'disability',
             'gender',
             'heritage',
@@ -277,6 +255,7 @@ class ScholarshipAdmin(admin.ModelAdmin):
         'college',
         'degree',
         'disability',
+        'field',
         'gender',
         'heritage',
         'interest',
@@ -287,7 +266,7 @@ class ScholarshipAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': '50'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 100})},
     }
-    inlines = [EducationScholarshipInline, FieldScholarshipInline, LocationScholarshipInline]
+    inlines = [EducationScholarshipInline, LocationScholarshipInline]
     list_display = ['name', 'provider', 'deadline', 'max_amount',]
     model = Scholarship
     ordering = ('name', 'provider',)
@@ -331,8 +310,7 @@ admin.site.register(Degree, DegreeAdmin)
 admin.site.register(Disability, DisabilityAdmin)
 admin.site.register(EducationCategory, EducationCategoryAdmin)
 admin.site.register(EducationDetail, EducationDetailAdmin)
-admin.site.register(FieldCategory, FieldCategoryAdmin)
-admin.site.register(FieldDetail, FieldDetailAdmin)
+admin.site.register(Field, FieldAdmin)
 admin.site.register(Gender, GenderAdmin)
 admin.site.register(Heritage, HeritageAdmin)
 admin.site.register(Interest, InterestAdmin)

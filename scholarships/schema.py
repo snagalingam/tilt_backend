@@ -14,9 +14,7 @@ from scholarships.models import (
     EducationCategory,
     EducationDetail,
     EducationScholarship,
-    FieldCategory,
-    FieldDetail,
-    FieldScholarship,
+    Field,
     Gender,
     Heritage,
     Interest,
@@ -75,22 +73,10 @@ class ScholarshipEducationScholarshipType(DjangoObjectType):
         fields = ('id', 'education_category', 'education_detail', 'scholarship')
 
 
-class ScholarshipFieldCategoryType(DjangoObjectType):
+class ScholarshipFieldType(DjangoObjectType):
     class Meta:
-        model = FieldCategory
+        model = Field
         fields = ('id', 'category')
-
-
-class ScholarshipFieldDetailType(DjangoObjectType):
-    class Meta:
-        model = FieldDetail
-        fields = ('id', 'description')
-
-
-class ScholarshipFieldScholarshipType(DjangoObjectType):
-    class Meta:
-        model = FieldScholarship
-        fields = ('id', 'field_category', 'field_detail', 'scholarship')
 
 
 class ScholarshipGenderType(DjangoObjectType):

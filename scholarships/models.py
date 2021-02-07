@@ -113,6 +113,17 @@ class Disability(models.Model):
     def __str__(self):
         return self.category
 
+class Field(models.Model):
+    category = models.CharField(max_length=50, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'field'
+        verbose_name_plural = 'fields'
+
+    def __str__(self):
+        return self.category
 
 class Gender(models.Model):
     category = models.CharField(max_length=50, unique=True)
@@ -180,7 +191,7 @@ class Scholarship(models.Model):
     max_amount = models.PositiveIntegerField(blank=True, null=True)
     number_awards = models.PositiveSmallIntegerField(blank=True, null=True)
     renewable = models.BooleanField(default=False)
-    website = models.TextField(blank=True)
+    website = models.TextField()
 
     # requirements
     financial_need = models.BooleanField(default=False)
@@ -196,6 +207,7 @@ class Scholarship(models.Model):
     college = models.ManyToManyField(College, blank=True)
     degree = models.ManyToManyField(Degree, blank=True)
     disability = models.ManyToManyField(Disability, blank=True)
+    field = models.ManyToManyField(Field, blank=True)
     gender = models.ManyToManyField(Gender, blank=True)
     heritage = models.ManyToManyField(Heritage, blank=True)
     interest = models.ManyToManyField(Interest, blank=True)
@@ -221,8 +233,8 @@ class EducationCategory(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'education level'
-        verbose_name_plural = 'education levels'
+        verbose_name = 'education category'
+        verbose_name_plural = 'education categories'
 
     def __str__(self):
         return self.category
@@ -254,64 +266,14 @@ class EducationScholarship(models.Model):
     )
     education_detail = models.ForeignKey(
         EducationDetail,
-        default=DEFAULT_EDUCATION_DETAIL_ID,
+        blank=True,
+        null=True,
         on_delete=models.PROTECT
     )
 
     class Meta:
         verbose_name = 'education scholarship'
         verbose_name_plural = 'education scholarships'
-
-    def __str__(self):
-        return str(self.scholarship)
-
-
-class FieldCategory(models.Model):
-    category = models.CharField(max_length=50, unique=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'field category'
-        verbose_name_plural = 'field categories'
-
-    def __str__(self):
-        return self.category
-
-
-class FieldDetail(models.Model):
-    description = models.CharField(max_length=255, unique=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'field detail'
-        verbose_name_plural = 'field details'
-
-    def __str__(self):
-        return self.description
-
-
-class FieldScholarship(models.Model):
-    scholarship = models.ForeignKey(
-        Scholarship,
-        default=DEFAULT_SCHOLARSHIP_ID,
-        on_delete=models.CASCADE
-    )
-    field_category = models.ForeignKey(
-        FieldCategory,
-        default=DEFAULT_FIELD_CATEGORY_ID,
-        on_delete=models.PROTECT
-    )
-    field_detail = models.ForeignKey(
-        FieldDetail,
-        default=DEFAULT_FIELD_DETAIL_ID,
-        on_delete=models.PROTECT
-    )
-
-    class Meta:
-        verbose_name = 'field scholarship'
-        verbose_name_plural = 'field scholarships'
 
     def __str__(self):
         return str(self.scholarship)
@@ -343,7 +305,8 @@ class LocationScholarship(models.Model):
     )
     location_detail = models.ForeignKey(
         LocationDetail,
-        default=DEFAULT_LOCATION_DETAIL_ID,
+        blank=True,
+        null=True,
         on_delete=models.PROTECT
     )
 
