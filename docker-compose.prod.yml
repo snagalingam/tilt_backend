@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod
+    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
+    container_name: backend
+    depends_on:
+      - db
+    environment:
+      - REGION=us-east-2
+      - ENVIRONMENT=development
+      - DATABASE_HOST=db
+      - DATABASE_NAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_USER=postgres
+      - DEBUG=1
+      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
+    expose:
+      - 8000
+    volumes:
+      - static_volume:/home/app/staticfiles
+
+  db:
+    container_name: db
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    image: postgres:12
+    volumes:
+      - prod_postgres:/var/lib/postgresql/data/
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.prod
+    container_name: nginx
+    depends_on:
+      - backend
+      - db
+    image: nginx:mainline-alpine
+    ports:
+      - 4000:80
+    restart: always
+    volumes:
+      - static_volume:/home/app/staticfiles
+
+volumes:
+  prod_postgres:
+  static_volume:
