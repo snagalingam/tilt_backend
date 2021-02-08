@@ -395,7 +395,8 @@ class UpdateUser(graphene.Mutation):
                     icon = results.get("icon", "")
                     lat = results.get("geometry")["location"]["lat"]
                     lng = results.get("geometry")["location"]["lng"]
-                    place_phone_number = results.get("formatted_phone_number", "")
+                    place_phone_number = results.get(
+                        "formatted_phone_number", "")
                     place_name = results.get("name")
                     types = results.get("types", [])
                     url = results.get("url", "")
@@ -450,7 +451,7 @@ class UpdateUser(graphene.Mutation):
                 except ObjectDoesNotExist:
                     standard_value = Pronoun.objects.get(category="other")
                     pronoun_user = PronounUser(
-                        other_value=input,
+                        other_value=pronoun,
                         pronoun=standard_value,
                         user=user
                     )
@@ -605,7 +606,8 @@ class UpdatePassword(graphene.Mutation):
             else:
                 # password validation
                 try:
-                    password_validation.validate_password(new_password, user=user)
+                    password_validation.validate_password(
+                        new_password, user=user)
                 except ValidationError as e:
                     raise e
 
