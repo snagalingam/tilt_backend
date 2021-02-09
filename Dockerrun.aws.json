@@ -2,7 +2,7 @@
   "AWSEBDockerrunVersion": 2,
   "Authentication": {
     "bucket": "elasticbeanstalk-us-east-2-614818178581",
-    "key": "docker-config.json"
+    "key": ".dockercfg"
   },
   "containerDefinitions": [
     {
