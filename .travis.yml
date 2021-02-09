@@ -17,13 +17,12 @@ after_success:
 
 deploy:
   provider: elasticbeanstalk
-  region: "us-east-2"
-  app: "tilt-staging"
-  env: "Tiltstaging-env"
-  bucket_name: "elasticbeanstalk-us-east-2-614818178581"
-  bucket_path: "tilt-staging"
+  region: us-east-2
+  app: tilt-staging
+  env: Tiltstaging-env
+  bucket_name: elasticbeanstalk-us-east-2-614818178581
+  bucket_path: tilt-staging
   on:
     branch: feature/update-deployment
   access_key_id: $AWS_ACCESS_KEY
-  secret_access_key:
-    secure: $AWS_SECRET_KEY
+  secret_access_key: $AWS_SECRET_KEY
