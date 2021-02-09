@@ -9,8 +9,9 @@ eb_codebuild_settings:
 phases:
   build:
     commands:
-      -  docker-compose -f docker-compose.prod.yml up -d --build
+      - docker-compose -f docker-compose.prod.yml up -d --build
   post_build:
     commands:
       - docker-compose exec -T app python manage.py test
-      - docker-compose push
+      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
+      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
