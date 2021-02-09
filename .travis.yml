@@ -22,7 +22,7 @@ after_success:
   # install aws cli w/o sudo
   - pip install awscli
   #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-  - eval $(aws ecr get-login --no-include-email --region us-east-1)
+  - eval $(aws ecr get-login --no-include-email --region us-east-2)
   # take those images and push them to docker hub
   - docker tag app $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
   - docker tag nginx $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
