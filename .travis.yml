@@ -18,7 +18,7 @@ script:
 
 after_success:
   # install aws cli w/o sudo
-  - pip install --user awscli
+  - pip install awscli
   # put aws in the path
   - export PATH=$PATH:$HOME/.local/bin
   #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
