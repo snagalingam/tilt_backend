@@ -7,6 +7,9 @@ eb_codebuild_settings:
   Timeout: 10
 
 phases:
+  pre_build:
+    commands:
+      - $(aws ecr get-login --no-include-email --region us-east-2
   build:
     commands:
       - docker-compose -f docker-compose.prod.yml up -d --build
