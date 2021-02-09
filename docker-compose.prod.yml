@@ -1,12 +1,12 @@
 version: '3.7'
 
 services:
-  backend:
+  app:
     build:
       context: ./app
       dockerfile: Dockerfile.prod
     command: gunicorn tilt.wsgi -b 0.0.0.0:8000
-    container_name: backend
+    container_name: app
     depends_on:
       - db
     environment:
@@ -42,7 +42,7 @@ services:
       dockerfile: Dockerfile.prod
     container_name: nginx
     depends_on:
-      - backend
+      - app
       - db
     image: nginx:mainline-alpine
     ports:

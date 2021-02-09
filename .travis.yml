@@ -6,7 +6,7 @@ before_script:
   - docker-compose up -d --build
 
 script:
-  - docker-compose exec backend python manage.py test
+  - docker-compose exec app python manage.py test
 
 after_success:
   - docker build -t snagalingam/tilt-app ./app
@@ -16,3 +16,16 @@ after_success:
   # take those images and push them to docker hub
   - docker push snagalingam/tilt-app
   - docker push snagalingam/tilt-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: tilt
+  env: tilt-env
+  bucket_name: test
+  bucket_path: test
+  on:
+    branch: production
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
