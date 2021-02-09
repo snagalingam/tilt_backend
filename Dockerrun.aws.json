@@ -2,9 +2,9 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "app",
+      "name": "backend",
       "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest",
-      "hostname": "app",
+      "hostname": "backend",
       "essential": true,
       "memory": 128
     },
@@ -19,7 +19,7 @@
           "containerPort": 80
         }
       ],
-      "links": ["app"],
+      "links": ["backend"],
       "memory": 128
     }
   ]
