@@ -10,14 +10,19 @@ services:
     depends_on:
       - db
     environment:
-      - REGION=us-east-2
+      - AWS_BUCKET=financial-letters
+      - AWS_LAMBDA_FUNCTION=wait-for-textract
+      - AWS_REGION=us-east-2
       - ENVIRONMENT=development
+      - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
       - DATABASE_HOST=db
       - DATABASE_NAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_USER=postgres
       - DEBUG=1
-      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
+      - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
+      - TWILIO_PHONE_NUMBER=+15624721665
+      - SENDER_NAME=Tilt
     expose:
       - 8000
     volumes:
