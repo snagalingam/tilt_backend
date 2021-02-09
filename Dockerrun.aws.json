@@ -6,7 +6,7 @@
       "image": "snagalingam/tilt-app",
       "hostname": "app",
       "essential": true,
-      "memory": 512
+      "memory": 128
     },
     {
       "name": "nginx",
@@ -20,7 +20,7 @@
         }
       ],
       "links": ["app"],
-      "memory": 512
+      "memory": 128
     }
   ]
 }
