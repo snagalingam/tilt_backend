@@ -13,5 +13,6 @@ phases:
   post_build:
     commands:
       - docker-compose exec -T app python manage.py test
+      - $(aws ecr get-login --no-include-email --region us-east-2)
       - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
       - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
