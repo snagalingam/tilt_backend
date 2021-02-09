@@ -23,7 +23,7 @@ deploy:
   bucket_name: elasticbeanstalk-us-east-2-614818178581
   bucket_path: tilt-staging
   on:
-    branch: staging
+    branch: feature/update-deployment
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key:
     secure: $AWS_SECRET_KEY
