@@ -25,7 +25,7 @@ services:
       - SENDER_NAME=Tilt
     expose:
       - 8000
-    image: snagalingam/tilt-app
+    image: tilt-app
     volumes:
       - static_volume:/home/app/staticfiles
 
@@ -45,7 +45,7 @@ services:
     depends_on:
       - app
       - db
-    image: snagalingam/tilt-nginx
+    image: nginx
     ports:
       - 4000:80
     restart: always
