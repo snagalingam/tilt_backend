@@ -1,0 +1,26 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "app",
+      "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging",
+      "hostname": "app",
+      "essential": true,
+      "memory": 128
+    },
+    {
+      "name": "nginx",
+      "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["app"],
+      "memory": 128
+    }
+  ]
+}

@@ -9,7 +9,8 @@ eb_codebuild_settings:
 phases:
   build:
     commands:
-      - docker-compose -f docker-compose.prod.yml up -d --build
+      -  docker-compose -f docker-compose.prod.yml up -d --build
   post_build:
     commands:
       - docker-compose exec -T app python manage.py test
+      - docker-compose push

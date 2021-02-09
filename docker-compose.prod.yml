@@ -20,12 +20,13 @@ services:
       - DATABASE_PASSWORD=postgres
       - DATABASE_USER=postgres
       - DEBUG=1
+      - DOCKER_REGISTRY=614818178581.dkr.ecr.us-east-2.amazonaws.com
       - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
       - TWILIO_PHONE_NUMBER=+15624721665
       - SENDER_NAME=Tilt
     expose:
       - 8000
-    image: tilt-app
+    image: ${DOCKER_REGISTRY}/tilt-app-staging
     volumes:
       - static_volume:/home/app/staticfiles
 
@@ -45,7 +46,7 @@ services:
     depends_on:
       - app
       - db
-    image: nginx
+    image: ${DOCKER_REGISTRY}/tilt-app-nginx
     ports:
       - 4000:80
     restart: always
