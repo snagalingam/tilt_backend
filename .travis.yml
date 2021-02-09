@@ -24,8 +24,8 @@ after_success:
   #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
   - eval $(aws ecr get-login --no-include-email --region us-east-1)
   # take those images and push them to docker hub
-  - docker tag tilt-app-staging:latest $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
-  - docker tag tilt-nginx-staging:latest $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
+  - docker tag app $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
+  - docker tag nginx $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
   - docker push $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
   - docker push $AWS_ECR_ACCOUNT.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
 
