@@ -39,8 +39,6 @@ services:
       - 80:80
       - 443:443
     restart: always
-    stdin_open: true
-    tty: true
     volumes:
       - static_volume:/home/app/staticfiles
 

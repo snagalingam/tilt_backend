@@ -4,9 +4,9 @@ FROM nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
 # copy our config file
-COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-COPY certs/tiltstaging.crt /etc/nginx/certs/tiltstaging.crt
-COPY certs/tiltstaging.key /etc/nginx/certs/tiltstaging.key
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY certs/tiltstaging.crt /etc/nginx/ssl/tiltstaging.crt
+COPY certs/tiltstaging.key /etc/nginx/ssl/tiltstaging.key
 
 # Expose ports
 EXPOSE 80
