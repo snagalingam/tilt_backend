@@ -284,7 +284,7 @@ CSRF_TRUSTED_ORIGINS = [
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.amazonaws.com', '.elasticbeanstalk.com']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.amazonaws.com', '.elasticbeanstalk.com', '.tiltstaging.dev']
 
 # security for production
 if ENVIRONMENT == 'production':
