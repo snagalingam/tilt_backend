@@ -6,7 +6,6 @@ services:
       context: ./app
       dockerfile: Dockerfile.prod
     command: gunicorn tilt.wsgi -b 0.0.0.0:8000
-    container_name: app
     environment:
       - AWS_BUCKET=financial-letters
       - AWS_LAMBDA_FUNCTION=wait-for-textract
@@ -21,8 +20,6 @@ services:
       - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
       - TWILIO_PHONE_NUMBER=+15624721665
       - SENDER_NAME=Tilt
-    expose:
-      - 8000
     image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
     volumes:
       - static_volume:/home/app/staticfiles
@@ -30,11 +27,10 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile.prod
-    container_name: nginx
+      dockerfile: Dockerfile
     depends_on:
       - app
-    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
+    image: nginx
     ports:
       - 80:80
       - 443:443
