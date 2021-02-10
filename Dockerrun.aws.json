@@ -2,9 +2,15 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "static_volume",
+      "name": "app",
       "host": {
-        "sourcePath": "/home/app/staticfiles"
+        "sourcePath": "/var/app/current/app"
+      }
+    },
+    {
+      "name": "nginx-proxy-conf",
+      "host": {
+        "sourcePath": "/var/app/current/conf.d"
       }
     }
   ],
@@ -19,14 +25,19 @@
         {
           "sourceVolume": "awseb-logs-app",
           "containerPath": "/var/log/containers/app"
+        },
+        {
+          "sourceVolume": "app",
+          "containerPath": "/home/app/",
+          "readOnly": false
         }
       ]
     },
     {
       "name": "nginx",
+      "image": "nginx",
       "essential": true,
       "hostname": "nginx",
-      "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest",
       "links": ["app"],
       "portMappings": [
         {
@@ -37,8 +48,18 @@
       "memory": 128,
       "mountPoints": [
         {
+          "sourceVolume": "app",
+          "containerPath": "/home/app/",
+          "readOnly": true
+        },
+        {
           "sourceVolume": "awseb-logs-nginx",
-          "containerPath": "/var/log/containers/nginx"
+          "containerPath": "/var/log/nginx"
+        },
+        {
+          "sourceVolume": "nginx-proxy-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
         }
       ]
     }
