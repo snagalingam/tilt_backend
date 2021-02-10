@@ -7,18 +7,16 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     container_name: app
-    depends_on:
-      - db
     environment:
       - AWS_BUCKET=financial-letters
       - AWS_LAMBDA_FUNCTION=wait-for-textract
       - AWS_REGION=us-east-2
       - ENVIRONMENT=development
       - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
-      - DATABASE_HOST=db
-      - DATABASE_NAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_USER=postgres
+      - DATABASE_HOST=tilt-staging-postgres-test.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
+      - DATABASE_NAME=tiltstaging
+      - DATABASE_PASSWORD=tiltstaging
+      - DATABASE_USER=tiltstaging
       - DEBUG=1
       - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
       - TWILIO_PHONE_NUMBER=+15624721665
@@ -29,14 +27,6 @@ services:
     volumes:
       - static_volume:/home/app/staticfiles
 
-  db:
-    container_name: db
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    image: postgres:12
-    volumes:
-      - prod_postgres:/var/lib/postgresql/data/
-
   nginx:
     build:
       context: ./nginx
@@ -44,7 +34,6 @@ services:
     container_name: nginx
     depends_on:
       - app
-      - db
     image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
     ports:
       - 4000:80
@@ -53,5 +42,4 @@ services:
       - static_volume:/home/app/staticfiles
 
 volumes:
-  prod_postgres:
   static_volume:
