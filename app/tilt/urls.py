@@ -22,5 +22,5 @@ if ENVIRONMENT == 'production' and TILT_APP == 'production':
     urlpatterns = [
         path("teamtilt", admin.site.urls),
         path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=False))),
-        re_path(".*", TemplateView.as_view(template_name="index.html"))
+        re_path(".*", blank_response, name="blank")
     ]

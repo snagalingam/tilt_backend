@@ -36,10 +36,14 @@ services:
       - app
     image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
     ports:
-      - 4000:80
+      - 80:80
+      - 443:443
     restart: always
+    tty: true
     volumes:
       - static_volume:/home/app/staticfiles
+      - /nginx/certs:/etc/nginx/certs
+
 
 volumes:
   static_volume:
