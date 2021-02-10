@@ -42,8 +42,6 @@ services:
     tty: true
     volumes:
       - static_volume:/home/app/staticfiles
-      - /nginx/certs:/etc/nginx/certs
-
 
 volumes:
   static_volume:
