@@ -1,26 +1,46 @@
 {
   "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "static_volume",
+      "host": {
+        "sourcePath": "/home/app/staticfiles"
+      }
+    }
+  ],
   "containerDefinitions": [
     {
       "name": "app",
+      "essential": true,
       "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest",
       "hostname": "app",
-      "essential": true,
-      "memory": 128
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-app",
+          "containerPath": "/var/log/containers/app"
+        }
+      ]
     },
     {
       "name": "nginx",
-      "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest",
-      "hostname": "nginx",
       "essential": true,
+      "hostname": "nginx",
+      "image": "614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest",
+      "links": ["app"],
       "portMappings": [
         {
           "hostPort": 80,
           "containerPort": 80
         }
       ],
-      "links": ["app"],
-      "memory": 128
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-nginx",
+          "containerPath": "/var/log/containers/nginx"
+        }
+      ]
     }
   ]
 }
