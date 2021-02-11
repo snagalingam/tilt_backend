@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - app
-    image: nginx
+    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
     ports:
       - 80:80
       - 443:443

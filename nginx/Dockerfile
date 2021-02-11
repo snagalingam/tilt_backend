@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:alpine
 
 # delete the initial config file
 RUN rm /etc/nginx/conf.d/default.conf
