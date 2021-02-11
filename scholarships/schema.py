@@ -29,7 +29,7 @@ from scholarships.models import (
 
 
 ################################################
-### Standard Model Definitions
+# Standard Model Definitions
 ################################################
 class ScholarshipAssociationType(DjangoObjectType):
     class Meta:
@@ -70,7 +70,8 @@ class ScholarshipEducationDetailType(DjangoObjectType):
 class ScholarshipEducationScholarshipType(DjangoObjectType):
     class Meta:
         model = EducationScholarship
-        fields = ('id', 'education_category', 'education_detail', 'scholarship')
+        fields = ('id', 'education_category',
+                  'education_detail', 'scholarship')
 
 
 class ScholarshipFieldType(DjangoObjectType):
@@ -157,11 +158,13 @@ class ScholarshipStateType(DjangoObjectType):
 
 
 ################################################
-### Query
+# Query
 ################################################
 class Query(graphene.ObjectType):
-    scholarship_providers = graphene.List(ScholarshipProviderType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(ScholarshipStatusType, limit=graphene.Int())
+    scholarship_providers = graphene.List(
+        ScholarshipProviderType, limit=graphene.Int())
+    scholarship_statuses = graphene.List(
+        ScholarshipStatusType, limit=graphene.Int())
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
 
     # providers
@@ -267,7 +270,6 @@ class Query(graphene.ObjectType):
     ):
         qs = Scholarship.objects.all()
         user = info.context.user
-        income_quintile = user.income_quintile
 
         if name:
             qs = qs.filter(Q(name__icontains=name) | Q(
@@ -287,7 +289,7 @@ class Query(graphene.ObjectType):
         if max_amount:
             qs = qs.filter(max_amount__range=(max_amount[0], max_amount[1]))
 
-        qs = qs.order_by('-date_added')
+        qs = qs.order_by('-created')
         count = qs.count()
         pages = math.ceil(count / per_page)
         start = (page - 1) * per_page
@@ -302,7 +304,7 @@ class Query(graphene.ObjectType):
 
 
 ################################################
-### Mutations
+# Mutations
 ################################################
 class CreateOrUpdateScholarshipStatus(graphene.Mutation):
     class Arguments:
@@ -316,7 +318,8 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
         scholarship = Scholarship.objects.get(pk=scholarship_id)
 
         try:
-            scholarship_status = ScholarshipStatus.objects.get(user=user, scholarship=scholarship)
+            scholarship_status = ScholarshipStatus.objects.get(
+                user=user, scholarship=scholarship)
         except:
             scholarship_status = None
 
@@ -328,6 +331,7 @@ class CreateOrUpdateScholarshipStatus(graphene.Mutation):
         scholarship_status.save()
 
         return CreateOrUpdateScholarshipStatus(scholarship_status=scholarship_status)
+
 
 class Mutation(graphene.ObjectType):
     create_or_update_scholarship_status = CreateOrUpdateScholarshipStatus.Field()
