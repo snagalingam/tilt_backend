@@ -135,35 +135,7 @@ class ScholarshipProviderType(DjangoObjectType):
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
-        fields = (
-            # scholarship details
-            'id',
-            'name',
-            'deadline',
-            'description',
-            'max_amount',
-            'number_awards',
-            'provider',
-            'renewable',
-            'website',
-            # requirements
-            'association',
-            'citizenship',
-            'college',
-            'degree',
-            'disability',
-            'financial_need',
-            'first_generation',
-            'gender',
-            'heritage',
-            'interest',
-            'military',
-            'min_act',
-            'min_gpa',
-            'min_sat',
-            'max_gpa',
-            'writing'
-        )
+        fields = "__all__"
 
 
 class ScholarshipPaginationType(graphene.ObjectType):
@@ -175,7 +147,7 @@ class ScholarshipPaginationType(graphene.ObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
-        fields = ('id', 'user', 'scholarship', 'status')
+        fields = "__all__"
 
 
 class ScholarshipStateType(DjangoObjectType):
@@ -281,6 +253,48 @@ class Query(graphene.ObjectType):
     def resolve_scholarships_by_fields(self, info, **kwargs):
         qs = Scholarship.objects.filter(**kwargs)
         return qs
+
+    def resolve_scholarships_by_user_criteria(
+        self,
+        info,
+        name=None,
+        start_deadline=None,
+        end_deadline=None,
+        status=None,
+        max_amount=None,
+        per_page=None,
+        page=None
+    ):
+        qs = Scholarship.objects.all()
+        user = info.context.user
+        income_quintile = user.income_quintile
+
+        if name:
+            qs = qs.filter(Q(name__icontains=name) | Q(
+                provider__organization__icontains=name))
+        if start_deadline is not None and end_deadline is not None:
+            qs = qs.filter(deadline__range=(start_deadline, end_deadline))
+
+        if start_deadline is not None and end_deadline is None:
+            qs = qs.filter(deadline=start_deadline)
+
+        if status:
+            if (status == "no status"):
+                qs = qs.filter(scholarshipstatus__status__isnull=True)
+            else:
+                qs = qs.filter(scholarshipstatus__status=status)
+
+        if max_amount:
+            qs = qs.filter(max_amount__range=(max_amount[0], max_amount[1]))
+
+        qs = qs.order_by('-date_added')
+        count = qs.count()
+        pages = math.ceil(count / per_page)
+        start = (page - 1) * per_page
+        end = start + per_page
+
+        search_results = qs[start:end]
+        return ScholarshipPaginationType(search_results=search_results, pages=pages, count=count)
 
     def resolve_scholarship_statuses_by_fields(self, info, **kwargs):
         qs = ScholarshipStatus.objects.filter(**kwargs)
