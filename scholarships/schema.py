@@ -135,35 +135,7 @@ class ScholarshipProviderType(DjangoObjectType):
 class ScholarshipType(DjangoObjectType):
     class Meta:
         model = Scholarship
-        fields = (
-            # scholarship details
-            'id',
-            'name',
-            'deadline',
-            'description',
-            'max_amount',
-            'number_awards',
-            'provider',
-            'renewable',
-            'website',
-            # requirements
-            'association',
-            'citizenship',
-            'college',
-            'degree',
-            'disability',
-            'financial_need',
-            'first_generation',
-            'gender',
-            'heritage',
-            'interest',
-            'military',
-            'min_act',
-            'min_gpa',
-            'min_sat',
-            'max_gpa',
-            'writing'
-        )
+        fields = "__all__"
 
 
 class ScholarshipPaginationType(graphene.ObjectType):
@@ -175,7 +147,7 @@ class ScholarshipPaginationType(graphene.ObjectType):
 class ScholarshipStatusType(DjangoObjectType):
     class Meta:
         model = ScholarshipStatus
-        fields = ('id', 'user', 'scholarship', 'status')
+        fields = "__all__"
 
 
 class ScholarshipStateType(DjangoObjectType):
