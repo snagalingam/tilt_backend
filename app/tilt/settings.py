@@ -299,9 +299,7 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
-    ALLOWED_HOSTS = ['api.tiltstaging.dev',
-                     'api.tiltaccess.com',
-                     '.amazonaws.com',]
+    ALLOWED_HOSTS = ['api.tiltstaging.dev', 'api.tiltaccess.com', '.amazonaws.com', '.elasticbeanstalk.com']
 
 
 ################################################################################
