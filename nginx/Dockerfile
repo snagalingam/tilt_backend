@@ -4,7 +4,7 @@ FROM nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
 # copy our config file
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf
 
 # copy certificate files
 WORKDIR /etc/nginx/ssl/
