@@ -221,6 +221,7 @@ class Query(graphene.ObjectType):
         status=graphene.String()
     )
     scholarship_max_amount = graphene.Int()
+    scholarship_by_id = graphene.Field(ScholarshipType, id=graphene.Int())
 
     # scholarship status
     scholarship_statuses_by_fields = graphene.List(
@@ -256,6 +257,10 @@ class Query(graphene.ObjectType):
     def resolve_scholarships_by_fields(self, info, **kwargs):
         qs = Scholarship.objects.filter(**kwargs)
         return qs
+
+    def resolve_scholarship_by_id(self, info, id):
+        scholarship = Scholarship.objects.get(pk=id)
+        return scholarship
 
     def resolve_scholarships_by_user_criteria(
         self,
