@@ -27,6 +27,10 @@ RUN SECRET_KEY=somethingsupersecret \
 # Chown all the files to the app user
 RUN chown -R app:app $APP_HOME
 
+# chmod all database files
+RUN chmod 600 $APP_HOME/.postgresql/staging/*
+RUN chmod 600 $APP_HOME/.postgresql/production/*
+
 # Change to the app user
 USER app
 
