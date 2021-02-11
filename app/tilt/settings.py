@@ -1,4 +1,3 @@
-import dj_database_url
 import os
 
 
@@ -9,6 +8,7 @@ APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 DEBUG = int(os.environ.get('DEBUG', default=0))
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+TILT_APP = os.environ.get('TILT_APP', default='staging')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
@@ -21,6 +21,13 @@ AWS_LAMBDA_FUNCTION = os.environ.get('AWS_LAMBDA_FUNCTION', default='none')
 AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
 AWS_REGION = os.environ.get('AWS_REGION', default='none')
 GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
+
+################################################################################
+# Database certificate files
+################################################################################
+CA_CERT_PATH = f".postgresql/{TILT_APP}/ca-cert.pem"
+CLIENT_CERT_PATH = f".postgresql/{TILT_APP}/client-cert.pem"
+CLIENT_KEY_PATH = f".postgresql/{TILT_APP}/client-key.pem"
 
 ################################################################################
 # Google Variables
@@ -132,11 +139,12 @@ if ENVIRONMENT == 'production':
             'PORT': 5432,
             'OPTIONS':{
                 'sslmode':'verify-ca',
+                'sslcert': CLIENT_CERT_PATH,
+                'sslkey': CLIENT_KEY_PATH,
+                'sslrootcert': CA_CERT_PATH
             }
         }
     }
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
 
 ################################################################################
 # Password Validation
@@ -299,7 +307,7 @@ if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
-    ALLOWED_HOSTS = ['api.tiltstaging.dev', 'api.tiltaccess.com', '.amazonaws.com', '.elasticbeanstalk.com']
+    ALLOWED_HOSTS = ['localhost', '.tiltstaging.dev', '.tiltaccess.com', '.amazonaws.com', '.elasticbeanstalk.com']
 
 
 ################################################################################

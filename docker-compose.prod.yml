@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   app:
+    container_name: app
     build:
       context: ./app
       dockerfile: Dockerfile.prod
@@ -20,11 +21,15 @@ services:
       - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
       - TWILIO_PHONE_NUMBER=+15624721665
       - SENDER_NAME=Tilt
+      - TILT_APP=staging
+    expose:
+      - 8000
     image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
     volumes:
       - static_volume:/home/app/staticfiles
 
   nginx:
+    container_name: nginx
     build:
       context: ./nginx
       dockerfile: Dockerfile
