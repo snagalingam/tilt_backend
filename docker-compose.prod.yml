@@ -6,7 +6,6 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.prod
-    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
     environment:
       - AWS_BUCKET=financial-letters
       - AWS_LAMBDA_FUNCTION=wait-for-textract
