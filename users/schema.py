@@ -386,7 +386,7 @@ class UpdateEmail(graphene.Mutation):
                 )
                 user.save()
                 success = True
-                return UpdateEmail(success=success)
+                return UpdateEmail(success=success, user=user)
 
         # raise exception if not authenticated
         raise Exception("Incorrect credentials")
