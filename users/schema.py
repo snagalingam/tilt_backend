@@ -269,6 +269,177 @@ class LogoutUser(graphene.Mutation):
         return LogoutUser(is_logged_out=True)
 
 
+class ResetPassword(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+        password_repeat = graphene.String()
+        token = graphene.String(required=True)
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(self, info, password, password_repeat, token):
+        email = jwt.decode(token,
+                           os.environ.get('SECRET_KEY'),
+                           algorithms=['HS256'])['email']
+        user = User.objects.get(email=email)
+
+        if user is not None and password == password_repeat:
+            user.set_password(password)
+            user.save()
+            return ResetPassword(success=True)
+        elif password != password_repeat:
+            raise Exception("Passwords do not match")
+        raise Exception("Password did not reset")
+
+
+class SendForgotEmail(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(self, info, email):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            user = None
+
+        if user is not None:
+            send_reset_password(user.email, user.first_name)
+            return SendForgotEmail(success=True)
+        raise Exception("Email not found")
+
+
+class SendSubscriptionVerification(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(self, info, email):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+        send_subscription_verification(email)
+        return SendSubscriptionVerification(success=True)
+
+
+class SendVerificationEmail(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(self, info, email):
+        lowercase_email = email.lower()
+        email = BaseUserManager.normalize_email(lowercase_email)
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            user = None
+
+        if user is not None:
+            send_verification(user.email, user.first_name)
+            return SendVerificationEmail(success=True)
+        raise Exception("Email not found")
+
+
+class UpdateEmail(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(
+        self,
+        info,
+        email
+    ):
+
+        user = info.context.user
+
+        if user.is_authenticated:
+            if email and email != user.email:
+                old_email = user.email
+                lowercase_email = email.lower()
+                new_email = BaseUserManager.normalize_email(lowercase_email)
+                user.email = new_email
+
+                if user.preferred_name is not None:
+                    name = user.preferred_name
+                else:
+                    name = user.first_name
+
+                send_email_changed(
+                    old_email=old_email,
+                    new_email=new_email,
+                    name=name
+                )
+                user.save()
+                success = True
+                return UpdateEmail(success=success)
+
+        # raise exception if not authenticated
+        raise Exception("Incorrect credentials")
+
+
+class UpdatePassword(graphene.Mutation):
+    class Arguments:
+        new_password = graphene.String()
+        password = graphene.String()
+
+    user = graphene.Field(UserType)
+    success = graphene.Boolean()
+
+    def mutate(
+        self,
+        info,
+        new_password,
+        password,
+    ):
+
+        user = info.context.user
+
+        if user.is_authenticated:
+            # check if the password is the same
+            if password == new_password:
+                raise Exception("The passwords are the same")
+
+            else:
+                # password validation
+                try:
+                    password_validation.validate_password(new_password, user=user)
+                except ValidationError as e:
+                    raise e
+
+                if user.preferred_name is not None:
+                    name = user.preferred_name
+                else:
+                    name = user.first_name
+
+                user.set_password(new_password)
+                user.save()
+                success = True
+                send_password_changed(email=user.email, name=name)
+
+                return UpdatePassword(success=success)
+
+        # raise exception if not authenticated
+        raise Exception("Incorrect credentials")
+
+################################################################################
+# Updates the logged in user. Pass the entire User object
+# expect firstname, lastname, preferred_contact_method, source, user_category
+################################################################################
 class UpdateUser(graphene.Mutation):
     class Arguments:
         act_score = graphene.Int()
@@ -471,7 +642,7 @@ class UpdateUser(graphene.Mutation):
                     pass
 
             # preferred contact method
-            # only update first name if passing data
+            # only update preferred contact method if passing data
             if preferred_contact_method is not None:
                 if preferred_contact_method != user.preferred_contact_method:
                     user.preferred_contact_method = preferred_contact_method
@@ -558,6 +729,7 @@ class UpdateUser(graphene.Mutation):
                     source_user.save()
 
             # user category
+            # only update source if passing data
             if user_category is not None:
                 if user_category != user.user_category:
                     user.user_category = UserCategory.objects.get(category=user_category)
@@ -571,173 +743,41 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(user=user)
 
 
-class ResetPassword(graphene.Mutation):
+################################################################################
+# Updates the logged in user. Pass specific fields to be updated
+################################################################################
+class UpdateUserFields(graphene.Mutation):
     class Arguments:
-        email = graphene.String()
-        password = graphene.String()
-        password_repeat = graphene.String()
-        token = graphene.String(required=True)
+        phone_number = graphene.String()
+        preferred_contact_method = graphene.String()
 
     user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    def mutate(self, info, password, password_repeat, token):
-        email = jwt.decode(token,
-                           os.environ.get('SECRET_KEY'),
-                           algorithms=['HS256'])['email']
-        user = User.objects.get(email=email)
-
-        if user is not None and password == password_repeat:
-            user.set_password(password)
-            user.save()
-            return ResetPassword(success=True)
-        elif password != password_repeat:
-            raise Exception("Passwords do not match")
-        raise Exception("Password did not reset")
-
-
-class SendForgotEmail(graphene.Mutation):
-    class Arguments:
-        email = graphene.String()
-
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    def mutate(self, info, email):
-        lowercase_email = email.lower()
-        email = BaseUserManager.normalize_email(lowercase_email)
-
-        try:
-            user = User.objects.get(email=email)
-        except:
-            user = None
-
-        if user is not None:
-            send_reset_password(user.email, user.first_name)
-            return SendForgotEmail(success=True)
-        raise Exception("Email not found")
-
-
-class SendSubscriptionVerification(graphene.Mutation):
-    class Arguments:
-        email = graphene.String()
-
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    def mutate(self, info, email):
-        lowercase_email = email.lower()
-        email = BaseUserManager.normalize_email(lowercase_email)
-        send_subscription_verification(email)
-        return SendSubscriptionVerification(success=True)
-
-
-class SendVerificationEmail(graphene.Mutation):
-    class Arguments:
-        email = graphene.String()
-
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    def mutate(self, info, email):
-        lowercase_email = email.lower()
-        email = BaseUserManager.normalize_email(lowercase_email)
-
-        try:
-            user = User.objects.get(email=email)
-        except:
-            user = None
-
-        if user is not None:
-            send_verification(user.email, user.first_name)
-            return SendVerificationEmail(success=True)
-        raise Exception("Email not found")
-
-
-class UpdateEmail(graphene.Mutation):
-    class Arguments:
-        email = graphene.String()
-
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
 
     def mutate(
         self,
         info,
-        email
+        phone_number=None,
+        preferred_contact_method=None
     ):
 
         user = info.context.user
 
-        if user.is_authenticated:
-            if email and email != user.email:
-                old_email = user.email
-                lowercase_email = email.lower()
-                new_email = BaseUserManager.normalize_email(lowercase_email)
-                user.email = new_email
+        if not user.is_authenticated:
+            raise Exception("User is not logged in")
 
-                if user.preferred_name is not None:
-                    name = user.preferred_name
-                else:
-                    name = user.first_name
+        else:
+            # phone number
+            if phone_number is not None:
+                user.phone_number = re.sub("[^0-9]", "", phone_number)
 
-                send_email_changed(
-                    old_email=old_email,
-                    new_email=new_email,
-                    name=name
-                )
-                user.save()
-                success = True
-                return UpdateEmail(success=success)
-
-        # raise exception if not authenticated
-        raise Exception("Incorrect credentials")
+            # preferred contact method
+            if preferred_contact_method is not None:
+                if preferred_contact_method != user.preferred_contact_method:
+                    user.preferred_contact_method = preferred_contact_method
 
 
-class UpdatePassword(graphene.Mutation):
-    class Arguments:
-        new_password = graphene.String()
-        password = graphene.String()
-
-    user = graphene.Field(UserType)
-    success = graphene.Boolean()
-
-    def mutate(
-        self,
-        info,
-        new_password,
-        password,
-    ):
-
-        user = info.context.user
-
-        if user.is_authenticated:
-            # check if the password is the same
-            if password == new_password:
-                raise Exception("The passwords are the same")
-
-            else:
-                # password validation
-                try:
-                    password_validation.validate_password(new_password, user=user)
-                except ValidationError as e:
-                    raise e
-
-                if user.preferred_name is not None:
-                    name = user.preferred_name
-                else:
-                    name = user.first_name
-
-                user.set_password(new_password)
-                user.save()
-                success = True
-                send_password_changed(email=user.email, name=name)
-
-                return UpdatePassword(success=success)
-
-        # raise exception if not authenticated
-        raise Exception("Incorrect credentials")
-
+        user.save()
+        return UpdateUser(user=user)
 
 class VerifyEmail(graphene.Mutation):
     class Arguments:
@@ -773,7 +813,8 @@ class Mutation(graphene.ObjectType):
     send_subscription_verification = SendSubscriptionVerification.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
-    update_password = UpdatePassword.Field()
     update_email = UpdateEmail.Field()
+    update_password = UpdatePassword.Field()
     update_user = UpdateUser.Field()
+    update_user_fields = UpdateUserFields.Field()
     verify_email = VerifyEmail.Field()
