@@ -111,13 +111,13 @@ def compare_tables_and_text(tables, text):
 
     if len(text_money_list) > 0:
         data = {
-            "automated_review_succeeded": False,
+            "comparison_succeeded": False,
             "comparison_missing_amounts" : text_money_list,
             "comparison_missing_num": len(text_money_list)
         }
     else:
         data = {
-            "automated_review_succeeded": True,
+            "comparison_succeeded": True,
             "comparison_missing_amounts" : None,
             "comparison_missing_num": 0
         }

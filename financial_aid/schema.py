@@ -123,6 +123,7 @@ class SendDocuments(graphene.Mutation):
             )
             document_result.save()
 
+            college_status.status = "accepted"
             college_status.award_status = "uploaded"
             college_status.save()
 
@@ -147,16 +148,16 @@ class ParseDocuments(graphene.Mutation):
         documents = graphene.List(graphene.String)
 
     def mutate(self, info, documents):
-        sendgrid_documents = []
-
         # before running any analysis, delete aid data for this college status
         first_document = documents[0]
         first_document_result = DocumentResult.objects.get(document_name=first_document)
-
         aid_raw_data = AidRawData.objects.filter(college_status=first_document_result.college_status)
         if aid_raw_data.exists():
             aid_raw_data.delete()
             AidFinalData.objects.filter(college_status=first_document_result.college_status).delete()
+
+        # then go through the documents
+        sendgrid_documents = []
 
         for document in documents:
             errors = []
@@ -205,10 +206,14 @@ class ParseDocuments(graphene.Mutation):
                 document_result.comparison_missing_amounts = comparison["comparison_missing_amounts"]
                 document_result.comparison_missing_num = comparison["comparison_missing_num"]
 
-                if document_result.comparison_missing_num > 0:
+                if comparison["comparison_succeeded"] is False:
                     errors.append({
                         "type": "Comparison between text and tables failed",
-                        "message": f"There are {document_result.comparison_missing_num} more dollar amounts in text"
+                        "message": f"""
+                            There are {document_result.comparison_missing_num}
+                            more dollar amounts in text. Those amounts include
+                            {document_result.comarison_missing_amounts}.
+                        """
                     })
 
                 aid_raw_data, parse_errors = parse_data(tables=tables)
@@ -230,7 +235,7 @@ class ParseDocuments(graphene.Mutation):
                         )
 
 
-                if not errors or comparison["automated_review_succeeded"]:
+                if not errors:
                     document_result.automated_review_succeeded = True
 
                     # automatically change award status to reviewed
@@ -238,14 +243,13 @@ class ParseDocuments(graphene.Mutation):
 
                 else:
                     document_result.automated_review_succeeded = False
-                    if errors is not None:
-                        for error in errors:
-                            print(error)
-                            DocumentError.objects.create(
-                                document_result=document_result,
-                                type=error["type"],
-                                message=error["message"]
-                            )
+                    for error in errors:
+                        print(error)
+                        DocumentError.objects.create(
+                            document_result=document_result,
+                            type=error["type"],
+                            message=error["message"]
+                        )
 
             # create report_data for sendgrid
             sendgrid_document = {
@@ -259,6 +263,11 @@ class ParseDocuments(graphene.Mutation):
             }
             sendgrid_documents.append(sendgrid_document)
             document_result.save()
+
+        # check data after all documents have been processed
+        final_aid_raw_data = AidRawData.objects.filter(college_status=college_status)
+        aid_categories = AidCategory.objects.all()
+        check_errors = check_aid_raw_data(aid_data=final_aid_raw_data, aid_categories=aid_categories)
 
         send_report_email(
             documents=sendgrid_documents,

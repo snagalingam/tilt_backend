@@ -5,7 +5,7 @@
   "fields": {
     "name": "tuition",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "direct",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -16,7 +16,7 @@
   "fields": {
     "name": "fees",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "direct",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -27,7 +27,7 @@
   "fields": {
     "name": "room",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "direct",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -49,7 +49,7 @@
   "fields": {
     "name": "meals",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "direct",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -60,7 +60,7 @@
   "fields": {
     "name": "books",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -71,7 +71,7 @@
   "fields": {
     "name": "personal expenses",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -82,7 +82,7 @@
   "fields": {
     "name": "transportation",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -93,7 +93,7 @@
   "fields": {
     "name": "health insurance",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -104,7 +104,7 @@
   "fields": {
     "name": "off campus housing",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -115,7 +115,7 @@
   "fields": {
     "name": "stafford loan fees",
     "primary": "cost",
-    "secondary": "",
+    "secondary": "indirect",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -146,9 +146,9 @@
   "model": "financial_aid.AidCategory",
   "pk": 14,
   "fields": {
-    "name": "total cost",
-    "primary": "total",
-    "secondary": "cost",
+    "name": "tuition & fees",
+    "primary": "cost",
+    "secondary": "tuition & fees",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -324,22 +324,11 @@
 "fields": {
   "name": "standard personal expenses",
   "primary": "cost",
-  "secondary": "",
+  "secondary": "standard personal expenses",
   "tertiary": "",
   "created": "2020-12-10T22:15:15.934695-07:00",
   "updated": "2020-12-10T22:15:15.934695-07:00"
 }
-},{
-  "model": "financial_aid.AidCategory",
-  "pk": 31,
-  "fields": {
-    "name": "tuition & fees",
-    "primary": "cost",
-    "secondary": "tuition & fees",
-    "tertiary": "",
-    "created": "2020-12-10T22:15:15.934695-07:00",
-    "updated": "2020-12-10T22:15:15.934695-07:00"
-  }
 },{
   "model": "financial_aid.AidCategory",
   "pk": 32,
