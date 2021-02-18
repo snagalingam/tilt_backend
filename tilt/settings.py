@@ -22,10 +22,12 @@ AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
 AWS_REGION = os.environ.get('AWS_REGION', default='none')
 GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
 
+
 ################################################################################
 # Google Variables
 ################################################################################
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', default='none')
+
 
 ################################################################################
 # Sendgrid Variables
@@ -34,6 +36,13 @@ FROM_EMAIL = os.environ.get('FROM_EMAIL', default='hello@tiltaccess.com')
 SENDER_NAME = os.environ.get('SENDER_NAME', default='Tilt')
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDGRID_DOMAIN = os.environ.get('SENDGRID_DOMAIN', default='http://localhost:3000')
+
+
+################################################################################
+# Sendgrid Variables
+################################################################################
+SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
+SLACK_SIGNING_SECRET = os.environ.get('SLACK_SIGNING_SECRET')
 
 
 ################################################################################
