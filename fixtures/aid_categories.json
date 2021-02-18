@@ -278,10 +278,10 @@
   "model": "financial_aid.AidCategory",
   "pk": 26,
   "fields": {
-    "name": "total aid",
+    "name": "total aid defined by school",
     "primary": "total",
     "secondary": "aid",
-    "tertiary": "",
+    "tertiary": "unknown",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
@@ -302,7 +302,7 @@
   "fields": {
     "name": "net price after grants",
     "primary": "net price",
-    "secondary": "scholarships",
+    "secondary": "grants",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -313,7 +313,7 @@
   "fields": {
     "name": "net price after grants and loans",
     "primary": "net price",
-    "secondary": "scholarships and loans",
+    "secondary": "grants and loans",
     "tertiary": "",
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
@@ -328,10 +328,10 @@
   "tertiary": "",
   "created": "2020-12-10T22:15:15.934695-07:00",
   "updated": "2020-12-10T22:15:15.934695-07:00"
-}
+  }
 },{
   "model": "financial_aid.AidCategory",
-  "pk": 32,
+  "pk": 31,
   "fields": {
     "name": "room & board",
     "primary": "cost",
@@ -340,4 +340,49 @@
     "created": "2020-12-10T22:15:15.934695-07:00",
     "updated": "2020-12-10T22:15:15.934695-07:00"
   }
-}]
+},{
+  "model": "financial_aid.AidCategory",
+  "pk": 32,
+  "fields": {
+    "name": "total direct and indirect costs",
+    "primary": "total",
+    "secondary": "cost",
+    "tertiary": "direct and indirect",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "financial_aid.AidCategory",
+  "pk": 33,
+  "fields": {
+    "name": "total grants and loans",
+    "primary": "total",
+    "secondary": "aid",
+    "tertiary": "grants and loans",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+},{
+  "model": "financial_aid.AidCategory",
+  "pk": 34,
+  "fields": {
+    "name": "total grants and loans and work study",
+    "primary": "total",
+    "secondary": "aid",
+    "tertiary": "grants and loan and work study",
+    "created": "2020-12-10T22:15:15.934695-07:00",
+    "updated": "2020-12-10T22:15:15.934695-07:00"
+  }
+  },{
+    "model": "financial_aid.AidCategory",
+    "pk": 35,
+    "fields": {
+      "name": "net price after grants and loans and work study",
+      "primary": "net price",
+      "secondary": "grants and loan and work study",
+      "tertiary": "",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
+  }
+]
