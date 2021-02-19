@@ -357,7 +357,6 @@ class UpdateEmail(graphene.Mutation):
         email = graphene.String()
 
     user = graphene.Field(UserType)
-    success = graphene.Boolean()
 
     def mutate(
         self,
@@ -385,8 +384,7 @@ class UpdateEmail(graphene.Mutation):
                     name=name
                 )
                 user.save()
-                success = True
-                return UpdateEmail(success=success, user=user)
+                return UpdateEmail(user=user)
 
         # raise exception if not authenticated
         raise Exception("Incorrect credentials")
@@ -777,7 +775,7 @@ class UpdateUserFields(graphene.Mutation):
 
 
         user.save()
-        return UpdateUser(user=user)
+        return UpdateUserFields(user=user)
 
 class VerifyEmail(graphene.Mutation):
     class Arguments:
