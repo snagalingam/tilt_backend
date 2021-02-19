@@ -148,96 +148,90 @@ def check_aid_raw_data(aid_data, aid_categories):
 
     ################ total costs
     # total direct cost - check that total adds up to what we pulled
-    if total_direct_cost_count = 1:
+    if total_direct_cost_count == 1:
         total_direct_cost = aid_data.get(aid_category=total_direct_cost_category)
 
         if total_direct_cost_amount != total_direct_cost.amount:
             errors.append({
                 "type": f"Direct cost data points don't equal total direct cost pulled from award letter",
-                "message": f"""
-                    Direct cost data points add up to {total_direct_cost_amount} while row with
-                    total direct cost amount is {total_direct_cost.amount}
-                """
+                "message":
+                    f"Direct cost data points add up to {total_direct_cost_amount} while row with " \
+                    f"total direct cost amount is {total_direct_cost.amount}"
             })
 
     # total indirect cost - check that total adds up to what we pulled
-    if total_indirect_cost_count = 1:
+    if total_indirect_cost_count == 1:
         total_indirect_cost = aid_data.get(aid_category=total_indirect_cost_category)
 
         if total_indirect_cost_amount != total_indirect_cost.amount:
             errors.append({
                 "type": f"Direct cost data points don't equal total direct cost pulled from award letter",
-                "message": f"""
-                    Direct cost data points add up to {total_direct_cost_amount} while row with
-                    total direct cost amount is {total_direct_cost.amount}
-                """
+                "message":
+                    f"Direct cost data points add up to {total_direct_cost_amount} while row with " \
+                    f"total direct cost amount is {total_direct_cost.amount}"
             })
 
     # total cost defined by school - check that total adds up to what we pulled
-    if total_cost_defined_by_school_count = 1:
+    if total_cost_defined_by_school_count == 1:
 
-        if total_cost_defined_by_school.amount == total_direct_cost_amount and total_direct_cost_count = 0:
+        if total_cost_defined_by_school.amount == total_direct_cost_amount and total_direct_cost_count == 0:
             total_cost_defined_by_school.category = total_direct_cost_category
             total_cost_defined_by_school.save()
 
-        elif total_cost_defined_by_school.amount == total_indirect_cost_amount and total_indirect_cost_count = 0:
+        elif total_cost_defined_by_school.amount == total_indirect_cost_amount and total_indirect_cost_count == 0:
             total_cost_defined_by_school.category = total_indirect_cost_category
             total_cost_defined_by_school.save()
 
-        elif total_cost_defined_by_school.amount == total_direct_and_indirect_costs_amount
-            and total_direct_and_indirect_costs_count = 0:
+        elif total_cost_defined_by_school.amount == total_direct_and_indirect_costs_amount and total_direct_and_indirect_costs_count == 0:
             total_cost_defined_by_school.category = total_direct_and_indirect_costs_category
             total_cost_defined_by_school.save()
 
         else:
             errors.append({
-                "type": f"Total cost defined by school didn't add up to direct and/or indirect costs",
-                "message": f"""
-                    Total costs defined by school was {total_cost_defined_by_school.amount} but
-                    total direct cost was {total_direct_cost_amount} and total indirect cost was
-                    {total_indirect_cost_amount}. Total of both was {total_direct_and_indirect_costs_amount}.
-                """
+                "type": f"Total cost defined by school didn't add up to direct and\or indirect costs",
+                "message":
+                    f"Total costs defined by school was {total_cost_defined_by_school.amount} but " \
+                    f"total direct cost was {total_direct_cost_amount} and total indirect cost was " \
+                    f"{total_indirect_cost_amount}. Total of both was {total_direct_and_indirect_costs_amount}."
             })
 
     ################ total grants
-    if total_grant_count = 1:
+    if total_grant_count == 1:
         total_grant = aid_data.get(aid_category=total_grant_category)
 
         if total_grant_amount != total_grant.amount:
             errors.append({
                 "type": f"Grant data points don't equal total grant amount pulled from award letter",
-                "message": f"""
-                    Grant data points add up to {total_grant_amount} while row with
-                    total grant amount is {total_grant.amount}
-                """
+                "message":
+                    f"Grant data points add up to {total_grant_amount} while row with " \
+                    f"total grant amount is {total_grant.amount}."
             })
 
     ################ total loans
-    if total_loan_count = 1:
+    if total_loan_count == 1:
         total_loan = aid_data.get(aid_category=total_loan_category)
 
         if total_loan_amount != total_loan.amount:
             errors.append({
                 "type": f"Loan data points don't equal total loan amount pulled from award letter",
-                "message": f"""
-                    Loan data points add up to {total_loan_amount} while row with
-                    total loan amount is {total_loan.amount}
-                """
+                "message":
+                    f"Loan data points add up to {total_loan_amount} while row with " \
+                    f"total loan amount is {total_loan.amount}"
             })
 
     ################ total aid
-    if total_aid_defined_by_school_count = 1:
+    if total_aid_defined_by_school_count == 1:
         total_aid = aid_data.get(aid_category=total_aid_defined_by_school_category)
 
-        if total_aid.amount == total_grant_amount and total_grant_count = 0:
+        if total_aid.amount == total_grant_amount and total_grant_count == 0:
             total_aid.category = total_grant_category
             total_aid.save()
 
-        elif total_aid.amount == total_loan_amount and total_loan_count = 0:
+        elif total_aid.amount == total_loan_amount and total_loan_count == 0:
             total_aid.category = total_loan_category
             total_aid.save()
 
-        elif total_aid.amount == total_ and total_loan_count = 0:
+        elif total_aid.amount == total_ and total_loan_count == 0:
             total_aid.category = total_loan_category
             total_aid.save()
 
@@ -252,11 +246,10 @@ def check_aid_raw_data(aid_data, aid_categories):
         else:
             errors.append({
                 "type": f"Total aid defined by school didn't add up to grants, loans, and work study",
-                "message": f"""
-                    Total aid defined by school was {total_aid.amount} but
-                    total grants was {total_grant_amount} and total loans was
-                    {total_loan_amount} and work study was {total_work_study_amount}.
-                """
+                "message":
+                    f"Total aid defined by school was {total_aid.amount} but " \
+                    f"total grants was {total_grant_amount} and total loans was " \
+                    f"{total_loan_amount} and work study was {total_work_study_amount}."
             })
 
     ################ check that net price categories only have one row

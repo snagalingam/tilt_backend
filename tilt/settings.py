@@ -43,7 +43,10 @@ SENDGRID_DOMAIN = os.environ.get('SENDGRID_DOMAIN', default='http://localhost:30
 ################################################################################
 SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
 SLACK_SIGNING_SECRET = os.environ.get('SLACK_SIGNING_SECRET')
-
+if ENVIRONMENT == 'development':
+    SLACK_AWARD_CHANNEL = '#award-letters-staging'
+elif ENVIRONMENT == 'production':
+    SLACK_AWARD_CHANNEL = '#award-letters-production'
 
 ################################################################################
 # Twilio Variables
@@ -296,7 +299,7 @@ if ENVIRONMENT == 'development':
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.amazonaws.com',]
 
 # security for production
-if ENVIRONMENT == 'production':
+elif ENVIRONMENT == 'production':
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True

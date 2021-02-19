@@ -1,6 +1,7 @@
 import graphene
 
 from colleges.models import CollegeStatus
+from django.conf import settings
 from financial_aid.models import AidCategory, AidFinalData, AidRawData, DocumentError, DocumentResult
 from graphene_django import DjangoObjectType
 from services.aws.lambda_handler import lambda_handler
@@ -10,11 +11,17 @@ from services.aws.textract import (
     start_table_analysis,
     start_text_analysis
 )
+from services.helpers.check_aid_raw_data import check_aid_raw_data
 from services.helpers.parse_aid_letters import (
     compare_tables_and_text,
     parse_data
 )
 from services.sendgrid.send_email import send_notification_email, send_report_email
+from services.slack.send_message import (
+    send_award_letter_uploaded_notification,
+    send_award_letter_reviewed_notification
+)
+
 
 ################################################################################
 # Standard Model Definitions
@@ -134,9 +141,20 @@ class SendDocuments(graphene.Mutation):
         # triggers lambda function to wait for results
         lambda_handler(
             documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
             table_job_ids=table_job_ids,
             text_job_ids=text_job_ids
         )
+
+        # triggers slack channel message
+        send_award_letter_uploaded_notification(
+            channel=settings.SLACK_AWARD_CHANNEL,
+            documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
+            table_job_ids=table_job_ids,
+            text_job_ids=text_job_ids
+        )
+
 
         return SendDocuments(success=True)
 
@@ -209,11 +227,10 @@ class ParseDocuments(graphene.Mutation):
                 if comparison["comparison_succeeded"] is False:
                     errors.append({
                         "type": "Comparison between text and tables failed",
-                        "message": f"""
-                            There are {document_result.comparison_missing_num}
-                            more dollar amounts in text. Those amounts include
-                            {document_result.comarison_missing_amounts}.
-                        """
+                        "message":
+                            f"There are {document_result.comparison_missing_num} " \
+                            "more dollar amounts in text. Those amounts include " \
+                            f"{document_result.comparison_missing_amounts}."
                     })
 
                 aid_raw_data, parse_errors = parse_data(tables=tables)
@@ -244,7 +261,6 @@ class ParseDocuments(graphene.Mutation):
                 else:
                     document_result.automated_review_succeeded = False
                     for error in errors:
-                        print(error)
                         DocumentError.objects.create(
                             document_result=document_result,
                             type=error["type"],
@@ -267,12 +283,15 @@ class ParseDocuments(graphene.Mutation):
         # check data after all documents have been processed
         final_aid_raw_data = AidRawData.objects.filter(college_status=college_status)
         aid_categories = AidCategory.objects.all()
-        check_errors = check_aid_raw_data(aid_data=final_aid_raw_data, aid_categories=aid_categories)
+        final_check_errors = check_aid_raw_data(aid_data=final_aid_raw_data, aid_categories=aid_categories)
 
-        send_report_email(
-            documents=sendgrid_documents,
+        # triggers Slack channel message
+        send_award_letter_reviewed_notification(
+            channel=settings.SLACK_AWARD_CHANNEL,
             college_name=college.name,
             college_status_id=college_status.pk,
+            documents=sendgrid_documents,
+            final_check_errors=final_check_errors,
             user_email=user.email
         )
 
