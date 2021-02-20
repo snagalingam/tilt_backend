@@ -5,38 +5,27 @@ services:
     container_name: backend
     build:
       context: .
-      Dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.prod
     environment:
       - AWS_BUCKET=financial-letters
-      - AWS_LAMBDA_FUNCTION=TiltGetAnalyzedData
+      - AWS_LAMBDA_FUNCTION=wait-for-textract
       - AWS_REGION=us-east-2
       - ENVIRONMENT=development
       - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
-      - DATABASE_HOST=db
-      - DATABASE_NAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_USER=postgres
+      - DATABASE_HOST=tilt-staging-postgres-test.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
+      - DATABASE_NAME=tiltstaging
+      - DATABASE_PASSWORD=tiltstaging
+      - DATABASE_USER=tiltstaging
       - DEBUG=1
-      - SECRET_KEY=((5qzn4=1s57*63r48lqkvz%60d#&_@b4w5f05$$6)lu35r(^lm
-    ports:
-      - 8000:8000
+      - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
+      - TWILIO_PHONE_NUMBER=+15624721665
+      - SENDER_NAME=Tilt
+      - TILT_APP=staging
+    expose:
+      - 8000
+    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
     volumes:
-      - .:/app
-    depends_on:
-      - db
+      - static_volume:/home/app/staticfiles
 
-  db:
-    container_name: db
-    image: postgres:11
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT=5050
-    ports:
-      - 5050:5050
+volumes:
+  static_volume:
