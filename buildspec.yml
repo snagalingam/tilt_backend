@@ -15,7 +15,5 @@ phases:
       - docker-compose -f docker-compose.prod.yml up -d --build
   post_build:
     commands:
-      - docker-compose exec -T app python manage.py test
-      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
-      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-nginx-staging:latest
-      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-certbot-staging:latest
+      - docker-compose exec -T backend python manage.py test
+      - docker push 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-staging:latest
