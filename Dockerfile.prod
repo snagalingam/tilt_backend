@@ -37,5 +37,8 @@ USER app
 # Run entrypoint.sh that verifies that Postgres is healthy before applying the migrations
 ENTRYPOINT ["sh", "entrypoint.prod.sh"]
 
+# expose port
+EXPOSE $PORT
+
 # Run command to start container
 CMD ["gunicorn", "tilt.wsgi", "-b", "0.0.0.0:8000"]
