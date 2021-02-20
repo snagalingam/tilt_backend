@@ -23,7 +23,7 @@ services:
       - TILT_APP=staging
     expose:
       - 8000
-    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-app-staging:latest
+    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-staging:latest
     volumes:
       - static_volume:/home/app/staticfiles
 
