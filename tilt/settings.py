@@ -315,6 +315,7 @@ if ENVIRONMENT == 'production':
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
     ALLOWED_HOSTS = [
+        '127.0.0.1',
         'localhost',
         '.amazonaws.com',
         '.elasticbeanstalk.com'
