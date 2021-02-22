@@ -3,8 +3,10 @@ version: '3.7'
 services:
   backend:
     container_name: backend
-    build: .
-    command: gunicorn tilt.wsgi -b 0.0.0.0:8000
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
       - AWS_BUCKET=financial-letters
       - AWS_LAMBDA_FUNCTION=TiltGetAnalyzedData
@@ -29,6 +31,8 @@ services:
     image: postgres:11
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - dev_postgres:/var/lib/postgresql/data/
 
   pgadmin:
     image: dpage/pgadmin4
@@ -39,3 +43,6 @@ services:
       - PGADMIN_LISTEN_PORT=5050
     ports:
       - 5050:5050
+
+volumes:
+  dev_postgres:

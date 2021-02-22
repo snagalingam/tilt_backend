@@ -109,8 +109,6 @@ class ScholarshipTests(TestCase):
         disability1 = Disability.objects.create(category="handicap")
         education_category1 = EducationCategory.objects.create(category="college student")
         education_detail1 = EducationDetail.objects.create(description="computer science class")
-        field_category1 = FieldCategory.objects.create(category="healthcare")
-        field_detail1 = FieldDetail.objects.create(description="nurse")
         gender1 = Gender.objects.create(category="man")
         heritage1 = Heritage.objects.create(category="asian")
         interest1 = Interest.objects.create(category="bicycling")
@@ -147,11 +145,6 @@ class ScholarshipTests(TestCase):
             education_detail=education_detail1,
             scholarship=scholarship1
         )
-        field_scholarship1 = FieldScholarship.objects.create(
-            field_category=field_category1,
-            field_detail=field_detail1,
-            scholarship=scholarship1
-        )
         location_scholarship1 = LocationScholarship.objects.create(
             location_detail=location_detail1,
             scholarship=scholarship1,
@@ -174,8 +167,6 @@ class ScholarshipTests(TestCase):
         disability = Disability.objects.get(category="handicap")
         education_category = EducationCategory.objects.get(category="college student")
         education_detail = EducationDetail.objects.get(description="computer science class")
-        field_category = FieldCategory.objects.get(category="healthcare")
-        field_detail = FieldDetail.objects.get(description="nurse")
         gender = Gender.objects.get(category="man")
         heritage = Heritage.objects.get(category="asian")
         interest = Interest.objects.get(category="bicycling")

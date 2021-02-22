@@ -1,5 +1,5 @@
-from financial_aid.models import AidCategory, AidData, DocumentData, DocumentResult
-from colleges.models import College, CollegeStatus
+from financial_aid.models import AidCategory, AidRawData, DocumentResult
+from colleges.models import Ipeds, College, CollegeStatus
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
@@ -60,6 +60,20 @@ class AidTests(TestCase):
             secondary="grant",
             tertiary="federal"
         )
+        ipeds = Ipeds.objects.create(
+            college=college
+        )
+
+        # categories to ensure the signals work
+        fees_category = AidCategory.objects.create(name="fees")
+        meals_category = AidCategory.objects.create(name="meals")
+        personal_expenses_category = AidCategory.objects.create(name="standard personal expenses")
+        room_category = AidCategory.objects.create(name="room")
+        room_board_category = AidCategory.objects.create(name="room & board")
+        tuition_category = AidCategory.objects.create(name="tuition")
+        tuition_fees_category = AidCategory.objects.create(name="tuition & fees")
+        work_study_category = AidCategory.objects.create(name="work study")
+
 
     def test_create_aid_category(self):
         aid_category = AidCategory.objects.create(
@@ -76,28 +90,26 @@ class AidTests(TestCase):
         self.assertIsNotNone(aid_category.created)
         self.assertIsNotNone(aid_category.updated)
 
-    def test_create_aid_data(self):
+    def test_create_aid_raw_data(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
         college_status = CollegeStatus.objects.get(user=user)
         aid_category = AidCategory.objects.get(name="pell")
-        aid_data = AidData.objects.create(
+        aid_raw_data = AidRawData.objects.create(
             college_status=college_status,
             aid_category=aid_category,
             name="Pell Grant",
             amount=4000,
-            row_text ="Pell Grant, $2,000, $2,000, $4,000",
-            table=2,
-            row_index=2,
-            col_index=3
+            row_text=["Pell Grant", "$2,000, $2,000, $4,000"],
+            table_num=2,
+            row_num=2
         )
 
-        self.assertEqual(aid_data.college_status, college_status)
-        self.assertEqual(aid_data.aid_category, aid_category)
-        self.assertEqual(aid_data.name, "Pell Grant")
-        self.assertEqual(aid_data.amount, 4000)
-        self.assertEqual(aid_data.row_text, "Pell Grant, $2,000, $2,000, $4,000")
-        self.assertEqual(aid_data.table, 2)
-        self.assertEqual(aid_data.row_index, 2)
-        self.assertEqual(aid_data.col_index, 3)
-        self.assertIsNotNone(aid_data.created)
-        self.assertIsNotNone(aid_data.updated)
+        self.assertEqual(aid_raw_data.college_status, college_status)
+        self.assertEqual(aid_raw_data.aid_category, aid_category)
+        self.assertEqual(aid_raw_data.name, "Pell Grant")
+        self.assertEqual(aid_raw_data.amount, 4000)
+        self.assertEqual(aid_raw_data.row_text,["Pell Grant", "$2,000, $2,000, $4,000"])
+        self.assertEqual(aid_raw_data.table_num, 2)
+        self.assertEqual(aid_raw_data.row_num, 2)
+        self.assertIsNotNone(aid_raw_data.created)
+        self.assertIsNotNone(aid_raw_data.updated)
