@@ -1,0 +1,6 @@
+build:
+  docker:
+    web: Dockerfile.dev
+
+run:
+  web: PYTHONPATH="$PWD/" gunicorn tilt.wsgi

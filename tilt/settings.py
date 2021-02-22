@@ -138,10 +138,10 @@ if ENVIRONMENT == 'production':
             'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': 5432,
             'OPTIONS':{
-                'sslmode':'verify-ca',
-                'sslcert': CLIENT_CERT_PATH,
-                'sslkey': CLIENT_KEY_PATH,
-                'sslrootcert': CA_CERT_PATH
+                'sslmode':'verify-ca'
+                # 'sslcert': CLIENT_CERT_PATH,
+                # 'sslkey': CLIENT_KEY_PATH,
+                # 'sslrootcert': CA_CERT_PATH
             }
         }
     }

@@ -35,7 +35,7 @@ RUN chmod 600 $APP_HOME/.postgresql/production/*
 USER app
 
 # Run entrypoint.sh that verifies that Postgres is healthy before applying the migrations
-ENTRYPOINT ["sh", "entrypoint.prod.sh"]
+ENTRYPOINT ["sh", "entrypoint.sh"]
 
 # expose port
 EXPOSE $PORT
