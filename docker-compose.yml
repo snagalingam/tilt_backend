@@ -5,7 +5,7 @@ services:
     container_name: backend
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - AWS_BUCKET=financial-letters
