@@ -45,7 +45,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
     except:
         fees = None
 
-    # use raw data if that exists
+    # use data from award letter if that exists
     if tuition is not None:
         tuition_fees_amount = tuition.amount
 
@@ -90,7 +90,8 @@ def calculate_aid_summary(sender, instance, **kwargs):
                 aid_category=tuition_fees_category,
                 amount=tuition_fees_amount,
                 college_status=college_status,
-                name="tuition & fees"
+
+                name="Tuition & Fees"
             )
 
     ################ room and board
@@ -108,9 +109,9 @@ def calculate_aid_summary(sender, instance, **kwargs):
     except:
         meals = None
 
-    # use raw data if that exists
+    # use data from award letter if that exists
     if room is not None:
-        room_meals_name = "room & board"
+        room_meals_name = "Room & Board"
         room_meals_amount = room.amount
 
         if meals is not None:
@@ -120,17 +121,17 @@ def calculate_aid_summary(sender, instance, **kwargs):
         if college_status.residency == "offcampus not with family":
             if ipeds.room_off_campus_not_with_family is not None:
                 room_meals_amount = ipeds.room_off_campus_not_with_family
-                room_meals_name = "off-campus not with family room & board"
+                room_meals_name = "Off-campus not with Family Room & Board"
 
         elif college_status.residency == "offcampus with family":
             room_meals_amount = 0
-            room_meals_name = "off campus with family room & board"
+            room_meals_name = "Off-campus with Family Room & Board"
 
         # assume on campus unless otherwise stated
         else:
             if ipeds.room_on_campus is not None:
                 room_meals_amount = ipeds.room_on_campus
-                room_meals_name = "on campus room & board"
+                room_meals_name = "On-Campus Room & Board"
 
     if room_meals_amount is not None:
         # update it if it already exists
@@ -172,7 +173,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
             aid_category=personal_expenses_category,
             amount=5000,
             college_status=college_status,
-            name="standard personal expenses"
+            name="Standard Personal Expenses"
         )
 
     # add 5,000 for indirect costs

@@ -1,6 +1,7 @@
 import graphene
 
 from colleges.models import CollegeStatus
+from django.conf import settings
 from financial_aid.models import AidCategory, AidFinalData, AidRawData, DocumentError, DocumentResult
 from graphene_django import DjangoObjectType
 from services.aws.lambda_handler import lambda_handler
@@ -10,11 +11,17 @@ from services.aws.textract import (
     start_table_analysis,
     start_text_analysis
 )
+from services.helpers.check_aid_raw_data import check_aid_raw_data
 from services.helpers.parse_aid_letters import (
     compare_tables_and_text,
     parse_data
 )
 from services.sendgrid.send_email import send_notification_email, send_report_email
+from services.slack.send_message import (
+    send_award_letter_uploaded_notification,
+    send_award_letter_reviewed_notification
+)
+
 
 ################################################################################
 # Standard Model Definitions
@@ -123,6 +130,7 @@ class SendDocuments(graphene.Mutation):
             )
             document_result.save()
 
+            college_status.status = "accepted"
             college_status.award_status = "uploaded"
             college_status.save()
 
@@ -133,9 +141,20 @@ class SendDocuments(graphene.Mutation):
         # triggers lambda function to wait for results
         lambda_handler(
             documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
             table_job_ids=table_job_ids,
             text_job_ids=text_job_ids
         )
+
+        # triggers slack channel message
+        send_award_letter_uploaded_notification(
+            channel=settings.SLACK_AWARD_CHANNEL,
+            documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
+            table_job_ids=table_job_ids,
+            text_job_ids=text_job_ids
+        )
+
 
         return SendDocuments(success=True)
 
@@ -147,16 +166,16 @@ class ParseDocuments(graphene.Mutation):
         documents = graphene.List(graphene.String)
 
     def mutate(self, info, documents):
-        sendgrid_documents = []
-
         # before running any analysis, delete aid data for this college status
         first_document = documents[0]
         first_document_result = DocumentResult.objects.get(document_name=first_document)
-
         aid_raw_data = AidRawData.objects.filter(college_status=first_document_result.college_status)
         if aid_raw_data.exists():
             aid_raw_data.delete()
             AidFinalData.objects.filter(college_status=first_document_result.college_status).delete()
+
+        # then go through the documents
+        sendgrid_documents = []
 
         for document in documents:
             errors = []
@@ -205,10 +224,13 @@ class ParseDocuments(graphene.Mutation):
                 document_result.comparison_missing_amounts = comparison["comparison_missing_amounts"]
                 document_result.comparison_missing_num = comparison["comparison_missing_num"]
 
-                if document_result.comparison_missing_num > 0:
+                if comparison["comparison_succeeded"] is False:
                     errors.append({
                         "type": "Comparison between text and tables failed",
-                        "message": f"There are {document_result.comparison_missing_num} more dollar amounts in text"
+                        "message":
+                            f"There are {document_result.comparison_missing_num} " \
+                            "more dollar amounts in text. Those amounts include " \
+                            f"{document_result.comparison_missing_amounts}."
                     })
 
                 aid_raw_data, parse_errors = parse_data(tables=tables)
@@ -230,7 +252,7 @@ class ParseDocuments(graphene.Mutation):
                         )
 
 
-                if not errors or comparison["automated_review_succeeded"]:
+                if not errors:
                     document_result.automated_review_succeeded = True
 
                     # automatically change award status to reviewed
@@ -238,14 +260,12 @@ class ParseDocuments(graphene.Mutation):
 
                 else:
                     document_result.automated_review_succeeded = False
-                    if errors is not None:
-                        for error in errors:
-                            print(error)
-                            DocumentError.objects.create(
-                                document_result=document_result,
-                                type=error["type"],
-                                message=error["message"]
-                            )
+                    for error in errors:
+                        DocumentError.objects.create(
+                            document_result=document_result,
+                            type=error["type"],
+                            message=error["message"]
+                        )
 
             # create report_data for sendgrid
             sendgrid_document = {
@@ -260,10 +280,18 @@ class ParseDocuments(graphene.Mutation):
             sendgrid_documents.append(sendgrid_document)
             document_result.save()
 
-        send_report_email(
-            documents=sendgrid_documents,
+        # check data after all documents have been processed
+        final_aid_raw_data = AidRawData.objects.filter(college_status=college_status)
+        aid_categories = AidCategory.objects.all()
+        final_check_errors = check_aid_raw_data(aid_data=final_aid_raw_data, aid_categories=aid_categories)
+
+        # triggers Slack channel message
+        send_award_letter_reviewed_notification(
+            channel=settings.SLACK_AWARD_CHANNEL,
             college_name=college.name,
             college_status_id=college_status.pk,
+            documents=sendgrid_documents,
+            final_check_errors=final_check_errors,
             user_email=user.email
         )
 

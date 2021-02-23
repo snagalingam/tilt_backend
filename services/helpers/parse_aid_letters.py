@@ -15,17 +15,19 @@ TOTAL_VALUES = {
     # total indirect costs
     "total indirect cost": "total indirect cost",
     # total aid (grants and loans?)
-    "total financial aid": "total aid",
-    "total aid": "total aid",
-    "aid year total": "total aid",
+    "total financial aid": "total aid defined by school",
+    "total aid": "total aid defined by school",
+    "aid year total": "total aid defined by school",
     # net price
     "out of pocket": "net price defined by school",
     # total grants
     "total scholarship": "total grants",
     "total grant": "total grants",
     # total loans
-    "total student loan": "total loans",
     "total federal loan": "total loans",
+    "total federal student loan": "total loans",
+    "total student loan": "total loans",
+    "total loan options": "total loans",
     # net price after grants
     "estimated cost to you after scholarhip": "net price after grants",
     # net price after grants and loans
@@ -38,6 +40,7 @@ FIRST_LOOK_VALUES = {
     "tuition": "tuition",
     # room
     "room": "room",
+    "housing": "room",
     # pell grant
     "pell grant": "pell",
     # unsubsidized loan
@@ -62,6 +65,7 @@ SECOND_LOOK_VALUES = {
     "books": "books",
     # personal expenses
     "personal expense": "personal expenses",
+    "miscellaneous costs": "personal expenses",
     # subsidized loan
     "subsidized": "subsidized",
     "direct sub": "subsidized",
@@ -74,6 +78,8 @@ SECOND_LOOK_VALUES = {
     "award": "other grant",
     # other loans
     "loan": "other loan",
+    # transportation
+    "transportation": "transportation"
 }
 
 
@@ -111,13 +117,13 @@ def compare_tables_and_text(tables, text):
 
     if len(text_money_list) > 0:
         data = {
-            "automated_review_succeeded": False,
+            "comparison_succeeded": False,
             "comparison_missing_amounts" : text_money_list,
             "comparison_missing_num": len(text_money_list)
         }
     else:
         data = {
-            "automated_review_succeeded": True,
+            "comparison_succeeded": True,
             "comparison_missing_amounts" : None,
             "comparison_missing_num": 0
         }
