@@ -12,17 +12,18 @@ services:
       - AWS_REGION=us-east-2
       - ENVIRONMENT=development
       - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
-      - DATABASE_HOST=tilt-staging-postgres-test.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
-      - DATABASE_NAME=tiltstaging
-      - DATABASE_PASSWORD=tiltstaging
-      - DATABASE_USER=tiltstaging
+      - DATABASE_HOST=18.191.201.186
+      - DATABASE_NAME=tilt
+      - DATABASE_PASSWORD=6hK3&ABsYZ8S6Z
+      - DATABASE_URL=postgresql://tilt:6hK3&ABsYZ8S6Z@18.191.201.186:5432/tilt?sslmode=verify-ca&sslrootcert=.postgresql/staging/ca-cert.pem&sslcert=.postgresql/staging/client-cert.pem&sslkey=.postgresql/staging/client-key.pem
+      - DATABASE_USER=tilt
       - DEBUG=1
       - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
       - TWILIO_PHONE_NUMBER=+15624721665
       - SENDER_NAME=Tilt
       - TILT_APP=staging
-    expose:
-      - 8000
+    ports:
+      - 8000:8000
     image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-staging:latest
     volumes:
       - static_volume:/home/app/staticfiles
