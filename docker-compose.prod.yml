@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - AWS_BUCKET=financial-letters
+      - AWS_LAMBDA_FUNCTION=wait-for-textract
+      - AWS_REGION=us-east-2
+      - ENVIRONMENT=development
+      - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
+      - DATABASE_HOST=tilt-staging-postgres-test.co1g8hkhkrwp.us-east-2.rds.amazonaws.com
+      - DATABASE_NAME=tiltstaging
+      - DATABASE_PASSWORD=tiltstaging
+      - DATABASE_USER=tiltstaging
+      - DEBUG=1
+      - SECRET_KEY=rUDX9ep7!&@YszbBaREjM2zAXqydPmvCz%Z5Hh4xBAdu3!V
+      - TWILIO_PHONE_NUMBER=+15624721665
+      - SENDER_NAME=Tilt
+      - TILT_APP=staging
+    expose:
+      - 8000
+    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-staging:latest
+    volumes:
+      - static_volume:/home/app/staticfiles
+
+volumes:
+  static_volume:

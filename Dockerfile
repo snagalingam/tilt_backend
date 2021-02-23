@@ -6,18 +6,18 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set working directory
-WORKDIR /app
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
 
 # Install Python dependencies
-COPY Pipfile Pipfile.lock /app/
+COPY Pipfile Pipfile.lock $APP_HOME/
 RUN pip install pipenv && pipenv install --system
 
 # Add the rest of the code
-COPY . /app/
+COPY . $APP_HOME/
 
-# SECRET_KEY is only included here to avoid raising an error when generating static files.
-# Be sure to add a real SECRET_KEY config variable in deployment.
-RUN SECRET_KEY=somethingsupersecret \
-  python3 manage.py collectstatic --noinput
+# Run entrypoint.sh that verifies that Postgres is healthy before applying the migrations
+ENTRYPOINT ["sh", "entrypoint.sh"]
 
+# expose port
 EXPOSE $PORT

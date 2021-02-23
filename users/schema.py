@@ -269,231 +269,6 @@ class LogoutUser(graphene.Mutation):
         return LogoutUser(is_logged_out=True)
 
 
-class UpdateUser(graphene.Mutation):
-    class Arguments:
-        act_score = graphene.Int()
-        delete_school = graphene.Boolean()
-        efc = graphene.Int()
-        email = graphene.String()
-        ethnicity = graphene.List(graphene.String)
-        first_name = graphene.String()
-        gpa = graphene.Float()
-        high_school_grad_year = graphene.Int()
-        income = graphene.String()
-        last_name = graphene.String()
-        phone_number = graphene.String()
-        place_id = graphene.String()
-        place_name = graphene.String()
-        preferred_contact_method = graphene.String()
-        preferred_name = graphene.String()
-        pronoun = graphene.String()
-        sat_math = graphene.Int()
-        sat_verbal = graphene.Int()
-        source = graphene.List(graphene.String)
-        user_category = graphene.String()
-
-    user = graphene.Field(UserType)
-
-    def mutate(
-        self,
-        info,
-        act_score=None,
-        delete_school=None,
-        efc=None,
-        email=None,
-        ethnicity=None,
-        first_name=None,
-        gpa=None,
-        high_school_grad_year=None,
-        income=None,
-        last_name=None,
-        phone_number=None,
-        place_id=None,
-        place_name=None,
-        preferred_contact_method=None,
-        preferred_name=None,
-        pronoun=None,
-        sat_math=None,
-        sat_verbal=None,
-        source=None,
-        user_category=None
-    ):
-
-        user = info.context.user
-
-        if not user.is_authenticated:
-            raise Exception("User is not logged in")
-
-        else:
-            if act_score is not None:
-                user.act_score = act_score
-
-            if delete_school is True:
-                user.organization.clear()
-
-            if efc is not None:
-                user.efc = efc
-
-            if email and email != user.email:
-                old_email = user.email
-                lowercase_email = email.lower()
-                new_email = BaseUserManager.normalize_email(lowercase_email)
-                user.email = new_email
-                send_email_changed(old_email, new_email, user.first_name)
-
-            if ethnicity is not None:
-                user.ethnicityuser_set.all().delete()
-
-                for input in ethnicity:
-                    try:
-                        standard_value = Ethnicity.objects.get(category=input)
-                        ethnicity_user = EthnicityUser(
-                            ethnicity=standard_value,
-                            user=user
-                        )
-
-                    except ObjectDoesNotExist:
-                        standard_value = Ethnicity.objects.get(
-                            category="other")
-                        ethnicity_user = EthnicityUser(
-                            ethnicity=standard_value,
-                            other_value=input,
-                            user=user
-                        )
-
-                    ethnicity_user.save()
-
-            if first_name and first_name != user.first_name:
-                user.first_name = first_name
-
-            if gpa is not None:
-                user.gpa = gpa
-
-            if high_school_grad_year is not None:
-                user.high_school_grad_year = high_school_grad_year
-
-            if income is not None:
-                user.income = Income.objects.get(category=income)
-
-            if last_name and last_name != user.last_name:
-                user.last_name = last_name
-
-            if phone_number is not None:
-                user.phone_number = re.sub("[^0-9]", "", phone_number)
-
-            if place_id is not None:
-                try:
-                    organization = Organization.objects.get(place_id=place_id)
-                    user.organization.clear()
-                    user.organization.add(organization)
-                except:
-                    data = search_place_id(place_id=place_id)
-                    results = data.get("result")
-
-                    address = results.get("formatted_address", "")
-                    business_status = results.get("business_status", "")
-                    icon = results.get("icon", "")
-                    lat = results.get("geometry")["location"]["lat"]
-                    lng = results.get("geometry")["location"]["lng"]
-                    place_phone_number = results.get(
-                        "formatted_phone_number", "")
-                    place_name = results.get("name")
-                    types = results.get("types", [])
-                    url = results.get("url", "")
-                    website = results.get("website", "")
-
-                    organization = Organization(
-                        address=address,
-                        business_status=business_status,
-                        icon=icon,
-                        lat=lat,
-                        lng=lng,
-                        name=place_name,
-                        phone_number=place_phone_number,
-                        place_id=place_id,
-                        types=types,
-                        url=url,
-                        website=website
-                    )
-
-                    organization.save()
-                    user.organization.clear()
-                    user.organization.add(organization)
-
-            # only look at place name if place_id is None
-            if place_name is not None and place_id is None:
-                try:
-                    organization = Organization.objects.get(name=place_name)
-                    user.organization.clear()
-                    user.organization.add(organization)
-                except:
-                    organization = Organization(name=place_name)
-                    organization.save()
-                    user.organization.clear()
-                    user.organization.add(organization)
-
-            if preferred_contact_method is not None:
-                user.preferred_contact_method = preferred_contact_method
-
-            if preferred_name is not None:
-                user.preferred_name = preferred_name
-
-            if pronoun is not None:
-                user.pronounuser_set.all().delete()
-
-                try:
-                    standard_value = Pronoun.objects.get(category=pronoun)
-                    pronoun_user = PronounUser(
-                        pronoun=standard_value,
-                        user=user
-                    )
-
-                except ObjectDoesNotExist:
-                    standard_value = Pronoun.objects.get(category="other")
-                    pronoun_user = PronounUser(
-                        other_value=pronoun,
-                        pronoun=standard_value,
-                        user=user
-                    )
-
-                pronoun_user.save()
-
-            if sat_math is not None:
-                user.sat_math = sat_math
-
-            if sat_verbal is not None:
-                user.sat_verbal = sat_verbal
-
-            if source is not None:
-                user.sourceuser_set.all().delete()
-
-                for input in source:
-                    try:
-                        standard_value = Source.objects.get(category=input)
-                        source_user = SourceUser(
-                            user=user,
-                            source=standard_value
-                        )
-
-                    except ObjectDoesNotExist:
-                        standard_value = Source.objects.get(category="other")
-                        source_user = SourceUser(
-                            user=user,
-                            other_value=input,
-                            source=standard_value
-                        )
-
-                    source_user.save()
-
-            if user_category is not None:
-                user.user_category = UserCategory.objects.get(
-                    category=user_category)
-
-            user.is_onboarded = True
-            user.save()
-            return UpdateUser(user=user)
-
-
 class ResetPassword(graphene.Mutation):
     class Arguments:
         email = graphene.String()
@@ -577,10 +352,46 @@ class SendVerificationEmail(graphene.Mutation):
         raise Exception("Email not found")
 
 
-class UpdatePassword(graphene.Mutation):
+class UpdateEmail(graphene.Mutation):
     class Arguments:
         email = graphene.String()
-        first_name = graphene.String()
+
+    user = graphene.Field(UserType)
+
+    def mutate(
+        self,
+        info,
+        email
+    ):
+
+        user = info.context.user
+
+        if user.is_authenticated:
+            if email and email != user.email:
+                old_email = user.email
+                lowercase_email = email.lower()
+                new_email = BaseUserManager.normalize_email(lowercase_email)
+                user.email = new_email
+
+                if user.preferred_name is not None:
+                    name = user.preferred_name
+                else:
+                    name = user.first_name
+
+                send_email_changed(
+                    old_email=old_email,
+                    new_email=new_email,
+                    name=name
+                )
+                user.save()
+                return UpdateEmail(user=user)
+
+        # raise exception if not authenticated
+        raise Exception("Incorrect credentials")
+
+
+class UpdatePassword(graphene.Mutation):
+    class Arguments:
         new_password = graphene.String()
         password = graphene.String()
 
@@ -590,8 +401,6 @@ class UpdatePassword(graphene.Mutation):
     def mutate(
         self,
         info,
-        email,
-        first_name,
         new_password,
         password,
     ):
@@ -606,19 +415,367 @@ class UpdatePassword(graphene.Mutation):
             else:
                 # password validation
                 try:
-                    password_validation.validate_password(
-                        new_password, user=user)
+                    password_validation.validate_password(new_password, user=user)
                 except ValidationError as e:
                     raise e
+
+                if user.preferred_name is not None:
+                    name = user.preferred_name
+                else:
+                    name = user.first_name
 
                 user.set_password(new_password)
                 user.save()
                 success = True
-                send_password_changed(email, first_name)
+                send_password_changed(email=user.email, name=name)
 
                 return UpdatePassword(success=success)
+
+        # raise exception if not authenticated
         raise Exception("Incorrect credentials")
 
+################################################################################
+# Updates the logged in user. Pass the entire User object
+# expect firstname, lastname, preferred_contact_method, source, user_category
+################################################################################
+class UpdateUser(graphene.Mutation):
+    class Arguments:
+        act_score = graphene.Int()
+        efc = graphene.Int()
+        ethnicity = graphene.List(graphene.String)
+        first_name = graphene.String()
+        gpa = graphene.Float()
+        high_school_grad_year = graphene.Int()
+        income = graphene.String()
+        last_name = graphene.String()
+        phone_number = graphene.String()
+        place_id = graphene.String()
+        place_name = graphene.String()
+        preferred_contact_method = graphene.String()
+        preferred_name = graphene.String()
+        pronoun = graphene.String()
+        sat_math = graphene.Int()
+        sat_verbal = graphene.Int()
+        source = graphene.List(graphene.String)
+        user_category = graphene.String()
+
+    user = graphene.Field(UserType)
+
+    def mutate(
+        self,
+        info,
+        act_score=None,
+        efc=None,
+        ethnicity=None,
+        first_name=None,
+        gpa=None,
+        high_school_grad_year=None,
+        income=None,
+        last_name=None,
+        phone_number=None,
+        place_id=None,
+        place_name=None,
+        preferred_contact_method=None,
+        preferred_name=None,
+        pronoun=None,
+        sat_math=None,
+        sat_verbal=None,
+        source=None,
+        user_category=None
+    ):
+
+        user = info.context.user
+
+        if not user.is_authenticated:
+            raise Exception("User is not logged in")
+
+        else:
+            # act score
+            if act_score != user.act_score:
+                user.act_score = act_score
+
+            # efc
+            if efc != user.efc:
+                user.efc = efc
+
+            # ethnicity
+            if ethnicity is None and user.ethnicityuser_set.all() is not None:
+                user.ethnicityuser_set.all().delete()
+
+            elif ethnicity is not None:
+                original_ethnicities = list(user.ethnicityuser_set.all())
+                new_categories = []
+
+                for input in ethnicity:
+                    found = False
+
+                    # get the category
+                    try:
+                        standard_value = Ethnicity.objects.get(category=input)
+                    except:
+                        standard_value = Ethnicity.objects.get(category="other")
+
+                    # compare the input to current categories
+                    for value in original_ethnicities:
+                        if standard_value.category != "other" and standard_value == value.ethnicity:
+                            found = True
+
+                        elif standard_value.category == "other" and standard_value == value.ethnicity:
+                            other_ethnicity = EthnicityUser.objects.get(
+                                ethnicity=standard_value,
+                                user=user
+                            )
+                            other_ethnicity.other_value = input
+                            other_ethnicity.save()
+                            found = True
+
+                    if found == False:
+                        if standard_value.category == "other":
+                            EthnicityUser.objects.create(
+                                ethnicity=standard_value,
+                                other_value=input,
+                                user=user
+                            )
+                        else:
+                            EthnicityUser.objects.create(
+                                ethnicity=standard_value,
+                                user=user
+                            )
+
+                    new_categories.append(standard_value.category)
+
+                # delete extra ethnicities
+                updated_ethnicities = list(user.ethnicityuser_set.all())
+                for value in updated_ethnicities:
+                    if str(value.ethnicity) not in new_categories:
+                        value.delete()
+
+            # first name
+            # only update first name if passing data
+            if first_name and first_name != user.first_name:
+                user.first_name = first_name
+
+            # gpa
+            if gpa != user.gpa:
+                user.gpa = gpa
+
+            # high school grad year
+            if high_school_grad_year != user.high_school_grad_year:
+                user.high_school_grad_year = high_school_grad_year
+
+            # income
+            if income != user.income:
+                if income is None:
+                    user.income = None
+                else:
+                    user.income = Income.objects.get(category=income)
+
+            # last name
+            # only update last name if passing data
+            if last_name and last_name != user.last_name:
+                user.last_name = last_name
+
+            # phone number
+            if phone_number != user.phone_number:
+                if phone_number is not None:
+                    user.phone_number = re.sub("[^0-9]", "", phone_number)
+                else:
+                    user.phone_number = ""
+
+            # organization
+            if place_id is not None:
+                try:
+                    organization = Organization.objects.get(place_id=place_id)
+                    user.organization.clear()
+                    user.organization.add(organization)
+                except:
+                    data = search_place_id(place_id=place_id)
+                    results = data.get("result")
+
+                    address = results.get("formatted_address", "")
+                    business_status = results.get("business_status", "")
+                    icon = results.get("icon", "")
+                    lat = results.get("geometry")["location"]["lat"]
+                    lng = results.get("geometry")["location"]["lng"]
+                    place_phone_number = results.get("formatted_phone_number", "")
+                    place_name = results.get("name")
+                    types = results.get("types", [])
+                    url = results.get("url", "")
+                    website = results.get("website", "")
+
+                    organization = Organization(
+                        address=address,
+                        business_status=business_status,
+                        icon=icon,
+                        lat=lat,
+                        lng=lng,
+                        name=place_name,
+                        phone_number=place_phone_number,
+                        place_id=place_id,
+                        types=types,
+                        url=url,
+                        website=website
+                    )
+
+                    organization.save()
+                    user.organization.clear()
+                    user.organization.add(organization)
+
+            # only look at place name if place_id is None
+            elif place_name is not None and place_id is None:
+                try:
+                    organization = Organization.objects.get(name=place_name)
+                    user.organization.clear()
+                    user.organization.add(organization)
+                except:
+                    organization = Organization(name=place_name)
+                    organization.save()
+                    user.organization.clear()
+                    user.organization.add(organization)
+
+            else:
+                try:
+                    user.organization.clear()
+                except:
+                    pass
+
+            # preferred contact method
+            # only update preferred contact method if passing data
+            if preferred_contact_method is not None:
+                if preferred_contact_method != user.preferred_contact_method:
+                    user.preferred_contact_method = preferred_contact_method
+
+            # preferred name
+            if preferred_name != user.preferred_name:
+                if preferred_name is not None:
+                    user.preferred_name = preferred_name
+                else:
+                    user.preferred_name = ""
+
+            # pronoun
+            if pronoun is None and user.pronounuser_set.all() is not None:
+                user.pronounuser_set.all().delete()
+
+            elif pronoun is not None:
+                # get the category
+                try:
+                    standard_category = Pronoun.objects.get(category=pronoun)
+                except:
+                    standard_category = Pronoun.objects.get(category="other")
+
+                # get the pronoun if already exists
+                try:
+                    current_value = PronounUser.objects.get(user=user)
+
+                    if standard_category != current_value.pronoun:
+                        user.pronounuser_set.all().delete()
+                        current_value = None
+
+                    elif standard_category.category == "other" and standard_category == current_value.pronoun:
+                            pronoun_user = PronounUser.objects.get(
+                                pronoun=standard_category,
+                                user=user
+                            )
+                            pronoun_user.other_value = pronoun
+                            pronoun_user.save()
+
+                except:
+                    current_value = None
+
+                if current_value is None:
+                    if standard_category.category == "other":
+                        PronounUser.objects.create(
+                            pronoun=standard_category,
+                            other_value=pronoun,
+                            user=user
+                        )
+                    else:
+                        PronounUser.objects.create(
+                            pronoun=standard_category,
+                            user=user
+                        )
+
+            # sat math
+            if sat_math != user.sat_math:
+                user.sat_math = sat_math
+
+            # sat verbal
+            if sat_verbal != user.sat_verbal:
+                user.sat_verbal = sat_verbal
+
+            # source
+            # only update source if passing data
+            if source is not None:
+                user.sourceuser_set.all().delete()
+
+                for input in source:
+                    try:
+                        standard_category = Source.objects.get(category=input)
+                        source_user = SourceUser(
+                            user=user,
+                            source=standard_category
+                        )
+
+                    except:
+                        standard_category = Source.objects.get(category="other")
+                        source_user = SourceUser(
+                            user=user,
+                            other_value=input,
+                            source=standard_category
+                        )
+
+                    source_user.save()
+
+            # user category
+            # only update source if passing data
+            if user_category is not None:
+                if user_category != user.user_category:
+                    user.user_category = UserCategory.objects.get(category=user_category)
+
+            # social login adds first name and last name later, so user category is a better
+            # check for onboarding
+            if user.user_category is not None:
+                user.is_onboarded = True
+
+            user.save()
+            return UpdateUser(user=user)
+
+
+################################################################################
+# Updates the logged in user. Pass specific fields to be updated
+################################################################################
+class UpdateUserFields(graphene.Mutation):
+    class Arguments:
+        phone_number = graphene.String()
+        preferred_contact_method = graphene.String()
+
+    user = graphene.Field(UserType)
+
+    def mutate(
+        self,
+        info,
+        phone_number=None,
+        preferred_contact_method=None
+    ):
+
+        user = info.context.user
+
+        if not user.is_authenticated:
+            raise Exception("User is not logged in")
+
+        else:
+            # phone number
+            if phone_number is not None:
+                user.phone_number = re.sub("[^0-9]", "", phone_number)
+
+            # preferred contact method
+            if preferred_contact_method is not None:
+                if preferred_contact_method != user.preferred_contact_method:
+                    user.preferred_contact_method = preferred_contact_method
+
+
+        user.save()
+        return UpdateUserFields(user=user)
 
 class VerifyEmail(graphene.Mutation):
     class Arguments:
@@ -654,6 +811,8 @@ class Mutation(graphene.ObjectType):
     send_subscription_verification = SendSubscriptionVerification.Field()
     send_verification_email = SendVerificationEmail.Field()
     social_auth = graphql_social_auth.SocialAuth.Field()
+    update_email = UpdateEmail.Field()
     update_password = UpdatePassword.Field()
     update_user = UpdateUser.Field()
+    update_user_fields = UpdateUserFields.Field()
     verify_email = VerifyEmail.Field()

@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def blank_response(request):
+    return HttpResponse("nothing to see")

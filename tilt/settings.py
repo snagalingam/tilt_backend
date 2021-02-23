@@ -1,4 +1,3 @@
-import dj_database_url
 import os
 
 
@@ -9,6 +8,7 @@ APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 DEBUG = int(os.environ.get('DEBUG', default=0))
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
+TILT_APP = os.environ.get('TILT_APP', default='staging')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
@@ -22,6 +22,13 @@ AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', default='none')
 AWS_REGION = os.environ.get('AWS_REGION', default='none')
 GRAPHQL_ENDPOINT = os.environ.get('GRAPHQL_ENDPOINT', default='none')
 
+
+################################################################################
+# Database certificate files
+################################################################################
+CA_CERT_PATH = f".postgresql/{TILT_APP}/ca-cert.pem"
+CLIENT_CERT_PATH = f".postgresql/{TILT_APP}/client-cert.pem"
+CLIENT_KEY_PATH = f".postgresql/{TILT_APP}/client-key.pem"
 
 ################################################################################
 # Google Variables
@@ -143,12 +150,13 @@ if ENVIRONMENT == 'production':
             'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': 5432,
             'OPTIONS':{
-                'sslmode':'verify-ca',
+                'sslmode':'verify-ca'
+                # 'sslcert': CLIENT_CERT_PATH,
+                # 'sslkey': CLIENT_KEY_PATH,
+                # 'sslrootcert': CA_CERT_PATH
             }
         }
     }
-db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
 
 ################################################################################
 # Password Validation
@@ -296,7 +304,14 @@ CSRF_TRUSTED_ORIGINS = [
 # security for development
 if ENVIRONMENT == 'development':
     CORS_ORIGIN_ALLOW_ALL = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.amazonaws.com',]
+    ALLOWED_HOSTS = [
+        '[::1]',
+        '127.0.0.1',
+        'localhost',
+        '.amazonaws.com',
+        '.elasticbeanstalk.com',
+        '.tiltstaging.dev'
+    ]
 
 # security for production
 elif ENVIRONMENT == 'production':
@@ -311,9 +326,15 @@ elif ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
-    ALLOWED_HOSTS = ['api.tiltstaging.dev',
-                     'api.tiltaccess.com',
-                     '.amazonaws.com',]
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        '.amazonaws.com',
+        '.elasticbeanstalk.com'
+        '.tiltaccess.com',
+        '.tiltstaging.com',
+        '.tiltstaging.dev',
+    ]
 
 
 ################################################################################

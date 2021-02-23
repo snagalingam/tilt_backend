@@ -114,14 +114,14 @@ def send_reset_password(email, first_name):
 ################################################################################
 # Send password change notification
 ################################################################################
-def send_password_changed(email, first_name):
+def send_password_changed(email, name):
     message = Mail(
         from_email=(settings.FROM_EMAIL, settings.SENDER_NAME),
         to_emails=email
     )
     message.template_id = 'd-44fdc9534a574732a7fca8b07238db04'
     message.dynamic_template_data = {
-        "first_name": first_name,
+        "name": name,
         "email": email
     }
 
@@ -131,15 +131,14 @@ def send_password_changed(email, first_name):
 ################################################################################
 # Send email change notification
 ################################################################################
-def send_email_changed(old_email, new_email, first_name):
+def send_email_changed(old_email, new_email, name):
     message = Mail(
         from_email=(settings.FROM_EMAIL, settings.SENDER_NAME),
         to_emails=old_email
     )
     message.template_id = 'd-4d2c08403ebc4a8cbd582233aaff3da6'
     message.dynamic_template_data = {
-        "first_name": first_name,
-        "old_email": old_email,
+        "name": name,
         "new_email": new_email
     }
 

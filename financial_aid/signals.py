@@ -57,6 +57,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
         if college_status.in_state_tuition == "yes":
             if ipeds.tuition_in_state is not None:
                 tuition_amount = ipeds.tuition_in_state
+
             if ipeds.fees_in_state is not None:
                 fees_amount = ipeds.fees_in_state
 
@@ -89,6 +90,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
                 aid_category=tuition_fees_category,
                 amount=tuition_fees_amount,
                 college_status=college_status,
+
                 name="Tuition & Fees"
             )
 
