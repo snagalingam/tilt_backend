@@ -16,7 +16,7 @@ from services.helpers.parse_aid_letters import (
     compare_tables_and_text,
     parse_data
 )
-from services.sendgrid.send_email import send_notification_email, send_report_email
+from services.sendgrid.send_email import send_report_email
 from services.slack.send_message import (
     send_award_letter_uploaded_notification,
     send_award_letter_reviewed_notification
