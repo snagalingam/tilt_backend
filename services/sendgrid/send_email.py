@@ -10,7 +10,7 @@ from sendgrid.helpers.mail import Mail
 # Make sure sendgrid and _certifi (SSL) is installed
 
 ################################################################################
-# Standard send email function
+# Standard send email function used in functions below
 ################################################################################
 def send_email(message):
     try:
@@ -86,7 +86,7 @@ def send_verification(email, first_name):
 ################################################################################
 # Reset password
 ################################################################################
-def send_reset_password(email, first_name):
+def send_reset_password(email, name):
     message = Mail(
         from_email=(settings.FROM_EMAIL, settings.SENDER_NAME),
         to_emails=email
@@ -103,7 +103,7 @@ def send_reset_password(email, first_name):
     url = f"{settings.SENDGRID_DOMAIN}/forgot-password/{token}"
     message.template_id = 'd-721a69f0688d484db91503c611d87d1c'
     message.dynamic_template_data = {
-        "first_name": first_name,
+        "name": name,
         "email": email,
         "forgot_password_url": url
     }
@@ -147,6 +147,7 @@ def send_email_changed(old_email, new_email, name):
 
 ################################################################################
 # Send team notification a financial aid letter has been uploaded
+# Not using this anymore. Using Slack now.
 ################################################################################
 def send_report_email(college_name, college_status_id, documents, user_email):
     message = Mail(
@@ -167,15 +168,16 @@ def send_report_email(college_name, college_status_id, documents, user_email):
 ################################################################################
 # Notify user that their aid letter has been processed
 ################################################################################
-def send_notification_email(email, first_name):
+def send_award_email(college, email, name):
     message = Mail(
         from_email=(settings.FROM_EMAIL, settings.SENDER_NAME),
         to_emails=email
     )
-    message.template_id = ''
+    message.template_id = 'd-4d3b969ca5514b1d8f5ae9024094b571'
     message.dynamic_template_data = {
-        "first_name": first_name,
+        "college": college,
         "email": email,
+        "name": name
     }
 
     return send_email(message)

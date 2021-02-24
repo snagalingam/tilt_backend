@@ -50,10 +50,10 @@ SENDGRID_DOMAIN = os.environ.get('SENDGRID_DOMAIN', default='http://localhost:30
 ################################################################################
 SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
 SLACK_SIGNING_SECRET = os.environ.get('SLACK_SIGNING_SECRET')
-if ENVIRONMENT == 'development':
-    SLACK_AWARD_CHANNEL = '#award-letters-staging'
-elif ENVIRONMENT == 'production':
+if TILT_APP == 'production':
     SLACK_AWARD_CHANNEL = '#award-letters-production'
+else:
+    SLACK_AWARD_CHANNEL = '#award-letters-staging'
 
 ################################################################################
 # Twilio Variables
