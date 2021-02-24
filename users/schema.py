@@ -311,7 +311,12 @@ class SendForgotEmail(graphene.Mutation):
             user = None
 
         if user is not None:
-            send_reset_password(user.email, user.first_name)
+            if user.preferred_name is not None:
+                name = user.preferred_name
+            else:
+                name = user.first_name
+
+            send_reset_password(email=user.email, name=name)
             return SendForgotEmail(success=True)
         raise Exception("Email not found")
 
@@ -349,6 +354,7 @@ class SendVerificationEmail(graphene.Mutation):
         if user is not None:
             send_verification(user.email, user.first_name)
             return SendVerificationEmail(success=True)
+
         raise Exception("Email not found")
 
 
