@@ -334,7 +334,7 @@ elif ENVIRONMENT == 'production':
         '127.0.0.1',
         'localhost',
         '.amazonaws.com',
-        '.elasticbeanstalk.com'
+        '.elasticbeanstalk.com',
         '.tiltaccess.com',
         '.tiltstaging.com',
         '.tiltstaging.dev',
