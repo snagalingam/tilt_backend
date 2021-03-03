@@ -320,7 +320,7 @@ class LocationScholarship(models.Model):
 
 class ScholarshipStatus(models.Model):
     SCHOLARSHIP_STATUS_CHOICES = (
-        ("not interested","not interestd"),
+        ("not interested","not interested"),
         ("interested", "interested"),
         ("applied", "applied"),
         ("awarded", "awarded"),
