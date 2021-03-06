@@ -55,7 +55,9 @@ FIRST_LOOK_VALUES = {
     "work/study": "work study",
     # seog grant
     "seog": "seog",
-    "supp educ opport grant": "seog"
+    "supp educ opport grant": "seog",
+    "federal sup. ed. opp. grant": "seog",
+    "federal suppl educ oppor grant": "seog"
 }
 
 SECOND_LOOK_VALUES = {
