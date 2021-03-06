@@ -1,4 +1,5 @@
 import boto3
+import json
 import requests
 import time
 
@@ -18,21 +19,21 @@ def lambda_handler(event, context):
     text_job_ids = event["text_job_ids"]
 
     for id in table_job_ids:
-        status = textract.get_document_analysis(JobId=id)["JobStatus"]
+        table_status = textract.get_document_analysis(JobId=id)["JobStatus"]
 
         counter = 1
-        if status == "IN_PROGRESS" and counter < 10:
-            time.sleep(60)
-            response = textract.get_document_analysis(JobId=id)["JobStatus"]
+        while table_status == "IN_PROGRESS" and counter < 10:
+            time.sleep(10)
+            table_status = textract.get_document_analysis(JobId=id)["JobStatus"]
             counter += 1
 
     for id in text_job_ids:
-        status = textract.get_document_text_detection(JobId=id)["JobStatus"]
+        text_status = textract.get_document_text_detection(JobId=id)["JobStatus"]
 
         counter = 1
-        if status == "IN_PROGRESS" and counter < 10:
-            time.sleep(60)
-            status = textract.get_document_text_detection(JobId=id)["JobStatus"]
+        while text_status == "IN_PROGRESS" and counter < 10:
+            time.sleep(10)
+            text_status = textract.get_document_text_detection(JobId=id)["JobStatus"]
             counter += 1
 
     mutation = '''
@@ -51,3 +52,4 @@ def lambda_handler(event, context):
         },
         verify=False
     )
+    print(res)
