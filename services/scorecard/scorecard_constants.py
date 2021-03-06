@@ -175,7 +175,7 @@ LOCALE_DICT = {
 LOCALE_UPDATED_DICT = {
     None: "",
     -3: "",
-    11: "Larce City",
+    11: "Large City",
     12: "Midsize City",
     13: "Small City",
     21: "Large Suburb",
