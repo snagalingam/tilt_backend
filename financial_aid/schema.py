@@ -40,61 +40,25 @@ class AidFinalDataType(DjangoObjectType):
 ################################################################################
 # Query
 ################################################################################
-
 class Query(graphene.ObjectType):
-    aid_categories = graphene.List(AidCategoryType, limit=graphene.Int())
-    aid_final_data = graphene.List(AidFinalDataType, limit=graphene.Int())
-
-    aid_categories_by_fields = graphene.List(
-        AidCategoryType,
-        name=graphene.String(),
-        primary=graphene.String(),
-        secondary=graphene.String(),
-        tertiary=graphene.String()
-    )
+    # graphene type
     aid_final_data_by_college_status = graphene.List(
         AidFinalDataType,
         college_status_id=graphene.Int()
     )
-    aid_final_data_by_fields = graphene.List(
-        AidFinalDataType,
-        aid_category_id=graphene.Int(),
-        amount=graphene.Int(),
-        col_index=graphene.Int(),
-        college_status_id=graphene.Int(),
-        name=graphene.String(),
-        table_number=graphene.Int(),
-        row_index=graphene.Int(),
-    )
-    my_aid_final_data = graphene.List(AidFinalDataType)
 
-    # get_all()
-    def resolve_aid_categories(self, info, limit=None):
-        qs = AidCategory.objects.all()[0:limit]
-        return qs
-
-    def resolve_aid_final_data(self, info, limit=None):
-        qs = AidFinalData.objects.all()[0:limit]
-        return qs
-
-    # get_by_fields()
-    def resolve_aid_categories_by_fields(self, info, **kwargs):
-        qs = AidCategory.objects.filter(**kwargs)
-        return qs
-
+    # function definition
     def resolve_aid_final_data_by_college_status(self, info, college_status_id=None):
-        qs = AidFinalData.objects.filter(college_status__id=college_status_id)
-        return qs
-
-    def resolve_aid_final_data_by_fields(self, info, **kwargs):
-        qs = AidFinalData.objects.filter(**kwargs)
-        return qs
-
-    def resolve_my_aid_final_data(self, info):
         user = info.context.user
-        qs = AidFinalData.objects.filter(college_status__user__id=user.id)
-        return qs
 
+        if user.is_authenticated:
+            college_status = CollegeStatus.objects.get(id=college_status_id)
+
+            if user == college_status.user or user.is_superuser:
+                qs = AidFinalData.objects.filter(college_status__id=college_status_id)
+                return qs
+            raise Exception("User does not have access to this data")
+        raise Exception("User is not logged in")
 
 ################################################################################
 # Mutations

@@ -65,24 +65,10 @@ class NetPriceRangeType(graphene.ObjectType):
 
 
 class Query(graphene.ObjectType):
-    # standard queries
-    college_statuses = graphene.List(
-        CollegeStatusType,
-        college_id=graphene.Int(),
-        user_id=graphene.Int(),
-        limit=graphene.Int()
-    )
-    college_statuses_by_id = graphene.Field(CollegeStatusType, id=graphene.Int())
-    colleges = graphene.List(
-        CollegeType, id=graphene.Int(), limit=graphene.Int())
-    college_fields_of_study = graphene.List(
-        CollegeFieldOfStudyType, college_id=graphene.Int())
-    college_scorecards = graphene.List(
-        CollegeScorecardType, limit=graphene.Int())
-
-    # speicfic queries
+    # define query types
     cities = graphene.List(CollegeScorecardType, city=graphene.String())
     college_by_id = graphene.Field(CollegeType, id=graphene.Int())
+    college_statuses_by_id = graphene.Field(CollegeStatusType, id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
@@ -105,6 +91,7 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         state_fips=graphene.String()
     )
+    my_colleges = graphene.List(CollegeStatusType)
     nearby_colleges = graphene.List(
         CollegeType,
         city=graphene.String(),
@@ -114,47 +101,24 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         zipcode=graphene.Int()
     )
-    net_price_range = graphene.Field(
-        NetPriceRangeType, income=graphene.String())
+    net_price_range = graphene.Field(NetPriceRangeType, income=graphene.String())
     religious_affiliation = graphene.List(CollegeScorecardType)
     state_fips = graphene.List(
-        CollegeScorecardType, state_fip=graphene.String())
+        CollegeScorecardType, state_fip=graphene.String()
+    )
     states = graphene.List(CollegeScorecardType, state=graphene.String())
-    my_colleges = graphene.List(CollegeStatusType)
 
-    # standard model queries
-    def resolve_college_statuses(self, info, limit=None, **kwargs):
-        qs = CollegeStatus.objects.filter(**kwargs)[0:limit]
-        return qs
-
-    def resolve_college_statuses_by_id(self, info, id):
-        qs = CollegeStatus.objects.get(id=id)
-        return qs
-
-    def resolve_my_colleges(self, info):
-        user = info.context.user
-        qs = CollegeStatus.objects.filter(user=user)
-        return qs
-
-    def resolve_colleges(self, info, limit=None, **kwargs):
-        qs = College.objects.filter(show=True, **kwargs)[0:limit]
-        return qs
-
-    def resolve_college_fields_of_study(self, info, **kwargs):
-        qs = FieldOfStudy.objects.filter(show=True, **kwargs)
-        return qs
-
-    def resolve_college_scorecards(self, info, limit=None):
-        qs = Scorecard.objects.filter(show=True)[0:limit]
-        return qs
-
-    # speicfic queries
+    # functions
     def resolve_cities(self, info, city=""):
         qs = Scorecard.objects.filter(show=True, city__icontains=city)
         return qs
 
     def resolve_college_by_id(self, info, id):
         qs = College.objects.get(pk=id)
+        return qs
+
+    def resolve_college_statuses_by_id(self, info, id):
+        qs = CollegeStatus.objects.get(id=id)
         return qs
 
     def resolve_colleges_by_popularity(self, info, limit=None):
@@ -281,6 +245,11 @@ class Query(graphene.ObjectType):
         end = start + per_page
         search_results = qs[start:end]
         return CollegePaginationType(search_results=search_results, pages=pages, count=count)
+
+    def resolve_my_colleges(self, info):
+        user = info.context.user
+        qs = CollegeStatus.objects.filter(user=user)
+        return qs
 
     def resolve_nearby_colleges(
         self,

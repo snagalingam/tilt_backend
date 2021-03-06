@@ -35,23 +35,17 @@ class OrganizationType(DjangoObjectType):
 ### Query
 ################################################
 class Query(graphene.ObjectType):
+    # graphene type
     organizations = graphene.List(OrganizationType)
-    organizations_by_fields = graphene.Field(
-        OrganizationType,
-        id=graphene.Int(),
-        name=graphene.String(),
-        partner=graphene.Boolean(),
-        place_id=graphene.String()
-    )
 
+    # function definition
     def resolve_organizations(self, info):
-        qs = Organization.objects.all()
-        return qs
+        user = info.context.user
 
-    def resolve_organizations_by_fields(self, info, **kwargs):
-        qs = Organization.objects.filter(**kwargs)
-        return qs
-
+        if user.is_authenticated and user.is_superuser:
+            qs = Organization.objects.all()
+            return qs
+        raise Exception("User does not have access to this data")
 
 ################################################
 ### Mutations
