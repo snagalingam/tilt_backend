@@ -82,7 +82,8 @@ def calculate_aid_summary(sender, instance, **kwargs):
             )
 
             if final_tuition_fees.amount != tuition_fees_amount:
-                final_tuition_fees.update(amount=tuition_fees_amount)
+                final_tuition_fees.amount = tuition_fees_amount
+                final_tuition_fees.save()
 
         # create a new one if it doesn't
         except:
@@ -90,7 +91,6 @@ def calculate_aid_summary(sender, instance, **kwargs):
                 aid_category=tuition_fees_category,
                 amount=tuition_fees_amount,
                 college_status=college_status,
-
                 name="Tuition & Fees"
             )
 
@@ -142,7 +142,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
             )
 
             if final_room_meals.amount != room_meals_amount:
-                final_room_meals.amount=room_meals_amount
+                final_room_meals.amount = room_meals_amount
                 final_room_meals.save()
 
         # create a new one if it doesn't
