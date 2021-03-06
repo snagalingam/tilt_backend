@@ -8,7 +8,7 @@ APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 DEBUG = int(os.environ.get('DEBUG', default=0))
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='production')
-TILT_APP = os.environ.get('TILT_APP', default='staging')
+TILT_APP = os.environ.get('TILT_APP', default='development')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
@@ -289,25 +289,29 @@ GRAPHENE = {
 ################################################################################
 # Security
 ################################################################################
-SESSION_COOKIE_SAMESITE = None
-CORS_ALLOW_CREDENTIALS = True
+if TILT_APP == 'production':
+    SESSION_COOKIE_DOMAIN = '.tiltaccess.com'
+elif TILT_APP == 'staging':
+    SESSION_COOKIE_DOMAIN = '.tiltstaging.dev'
+else:
+    SESSION_COOKIE_DOMAIN = 'localhost'
 
+
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://tiltaccess.com",
     "https://www.tiltaccess.com",
     "https://tiltstaging.dev"
 ]
-
-CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = [
     "tiltaccess.com",
     "www.tiltaccess.com",
     "tiltstaging.dev",
 ]
+SESSION_COOKIE_SAMESITE = 'lax'
 
 # security for development
 if ENVIRONMENT == 'development':
-    CORS_ORIGIN_ALLOW_ALL = True
     ALLOWED_HOSTS = [
         '[::1]',
         '127.0.0.1',
@@ -316,9 +320,20 @@ if ENVIRONMENT == 'development':
         '.elasticbeanstalk.com',
         '.tiltstaging.dev'
     ]
+    CORS_ORIGIN_ALLOW_ALL = True
+    SESSION_COOKIE_DOMAIN = 'localhost'
 
 # security for production
 elif ENVIRONMENT == 'production':
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        '.amazonaws.com',
+        '.elasticbeanstalk.com',
+        '.tiltaccess.com',
+        '.tiltstaging.com',
+        '.tiltstaging.dev',
+    ]
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -330,15 +345,6 @@ elif ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
-    ALLOWED_HOSTS = [
-        '127.0.0.1',
-        'localhost',
-        '.amazonaws.com',
-        '.elasticbeanstalk.com',
-        '.tiltaccess.com',
-        '.tiltstaging.com',
-        '.tiltstaging.dev',
-    ]
 
 
 ################################################################################
