@@ -118,9 +118,9 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         'award_status',
     ]
     model = CollegeStatus
-    ordering = ('status', 'college', 'user',)
+    ordering = ('user', 'status', 'college',)
     readonly_fields = ('created', 'updated')
-    search_fields = ('status', 'college', 'user',)
+    search_fields = ('user__email',)
 
 
 class FieldOfStudyAdmin(admin.ModelAdmin, DynamicArrayMixin):
