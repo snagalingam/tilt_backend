@@ -161,55 +161,10 @@ class ScholarshipStateType(DjangoObjectType):
 # Query
 ################################################
 class Query(graphene.ObjectType):
-    scholarship_providers = graphene.List(
-        ScholarshipProviderType, limit=graphene.Int())
-    scholarship_statuses = graphene.List(
-        ScholarshipStatusType, limit=graphene.Int())
+    # graphene type
+    scholarship_by_id = graphene.Field(ScholarshipType, id=graphene.Int())
+    scholarship_max_amount = graphene.Int()
     scholarships = graphene.List(ScholarshipType, limit=graphene.Int())
-
-    # providers
-    scholarship_providers_by_fields = graphene.List(
-        ScholarshipProviderType,
-        addressee=graphene.String(),
-        city=graphene.String(),
-        email=graphene.String(),
-        organization=graphene.String(),
-        phone_number=graphene.String(),
-        phone_number_ext=graphene.String(),
-        state=graphene.ID(),
-        street=graphene.String(),
-        zipcode=graphene.String()
-    )
-
-    # scholarships
-    scholarships_by_fields = graphene.List(
-        ScholarshipType,
-        # contact
-        name=graphene.String(),
-        deadline=graphene.Date(),
-        description=graphene.String(),
-        max_amount=graphene.Int(),
-        number_awards=graphene.Int(),
-        provider=graphene.ID(),
-        renewable=graphene.Boolean(),
-        website=graphene.String(),
-        association=graphene.ID(),
-        citizenship=graphene.ID(),
-        college=graphene.ID(),
-        degree=graphene.ID(),
-        disability=graphene.ID(),
-        financial_need=graphene.Boolean(),
-        first_generation=graphene.Boolean(),
-        gender=graphene.ID(),
-        heritage=graphene.ID(),
-        interest=graphene.ID(),
-        military=graphene.ID(),
-        min_act=graphene.Int(),
-        min_gpa=graphene.Float(),
-        min_sat=graphene.Int(),
-        max_gpa=graphene.Float(),
-        writing=graphene.Boolean()
-    )
     scholarships_by_user_criteria = graphene.Field(
         ScholarshipPaginationType,
         end_deadline=graphene.Date(),
@@ -220,47 +175,20 @@ class Query(graphene.ObjectType):
         start_deadline=graphene.Date(),
         status=graphene.String()
     )
-    scholarship_max_amount = graphene.Int()
-    scholarship_by_id = graphene.Field(ScholarshipType, id=graphene.Int())
 
-    # scholarship status
-    scholarship_statuses_by_fields = graphene.List(
-        ScholarshipStatusType,
-        scholarship=graphene.ID(),
-        status=graphene.String(),
-        user=graphene.ID()
-    )
+    # function definition
+    def resolve_scholarship_by_id(self, info, id):
+        scholarship = Scholarship.objects.get(pk=id)
+        return scholarship
 
-    # get_all()
     def resolve_scholarship_max_amount(self, info):
         get_max = Scholarship.objects.aggregate(Max("max_amount"))
         _max = get_max['max_amount__max']
         return _max
 
-    def resolve_scholarship_providers(self, info, limit=None):
-        qs = Provider.objects.all()[0:limit]
-        return qs
-
     def resolve_scholarships(self, info, limit=None):
         qs = Scholarship.objects.all()[0:limit]
         return qs
-
-    def resolve_scholarship_statuses(self, info, limit=None):
-        qs = ScholarshipStatus.objects.all()[0:limit]
-        return qs
-
-    # get_by_fields()
-    def resolve_scholarship_providers_by_fields(self, info, **kwargs):
-        qs = Provider.objects.filter(**kwargs)
-        return qs
-
-    def resolve_scholarships_by_fields(self, info, **kwargs):
-        qs = Scholarship.objects.filter(**kwargs)
-        return qs
-
-    def resolve_scholarship_by_id(self, info, id):
-        scholarship = Scholarship.objects.get(pk=id)
-        return scholarship
 
     def resolve_scholarships_by_user_criteria(
         self,
@@ -302,10 +230,6 @@ class Query(graphene.ObjectType):
 
         search_results = qs[start:end]
         return ScholarshipPaginationType(search_results=search_results, pages=pages, count=count)
-
-    def resolve_scholarship_statuses_by_fields(self, info, **kwargs):
-        qs = ScholarshipStatus.objects.filter(**kwargs)
-        return qs
 
 
 ################################################
