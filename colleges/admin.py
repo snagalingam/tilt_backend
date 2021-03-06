@@ -79,6 +79,7 @@ class CollegeStatusAdmin(admin.ModelAdmin):
         }),
         (('Award Totals'), {
             'fields': (
+                'award_costs_missing',
                 'award_total_costs',
                 'award_total_grants',
                 'award_net_price',
