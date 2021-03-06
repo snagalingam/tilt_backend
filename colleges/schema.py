@@ -243,17 +243,17 @@ class Query(graphene.ObjectType):
         if sort_by == "net_price":
             if (income is not None):
                 if sort_order == 'asc':
-                    qs = qs.annotate(real_net_price=Least('status__net_price',
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price', f'scorecard__avg_net_price_{income}')).order_by(F('real_net_price').asc(nulls_last=True))
                 else:
-                    qs = qs.annotate(real_net_price=Least('status__net_price',
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price', f'scorecard__avg_net_price_{income}')).order_by(F('real_net_price').desc(nulls_last=True))
             else:
                 if sort_order == 'asc':
-                    qs = qs.annotate(real_net_price=Least('status__net_price',
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price')).order_by(F('real_net_price').asc(nulls_last=True))
                 else:
-                    qs = qs.annotate(real_net_price=Least('status__net_price',
+                    qs = qs.annotate(real_net_price=Least('collegestatus__net_price',
                                                           'scorecard__avg_net_price')).order_by(F('real_net_price').desc(nulls_last=True))
         if sort_by == "admissions_rate":
             if sort_order == 'asc':
