@@ -117,6 +117,8 @@ def get_scholarships_based_on_deadline(month):
     urls = links[0].find_all("a")
     scholarship_urls = {}
 
+    print("Status Update -> Getting Scholarships")
+
     for url in urls:
         name = url.text
         href = url.get("href")
@@ -124,6 +126,7 @@ def get_scholarships_based_on_deadline(month):
         scholarship_urls[name] = root + href
 
     entire_list = {}
+    count = 0
     for name, url in scholarship_urls.items():
         if month in name:
             response = requests.get(url + "?sortOrder=duedate&sortDirection=asc", headers=HEADERS)
@@ -133,6 +136,9 @@ def get_scholarships_based_on_deadline(month):
             scholarship_urls = {}
 
             for url in urls[3:]:
+                print(f"Status Update -> Getting Scholarship {count}")
+                count += 1
+
                 contact = url.text
                 href = url.get("href")
                 root = "https://www.scholarships.com"
