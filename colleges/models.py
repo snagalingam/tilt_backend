@@ -122,6 +122,7 @@ class CollegeStatus(models.Model):
     )
 
     # award fields
+    award_costs_missing = models.BooleanField(default=False)
     award_total_costs = models.PositiveIntegerField(blank=True, null=True)
     award_total_grants = models.PositiveIntegerField(blank=True, null=True)
     award_net_price = models.IntegerField(blank=True, null=True)

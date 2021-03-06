@@ -54,6 +54,11 @@ def calculate_aid_summary(sender, instance, **kwargs):
 
     # otherwise, pull the data from ipeds
     else:
+        # save flag that cost are missing on the award letter
+        college_status.award_costs_missing = True
+        college_status.save()
+
+        # look at ipeds data
         if college_status.in_state_tuition == "yes":
             if ipeds.tuition_in_state is not None:
                 tuition_amount = ipeds.tuition_in_state
