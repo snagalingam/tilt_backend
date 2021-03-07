@@ -321,7 +321,6 @@ if ENVIRONMENT == 'development':
         '.tiltstaging.dev'
     ]
     CORS_ORIGIN_ALLOW_ALL = True
-    SESSION_COOKIE_DOMAIN = 'localhost'
 
 # security for production
 elif ENVIRONMENT == 'production':
