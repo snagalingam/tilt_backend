@@ -20,11 +20,15 @@ def calculate_aid_summary(sender, instance, **kwargs):
     grant_categories = AidCategory.objects.filter(primary="grant")
     loan_categories = AidCategory.objects.filter(primary="loan")
     meals_category = AidCategory.objects.get(name="meals")
+    other_loan_category = AidCategory.objects.get(name="other loan")
     personal_expenses_category = AidCategory.objects.get(name="standard personal expenses")
+    plus_loan_category = AidCategory.objects.get(name="plus")
     room_category = AidCategory.objects.get(name="room")
     room_board_category = AidCategory.objects.get(name="room & board")
+    subsidized_loan_category = AidCategory.objects.get(name="subsidized")
     tuition_category = AidCategory.objects.get(name="tuition")
     tuition_fees_category = AidCategory.objects.get(name="tuition & fees")
+    unsubsidized_loan_category = AidCategory.objects.get(name="unsubsidized")
     work_study_category = AidCategory.objects.get(name="work study")
 
     # get ipeds object for costs
@@ -116,7 +120,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
 
     # use data from award letter if that exists
     if room is not None:
-        room_meals_name = "Room & Board"
+        room_meals_name = "On-Campus Housing & Meal Expenses"
         room_meals_amount = room.amount
 
         if meals is not None:
@@ -126,17 +130,17 @@ def calculate_aid_summary(sender, instance, **kwargs):
         if college_status.residency == "offcampus not with family":
             if ipeds.room_off_campus_not_with_family is not None:
                 room_meals_amount = ipeds.room_off_campus_not_with_family
-                room_meals_name = "Off-campus not with Family Room & Board"
+                room_meals_name = "Off-Campus (not with Family) Housing & Meal Expenses"
 
         elif college_status.residency == "offcampus with family":
             room_meals_amount = 0
-            room_meals_name = "Off-campus with Family Room & Board"
+            room_meals_name = "Off-Campus (with Family) Housing & Meal Expenses"
 
         # assume on campus unless otherwise stated
         else:
             if ipeds.room_on_campus is not None:
                 room_meals_amount = ipeds.room_on_campus
-                room_meals_name = "On-Campus Room & Board"
+                room_meals_name = "On-Campus Housing & Meal Expenses"
 
     if room_meals_amount is not None:
         # update it if it already exists
@@ -178,7 +182,7 @@ def calculate_aid_summary(sender, instance, **kwargs):
             aid_category=personal_expenses_category,
             amount=5000,
             college_status=college_status,
-            name="Standard Personal Expenses"
+            name="Estimated Personal Expenses"
         )
 
     # add 5,000 for indirect costs
@@ -214,22 +218,53 @@ def calculate_aid_summary(sender, instance, **kwargs):
     college_status.save()
 
     ################ loans
-    loan_categories_keys = loan_categories.values_list('id', flat=True)
-    loans = AidRawData.objects.filter(college_status=college_status, aid_category__in=loan_categories_keys)
+    # other loan
+    try:
+        other_loan = AidRawData.objects.get(college_status=college_status, aid_category=other_loan_category)
+        AidFinalData.objects.create(
+            aid_category=other_loan.aid_category,
+            amount=other_loan.amount,
+            college_status=other_loan.college_status,
+            name=other_loan.name
+        )
+    except:
+        pass
 
-    if loans.exists():
-        final_loans = AidFinalData.objects.filter(college_status=college_status, aid_category__in=loan_categories_keys)
+    # plus loan
+    try:
+        plus_loan = AidRawData.objects.get(college_status=college_status, aid_category=plus_loan_category)
+        AidFinalData.objects.create(
+            aid_category=plus_loan.aid_category,
+            amount=plus_loan.amount,
+            college_status=plus_loan.college_status,
+            name="Federal Parent PLUS Loan"
+        )
+    except:
+        pass
 
-        if final_loans.exists():
-            final_loans.delete()
+    # subsidized and unsbusidized loans
+    try:
+        subsidized_loan = AidRawData.objects.get(
+            college_status=college_status,
+            aid_category=subsidized_loan_category
+        )
+        AidFinalData.objects.create(
+            aid_category=subsidized_loan.aid_category,
+            amount=subsidized_loan.amount,
+            college_status=subsidized_loan.college_status,
+            name="Federal Subsidized Loan"
+        )
+        subsidized_amount = subsidized_loan.amount
+    except:
+        subsidized_amount = 0
 
-        for loan in loans:
-            AidFinalData.objects.create(
-                aid_category=loan.aid_category,
-                amount=loan.amount,
-                college_status=loan.college_status,
-                name=loan.name
-            )
+    unsubsidized_amount = 5500 - subsidized_amount
+    AidFinalData.objects.create(
+        aid_category=unsubsidized_loan_category,
+        amount=unsubsidized_amount,
+        college_status=college_status,
+        name="Federal Unsubsidized Loan"
+    )
 
     ################ work study
     try:
