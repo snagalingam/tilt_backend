@@ -63,65 +63,6 @@ class Query(graphene.ObjectType):
 ################################################################################
 # Mutations
 ################################################################################
-# Send documents to be analyzed by Textract
-# Only send documents that apply to the same college_status
-class SendDocuments(graphene.Mutation):
-    success = graphene.Boolean()
-
-    class Arguments:
-        college_status_id = graphene.Int()
-        documents = graphene.List(graphene.String)
-
-    def mutate(self, info, college_status_id, documents):
-        user = info.context.user
-        table_job_ids = []
-        text_job_ids = []
-
-        for document_name in documents:
-            college_status = CollegeStatus.objects.get(pk=college_status_id)
-
-            # send document for analysis
-            table_job_id = start_table_analysis(document_name)
-            text_job_id = start_text_analysis(document_name)
-
-            # save job_ids to database
-            document_result = DocumentResult.objects.create(
-                college_status=college_status,
-                document_name=document_name,
-                sent=True,
-                table_job_id=table_job_id,
-                text_job_id=text_job_id,
-            )
-            document_result.save()
-
-            college_status.status = "accepted"
-            college_status.award_status = "uploaded"
-            college_status.save()
-
-            table_job_ids.append(table_job_id)
-            text_job_ids.append(text_job_id)
-
-
-        # triggers lambda function to wait for results
-        lambda_handler(
-            documents=documents,
-            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
-            table_job_ids=table_job_ids,
-            text_job_ids=text_job_ids
-        )
-
-        # triggers slack channel message
-        send_award_letter_uploaded_notification(
-            channel=settings.SLACK_AWARD_CHANNEL,
-            documents=documents,
-            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
-            table_job_ids=table_job_ids,
-            text_job_ids=text_job_ids
-        )
-
-
-        return SendDocuments(success=True)
-
 # Only send documents that apply to the same college_status
 class ParseDocuments(graphene.Mutation):
     success = graphene.Boolean()
@@ -262,6 +203,102 @@ class ParseDocuments(graphene.Mutation):
         return ParseDocuments(success=True)
 
 
+# Send documents to be analyzed by Textract
+# Only send documents that apply to the same college_status
+class SendDocuments(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        college_status_id = graphene.Int()
+        documents = graphene.List(graphene.String)
+
+    def mutate(self, info, college_status_id, documents):
+        user = info.context.user
+        table_job_ids = []
+        text_job_ids = []
+
+        for document_name in documents:
+            college_status = CollegeStatus.objects.get(pk=college_status_id)
+
+            # send document for analysis
+            table_job_id = start_table_analysis(document_name)
+            text_job_id = start_text_analysis(document_name)
+
+            # save job_ids to database
+            document_result = DocumentResult.objects.create(
+                college_status=college_status,
+                document_name=document_name,
+                sent=True,
+                table_job_id=table_job_id,
+                text_job_id=text_job_id,
+            )
+            document_result.save()
+
+            college_status.status = "accepted"
+            college_status.award_status = "uploaded"
+            college_status.save()
+
+            table_job_ids.append(table_job_id)
+            text_job_ids.append(text_job_id)
+
+
+        # triggers lambda function to wait for results
+        lambda_handler(
+            documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
+            table_job_ids=table_job_ids,
+            text_job_ids=text_job_ids
+        )
+
+        # triggers slack channel message
+        send_award_letter_uploaded_notification(
+            channel=settings.SLACK_AWARD_CHANNEL,
+            documents=documents,
+            graphql_endpoint=settings.GRAPHQL_ENDPOINT,
+            table_job_ids=table_job_ids,
+            text_job_ids=text_job_ids
+        )
+        return SendDocuments(success=True)
+
+
+class UpdateExpenses(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        college_status_id = graphene.Int()
+        user_housing_expenses = graphene.Int()
+        user_personal_expenses = graphene.Int()
+
+    def mutate(
+        self,
+        info,
+        college_status_id,
+        user_housing_expenses=None,
+        user_personal_expenses=None
+    ):
+        college_status = CollegeStatus.objects.get(pk=college_status_id)
+
+        if user_housing_expenses is not None:
+            room_board_category = AidCategory.objects.get(name="room & board")
+            housing_expenses = AidFinalData.objects.get(
+                aid_category=room_board_category,
+                college_status=college_status
+            )
+            housing_expenses.amount = user_housing_expenses
+            housing_expenses.save()
+
+        if user_personal_expenses is not None:
+            personal_expenses_category = AidCategory.objects.get(name="standard personal expenses")
+            personal_expenses = AidFinalData.objects.get(
+                aid_category=personal_expenses_category,
+                college_status=college_status
+            )
+            personal_expenses.amount = user_personal_expenses
+            personal_expenses.save()
+        return UpdateExpenses(success=True)
+
+
 class Mutation(graphene.ObjectType):
     parse_documents = ParseDocuments.Field()
     send_documents = SendDocuments.Field()
+    update_expenses = UpdateExpenses.Field()
