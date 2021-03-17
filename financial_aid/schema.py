@@ -268,33 +268,54 @@ class UpdateExpenses(graphene.Mutation):
         college_status_id = graphene.Int()
         user_housing_expenses = graphene.Int()
         user_personal_expenses = graphene.Int()
+        user_tuition_expenses = graphene.Int()
 
     def mutate(
         self,
         info,
         college_status_id,
         user_housing_expenses=None,
-        user_personal_expenses=None
+        user_personal_expenses=None,
+        user_tuition_expenses=None
     ):
         college_status = CollegeStatus.objects.get(pk=college_status_id)
 
+        # room and board
+        room_board_category = AidCategory.objects.get(name="room & board")
+        housing_expenses = AidFinalData.objects.get(
+            aid_category=room_board_category,
+            college_status=college_status
+        )
         if user_housing_expenses is not None:
-            room_board_category = AidCategory.objects.get(name="room & board")
-            housing_expenses = AidFinalData.objects.get(
-                aid_category=room_board_category,
-                college_status=college_status
-            )
             housing_expenses.amount = user_housing_expenses
             housing_expenses.save()
 
+        # personal expenses
+        personal_expenses_category = AidCategory.objects.get(name="standard personal expenses")
+        personal_expenses = AidFinalData.objects.get(
+            aid_category=personal_expenses_category,
+            college_status=college_status
+        )
         if user_personal_expenses is not None:
-            personal_expenses_category = AidCategory.objects.get(name="standard personal expenses")
-            personal_expenses = AidFinalData.objects.get(
-                aid_category=personal_expenses_category,
-                college_status=college_status
-            )
             personal_expenses.amount = user_personal_expenses
             personal_expenses.save()
+
+        # tuition expenses
+        tuition_fees_category = AidCategory.objects.get(name="tuition & fees")
+        tuition_fees = AidFinalData.objects.get(
+            aid_category=tuition_fees_category,
+            college_status=college_status,
+        )
+        if user_tuition_expenses is not None:
+            tuition_fees.amount = user_tuition_expenses
+            tuition_fees.save()
+
+        # update the total cost amount
+        total_cost = housing_expenses.amount + personal_expenses.amount + tuition_fees.amount
+        college_status.award_total_costs = total_cost
+        college_status.award_net_price = total_cost - college_status.award_total_grants
+        college_status.save()
+
         return UpdateExpenses(success=True)
 
 

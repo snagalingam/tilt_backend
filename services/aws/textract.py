@@ -96,6 +96,7 @@ def get_table_data(job_id):
                                                 # adds a space in between words
                                                 else:
                                                     text += " " + word['Text']
+
                                 table_data[row_index][col_index] = text
 
     else:

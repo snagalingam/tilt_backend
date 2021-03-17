@@ -40,17 +40,24 @@ def calculate_aid_summary(sender, instance, **kwargs):
     tuition_fees_amount = None
 
     try:
-        tuition = AidRawData.objects.get(college_status=college_status, aid_category=tuition_category)
+        tuition = AidRawData.objects.get(
+            aid_category=tuition_category,
+            college_status=college_status
+        )
     except:
         tuition = None
 
     try:
-        fees = AidRawData.objects.get(college_status=college_status, aid_category=fees_category)
+        fees = AidRawData.objects.get(
+            aid_category=fees_category,
+            college_status=college_status
+        )
     except:
         fees = None
 
     # use data from award letter if that exists
     if tuition is not None:
+        college_status.award_costs_missing = False
         tuition_fees_amount = tuition.amount
 
         if fees is not None:
@@ -220,25 +227,47 @@ def calculate_aid_summary(sender, instance, **kwargs):
     ################ loans
     # other loan
     try:
-        other_loan = AidRawData.objects.get(college_status=college_status, aid_category=other_loan_category)
-        AidFinalData.objects.create(
-            aid_category=other_loan.aid_category,
-            amount=other_loan.amount,
-            college_status=other_loan.college_status,
-            name=other_loan.name
+        other_loan = AidRawData.objects.get(
+            aid_category=other_loan_category,
+            college_status=college_status
         )
+        # see if it exists
+        try:
+            final_other_loan = AidFinalData.objects.get(
+                aid_category=other_loan_category,
+                college_status=college_status
+            )
+        # create a new one if it doesn't
+        except:
+            AidFinalData.objects.create(
+                aid_category=other_loan.aid_category,
+                amount=other_loan.amount,
+                college_status=other_loan.college_status,
+                name=other_loan.name
+            )
     except:
         pass
 
     # plus loan
     try:
-        plus_loan = AidRawData.objects.get(college_status=college_status, aid_category=plus_loan_category)
-        AidFinalData.objects.create(
-            aid_category=plus_loan.aid_category,
-            amount=plus_loan.amount,
-            college_status=plus_loan.college_status,
-            name="Federal Parent PLUS Loan"
+        plus_loan = AidRawData.objects.get(
+            aid_category=plus_loan_category,
+            college_status=college_status
         )
+        # see if it exists
+        try:
+            final_plus_loan = AidFinalData.objects.get(
+                aid_category=plus_loan_category,
+                college_status=college_status
+            )
+        # create a new one if it doesn't
+        except:
+            AidFinalData.objects.create(
+                aid_category=plus_loan.aid_category,
+                amount=plus_loan.amount,
+                college_status=plus_loan.college_status,
+                name=plus_loan.name
+            )
     except:
         pass
 
@@ -248,23 +277,39 @@ def calculate_aid_summary(sender, instance, **kwargs):
             college_status=college_status,
             aid_category=subsidized_loan_category
         )
-        AidFinalData.objects.create(
-            aid_category=subsidized_loan.aid_category,
-            amount=subsidized_loan.amount,
-            college_status=subsidized_loan.college_status,
-            name="Federal Subsidized Loan"
-        )
         subsidized_amount = subsidized_loan.amount
+        # see if it exists
+        try:
+            subsidized_loan = AidFinalData.objects.get(
+                aid_category=subsidized_loan_category,
+                college_status=college_status
+            )
+        # create a new one if it doesn't
+        except:
+            AidFinalData.objects.create(
+                aid_category=subsidized_loan.aid_category,
+                amount=subsidized_loan.amount,
+                college_status=subsidized_loan.college_status,
+                name="Federal Subsidized Loan"
+            )
     except:
         subsidized_amount = 0
 
     unsubsidized_amount = 5500 - subsidized_amount
-    AidFinalData.objects.create(
-        aid_category=unsubsidized_loan_category,
-        amount=unsubsidized_amount,
-        college_status=college_status,
-        name="Federal Unsubsidized Loan"
-    )
+    # see if it exists
+    try:
+        unsubsidized_loan = AidFinalData.objects.get(
+            aid_category=unsubsidized_loan_category,
+            college_status=college_status
+        )
+    # create a new one if it doesn't
+    except:
+        AidFinalData.objects.create(
+            aid_category=unsubsidized_loan_category,
+            amount=unsubsidized_amount,
+            college_status=college_status,
+            name="Federal Unsubsidized Loan"
+        )
 
     ################ work study
     try:

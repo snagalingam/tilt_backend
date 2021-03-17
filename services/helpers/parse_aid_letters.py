@@ -32,7 +32,8 @@ TOTAL_VALUES = {
     "estimated cost to you after scholarhip": "net price after grants",
     # net price after grants and loans
     "estimated cost to you after student loan": "net price after grants and loans",
-
+    # other totals
+    "total": "total unknown"
 }
 
 FIRST_LOOK_VALUES = {
@@ -57,7 +58,9 @@ FIRST_LOOK_VALUES = {
     "seog": "seog",
     "supp educ opport grant": "seog",
     "federal sup. ed. opp. grant": "seog",
-    "federal suppl educ oppor grant": "seog"
+    "federal suppl educ oppor grant": "seog",
+    # loan fees
+    "loan fees": "stafford loan fees"
 }
 
 SECOND_LOOK_VALUES = {
@@ -71,6 +74,7 @@ SECOND_LOOK_VALUES = {
     # subsidized loan
     "subsidized": "subsidized",
     "direct sub": "subsidized",
+    "(sub)": "subsidized",
     # plus loan
     "plus loan": "plus",
     # other grant aid
@@ -81,7 +85,9 @@ SECOND_LOOK_VALUES = {
     # other loans
     "loan": "other loan",
     # transportation
-    "transportation": "transportation"
+    "transportation": "transportation",
+    # meals
+    "meals": "meals"
 }
 
 
@@ -105,17 +111,19 @@ def compare_tables_and_text(tables, text):
     for table_index, table_value in tables.items():
         for row_index, row_value in table_value.items():
             for column_index, cell in row_value.items():
-                # splits the text in case multiple values
-                text_values = cell.split(" ")
+                # only looks at cells with values
+                if cell:
+                    # splits the text in case multiple values
+                    text_values = cell.split(" ")
 
-                for value in text_values:
-                    if "$" in value:
-                        for letter in "$,*=+-":
-                            if letter in value:
-                                value = value.replace(letter, "")
+                    for value in text_values:
+                        if "$" in value:
+                            for letter in "$,*=+-":
+                                if letter in value:
+                                    value = value.replace(letter, "")
 
-                        if int(float(value)) in text_money_list:
-                            text_money_list.remove(int(float(value)))
+                            if int(float(value)) in text_money_list:
+                                text_money_list.remove(int(float(value)))
 
     if len(text_money_list) > 0:
         data = {
@@ -154,50 +162,56 @@ def parse_data(tables):
 
             for text in row_text:
 
-                # splits the text in case multiple values
-                text_values = text.split(" ")
+                # only looks at text when it isn't empty
+                if text:
+                    # splits the text in case multiple values
+                    text_values = text.split(" ")
 
-                for value in text_values:
-                    if "$" in value:
-                        row_contains_money = True
-                        # remove any additional formatting
-                        for letter in "$,":
-                            if letter in value:
-                                value = value.replace(letter, "")
-
-                        # checks that the value isn't weirdly low
-                        # if so, textract probably recognized a comma as a decimal
-                        if int(float(value)) < 10 and int(float(value)) > 0:
-                            if "." in value:
-                                value = value.replace(".", ",")
-
-                        # get the greatest dollar amount in each row
-                        if int(float(value)) > row_max_amount:
-                            row_max_amount = int(float(value))
-
-                    else:
-                        try:
+                    for value in text_values:
+                        if "$" in value:
+                            row_contains_money = True
                             # remove any additional formatting
-                            for letter in "'$, ":
+                            for letter in "$,":
                                 if letter in value:
                                     value = value.replace(letter, "")
 
-                            money = int(float(value))
-                            if money != 2020 and money != 2021 and money != 2022:
-                                row_contains_money = True
+                            # checks that the value isn't weirdly low
+                            # if so, textract probably recognized a comma as a decimal
+                            if int(float(value)) < 10 and int(float(value)) > 0:
+                                if "." in value:
+                                    value = value.replace(".", ",")
 
-                                # get the greatest dollar amount in each row
-                                if money > row_max_amount:
-                                    row_max_amount = money
+                            # get the greatest dollar amount in each row
+                            if int(float(value)) > row_max_amount:
+                                row_max_amount = int(float(value))
 
-                        except:
-                            pass
+                        else:
+                            try:
+                                # remove any additional formatting
+                                for letter in "'$, ":
+                                    if letter in value:
+                                        value = value.replace(letter, "")
+
+                                money = int(float(value))
+                                if money != 2020 and money != 2021 and money != 2022:
+                                    row_contains_money = True
+
+                                    # get the greatest dollar amount in each row
+                                    if money > row_max_amount:
+                                        row_max_amount = money
+
+                            except:
+                                pass
 
             if row_contains_money:
                 aid_category = None
 
                 # lower case the entire string
-                row_text_lower = [string.lower() for string in row_text]
+                row_text_lower = []
+                for string in row_text:
+                    if string:
+                        row_text_lower.append(string.lower())
+
                 row_text_lower_sorted = sorted(row_text_lower, key=len, reverse=True)
 
                 for key, value in TOTAL_VALUES.items():
