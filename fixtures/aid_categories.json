@@ -384,5 +384,16 @@
       "created": "2020-12-10T22:15:15.934695-07:00",
       "updated": "2020-12-10T22:15:15.934695-07:00"
     }
+  },{
+    "model": "financial_aid.AidCategory",
+    "pk": 36,
+    "fields": {
+      "name": "total unknown",
+      "primary": "total",
+      "secondary": "unknown",
+      "tertiary": "",
+      "created": "2020-12-10T22:15:15.934695-07:00",
+      "updated": "2020-12-10T22:15:15.934695-07:00"
+    }
   }
 ]
