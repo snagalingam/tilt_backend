@@ -104,8 +104,12 @@ def compare_tables_and_text(tables, text):
             if "$" in word:
 
                 # only keep numbers
-                word = re.sub("[^0-9]","",word)
-                text_money_list.append(int(float(word)))
+                word = re.sub("[^0-9]", "", word)
+                # strips spaces
+                word = word.strip()
+                # only looks at non-empty strings
+                if word:
+                    text_money_list.append(int(float(word)))
 
     # create a list of all money in the tables
     for table_index, table_value in tables.items():
@@ -206,41 +210,48 @@ def parse_data(tables):
             if row_contains_money:
                 aid_category = None
 
-                # lower case the entire string
-                row_text_lower = []
+                # create list of text and remove empty strings
+                # create the same list with only lower case values
+                text_list_lower = []
+                text_list = []
                 for string in row_text:
                     if string:
-                        row_text_lower.append(string.lower())
+                        text_list.append(string)
+                        text_list_lower.append(string.lower())
 
-                row_text_lower_sorted = sorted(row_text_lower, key=len, reverse=True)
+                text_list_lower_sorted = sorted(text_list_lower, key=len, reverse=True)
 
                 for key, value in TOTAL_VALUES.items():
                     # searches through lower case string for keys
-                    result = [text for text in row_text_lower_sorted if key in text]
+                    result = [text for text in text_list_lower_sorted if key in text]
                     if result:
                         aid_category = value
-                        text_position = row_text_lower.index(result[0])
-                        name = row_text[text_position][0:254]
+                        text_position = text_list_lower.index(result[0])
+                        name = text_list[text_position][0:254]
                         break
 
                 if aid_category is None:
                     for key, value in FIRST_LOOK_VALUES.items():
                         # searches through lower case string for keys
-                        result = [text for text in row_text_lower_sorted if key in text]
+                        result = [text for text in text_list_lower_sorted if key in text]
                         if result:
                             aid_category = value
-                            text_position = row_text_lower.index(result[0])
-                            name = row_text[text_position][0:254]
+                            text_position = text_list_lower.index(result[0])
+                            name = text_list[text_position][0:254]
                             break
 
                 if aid_category is None:
                     for key, value in SECOND_LOOK_VALUES.items():
                         # searches through lower case string for keys
-                        result = [text for text in row_text_lower_sorted if key in text]
+                        result = [text for text in text_list_lower_sorted if key in text]
                         if result:
                             aid_category = value
-                            text_position = row_text_lower.index(result[0])
-                            name = row_text[text_position][0:254]
+                            text_position = text_list_lower.index(result[0])
+                            print(result)
+                            print(value)
+                            print(row_text)
+                            print(text_position)
+                            name = text_list[text_position][0:254]
                             break
 
                 if aid_category is None:

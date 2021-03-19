@@ -9,7 +9,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - AWS_BUCKET=financial-letters
-      - AWS_LAMBDA_FUNCTION=TiltGetAnalyzedData
+      - AWS_LAMBDA_FUNCTION=wait-for-textract
       - AWS_REGION=us-east-2
       - ENVIRONMENT=development
       - GRAPHQL_ENDPOINT=https://localhost:8000/graphql
