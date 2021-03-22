@@ -19,6 +19,8 @@ User = get_user_model()
 ################################################
 # Standard Model Definitions
 ################################################
+
+
 class CollegeType(DjangoObjectType):
     class Meta:
         model = College
@@ -35,13 +37,13 @@ class CollegeStatusType(DjangoObjectType):
 class CollegeFieldOfStudyType(DjangoObjectType):
     class Meta:
         model = FieldOfStudy
-        fields  = "__all__"
+        fields = "__all__"
 
 
 class CollegeIpedsType(DjangoObjectType):
     class Meta:
         model = Ipeds
-        fields  = "__all__"
+        fields = "__all__"
 
 
 class CollegeScorecardType(DjangoObjectType):
@@ -68,7 +70,8 @@ class Query(graphene.ObjectType):
     # define query types
     cities = graphene.List(CollegeScorecardType, city=graphene.String())
     college_by_id = graphene.Field(CollegeType, id=graphene.Int())
-    college_statuses_by_id = graphene.Field(CollegeStatusType, id=graphene.Int())
+    college_statuses_by_id = graphene.Field(
+        CollegeStatusType, id=graphene.Int())
     colleges_by_popularity = graphene.List(CollegeType, limit=graphene.Int())
     filter_colleges = graphene.Field(
         CollegePaginationType,
@@ -101,7 +104,8 @@ class Query(graphene.ObjectType):
         state=graphene.String(),
         zipcode=graphene.Int()
     )
-    net_price_range = graphene.Field(NetPriceRangeType, income=graphene.String())
+    net_price_range = graphene.Field(
+        NetPriceRangeType, income=graphene.String())
     religious_affiliation = graphene.List(CollegeScorecardType)
     state_fips = graphene.List(
         CollegeScorecardType, state_fip=graphene.String()
@@ -150,7 +154,10 @@ class Query(graphene.ObjectType):
     ):
         qs = College.objects.filter(show=True)
         user = info.context.user
-        income = user.income
+
+        if (user.is_authenticated):
+            income = user.income
+
         if name:
             qs = qs.filter(Q(scorecard__name__icontains=name) | Q(
                 scorecard__alias__icontains=name) | Q(name__icontains=name))
@@ -191,7 +198,7 @@ class Query(graphene.ObjectType):
             qs = qs.filter(
                 scorecard__religious_affiliation__icontains=religious_affiliation)
         if net_price:
-            if (income):
+            if (income is not None):
                 income_filter_type = f'scorecard__avg_net_price_{income}__range'
                 qs = qs.filter(Q(scorecard__avg_net_price__range=(net_price[0], net_price[1])) |
                                Q(**{income_filter_type: (net_price[0], net_price[1])}))
@@ -298,14 +305,19 @@ class Query(graphene.ObjectType):
 
     def resolve_net_price_range(self, info):
         user = info.context.user
-        income = user.income
+
+        if (user.is_authenticated):
+            income = user.income
+        else:
+            income = None
+
         avg_net_price_min = Scorecard.objects.aggregate(Min("avg_net_price"))
         avg_net_price_max = Scorecard.objects.aggregate(Max("avg_net_price"))
         min = avg_net_price_min["avg_net_price__min"]
         max = avg_net_price_max["avg_net_price__max"]
 
         if min is not None and max is not None:
-            if income:
+            if income is not None:
                 income_min = Scorecard.objects.aggregate(
                     Min(f"avg_net_price_{income}"))
                 income_max = Scorecard.objects.aggregate(
