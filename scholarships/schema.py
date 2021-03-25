@@ -213,7 +213,9 @@ class Query(graphene.ObjectType):
         if start_deadline is not None and end_deadline is None:
             qs = qs.filter(deadline=start_deadline)
 
-        if status:
+        if status is not None:
+            # status is not Noneindicates that a user wants to see their own scholarships
+            qs = qs.filter(scholarshipstatus__user=user)
             if (status == "no status"):
                 qs = qs.filter(scholarshipstatus__status__isnull=True)
             else:
