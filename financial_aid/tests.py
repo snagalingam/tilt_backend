@@ -1,6 +1,7 @@
 from financial_aid.models import AidCategory, AidRawData, DocumentResult
 from colleges.models import Ipeds, College, CollegeStatus
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase
 
 
@@ -9,6 +10,9 @@ User = get_user_model()
 class AidTests(TestCase):
 
     def setUp(self):
+        # load fixture data for aid categories
+        call_command('loaddata', 'fixtures/aid_categories.json', verbosity=0)
+
         user = User.objects.create_user(
             email="demouser@tiltaccess.com",
             password = "gWzupKiX5c",
@@ -54,41 +58,10 @@ class AidTests(TestCase):
             residency="NY",
             in_state_tuition="NY"
         )
-        aid_category = AidCategory.objects.create(
-            name="pell",
-            primary="aid",
-            secondary="grant",
-            tertiary="federal"
-        )
         ipeds = Ipeds.objects.create(
             college=college
         )
-
-        # categories to ensure the signals work
-        fees_category = AidCategory.objects.create(name="fees")
-        meals_category = AidCategory.objects.create(name="meals")
-        personal_expenses_category = AidCategory.objects.create(name="standard personal expenses")
-        room_category = AidCategory.objects.create(name="room")
-        room_board_category = AidCategory.objects.create(name="room & board")
-        tuition_category = AidCategory.objects.create(name="tuition")
-        tuition_fees_category = AidCategory.objects.create(name="tuition & fees")
-        work_study_category = AidCategory.objects.create(name="work study")
-
-
-    def test_create_aid_category(self):
-        aid_category = AidCategory.objects.create(
-            name="tuition",
-            primary="cost",
-            secondary="direct",
-            tertiary=""
-        )
-
-        self.assertEqual(aid_category.name, "tuition")
-        self.assertEqual(aid_category.primary, "cost")
-        self.assertEqual(aid_category.secondary, "direct")
-        self.assertEqual(aid_category.tertiary, "")
-        self.assertIsNotNone(aid_category.created)
-        self.assertIsNotNone(aid_category.updated)
+        
 
     def test_create_aid_raw_data(self):
         user = User.objects.get(email="demouser@tiltaccess.com")
