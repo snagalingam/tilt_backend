@@ -313,7 +313,7 @@ SESSION_COOKIE_SAMESITE = 'lax'
 # security for development
 if ENVIRONMENT == 'development':
     ALLOWED_HOSTS = [
-        '[::1]',
+        '0.0.0.0',
         '127.0.0.1',
         'localhost',
         '.amazonaws.com',
@@ -325,8 +325,7 @@ if ENVIRONMENT == 'development':
 # security for production
 elif ENVIRONMENT == 'production':
     ALLOWED_HOSTS = [
-        '127.0.0.1',
-        'localhost',
+        '0.0.0.0',
         '.amazonaws.com',
         '.elasticbeanstalk.com',
         '.tiltaccess.com',

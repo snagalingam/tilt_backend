@@ -20,4 +20,4 @@ COPY . $APP_HOME/
 ENTRYPOINT ["sh", "entrypoint.sh"]
 
 # expose port
-EXPOSE $PORT
+EXPOSE 8000

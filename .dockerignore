@@ -1,3 +1,7 @@
 # Dev stuff
 .git
 .gitignore
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
