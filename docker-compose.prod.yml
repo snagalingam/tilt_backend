@@ -24,3 +24,4 @@ services:
       - TILT_APP=staging
     ports:
       - 8000:8000
+    image: 614818178581.dkr.ecr.us-east-2.amazonaws.com/tilt-staging:latest
