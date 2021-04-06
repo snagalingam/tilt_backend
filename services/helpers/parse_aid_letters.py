@@ -247,10 +247,6 @@ def parse_data(tables):
                         if result:
                             aid_category = value
                             text_position = text_list_lower.index(result[0])
-                            print(result)
-                            print(value)
-                            print(row_text)
-                            print(text_position)
                             name = text_list[text_position][0:254]
                             break
 
