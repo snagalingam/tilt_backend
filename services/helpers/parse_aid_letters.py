@@ -55,6 +55,7 @@ FIRST_LOOK_VALUES = {
     "unsubsidized": "unsubsidized",
     "direct unsub": "unsubsidized",
     "unsub": "unsubsidized",
+    "direct uns": "unsubsidized",
     # il map grant
     "il map": "il map",
     # work study
