@@ -9,6 +9,7 @@ TOTAL_VALUES = {
     "total cost": "total cost defined by school",
     "total estimated insitutional cost": "total cost defined by school",
     "total coa": "total cost defined by school",
+    "cost of attendance": "total cost defined by school",
     # total direct costs
     "direct cost": "total direct cost",
     "total estimated institutional costs": "total direct cost",
@@ -33,7 +34,11 @@ TOTAL_VALUES = {
     # net price after grants and loans
     "estimated cost to you after student loan": "net price after grants and loans",
     # other totals
-    "total": "total unknown"
+    "total": "total unknown",
+    "cost after grants": "net price defined by school"
+    # grants
+    "tuition grant": "other grant",
+    "housing grant": "other grant"
 }
 
 FIRST_LOOK_VALUES = {
@@ -42,8 +47,10 @@ FIRST_LOOK_VALUES = {
     # room
     "room": "room",
     "housing": "room",
+    "living allowance": "room",
     # pell grant
     "pell grant": "pell",
+    "federal pell": "pell",
     # unsubsidized loan
     "unsubsidized": "unsubsidized",
     "direct unsub": "unsubsidized",
@@ -68,9 +75,11 @@ SECOND_LOOK_VALUES = {
     "fees": "fees",
     # books and supplies
     "books": "books",
+    "book allowance": "books",
     # personal expenses
     "personal expense": "personal expenses",
-    "miscellaneous costs": "personal expenses",
+    "miscellaneous": "personal expenses",
+    "misc. expenses": "personal expenses",
     # subsidized loan
     "subsidized": "subsidized",
     "direct sub": "subsidized",
@@ -86,8 +95,10 @@ SECOND_LOOK_VALUES = {
     "loan": "other loan",
     # transportation
     "transportation": "transportation",
+    "transporation": "transportation",
     # meals
-    "meals": "meals"
+    "meals": "meals",
+    "board": "meals"
 }
 
 
@@ -148,8 +159,6 @@ def compare_tables_and_text(tables, text):
 # Categorize all aid data
 ################################################################################
 def parse_data(tables):
-    # if the report has three or more tables, delete the last two tables
-    # from our sample of reports, these tables are repeated tables to show fall and spring data
     aid_data = []
     errors= []
     num_tables = len(tables.keys())
