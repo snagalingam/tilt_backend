@@ -35,7 +35,7 @@ TOTAL_VALUES = {
     "estimated cost to you after student loan": "net price after grants and loans",
     # other totals
     "total": "total unknown",
-    "cost after grants": "net price defined by school"
+    "cost after grants": "net price defined by school",
     # grants
     "tuition grant": "other grant",
     "housing grant": "other grant"
