@@ -173,6 +173,7 @@ def check_aid_raw_data(aid_data, aid_categories):
 
     # total cost defined by school - check that total adds up to what we pulled
     if total_cost_defined_by_school_count == 1:
+        total_cost_defined_by_school = aid_data.get(aid_category=total_cost_defined_by_school_category)
 
         if total_cost_defined_by_school.amount == total_direct_cost_amount and total_direct_cost_count == 0:
             total_cost_defined_by_school.category = total_direct_cost_category
