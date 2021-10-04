@@ -78,6 +78,7 @@ SECOND_LOOK_VALUES = {
     "book allowance": "books",
     # personal expenses
     "personal expense": "personal expenses",
+    "personal": "personal expenses",
     "miscellaneous": "personal expenses",
     "misc. expenses": "personal expenses",
     # subsidized loan
